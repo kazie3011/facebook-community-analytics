@@ -1,0 +1,55 @@
+version: '3.4'
+
+services:
+  httpapihost:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/localhost.pfx
+      - ASPNETCORE_HTTPS_PORT=44344
+    ports:
+      - "44345:80"
+      - "44344:443"
+    volumes:
+   #   - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets:ro
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https:ro
+  identityserver:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/localhost.pfx
+      - ASPNETCORE_HTTPS_PORT=44382
+    ports:
+      - "44383:80"
+      - "44382:443"
+    volumes:
+   #   - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets:ro
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https:ro
+  webblazor:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/localhost.pfx
+      - ASPNETCORE_HTTPS_PORT=44314
+    ports:
+      - "44315:80"
+      - "44314:443"
+    volumes:
+   #   - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets:ro
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https:ro
+  webpublic:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/localhost.pfx
+      - ASPNETCORE_HTTPS_PORT=44306
+    ports:
+      - "44307:80"
+      - "44306:443"
+    volumes:
+   #   - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets:ro
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https:ro

@@ -1,0 +1,4 @@
+----------------------------------------------------Auto Backup Database-------------------------------------------
+1.Download and extract https://www.mongodb.com/try/download/database-tools?tck=docs_databasetools
+2.Edit AutoBackupDB.cmd in line 2 replace it with 'cd [Your mongo database tool directory path]' (etc D:\Workspace\facebook-community-analytics\MongoDBTools\bin)
+3.Run it and Database Folder will create in your mongo tools direct path.

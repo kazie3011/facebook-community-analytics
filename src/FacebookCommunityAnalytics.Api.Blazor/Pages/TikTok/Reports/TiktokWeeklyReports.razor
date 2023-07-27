@@ -1,0 +1,155 @@
+@page "/tiktok-weekly-reports"
+@attribute [Authorize(ApiPermissions.Tiktok.Reports)]
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Tiktoks;
+@using FA = Blazorise.Icons.FontAwesome;
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@inherits BlazorComponentBase
+@inject NavigationManager NavigationManager
+@inject ITiktokStatsAppService TiktokStatsAppService
+@inject IJSRuntime JSRuntime
+
+@* ************************* PAGE HEADER ************************* *@
+@* <PageHeader Title="@L["TiktokWeeklyReports"]" Toolbar="Toolbar"> *@
+@* *@
+@* </PageHeader> *@
+@* ************************* SEARCH ************************* *@
+<Form id="ReportSearchForm">
+    <Row>
+        <Field ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <DateRangePicker TimePicker="false" DateFormat="@GlobalConsts.DateFormat"
+                                     @bind-StartDate="TimeFrom"
+                                     @bind-EndDate="TimeTo"
+                                     class="form-control form-control-md"
+                                     Style="width: 210px !important;"
+                                     placeholder="@L["SelectDates"]"
+                                     OnClosed="ReloadAllData"
+                                     MaxDate="DateTimeOffset.Now"/>
+                </Addon>
+            </Addons>
+        </Field>
+        <Field ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+            <Button Style="float:right;width: 140px" Color="Color.Primary" Clicked="@ExportsReportTikTokBoD">
+                <Icon Name="IconName.Download"></Icon> @L["TiktokReport.ExportBoD"]
+            </Button>
+            <Button Style="float:right;margin-right: 5px;width: 140px" Color="Color.Primary" Clicked="@ExportsReportTikTokMCN">
+                <Icon Name="IconName.Download"></Icon> @L["TiktokReport.ExportMCN"]
+            </Button>
+        </Field>
+    </Row>
+</Form>
+
+<Row ColumnSize="ColumnSize.IsFull.OnMobile.IsQuarter.OnDesktop">
+    @foreach (var item in TiktokWeeklyTotalViews)
+    {
+        <Column ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile">
+            <Card Class="card-aff-report" Background="@(item.IsCurrentWeek ? Background.Warning : Background.Primary)" Style="color: white;">
+                <CardBody TextAlignment="TextAlignment.Center">
+                    <h2>@item.WeekName</h2>
+                    <h3>
+                        @item.TotalViews.ToCommaStyle("0") views
+                    </h3>
+                    <br/>
+                    <h3>
+                        @item.WeekStart.ToString(GlobalConsts.DateFormat) - @item.WeekEnd.ToString(GlobalConsts.DateFormat)
+                    </h3>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+</Row>
+
+<Card>
+<CardBody>
+    <div style="overflow: auto; height: 998px;">
+        <Table FullWidth="true" Narrow="true" Bordered="true" Striped="true"  Style="border-collapse: separate; border-spacing: 0px;">
+                                                                                       
+            <TableHeader style="position: sticky;top: -1px;">
+                <TableRow TextAlignment="TextAlignment.Center">
+                    <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle" RowSpan="2">
+                        @L["TiktokReports.Index"]
+                    </TableHeaderCell>
+                    <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;" RowSpan="2">
+                        @L["TiktokReports.ChannelName"]
+                    </TableHeaderCell>
+                    <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;" RowSpan="2">
+                        @L["TiktokReports.TiktokCategoryType"]
+                    </TableHeaderCell>
+                    @foreach (var item in TiktokWeeklyTotalFollowers.GroupBy(_ => _.WeekName))
+                    {
+                        <TableHeaderCell ColumnSpan="3" Style="background-color: lightgrey">@item.Key</TableHeaderCell>
+                    }
+                </TableRow>
+                
+                <TableRow  Style="background-color: lightgrey" TextAlignment="TextAlignment.Center">
+
+                    @foreach (var item in TiktokWeeklyTotalFollowers.GroupBy(_ => _.WeekName))
+                    {
+                        <TableHeaderCell Clicked="@(async () => await GetWeeklyTotalFollowers(TiktokPropertyType.Followers, item.Key))">
+                            @L["TiktokReports.Follower"]
+                            @if (_orderByFollower.HasValue && item.Key == _orderByWeekName)
+                            {
+                                <Icon TextColor="TextColor.Dark" Name="_orderByFollower.Value ? IconName.ArrowUp : IconName.ArrowDown"></Icon>
+                            }
+                        </TableHeaderCell>
+                        <TableHeaderCell Clicked="@(async () => await GetWeeklyTotalFollowers(TiktokPropertyType.Views, item.Key))">
+                            @L["TiktokReports.View"]
+                            @if (_orderByView.HasValue && item.Key == _orderByWeekName)
+                            {
+                                <Icon TextColor="TextColor.Dark" Name="_orderByView.Value ? IconName.ArrowUp : IconName.ArrowDown"></Icon>
+                            }
+                        </TableHeaderCell>
+                        <TableHeaderCell  Clicked="@(async () => await GetWeeklyTotalFollowers(TiktokPropertyType.Videos, item.Key))">
+                            @L["TiktokReports.Video"]
+                            @if (_orderByVideo.HasValue && item.Key == _orderByWeekName)
+                            {
+                                <Icon TextColor="TextColor.Dark" Name="_orderByVideo.Value ? IconName.ArrowUp : IconName.ArrowDown"></Icon>
+                            }
+                        </TableHeaderCell>
+                    }
+                </TableRow>
+            </TableHeader>
+
+            <TableBody>
+                @{
+                    var index = 1;
+
+                }
+                @foreach (var items in TiktokWeeklyTotalFollowerModelMCN.GroupBy(_ => _.ChannelName))
+                {
+                    var temp = index;
+                    <TableRow >
+                        <TableRowCell Style="font-size: 16px;font-weight: 500;" TextAlignment="TextAlignment.Center">@temp</TableRowCell>
+                        <TableRowCell Style="font-size: 16px;font-weight: 500;">@items.Key</TableRowCell>
+                        <TableRowCell >@items.FirstOrDefault()?.TiktokCategoryType</TableRowCell>
+                        @{ var i = 1; }
+                        @foreach (var item in items)
+                        {
+                            i++;
+                            @if (i % 2 == 0)
+                            {
+                                <TableRowCell TextAlignment="TextAlignment.Right" VerticalAlignment="VerticalAlignment.Middle" Style="@($"{StringHelper.FormatGrowthColor(item.IncreasedFollowers)}; background-color: #f5f5f5")">@item.Followers.ToCommaStyle("0")</TableRowCell>
+                                <TableRowCell TextAlignment="TextAlignment.Right" VerticalAlignment="VerticalAlignment.Middle" Style="background-color: #f5f5f5">@item.Views.ToCommaStyle("0")</TableRowCell>
+                                <TableRowCell TextAlignment="TextAlignment.Right" VerticalAlignment="VerticalAlignment.Middle" Style="background-color: #f5f5f5">@item.Videos.ToCommaStyle("0")</TableRowCell>
+                            }
+                            else
+                            {
+                                <TableRowCell TextAlignment="TextAlignment.Right" Background="Background.White" VerticalAlignment="VerticalAlignment.Middle" Style="@StringHelper.FormatGrowthColor(item.IncreasedFollowers)">@item.Followers.ToCommaStyle("0")</TableRowCell>
+                                <TableRowCell TextAlignment="TextAlignment.Right" Background="Background.White" VerticalAlignment="VerticalAlignment.Middle" Style="background-color: #696969">@item.Views.ToCommaStyle("0")</TableRowCell>
+                                <TableRowCell TextAlignment="TextAlignment.Right" Background="Background.White" VerticalAlignment="VerticalAlignment.Middle" Style="background-color: #696969">@item.Videos.ToCommaStyle("0")</TableRowCell>
+                            }
+                        }
+                    </TableRow>
+                    index++;
+                }
+            </TableBody>
+        </Table>
+    </div>
+    </CardBody>
+</Card>

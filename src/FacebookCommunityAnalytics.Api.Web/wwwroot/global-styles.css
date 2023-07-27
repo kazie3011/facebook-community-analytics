@@ -1,0 +1,12 @@
+﻿/* Your Global Styles */
+.k-combobox-clearable .k-input, .k-dropdowntree-clearable .k-dropdown-wrap .k-input, .k-dropdowntree-clearable .k-multiselect-wrap, .k-multiselect-clearable .k-multiselect-wrap {
+    height: calc(1.5em + 0.75rem + 2px);
+}
+.multipleselect {
+    display: block;
+    width: 100%;
+    float: left;
+}
+.display-none{
+    display: none !important; 
+}

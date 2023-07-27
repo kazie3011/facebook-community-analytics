@@ -1,0 +1,516 @@
+﻿@page "/teams"
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using Volo.Abp.Authorization.Permissions
+@using FacebookCommunityAnalytics.Api.Organizations;
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Groups
+@using FacebookCommunityAnalytics.Api.UserEvaluationConfigurations
+@using Faso.Blazor.SpinKit
+@using Volo.Abp.Identity
+@using FacebookCommunityAnalytics.Api.Core.Const
+
+@inject IPermissionChecker PermissionChecker;
+@inject ITeamMemberAppService TeamMemberAppService;
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+@inject IUserInfosAppService UserInfosAppService
+@inject IUserEvaluationConfigurationAppService UserEvaluationConfigurationAppService;
+@inject IGroupsAppService GroupsAppService
+@inherits BlazorComponentBase
+@attribute [Authorize(ApiPermissions.TeamMembers.Default)]
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["TeamMember"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+
+<Addons>
+    <Addon AddonType="AddonType.Start">
+        <Select TValue="Guid?" SelectedValue="Filter.TeamId" Disabled="@(!IsLeaderRole())" SelectedValueChanged="@OnTeamFilter_Changed">
+            <SelectItem Disabled="true" TValue="Guid?" Value="@NullableGuid">
+                @L["TeamMembers.SearchByTeam"]
+            </SelectItem>
+            <SelectItem TValue="Guid" Value="@Guid.Empty">
+                @L["TeamMembers.NoTeam"]
+            </SelectItem>
+            @foreach (var org in Teams)
+            {
+                <SelectItem @key="org" TValue="Guid" Value="@org.Id">
+                    @org.DisplayName
+                </SelectItem>
+            }
+        </Select>
+    </Addon>
+    @if (IsLeaderRole())
+    {
+        <Addon AddonType="AddonType.Start" Style="display:flex;align-items: center;padding:0 5px; border: solid lightgray 1px;">
+            <Check TValue="bool" Checked="Filter.IsActiveUser" CheckedChanged="@OnActiveFilter_Checked">@L["ActiveFilter"]</Check>
+        </Addon>
+        
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@Filter.FilterText"
+                      Autofocus="true"
+                      Placeholder="@L["TeamMembers.SearchByFilter"]"
+                      @onkeydown="TryGetTeamMembersByFilter">
+            </TextEdit>
+        </Addon>
+
+        <Addon AddonType="AddonType.End">
+            <SubmitButton Form="UserSearchForm" Clicked="Search">
+                <Icon Name="IconName.Search" Class="mr-1"></Icon>
+            </SubmitButton>
+        </Addon>
+    }
+</Addons>
+<br/>
+
+@if (IsLeaderRole())
+{
+    <Row>
+        <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnDesktop">
+            <Card>
+                <CardBody>
+                    <Select TValue="Guid" @bind-SelectedValue="@CurrentTeamId">
+                        <SelectItem TValue="Guid" Value="@Guid.Empty">
+                            @L["TeamMembers.UpdateTeam"]
+                        </SelectItem>
+                        @foreach (var org in Teams)
+                        {
+                            <SelectItem @key="org" TValue="Guid" Value="@org.Id">
+                                @org.DisplayName
+                            </SelectItem>
+                        }
+                    </Select>
+                    <Field>
+                        <br/>
+                        <Button Color="Color.Primary" Disabled="@_unRendered" Clicked="@(async () => await AssignTeam(true))">
+                            <Icon Name="IconName.Add" Class="mr-1"></Icon>@L["TeamMembers.Update"]
+                        </Button>
+                        <Button Color="Color.Danger" Disabled="@_unRendered" Clicked="@(async () => await AssignTeam(false))">
+                            <Icon Name="IconName.Remove" Class="mr-1"></Icon>@L["TeamMembers.Remove"]
+                        </Button>
+                        <Button Color="Color.Dark" Disabled="@_unRendered" Clicked="ClearSelectedUsers">
+                            <Icon Name="IconName.Delete" Class="mr-1"></Icon>@L["TeamMembers.Clear"]
+                        </Button>
+                        <br/><br/><br/><br/>
+                    </Field>
+                </CardBody>
+            </Card>
+        </Field>
+        @if (IsAdminRole())
+        {
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnDesktop">
+                <Card>
+                    <CardBody>
+                        <RadioGroup TValue="bool?" CheckedValue="@IsSystemUsers" CheckedValueChanged="SystemPropertyChanged">
+                            <Label Style="width: 130px">@L["TeamMembers.SystemUser"]</Label>
+                            <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                            <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                        </RadioGroup>
+
+                        <RadioGroup TValue="bool?" CheckedValue="@IsGDLUser" CheckedValueChanged="IsGDLPropertyChanged">
+                            <Label Style="width: 130px">@L["TeamMembers.GDLUser"]</Label>
+                            <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                            <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                        </RadioGroup>
+
+                        <RadioGroup TValue="bool?" CheckedValue="@IsCalculatePayrollUsers" CheckedValueChanged="CalculatePayrollPropertyChanged">
+                            <Label Style="width: 130px">@L["TeamMembers.CalculatePayrollUser"]</Label>
+                            <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                            <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                        </RadioGroup>
+
+                        <RadioGroup TValue="bool?" CheckedValue="@IsActiveUsers" CheckedValueChanged="ActivePropertyChanged">
+                            <Label Style="width: 130px">@L["TeamMembers.ActiveUser"]</Label>
+                            <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                            <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                        </RadioGroup>
+
+                        <Field>
+                            <br/>
+                            <Button Color="Color.Primary" Disabled="@_unRendered" Clicked="@(async () => await ChangeAccountType())">
+                                <Icon Name="IconName.Save" Class="mr-1"></Icon>@L["TeamMembers.AddTypeAccount"]
+                            </Button>
+                            <Button Color="Color.Dark" Disabled="@_unRendered" Clicked="@ClearUserProperty">
+                                <Icon Name="IconName.Delete" Class="mr-1"></Icon>@L["TeamMembers.Clear"]
+                            </Button>
+                        </Field>
+                    </CardBody>
+                </Card>
+            </Field>
+        }
+    </Row>
+}
+else
+{
+    <br/>
+}
+<br/>
+
+@* ************************* DATA GRID ************************* *@
+<Card style="margin-top: -40px">
+    <CardBody>
+        <DataGrid @ref="_dataGrid" TItem="TeamMemberDto"
+                  Data="Members"
+                  TotalItems="Members.Count"
+                  ShowPager="true"
+                  Responsive="true"
+                  Narrow="true"
+                  Striped="true"
+                  PageSize="Members.Count"
+                  @bind-SelectedRows="SelectedMembers"
+                  SelectionMode="DataGridSelectionMode.Multiple"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridMultiSelectColumn TItem="TeamMemberDto" Width="30px"></DataGridMultiSelectColumn>
+                <DataGridColumn TItem="TeamMemberDto"
+                                Field="UserName"
+                                Caption="@L["TeamMembers.User.UserName"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        <Link Clicked="(e => OpenEditUserInfoModal(context.Id))">@context.UserName</Link>
+                        <br />
+                        @L[$"Enum:UserPosition:{context.Position.ToInt()}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="TeamMemberDto"
+                                Field="Teams"
+                                Caption="Team"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @foreach (var item in context.Teams)
+                        {
+                            @item.DisplayName
+                            <br/>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                @* <DataGridColumn TItem="TeamMemberDto" *@
+                @*                 Field="Position" *@
+                @*                 Caption="@L["UserPosition"]" *@
+                @*                 Sortable="true"> *@
+                @*     <DisplayTemplate> *@
+                @*         @L[$"Enum:UserPosition:{context.Position.ToInt()}"] *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridColumn> *@
+                
+                <DataGridColumn TItem="TeamMemberDto"
+                                Field="Name"
+                                Caption="@L["TeamMembers.User.Name"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @context.Name
+                        <br/>
+                        @context.Surname
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="TeamMemberDto"
+                                Field="Email"
+                                Caption="@L["TeamMembers.User.Email"]"
+                                Sortable="true">
+                                
+                <DisplayTemplate>
+                    @context.Email
+                </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="TeamMemberDto"
+                                Field="PhoneNumber"
+                                Caption="@L["TeamMembers.User.Phone"]"
+                                Sortable="false">
+                </DataGridColumn>
+                @if (IsManagerRole())
+                {
+                    <DataGridColumn TItem="TeamMemberDto"
+                                    Field="IsSystemUser"
+                                    Caption="@L["TeamMembers.User.IsSystemUser"]"
+                                    Sortable="false">
+                        <DisplayTemplate>
+                            @if (context.IsSystemUser)
+                            {
+                                <Icon Name="IconName.Check" TextColor="TextColor.Success"/>
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Ban" TextColor="TextColor.Danger"/>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="TeamMemberDto"
+                                    Field="IsGDLStaff"
+                                    Caption="@L["TeamMembers.User.IsGDLStaff"]"
+                                    Sortable="false">
+                        <DisplayTemplate>
+                            @if (context.IsGDLStaff)
+                            {
+                                <Icon Name="IconName.Check" TextColor="TextColor.Success"/>
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Ban" TextColor="TextColor.Danger"/>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="TeamMemberDto"
+                                    Field="IsCalculatePayrollUser"
+                                    Caption="@L["TeamMembers.User.IsCalculatePayrollUser"]"
+                                    Sortable="false">
+                        <DisplayTemplate>
+                            @if (context.IsCalculatePayrollUser)
+                            {
+                                <Icon Name="IconName.Check" TextColor="TextColor.Success"/>
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Ban" TextColor="TextColor.Danger"/>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+
+                    <DataGridColumn TItem="TeamMemberDto"
+                                    Field="IsActive"
+                                    Caption="@L["ActiveFilter"]"
+                                    Sortable="false">
+                        <DisplayTemplate>
+                            @if (context.IsActive)
+                            {
+                                <Icon Name="IconName.Check" TextColor="TextColor.Success"/>
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Ban" TextColor="TextColor.Danger"/>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                }
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="UserInfoModal">
+<ModalContent Centered="true" Size="ModalSize.Large">
+<Form id="UserInfoForm">
+<ModalHeader>
+    <ModalTitle>@L["UserInfo"]</ModalTitle>
+    <CloseButton Clicked="CloseEditUserInfoModal"/>
+</ModalHeader>
+<Validations @ref="@EditingUserInfoValidations"
+             Mode="ValidationMode.Auto"
+             Model="@EditingUserInfo"
+             ValidateOnLoad="false">
+<ModalBody>
+    <Row>
+        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["Name"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.AppUser.Name" ReadOnly="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["Surname"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.AppUser.Surname" ReadOnly="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Divider DividerType="DividerType.Dashed"/>
+        </Column>
+
+        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["Email"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.AppUser.Email" ReadOnly="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["PhoneNumber"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.AppUser.PhoneNumber" ReadOnly="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+            <Divider DividerType="DividerType.Dashed"/>
+        </Column>
+    </Row>
+</ModalBody>
+<ModalBody>
+    <Row>
+        <Column>
+
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["UserCode"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.Code" ReadOnly="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["IdentityNumber"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.IdentityNumber"Disabled="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+
+
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["Facebook"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.Facebook"Disabled="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+
+            <Field>
+                <FieldLabel>@L["AppUser"]</FieldLabel>
+                <Select TValue="Guid?" @bind-SelectedValue="@EditingUserInfo.AppUserId" Disabled="true">
+                    <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                    @foreach (var appUser in UsersNullable)
+                    {
+                        <SelectItem @key="appUser" TValue="Guid?" Value="@appUser.Id">
+                            @appUser.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field>
+                <FieldLabel>@L["UserPosition"]</FieldLabel>
+                <Select TValue="UserPosition" @bind-SelectedValue="@EditingUserInfo.UserPosition" Disabled="true">
+                    @foreach (var itemValue in Enum.GetValues(typeof(UserPosition)))
+                    {
+                        <SelectItem @key="itemValue" TValue="UserPosition" Value="@((UserPosition) itemValue)">
+                            @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+        </Column>
+
+        <Column>
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["DateOfBirth"]</FieldLabel>
+                    <DatePicker TValue="DateTime?" @bind-Date="@EditingUserInfo.DateOfBirth" DisplayFormat="@GlobalConsts.DateFormat" Disabled="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </DatePicker>
+                </Field>
+            </Validation>
+
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["JoinedDateTime"]</FieldLabel>
+                    <DatePicker TValue="DateTime?" @bind-Date="@EditingUserInfo.JoinedDateTime" DisplayFormat="@GlobalConsts.DateFormat" Disabled="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </DatePicker>
+                </Field>
+            </Validation>
+
+            <Validation>
+                <Field>
+                    <FieldLabel>@L["PromotedDateTime"]</FieldLabel>
+                    <DatePicker TValue="DateTime?" @bind-Date="@EditingUserInfo.PromotedDateTime" DisplayFormat="@GlobalConsts.DateFormat" Disabled="true">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </DatePicker>
+                </Field>
+            </Validation>
+
+            @* <Validation> *@
+            @*     <Field> *@
+            @*         <FieldLabel>@L["AffiliateMultiplier"]</FieldLabel> *@
+            @*         <NumericEdit TValue="double" @bind-Value="@EditingUserInfo.AffiliateMultiplier" ReadOnly="true"> *@
+            @*             <Feedback> *@
+            @*                 <ValidationError/> *@
+            @*             </Feedback> *@
+            @*         </NumericEdit> *@
+            @*     </Field> *@
+            @* </Validation> *@
+            @* *@
+            @* <Validation> *@
+            @*     <Field> *@
+            @*         <FieldLabel>@L["SeedingMultiplier"]</FieldLabel> *@
+            @*         <NumericEdit TValue="double" @bind-Value="@EditingUserInfo.SeedingMultiplier" ReadOnly="true"> *@
+            @*             <Feedback> *@
+            @*                 <ValidationError/> *@
+            @*             </Feedback> *@
+            @*         </NumericEdit> *@
+            @*     </Field> *@
+            @* </Validation> *@
+
+            <Field>
+                <FieldLabel>@L["ContentRoleType"]</FieldLabel>
+                <Select TValue="ContentRoleType" @bind-SelectedValue="@EditingUserInfo.ContentRoleType" Disabled="true">
+                    @foreach (var itemValue in Enum.GetValues(typeof(ContentRoleType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="ContentRoleType" Value="@((ContentRoleType) itemValue)">
+                            @L[$"Enum:ContentRoleType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@EditingUserInfo.IsGDLStaff" Disabled="true">@L["IsGDLStaff"]</Check>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@EditingUserInfo.IsActive" Disabled="true">@L["IsActive"]</Check>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@EditingUserInfo.IsSystemUser" Disabled="true">@L["IsSystemUser"]</Check>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@EditingUserInfo.EnablePayrollCalculation" Disabled="true">@L["EnablePayrollCalculation"]</Check>
+            </Field>
+
+        </Column>
+    </Row>
+</ModalBody>
+</Validations>
+</Form>
+</ModalContent>
+</Modal>

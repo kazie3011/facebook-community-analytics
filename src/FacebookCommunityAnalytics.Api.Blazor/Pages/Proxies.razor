@@ -1,0 +1,355 @@
+@page "/proxies"
+@attribute [Authorize(ApiPermissions.Proxies.Default)]
+@using FacebookCommunityAnalytics.Api.Proxies
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@inject IProxiesAppService ProxiesAppService
+@inject IProxyExtendAppService ProxyExtendAppService
+@inject IStringLocalizer<ApiResource> L
+@inject IAuthorizationService AuthorizationService
+@inject IUiMessageService UiMessageService
+@inject IObjectMapper ObjectMapper
+@inject IJSRuntime JSRuntime
+@inherits BlazorComponentBase
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Proxies"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="ProxySearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="ProxySearchForm" Clicked="GetProxiesAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="ProxyDto"
+                  Data="ProxyList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="ProxyDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="ProxyDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="ProxyDto"
+                                          Visible="@CanEditProxy"
+                                          Clicked="() => OpenEditProxyModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="ProxyDto"
+                                          Visible="@CanDeleteProxy"
+                                          Clicked="() => DeleteProxyAsync(context)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="ProxyDto"
+                                Field="Ip"
+                                Caption="@L["Ip"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ProxyDto"
+                                Field="Port"
+                                Caption="@L["Port"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ProxyDto"
+                                Field="Protocol"
+                                Caption="@L["Protocol"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ProxyDto"
+                                Field="Username"
+                                Caption="@L["Username"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ProxyDto"
+                                Field="Password"
+                                Caption="@L["Password"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ProxyDto"
+                                Field="LastPingDateTime"
+                                Caption="@L["LastPingDateTime"]">
+                    <DisplayTemplate>
+                        @BrowserDateTime.ConvertToBrowserTime(context.LastPingDateTime, GlobalConsts.DateFormat)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ProxyDto"
+                                Field="IsActive"
+                                Caption="@L["IsActive"]">
+                    <DisplayTemplate>
+                        @(context.IsActive ? L["Yes"] : L["No"])
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateProxyModal">
+    <ModalContent Centered="true">
+        <Form id="CreateProxyForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewProxy"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateProxyModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewProxyValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@NewProxy"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Ip"] *</FieldLabel>
+                            <TextEdit @bind-Text="@NewProxy.Ip">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Port"] *</FieldLabel>
+                            <NumericEdit TValue="int" @bind-Value="@NewProxy.Port">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Protocol"] *</FieldLabel>
+                            <TextEdit @bind-Text="@NewProxy.Protocol">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Username"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewProxy.Username">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Password"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewProxy.Password">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["LastPingDateTime"]</FieldLabel>
+                            <DateEdit TValue="DateTime" @bind-Date="@NewProxy.LastPingDateTime">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </DateEdit>
+                        </Field>
+                    </Validation>
+
+                    <Field>
+                        <Check TValue="bool" @bind-Checked="@NewProxy.IsActive">@L["IsActive"]</Check>
+                    </Field>
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateProxyModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateProxyForm" Clicked="CreateProxyAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditProxyModal">
+    <ModalContent Centered="true">
+        <Form id="EditProxyForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditProxyModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditingProxyValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@EditingProxy"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Ip"] *</FieldLabel>
+                            <TextEdit @bind-Text="@EditingProxy.Ip">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Port"] *</FieldLabel>
+                            <NumericEdit TValue="int" @bind-Value="@EditingProxy.Port">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Protocol"] *</FieldLabel>
+                            <TextEdit @bind-Text="@EditingProxy.Protocol">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Username"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingProxy.Username">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Password"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingProxy.Password">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["LastPingDateTime"]</FieldLabel>
+                            <DateEdit TValue="DateTime" @bind-Date="@EditingProxy.LastPingDateTime">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </DateEdit>
+                        </Field>
+                    </Validation>
+
+                    <Field>
+                        <Check TValue="bool" @bind-Checked="@EditingProxy.IsActive">@L["IsActive"]</Check>
+                    </Field>
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditProxyModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditProxyForm" Clicked="UpdateProxyAsync"/><h1/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* IMPORT PROXY MODAL ************************* *@
+<Modal @ref="ImportProxyModal">
+    <ModalContent Centered="true">
+        <Form id="ImportProxyModal">
+            <ModalHeader>
+                <ModalTitle>@L["ImportProxy"]</ModalTitle>
+                <CloseButton Clicked="CloseImportProxyModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["ImportProxyFileType"] </FieldLabel>
+                    <FileEdit Changed="@OnFileImportProxiesChanged" Filter=".xls, .xlsx" AutoReset="false"/>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseImportProxyModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="ImportProxyModal" Clicked="ImportProxiesAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

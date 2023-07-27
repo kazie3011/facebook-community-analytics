@@ -1,0 +1,903 @@
+﻿@page "/evaluation-configs"
+@using Faso.Blazor.SpinKit
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.UserEvaluationConfigurations
+@using FacebookCommunityAnalytics.Api.Permissions;
+@using FacebookCommunityAnalytics.Api.StaffEvaluations
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using Microsoft.AspNetCore.Components
+@using Volo.Abp.Authorization.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@inherits BlazorComponentBase
+@inject IUserEvaluationConfigurationAppService UserEvaluationConfigurationAppService;
+@inject IPermissionChecker PermissionChecker;
+@inject IStaffEvaluationAppService StaffEvaluationAppService
+@inject IJSRuntime JS
+@inject ITeamMemberAppService TeamMemberAppService
+
+<PageHeader Title="@L["Menu:EvaluationConfigurations"]" BreadcrumbItems="BreadcrumbItems">
+</PageHeader>
+
+<Row>
+<Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnMobile">
+<Tabs SelectedTab="@_selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+<Items>
+    <AuthorizeView Policy="@ApiPermissions.UserEvaluationConfigurations.ConfigSale">
+        <Tab Name="TabSale">Sale</Tab>
+    </AuthorizeView>
+    <AuthorizeView Policy="@ApiPermissions.UserEvaluationConfigurations.ConfigTiktok">
+        <Tab Name="TabTiktok">Tiktok</Tab>
+    </AuthorizeView>
+    <AuthorizeView Policy="@ApiPermissions.UserEvaluationConfigurations.ConfigContent">
+        <Tab Name="TabContent">Content</Tab>
+    </AuthorizeView>
+    <AuthorizeView Policy="@ApiPermissions.UserEvaluationConfigurations.ConfigCommunity">
+        <Tab Name="TabCommunityConfiguration">Community</Tab>
+    </AuthorizeView>
+</Items>
+
+<Content>
+<AuthorizeView Policy="@ApiPermissions.UserEvaluationConfigurations.ConfigSale">
+    <TabPanel Name="TabSale">
+        @if (_showLoading)
+        {
+            <SpinKitChasingDots/>
+        }
+        else
+        {
+            <Form id="ConfigurationSaleForm">
+                <Heading Size="HeadingSize.Is5">@L["Configuration", "Sale"]</Heading>
+                <Row>
+                    <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                        <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Sale.ContractAmountKPI"]</FieldLabel>
+                        <FieldBody ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnTablet">
+                            <Addons>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit Text="@(_evalConfigDto.Sale.ContractAmountKPI?.ToString("N0"))" DefaultValue="0" TextChanged="OnContractAmountChange"/>
+                                </Addon>
+                                <Addon AddonType="AddonType.End">
+                                    <AddonLabel>@L["KPIUnit.Sale"]</AddonLabel>
+                                </Addon>
+                            </Addons>
+                        </FieldBody>
+                    </Field>
+                </Row>
+
+                <Row>
+                    <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                        <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop" TextAlignment="TextAlignment.Right">@L["Configuration.Sale.PaidContractAmountKPI"]</FieldLabel>
+                        <FieldBody ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnTablet">
+                            <Addons>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit Text="@(_evalConfigDto.Sale.PaidContractAmountKPI?.ToString("N0"))" DefaultValue="0" TextChanged="OnPaidContractAmountKPIChange"/>
+                                </Addon>
+                                <Addon AddonType="AddonType.End">
+                                    <AddonLabel>@L["KPIUnit.Sale"]</AddonLabel>
+                                </Addon>
+                            </Addons>
+                        </FieldBody>
+                    </Field>
+                </Row>
+
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is4.Is4.WithOffset.OnDesktop">
+                        <Buttons>
+                            <Button Color="Color.Primary" Clicked="EvaluateTeamSale">@L["Configuration.Evaluate.Sale"]</Button>
+                            <Button Color="Color.Primary" Clicked="SaveRootEvalConfig">@L["Update"]</Button>
+                        </Buttons>
+                    </Column>
+                </Row>
+            </Form>
+            <br/>
+            <Row>
+                <Column ColumnSize="ColumnSize.IsFull">
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <Select Style="width: fit-content" TValue="Guid?" SelectedValueChanged="@OnSelectedValueTeam">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["StaffEvaluations.Select.Team"]
+                                </SelectItem>
+                                @foreach (var team in FilterTeams)
+                                {
+                                    <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                        @team.DisplayName
+                                    </SelectItem>
+                                }
+                            </Select>
+                            <Select Style="width: fit-content" TValue="UserPosition" @bind-SelectedValue="_selectedUserPosition">
+                                @foreach (var itemValue in ListPosition)
+                                {
+                                    <SelectItem @key="itemValue" TValue="UserPosition" Value="@((UserPosition) itemValue)">
+                                        @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <Select Style="width: fit-content" TValue="Guid?" @bind-SelectedValue="_selectedUserId">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["UserProfile.SelectUser"]
+                                </SelectItem>
+                                @if (UserLookupDtos != null && UserLookupDtos.Count > 0)
+                                {
+                                    @foreach (var userLookup in UserLookupDtos)
+                                    {
+                                        <SelectItem TValue="Guid?" Value="@userLookup.Id">
+                                            @userLookup.DisplayName
+                                        </SelectItem>
+                                    }
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <Button Color="Color.Primary" Clicked="CreateCustomEvalConfig">
+                                <Icon Name="IconName.Add"></Icon>
+                            </Button>
+                        </Addon>
+                    </Addons>
+                </Column>
+                <br/>
+                <Column ColumnSize="ColumnSize.IsFull">
+                    <Table FullWidth="true" Narrow="true" Bordered="true" Striped="true" Responsive="true">
+                        <TableHeader>
+                            <TableRow TextAlignment="TextAlignment.Center">
+                                <TableHeaderCell>
+                                    @L["Team"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Role"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Username"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["ContractAmountKPI"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["PaidContractAmountKPI"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Action"]
+                                </TableHeaderCell>
+                            </TableRow>
+                        </TableHeader>
+
+                        @if (UserEvaluations.Count > 0)
+                        {
+                            <TableBody>
+
+                                @foreach (var userEvaluation in UserEvaluations)
+                                {
+                                    <TableRow >
+                                        <TableRowCell>@GetTeamName(userEvaluation.TeamId)</TableRowCell>
+                                        <TableRowCell>@L[$"Enum:UserPosition:{Convert.ToInt32(userEvaluation.UserPosition)}"]</TableRowCell>
+                                        <TableRowCell>
+                                            @if (userEvaluation.AppUserId.HasValue)
+                                            {
+                                                @GetAppUserName(userEvaluation.AppUserId.Value)
+                                            }
+                                        </TableRowCell>
+
+                                        <TableRowCell>@(userEvaluation.Sale.ContractAmountKPI?.ToString("N0"))</TableRowCell>
+                                        <TableRowCell>@(userEvaluation.Sale.PaidContractAmountKPI?.ToString("N0"))</TableRowCell>
+                                        <TableRowCell>
+                                            <Buttons>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="(() => OpenSaleEvalConfigModal(userEvaluation))">
+                                                    <Icon Name="IconName.Edit"></Icon>
+                                                </Button>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="(() => OpenRemoveModal(userEvaluation))">
+                                                    <Icon Name="IconName.Delete"></Icon>
+                                                </Button>
+                                            </Buttons>
+
+                                        </TableRowCell>
+                                    </TableRow>
+                                }
+                            </TableBody>
+                        }
+                    </Table>
+                </Column>
+            </Row>
+        }
+    </TabPanel>
+</AuthorizeView>
+
+<AuthorizeView Policy="@ApiPermissions.UserEvaluationConfigurations.ConfigTiktok">
+    <TabPanel Name="TabTiktok">
+        @if (_showLoading)
+        {
+            <SpinKitChasingDots/>
+        }
+        else
+        {
+            <Form id="ConfigurationTiktokForm">
+                <Heading Size="HeadingSize.Is5">@L["Configuration", "Tiktok"]</Heading>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Tiktok.TiktokVideoPerMonth"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet">
+                        <TextEdit Text="@(_evalConfigDto.Tiktok.TiktokVideoPerMonth?.ToString("N0"))" MaxLength="13" TextChanged="OnTiktokVideoPerMonthChange"/>
+                    </FieldBody>
+                </Field>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Tiktok.TiktokAverageVideoView"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet">
+                        <TextEdit Text="@(_evalConfigDto.Tiktok.TiktokAverageVideoView?.ToString("N0"))" MaxLength="13" TextChanged="OnTiktokAverageVideoViewChange"/>
+                    </FieldBody>
+                </Field>
+
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is4.Is3.WithOffset.OnDesktop">
+                        <Buttons>
+                            <Button Color="Color.Primary" Clicked="EvaluateTeamTiktok">@L["Configuration.Evaluate.Tiktok"]</Button>
+                            <Button Color="Color.Primary" Clicked="SaveRootEvalConfig">@L["Update"]</Button>
+                        </Buttons>
+                    </Column>
+                </Row>
+            </Form>
+            <br/>
+            <br/>
+
+            <Row>
+                <Column ColumnSize="ColumnSize.IsFull">
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <Select Style="width: fit-content" TValue="Guid?" SelectedValueChanged="@OnSelectedValueTeam">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["StaffEvaluations.Select.Team"]
+                                </SelectItem>
+                                @foreach (var team in FilterTeams)
+                                {
+                                    <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                        @team.DisplayName
+                                    </SelectItem>
+                                }
+                            </Select>
+                            <Select Style="width: fit-content" TValue="UserPosition" @bind-SelectedValue="_selectedUserPosition">
+                                @foreach (var itemValue in ListPosition)
+                                {
+                                    <SelectItem @key="itemValue" TValue="UserPosition" Value="@((UserPosition) itemValue)">
+                                        @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+
+                            <Select Style="width: fit-content" TValue="Guid?" @bind-SelectedValue="_selectedUserId">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["UserProfile.SelectUser"]
+                                </SelectItem>
+                                @if (UserLookupDtos != null && UserLookupDtos.Count > 0)
+                                {
+                                    @foreach (var userLookup in UserLookupDtos)
+                                    {
+                                        <SelectItem TValue="Guid?" Value="@userLookup.Id">
+                                            @userLookup.DisplayName
+                                        </SelectItem>
+                                    }
+                                }
+                            </Select>
+
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <Button Color="Color.Primary" Clicked="CreateCustomEvalConfig">
+                                <Icon Name="IconName.Add"></Icon>
+                            </Button>
+                        </Addon>
+                    </Addons>
+                </Column>
+                <Column ColumnSize="ColumnSize.IsFull">
+                    <Table FullWidth="true" Narrow="true" Bordered="true" Striped="true" Responsive="true">
+                        <TableHeader>
+                            <TableRow TextAlignment="TextAlignment.Center">
+                                <TableHeaderCell>
+                                    @L["Team"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Role"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Username"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["TiktokVideoPerMonth"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["TiktokAverageVideoView"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Action"]
+                                </TableHeaderCell>
+                            </TableRow>
+                        </TableHeader>
+                        @if (UserEvaluations.Count > 0)
+                        {
+                            <TableBody>
+
+                                @foreach (var userEvaluation in UserEvaluations)
+                                {
+                                    <TableRow >
+                                        <TableRowCell>@GetTeamName(userEvaluation.TeamId)</TableRowCell>
+                                        <TableRowCell>@L[$"Enum:UserPosition:{Convert.ToInt32(userEvaluation.UserPosition)}"]</TableRowCell>
+                                        <TableRowCell>@userEvaluation.Tiktok.TiktokVideoPerMonth</TableRowCell>
+                                        <TableRowCell>
+                                            @if (userEvaluation.AppUserId.HasValue)
+                                            {
+                                                @GetAppUserName(userEvaluation.AppUserId.Value)
+                                            }
+                                        </TableRowCell>
+                                        <TableRowCell>@(userEvaluation.Tiktok.TiktokAverageVideoView?.ToString("N0"))</TableRowCell>
+                                        <TableRowCell>
+                                            <Buttons>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="(() => OpenTiktokEvalConfigModal(userEvaluation))">
+                                                    <Icon Name="IconName.Edit"></Icon>
+                                                </Button>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="(() => OpenRemoveModal(userEvaluation))">
+                                                    <Icon Name="IconName.Delete"></Icon>
+                                                </Button>
+                                            </Buttons>
+                                        </TableRowCell>
+                                    </TableRow>
+                                }
+
+                            </TableBody>
+                        }
+                    </Table>
+                </Column>
+            </Row>
+        }
+    </TabPanel>
+</AuthorizeView>
+
+<AuthorizeView Policy="@ApiPermissions.UserEvaluationConfigurations.ConfigContent">
+    <TabPanel Name="TabContent">
+        @if (_showLoading)
+        {
+            <SpinKitChasingDots/>
+        }
+        else
+        {
+            <Form id="ConfigurationContentForm">
+                <Heading Size="HeadingSize.Is5">@L["Configuration", "Content"]</Heading>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Content.Posts"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet">
+                        <NumericEdit TValue="int?" Min="0" @bind-Value="_evalConfigDto.Content.ContentPostQuantity"/>
+                    </FieldBody>
+                </Field>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Content.MinimumPostReactions"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet">
+                        <TextEdit Text="@_evalConfigDto.Content.MinimumPostReactions?.ToString("N0")" MaxLength="13" DefaultValue="0" TextChanged="OnContentMinimumPostReactionsChange"/>
+                    </FieldBody>
+                </Field>
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is4.Is3.WithOffset.OnDesktop">
+                        <Buttons>
+                            <Button Color="Color.Primary" Clicked="EvaluateTeamContent">@L["Configuration.Evaluate.Content"]</Button>
+                            <Button Color="Color.Primary" Clicked="SaveRootEvalConfig">@L["Update"]</Button>
+                        </Buttons>
+                    </Column>
+                </Row>
+            </Form>
+            <br/>
+            <br/>
+            <Row>
+                <Column ColumnSize="ColumnSize.IsFull">
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <Select TValue="Guid?" SelectedValueChanged="@OnSelectedValueTeam">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["StaffEvaluations.Select.Team"]
+                                </SelectItem>
+                                @foreach (var team in FilterTeams)
+                                {
+                                    <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                        @team.DisplayName
+                                    </SelectItem>
+                                }
+                            </Select>
+                            <Select Style="width: fit-content" TValue="UserPosition" @bind-SelectedValue="_selectedUserPosition">
+                                @foreach (var itemValue in ListPosition)
+                                {
+                                    <SelectItem @key="itemValue" TValue="UserPosition" Value="@((UserPosition) itemValue)">
+                                        @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+
+                            <Select TValue="Guid?" @bind-SelectedValue="_selectedUserId">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["UserProfile.SelectUser"]
+                                </SelectItem>
+                                @if (UserLookupDtos != null && UserLookupDtos.Count > 0)
+                                {
+                                    @foreach (var userLookup in UserLookupDtos)
+                                    {
+                                        <SelectItem TValue="Guid?" Value="@userLookup.Id">
+                                            @userLookup.DisplayName
+                                        </SelectItem>
+                                    }
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <Button Color="Color.Primary" Clicked="CreateCustomEvalConfig">
+                                <Icon Name="IconName.Add"></Icon>
+                            </Button>
+                        </Addon>
+                    </Addons>
+                </Column>
+
+                <Column ColumnSize="ColumnSize.IsFull">
+                    <Table FullWidth="true" Narrow="true" Bordered="true" Striped="true" Responsive="true">
+                        <TableHeader>
+                            <TableRow TextAlignment="TextAlignment.Center">
+                                <TableHeaderCell>
+                                    @L["Team"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Role"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Username"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["ContentPostQuantity"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["MinimumPostReactions"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Action"]
+                                </TableHeaderCell>
+                            </TableRow>
+                        </TableHeader>
+                        @if (UserEvaluations.Count > 0)
+                        {
+                            <TableBody>
+
+                                @foreach (var userEvaluation in UserEvaluations)
+                                {
+                                    <TableRow >
+                                        <TableRowCell>@GetTeamName(userEvaluation.TeamId)</TableRowCell>
+                                        <TableRowCell>@L[$"Enum:UserPosition:{(int) userEvaluation.UserPosition}"]</TableRowCell>
+                                        <TableRowCell>
+                                            @if (userEvaluation.AppUserId.HasValue)
+                                            {
+                                                @GetAppUserName(userEvaluation.AppUserId.Value)
+                                            }
+                                        </TableRowCell>
+                                        <TableRowCell>@userEvaluation.Content.ContentPostQuantity</TableRowCell>
+                                        <TableRowCell>@userEvaluation.Content.MinimumPostReactions?.ToString("N0")</TableRowCell>
+                                        <TableRowCell>
+                                            <Buttons>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="(() => OpenContentEvalConfigModal(userEvaluation))">
+                                                    <Icon Name="IconName.Edit"></Icon>
+                                                </Button>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="(() => OpenRemoveModal(userEvaluation))">
+                                                    <Icon Name="IconName.Delete"></Icon>
+                                                </Button>
+                                            </Buttons>
+
+                                        </TableRowCell>
+                                    </TableRow>
+                                }
+
+                            </TableBody>
+                        }
+                    </Table>
+                </Column>
+            </Row>
+        }
+    </TabPanel>
+</AuthorizeView>
+
+<AuthorizeView Policy="@ApiPermissions.UserEvaluationConfigurations.ConfigCommunity">
+    <TabPanel Name="TabCommunityConfiguration">
+        @if (_showLoading)
+        {
+            <SpinKitChasingDots/>
+        }
+        else
+        {
+            <Form id="ConfigurationSeedingForm">
+                <Heading Size="HeadingSize.Is5">@L["Configuration", "Seeding"]</Heading>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Seeding.Posts"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet">
+                        <NumericEdit TValue="int?" Min="0" @bind-Value="_evalConfigDto.Seeding.SeedingPostQuantity"/>
+                    </FieldBody>
+                </Field>
+
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Seeding.MinimumPostReactions"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet">
+                        <TextEdit Text="@_evalConfigDto.Seeding.MinimumPostReactions?.ToString("N0")" MaxLength="13" DefaultValue="0" TextChanged="OnMinimumPostReactionsChange"/>
+                    </FieldBody>
+                </Field>
+            </Form>
+
+            <Form id="ConfigurationAffiliateForm">
+                <Heading Size="HeadingSize.Is5">@L["Configuration", "Affiliate"]</Heading>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Affiliate.Posts"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet">
+                        <NumericEdit TValue="int?" Min="0" @bind-Value="_evalConfigDto.Affiliate.AffiliatePostQuantity"/>
+                    </FieldBody>
+                </Field>
+
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnTablet" TextAlignment="TextAlignment.Right">@L["Configuration.Affiliate.MinConversions"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnTablet">
+                        <TextEdit Text="@(_evalConfigDto.Affiliate.MinConversionCount?.ToString("N0"))" MaxLength="13" DefaultValue="0" TextChanged="OnMinConversionChange"/>
+                    </FieldBody>
+                </Field>
+
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is4.Is4.WithOffset.OnDesktop">
+                        <Buttons>
+                            <Button Color="Color.Primary" Clicked="EvaluateTeamAffiliate">@L["Configuration.Evaluate.Affiliate"]</Button>
+                            <Button Color="Color.Primary" Clicked="SaveRootEvalConfig">@L["Update"]</Button>
+                        </Buttons>
+                    </Column>
+                </Row>
+            </Form>
+            <br/>
+            <br/>
+
+            <Row>
+                <Column ColumnSize="ColumnSize.IsFull">
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <Select TValue="Guid?" SelectedValueChanged="@OnSelectedCommunityTeam">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["StaffEvaluations.Select.Team"]
+                                </SelectItem>
+                                @foreach (var team in FilterTeams)
+                                {
+                                    <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                        @team.DisplayName
+                                    </SelectItem>
+                                }
+                            </Select>
+                            <Select Style="width: fit-content" TValue="UserPosition" @bind-SelectedValue="_selectedUserPosition">
+                                @foreach (var itemValue in ListPosition)
+                                {
+                                    <SelectItem @key="itemValue" TValue="UserPosition" Value="@((UserPosition) itemValue)">
+                                        @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <Select TValue="Guid?" @bind-SelectedValue="_selectedUserId">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["UserProfile.SelectUser"]
+                                </SelectItem>
+                                @if (UserLookupDtos != null && UserLookupDtos.Count > 0)
+                                {
+                                    @foreach (var userLookup in UserLookupDtos)
+                                    {
+                                        <SelectItem TValue="Guid?" Value="@userLookup.Id">
+                                            @userLookup.DisplayName
+                                        </SelectItem>
+                                    }
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <Button Color="Color.Primary" Clicked="CreateCustomEvalConfig">
+                                <Icon Name="IconName.Add"></Icon>
+                            </Button>
+                        </Addon>
+                    </Addons>
+                </Column>
+                <Column ColumnSize="ColumnSize.IsFull">
+                    <Table FullWidth="true" Narrow="true" Bordered="true" Striped="true" Responsive="true">
+                        <TableHeader>
+                            <TableRow TextAlignment="TextAlignment.Center">
+                                <TableHeaderCell>
+                                    @L["Team"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Role"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Username"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["SeedingPostQuantity"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["MinimumPostReactions"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["AffiliatePostQuantity"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["MinConversionCount"]
+                                </TableHeaderCell>
+                                <TableHeaderCell>
+                                    @L["Action"]
+                                </TableHeaderCell>
+                            </TableRow>
+                        </TableHeader>
+                        @if (UserEvaluations.Count > 0)
+                        {
+                            <TableBody>
+
+                                @foreach (var userEvaluation in UserEvaluations)
+                                {
+                                    <TableRow >
+                                        <TableRowCell>@GetTeamName(userEvaluation.TeamId)</TableRowCell>
+                                        <TableRowCell>@L[$"Enum:UserPosition:{Convert.ToInt32(userEvaluation.UserPosition)}"]</TableRowCell>
+                                        <TableRowCell>
+                                            @if (userEvaluation.AppUserId.HasValue)
+                                            {
+                                                @GetAppUserName(userEvaluation.AppUserId.Value)
+                                            }
+                                        </TableRowCell>
+                                        <TableRowCell>@userEvaluation.Seeding.SeedingPostQuantity</TableRowCell>
+                                        <TableRowCell>@(userEvaluation.Seeding.MinimumPostReactions?.ToString("N0"))</TableRowCell>
+                                        <TableRowCell>@userEvaluation.Affiliate.AffiliatePostQuantity</TableRowCell>
+                                        <TableRowCell>@(userEvaluation.Affiliate.MinConversionCount?.ToString("N0"))</TableRowCell>
+                                        <TableRowCell>
+                                            <Buttons>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="(() => OpenSeedingAndAffiliateEvalConfigModal(userEvaluation))">
+                                                    <Icon Name="IconName.Edit"></Icon>
+                                                </Button>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="(() => OpenRemoveModal(userEvaluation))">
+                                                    <Icon Name="IconName.Delete"></Icon>
+                                                </Button>
+                                            </Buttons>
+
+                                        </TableRowCell>
+                                    </TableRow>
+                                }
+
+                            </TableBody>
+                        }
+                    </Table>
+                </Column>
+            </Row>
+        }
+    </TabPanel>
+</AuthorizeView>
+</Content>
+</Tabs>
+</Column>
+@* @if (IsAdminRole()) *@
+@* { *@
+@*     <Column ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnMobile"> *@
+@*         <Card> *@
+@*             <CardBody> *@
+@*                 <Heading Size="HeadingSize.Is4">@L["EvaluateStaffs.Title"]</Heading> *@
+@*                 <Form id="EvaluationStaffForm" class="mb-3"> *@
+@*                     <Field> *@
+@*                         <Label>@L["Label:Year"]</Label> *@
+@*                         <Select TValue="int" @bind-SelectedValue="@Filter.Year"> *@
+@*                             @foreach (var year in Years) *@
+@*                             { *@
+@*                                 <SelectItem @key="year" TValue="int" Value="@year">@year</SelectItem> *@
+@*                             } *@
+@*                         </Select> *@
+@*                     </Field> *@
+@*                     <Field> *@
+@*                         <Label>@L["Label:Month"]</Label> *@
+@*                         <Select TValue="int" @bind-SelectedValue="@Filter.Month"> *@
+@* *@
+@*                             @foreach (var month in Months) *@
+@*                             { *@
+@*                                 <SelectItem @key="month" TValue="int" Value="@month"> *@
+@*                                     @string.Format(L["Month"], month) *@
+@*                                 </SelectItem> *@
+@*                             } *@
+@*                         </Select> *@
+@*                     </Field> *@
+@*                     <Field> *@
+@*                         <SubmitButton Form="EvaluationStaffForm" Clicked="EvaluateStaffs" Block="isLoading"> *@
+@*                             <Icon Name="IconName.Link" Class="mr-1"></Icon>@L["EvaluateStaffs.Submit"] *@
+@*                         </SubmitButton> *@
+@*                     </Field> *@
+@*                 </Form> *@
+@*             </CardBody> *@
+@*         </Card> *@
+@*     </Column> *@
+@* } *@
+</Row>
+
+
+@* ************************* EDIT SALE MODAL ************************* *@
+<Modal @ref="EditSaleModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditSaleEvalConfig">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateSaleConfig"] - @GetTeamName(EditingEvaluationConfiguration.TeamId) - @EditingEvaluationConfiguration.UserPosition</ModalTitle>
+                <CloseButton Clicked="CloseSaleEvalConfigModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is4" TextAlignment="TextAlignment.Right">@L["Configuration.Sale.ContractAmountKPI"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is4">
+                        <TextEdit Text="@(EditingEvaluationConfiguration.Sale.ContractAmountKPI?.ToString("N0"))" DefaultValue="0" TextChanged="OnEditContractAmountChange"/>
+                    </FieldBody>
+                    <FieldLabel>@L["KPIUnit.Sale"]</FieldLabel>
+                </Field>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is4" TextAlignment="TextAlignment.Right">@L["Configuration.Sale.PaidContractAmountKPI"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is4">
+                        <TextEdit Text="@(EditingEvaluationConfiguration.Sale.PaidContractAmountKPI?.ToString("N0"))" DefaultValue="0" TextChanged="OnEditPaidContractAmountChange"/>
+                    </FieldBody>
+                    <FieldLabel>@L["KPIUnit.Sale"]</FieldLabel>
+                </Field>
+            </ModalBody>
+
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseSaleEvalConfigModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditSaleEvalConfig" Clicked="UpdateCustomEvalConfig"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT TIKTOK MODAL ************************* *@
+<Modal @ref="EditTiktokModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditTiktokEvalConfig">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateTiktokConfig"] - @GetTeamName(EditingEvaluationConfiguration.TeamId) - @EditingEvaluationConfiguration.UserPosition</ModalTitle>
+                <CloseButton Clicked="CloseTiktokEvalConfigModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is3.OnDesktop.IsHalf.OnMobile" TextAlignment="TextAlignment.Right">@L["Configuration.Tiktok.TiktokVideoPerMonth"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+                        <TextEdit Text="@(EditingEvaluationConfiguration.Tiktok.TiktokVideoPerMonth?.ToString("N0"))" MaxLength="13" TextChanged="OnEditTiktokVideoPerMonthChange"/>
+                    </FieldBody>
+                </Field>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is3.OnDesktop.IsHalf.OnMobile" TextAlignment="TextAlignment.Right">
+                        @L["Configuration.Tiktok.TiktokAverageVideoView"]
+                    </FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+                        <TextEdit Text="@(EditingEvaluationConfiguration.Tiktok.TiktokAverageVideoView?.ToString("N0"))" MaxLength="13" TextChanged="OnEditTiktokAverageVideoViewChange"/>
+                    </FieldBody>
+                </Field>
+            </ModalBody>
+
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseTiktokEvalConfigModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditTiktokEvalConfig" Clicked="UpdateCustomEvalConfig"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT CONTENT MODAL ************************* *@
+<Modal @ref="EditContentModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditContentEvalConfig">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateContentConfig"] - @GetTeamName(EditingEvaluationConfiguration.TeamId) - @EditingEvaluationConfiguration.UserPosition</ModalTitle>
+                <CloseButton Clicked="CloseContentEvalConfigModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is2" TextAlignment="TextAlignment.Right">@L["Configuration.Content.Posts"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is6">
+                        <NumericEdit TValue="int?" Min="0" @bind-Value="EditingEvaluationConfiguration.Content.ContentPostQuantity"/>
+                    </FieldBody>
+                    <FieldLabel>@L["Label:Day"]</FieldLabel>
+                </Field>
+
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+
+                    <FieldLabel ColumnSize="ColumnSize.Is2" TextAlignment="TextAlignment.Right">@L["Configuration.Content.MinimumPostReactions"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is6">
+                        <TextEdit Text="@EditingEvaluationConfiguration.Content.MinimumPostReactions?.ToString("N0")"
+                                  MaxLength="13"
+                                  TextChanged="OnEditMinimumPostInteractionsChange"/>
+                    </FieldBody>
+                    <FieldLabel>@L["KPIUnit.Content.MinimumReactions"]</FieldLabel>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseContentEvalConfigModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditContentEvalConfig" Clicked="UpdateCustomEvalConfig"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT SEEDING AND AFFILIATE MODAL ************************* *@
+<Modal @ref="EditSeedingAndAffiliateModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditAffiliateEvalConfig">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateConfig"] - @GetTeamName(EditingEvaluationConfiguration.TeamId) - @EditingEvaluationConfiguration.UserPosition</ModalTitle>
+                <CloseButton Clicked="CloseAffiliateEvalConfigModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is2" TextAlignment="TextAlignment.Right">@L["Configuration.Seeding.Posts"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is6">
+                        <NumericEdit TValue="int?" Min="0" @bind-Value="EditingEvaluationConfiguration.Seeding.SeedingPostQuantity"/>
+                    </FieldBody>
+                    <FieldLabel>@L["Label:Day"]</FieldLabel>
+
+                </Field>
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is2" TextAlignment="TextAlignment.Right">@L["Configuration.Seeding.MinimumPostReactions"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is6">
+                        <TextEdit Text="@EditingEvaluationConfiguration.Seeding.MinimumPostReactions?.ToString("N0")" MaxLength="13" TextChanged="OnEditSeedingMinimumPostInteractionsChange"/>
+                    </FieldBody>
+                </Field>
+
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is2" TextAlignment="TextAlignment.Right">@L["Configuration.Affiliate.Posts"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is6">
+                        <NumericEdit TValue="int?" Min="0" @bind-Value="EditingEvaluationConfiguration.Affiliate.AffiliatePostQuantity"/>
+                    </FieldBody>
+                    <FieldLabel>@L["Label:Month"]</FieldLabel>
+                </Field>
+
+                <Field Horizontal="true" ColumnSize="ColumnSize.IsFull">
+                    <FieldLabel ColumnSize="ColumnSize.Is2" TextAlignment="TextAlignment.Right">@L["Configuration.Affiliate.MinConversionCount"]</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is6">
+                        <TextEdit Text="@(EditingEvaluationConfiguration.Affiliate.MinConversionCount?.ToString("N0"))" MaxLength="13" TextChanged="OnEditAffiliateConversionCountChange"/>
+                    </FieldBody>
+                </Field>
+            </ModalBody>
+
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseAffiliateEvalConfigModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditAffiliateEvalConfig" Clicked="UpdateCustomEvalConfig"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* CONFIRM DELETE MODAL ************************* *@
+<Modal @ref="ConfirmationModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="ConfirmationForm">
+            <ModalHeader>
+                <ModalTitle>@ConfirmModalTitle</ModalTitle>
+                <CloseButton Clicked="CloseConfirmationModal"></CloseButton>
+            </ModalHeader>
+            <ModalBody>
+                <div style="text-align: center; font-size: large">@L[$"Configuration.Confirm.Warning"]</div>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Success" Form="ConfirmationForm" @onclick="DeleteEvalConfig">
+                    @L["Confirm"]
+                </Button>
+                <Button Color="Color.Danger"
+                        Clicked="CloseConfirmationModal">
+                    @L["Cancel"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

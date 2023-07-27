@@ -1,0 +1,111 @@
+﻿@page "/dev"
+@attribute [Authorize(ApiPermissions.Dev.Default)]
+@using FacebookCommunityAnalytics.Api.Dev
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Groups
+@using Volo.Abp.Timing
+@using Volo.Abp.Users
+@using FA = Blazorise.Icons.FontAwesome;
+@using System.Linq
+@inherits BlazorComponentBase
+
+@inject IDevAppService DevAppService
+@inject IGroupExtendAppService GroupExtendAppService
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Dev"]">
+
+</PageHeader>
+
+<CardDeck>
+    <Card Margin="Margin.Is4.FromBottom">
+        <CardBody>
+            <CardTitle Size="10">NoRoleUsers</CardTitle>
+            @foreach (var forecast in NoRoleUsers)
+            {
+                <TableRow @key="forecast">
+                    <TableRowCell>@forecast</TableRowCell>
+                </TableRow>
+            }
+        </CardBody>
+    </Card>
+
+    <Card Margin="Margin.Is4.FromBottom">
+        <CardBody>
+            <CardTitle Size="10">NoTeamUsers</CardTitle>
+            @foreach (var forecast in NoTeamUsers)
+            {
+                <TableRow @key="forecast">
+                    <TableRowCell>@forecast</TableRowCell>
+                </TableRow>
+            }
+        </CardBody>
+    </Card>
+
+    <Card Margin="Margin.Is4.FromBottom">
+        <CardBody>
+            <CardTitle Size="10">NoPostUsers</CardTitle>
+            @foreach (var forecast in NoPostUsers)
+            {
+                <TableRow @key="forecast">
+                    <TableRowCell>@forecast</TableRowCell>
+                </TableRow>
+            }
+        </CardBody>
+    </Card>
+
+    <Card Margin="Margin.Is4.FromBottom">
+        <CardBody>
+            <CardTitle Size="10">DuplicatedUsers</CardTitle>
+            @foreach (var forecast in DuplicatedUsers)
+            {
+                <TableRow @key="forecast">
+                    <TableRowCell>@forecast</TableRowCell>
+                </TableRow>
+            }
+        </CardBody>
+    </Card>
+
+    <Card Margin="Margin.Is4.FromBottom">
+        <CardBody>
+            <CardTitle Size="10">NoCreatedAtPosts</CardTitle>
+            <TableRow>
+                <TableRowCell>@NoCreatedAtPosts.Count</TableRowCell>
+            </TableRow>
+        </CardBody>
+    </Card>
+
+    <Card Margin="Margin.Is4.FromBottom">
+        <CardBody>
+            <CardTitle Size="10">InvalidUrlsPosts</CardTitle>
+            @foreach (var forecast in InvalidUrlsPosts)
+            {
+                <TableRow @key="forecast">
+                    <TableRowCell>@InvalidUrlsPosts</TableRowCell>
+                </TableRow>
+            }
+        </CardBody>
+    </Card>
+
+    <Card Margin="Margin.Is4.FromBottom">
+        <CardBody>
+            <CardTitle Size="10">UncrawledPosts</CardTitle>
+            <TableRow>
+                <TableRowCell>@UncrawledPosts</TableRowCell>
+            </TableRow>
+        </CardBody>
+    </Card>
+
+</CardDeck>

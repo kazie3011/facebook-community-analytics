@@ -1,0 +1,135 @@
+﻿@page "/user-compensations"
+
+@attribute [Authorize(ApiPermissions.UserCompensations.Default)]
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using FacebookCommunityAnalytics.Api.UserCompensations
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Permissions
+@inherits BlazorComponentBase
+
+@inject IUserInfosAppService UserInfosAppService
+@inject IUserCompensationAppService UserCompensationAppService
+@inject IUiMessageService UiMessageService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["UserCompensation.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="UserCompensationSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="UserInfoSearchForm" Clicked="GetUserCompensationsAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="UserCompensationNavigationPropertiesDto"
+                  Data="UserCompensationDtos"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  ShowPageSizes="true"
+                  ShowPager="true"
+                  Striped="true"
+                  Sortable="true">
+            <DataGridColumns>
+                @* <DataGridEntityActionsColumn TItem="UserCompensationDto" @ref="@EntityActionsColumn"> *@
+                @*     <DisplayTemplate> *@
+                @*         <EntityActions TItem="UserCompensationDto" EntityActionsColumn="@EntityActionsColumn"> *@
+                @*             <EntityAction TItem="UserCompensationDto" *@
+                @*                           Visible="@CanEditUserInfo" *@
+                @*                           Clicked="() => OpenEditUserInfoModal(context)" *@
+                @*                           Text="@L["Edit"]"> *@
+                @*             </EntityAction> *@
+                @*             <EntityAction TItem="UserCompensationDto" *@
+                @*                           Clicked="() => OpenUserInfoAccountsModal(context)" *@
+                @*                           Text="@L["OpenUserInfoAccountsModal"]"> *@
+                @*             </EntityAction> *@
+                @*             <EntityAction TItem="UserCompensationDto" *@
+                @*                           Visible="@CanDeleteUserInfo" *@
+                @*                           Clicked="() => DeleteUserInfoAsync(context)" *@
+                @*                           ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])" *@
+                @*                           Text="@L["Delete"]"> *@
+                @*             </EntityAction> *@
+                @*             <EntityAction TItem="UserCompensationDto" *@
+                @*                           Clicked="() => ViewPayslip(context)" *@
+                @*                           Text="@L["ViewPayslip"]"> *@
+                @*             </EntityAction> *@
+                @* *@
+                @*         </EntityActions> *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridEntityActionsColumn> *@
+
+                <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                Field="AppUser.UserName"
+                                Caption="@L["UserName"]" Sortable="true">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                Field="AppUser.Email"
+                                Caption="@L["Email"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                Field="AppUser.Name"
+                                Caption="@L["FullName"]" Sortable="false">
+                    <DisplayTemplate>
+                        @($"{context.AppUser.Surname}/{context.AppUser.Name}")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                Field="UserCompensation.Month"
+                                Caption="@L["SalaryMonth"]" Sortable="false">
+                    <DisplayTemplate>
+                        @($"{context.UserCompensation.Month}/{context.UserCompensation.Year}")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                Field="UserCompensation.TotalAmount"
+                                Caption="@L["TotalAmount"]" Sortable="false">
+                    <DisplayTemplate>
+                        @context.UserCompensation.TotalAmount.ToVND()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                
+                <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                Field="UserCompensation.Bonuses"
+                                Caption="@L["Bonuses"]" Sortable="false">
+                    <DisplayTemplate>
+                            @{
+                                var detail = context.UserCompensation.Bonuses.Where(bonus => bonus.BonusAmount != 0).Aggregate(string.Empty, (current, bonus) => current + $"|{L[$"Enum:BonusType:{Convert.ToInt32(bonus.BonusType)}"]}: {bonus.BonusAmount}");
+                            }
+                            @(context.UserCompensation.Bonuses.IsNotNullOrEmpty() ? detail.Trim('|') : string.Empty)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>

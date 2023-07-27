@@ -1,0 +1,46 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using CanteenManagement.Localization
+@using CanteenManagement.Web.Pages.UserInfos
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using CanteenManagement.UserInfos;
+@using System.Globalization
+@inject IHtmlLocalizer<CanteenManagementResource> L
+@model EditModalModel
+@{
+    Layout = null;
+}
+
+<form data-ajaxForm="true" asp-page="/UserInfos/EditModal" autocomplete="off">
+    <abp-modal>
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+            <abp-input asp-for="Id" />
+            
+            <abp-input asp-for="UserInfo.Height"/>
+
+            <abp-input asp-for="UserInfo.Weight"/>
+
+            <abp-input asp-for="UserInfo.BMI"/>
+
+            <abp-input asp-for="UserInfo.DateOfBirth" value="@(Model.UserInfo.DateOfBirth.ToString("yyyy-MM-dd"))" type="date"/>
+
+            <abp-select asp-for="UserInfo.Male"/>
+
+                        <label for="AppUser_Name">@L["User"] *</label>
+            <div class="input-group mb-3">
+                <input hidden value="@(Model.UserInfo.AppUserId   == default ? "": Model.UserInfo.AppUserId.ToString()
+)" id="AppUser_Id" name="UserInfo.AppUserId"/>
+                <input type="text" id="AppUser_Name" class="form-control" value="@Model.AppUser?.Name" disabled>
+                <div class="input-group-append">
+                    <abp-button button-type="Info" id="AppUserLookupOpenButton" class="text-light">@L["Pick"]</abp-button>
+                    <abp-button button-type="Danger" class="lookupCleanButton"><i class="fa fa-times"></i></abp-button>
+                </div>
+            </div>
+
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

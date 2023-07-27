@@ -1,0 +1,240 @@
+﻿@page "/tiktok-channels"
+@page "/tiktok"
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Groups
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Flurl
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using Microsoft.AspNetCore.Components
+@using Radzen
+@using Volo.Abp.AspNetCore.Components.Messages
+@inherits BlazorComponentBase
+@inject IGroupsAppService GroupsAppService
+@inject IGroupExtendAppService GroupExtendAppService
+@inject IUiMessageService UiMessageService;
+@attribute [Authorize(ApiPermissions.Tiktok.Channels)]
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["TiktokChannels"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+</PageHeader>
+<Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+    <Items>
+        <Tab Name="GDLExternalChannel">@L["TikTok.GDLExternalChannel.TabName"]</Tab>
+        <Tab Name="GDLInternalChannel">@L["TikTok.GDLInternalChannel.TabName"]</Tab>
+        <Tab Name="YANChannel">@L["TikTok.YANChannel.TabName"]</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="GDLExternalChannel">
+            <GDLMCNExternalChannel @ref="_gdlmcnExternalChannel"/>
+        </TabPanel>
+        <TabPanel Name="GDLInternalChannel">
+            <GDLMCNInternalChannel @ref="_gdlmcnInternalChannel"/>
+        </TabPanel>
+        <TabPanel Name="YANChannel">
+            <MCNYANChannel @ref="_yanChannel"/>
+        </TabPanel>
+    </Content>
+</Tabs>
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateGroupModal">
+    <ModalContent Centered="true">
+        <Form id="CreateChannelForm">
+            <Validations @ref="creationValidations" Mode="ValidationMode.Manual">
+                <ModalHeader>
+                    <ModalTitle>@L["TiktokChannels.NewChannel"]</ModalTitle>
+                    <CloseButton Clicked="CloseCreateGroupModal"/>
+                </ModalHeader>
+                <ModalBody>
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.GroupOwnershipType"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <Select TValue="GroupOwnershipType" @bind-SelectedValue="@NewGroupCreateDto.GroupOwnershipType">
+                                    <SelectItem @key="GroupOwnershipType.GDLExternal" TValue="GroupOwnershipType" Value="@(GroupOwnershipType.GDLExternal)">
+                                        @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(GroupOwnershipType.GDLExternal)}"]
+                                    </SelectItem>
+                                    <SelectItem @key="GroupOwnershipType.GDLInternal" TValue="GroupOwnershipType" Value="@(GroupOwnershipType.GDLInternal)">
+                                        @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(GroupOwnershipType.GDLInternal)}"]
+                                    </SelectItem>
+                                    <SelectItem @key="GroupOwnershipType.YAN" TValue="GroupOwnershipType" Value="@(GroupOwnershipType.YAN)">
+                                        @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(GroupOwnershipType.YAN)}"]
+                                    </SelectItem>
+                                </Select>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.TikTokContractStatus"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <Select TValue="TikTokContractStatus" @bind-SelectedValue="@NewGroupCreateDto.ContractStatus">
+                                    @foreach (var itemValue in Enum.GetValues(typeof(TikTokContractStatus)))
+                                    {
+                                        <SelectItem @key="itemValue" TValue="TikTokContractStatus" Value="@((TikTokContractStatus) itemValue)">
+                                            @L[$"Enum:TikTokContractStatus:{Convert.ToInt32(itemValue)}"]
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.GroupTitle"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@NewGroupCreateDto.Title">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.Fid"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@NewGroupCreateDto.Fid">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.Url"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <Validation UsePattern="true">
+                                    <TextEdit @bind-Text="@NewGroupCreateDto.Url" Pattern="(https://(www.)?tiktok.com/){1}[\S]+">
+                                        <Feedback>
+                                            <ValidationError>Invalid Tiktok Url.</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.TargetFollower"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <NumericEdit TValue="long?" @bind-Text="@NewGroupCreateDto.TikTokTarget.TargetFollower"></NumericEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.TargetVideo"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <NumericEdit TValue="long?" @bind-Text="@NewGroupCreateDto.TikTokTarget.TargetVideo"></NumericEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.TargetDateTime"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <DateEdit TValue="DateTime?" @bind-Text="@NewGroupCreateDto.TikTokTarget.TargetDateTime"></DateEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["Description"]</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@NewGroupCreateDto.Description">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TiktokChannels.GroupCategoryType"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <Select TValue="GroupCategoryType" @bind-SelectedValue="@NewGroupCreateDto.GroupCategoryType">
+                                    @foreach (var itemValue in Enum.GetValues(typeof(GroupCategoryType)))
+                                    {
+                                        <SelectItem @key="itemValue" TValue="GroupCategoryType" Value="@((GroupCategoryType) itemValue)">
+                                            @L[$"Enum:GroupCategoryType:{Convert.ToInt32(itemValue)}"]
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["Moderator"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                @bind-Value=@ModeratorUserIds Multiple="true" Placeholder="@L["SelectModerator"]" Data=@StaffUsersLookupDtos TextProperty="DisplayName" ValueProperty="Id"
+                                                Change=@(CreateModeratorIdsSelectedValuesChanged) Class="rz-gdl-custom">
+                                </RadzenDropDown>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                    
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TikTokUserId"]</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@NewGroupCreateDto.TikTokUserId">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Dark"
+                            Clicked="CloseCreateGroupModal">
+                        @L["Cancel"]
+                    </Button>
+                    <SubmitButton Form="CreateGroupForm" Clicked="CreateGroupAsync"/>
+                    <h1/>
+                </ModalFooter>
+            </Validations>
+        </Form>
+    </ModalContent>
+</Modal>

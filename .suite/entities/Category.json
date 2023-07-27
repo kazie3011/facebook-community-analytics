@@ -1,0 +1,37 @@
+{
+  "Id": "c3b6c1dd-5114-475f-ac99-f2cabf80144a",
+  "Name": "Category",
+  "OriginalName": "Category",
+  "NamePlural": "Categories",
+  "DatabaseTableName": "Categories",
+  "Namespace": "Categories",
+  "BaseClass": "FullAuditedAggregateRoot",
+  "PrimaryKeyType": "Guid",
+  "IsMultiTenant": true,
+  "ShouldCreateUserInterface": true,
+  "ShouldCreateBackend": true,
+  "ShouldAddMigration": true,
+  "ShouldUpdateDatabase": true,
+  "CreateTests": false,
+  "Properties": [
+    {
+      "Id": "7ed768ea-d458-42e4-a2c4-2ebebd622d6e",
+      "Name": "Name",
+      "Type": "string",
+      "EnumType": "",
+      "EnumNamespace": "",
+      "EnumAngularImport": "shared/enums",
+      "IsNullable": false,
+      "IsRequired": true,
+      "MinLength": null,
+      "MaxLength": null,
+      "SortOrder": 0,
+      "SortType": 0,
+      "Regex": "",
+      "EmailValidation": false,
+      "EnumValues": null
+    }
+  ],
+  "NavigationProperties": [],
+  "PhysicalFileName": "Category.json"
+}

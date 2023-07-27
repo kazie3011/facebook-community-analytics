@@ -1,0 +1,507 @@
+@page "/partner-communities"
+@attribute [Authorize(ApiPermissions.PartnerModule.Default)]
+@using FacebookCommunityAnalytics.Api.Groups
+@using FacebookCommunityAnalytics.Api.Localization
+@using Microsoft.Extensions.Localization
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.PartnerModule
+@using Flurl
+@using Radzen
+@inject IPartnerModuleAppService _partnerModuleAppService
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Groups"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="GroupSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="GroupSearchForm" Clicked="GetGroupsAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+        <Row>
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is4.OnTablet">
+                <Select TValue="GroupSourceTypeFilter" @bind-SelectedValue="_groupSourceTypeFilter">
+                    @foreach (var itemValue in Enum.GetValues(typeof(GroupSourceTypeFilter)))
+                    {
+                        <SelectItem @key="itemValue" TValue="GroupSourceTypeFilter" Value="@((GroupSourceTypeFilter)itemValue)">
+                            @L[$"Enum:GroupSourceTypeFilter:{(int)itemValue}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is4.OnTablet">
+                <Select TValue="GroupOwnershipTypeFilter" @bind-SelectedValue="_groupOwnershipTypeFilter">
+                    @foreach (var itemValue in Enum.GetValues(typeof(GroupOwnershipTypeFilter)))
+                    {
+                        <SelectItem @key="itemValue" TValue="GroupOwnershipTypeFilter" Value="@((GroupOwnershipTypeFilter)itemValue)">
+                            @L[$"Enum:GroupOwnershipType:{(int)itemValue}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is4.OnTablet">
+                <Select TValue="bool" @bind-SelectedValue="Filter.IsActive">
+                    <SelectItem TValue="bool" Value="true">@L["Active"] - @L["True"]</SelectItem>
+                    <SelectItem TValue="bool" Value="false">@L["Active"] - @L["False"]</SelectItem>
+                </Select>
+            </Field>
+        </Row>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="GroupDto"
+                  Data="GroupList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  Narrow="true"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Single"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST" PageSize="PageSize" ShowPageSizes="true">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="GroupDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="GroupDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="GroupDto"
+                                          Clicked="() => OpenEditGroupModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="GroupSourceType"
+                                Caption="@L["GroupSourceType"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @L[$"Enum:GroupSourceType:{Convert.ToInt32(context.GroupSourceType)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="GroupOwnershipType"
+                                Caption="@L["GroupOwnershipType"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(context.GroupOwnershipType)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Title"
+                                Caption="@L["GroupTitle"]"
+                                Sortable="true"
+                                SortDirection="SortDirection.Ascending">
+                </DataGridColumn>
+
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Name"
+                                Sortable="false"
+                                Caption="@L["GroupName"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Url"
+                                Sortable="false"
+                                Caption="@L["Url"]">
+                    <DisplayTemplate>
+                        @{
+                            string GetGroupDisplayUrl(string urlString)
+                            {
+                                try
+                                {
+                                    var url = new Url(urlString);
+                                    return url.Path;
+                                }
+                                catch (Exception)
+                                {
+                                    return urlString;
+                                }
+                            }
+                        }
+                        <Link To="@context.Url" Target="Target.Blank">@GetGroupDisplayUrl(context.Url)</Link>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Description"
+                                Sortable="false"
+                                Caption="@L["Description"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Stats.TotalInteractions"
+                                Caption="@L["TotalInteractions"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @(context.Stats?.TotalInteractions != null ? context.Stats.TotalInteractions.ToString("N0") : 0)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Stats.InteractionRate"
+                                Caption="@L["InteractionRate"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @(context.Stats?.InteractionRate != null ? context.Stats.InteractionRate : "-")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Stats.AvgPosts"
+                                Caption="@L["AvgPosts"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @(context.Stats?.AvgPosts != null ? context.Stats.AvgPosts.ToString("N0") : 0)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Stats.GroupMembers"
+                                Caption="@L["GroupMembers"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @(context.Stats?.GroupMembers != null ? context.Stats.GroupMembers.ToString("N0") : 0)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Stats.GrowthPercent"
+                                Caption="@L["GrowthPercent"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @if (context.Stats?.GrowthPercent != null)
+                        {
+                            <strong class="@(context.Stats.GrowthPercent < 0 ? "text-danger" : "text-success")">@context.Stats.GrowthPercent %</strong>
+                        }
+                        else
+                        {
+                            <p>-</p>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Stats.GrowthNumber"
+                                Caption="@L["GrowthNumber"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @if (context.Stats?.GrowthNumber != null)
+                        {
+                            <strong class="@(context.Stats.GrowthNumber < 0 ? "text-danger" : "text-success")">@context.Stats.GrowthNumber</strong>
+                        }
+                        else
+                        {
+                            <p>-</p>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="Point"
+                                Caption="@L["Point"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @context.Point
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="GroupDto"
+                                Field="GroupCategoryType"
+                                Caption="@L["GroupCategoryType"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @L[$"Enum:GroupCategoryType:{Convert.ToInt32(context.GroupCategoryType)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Center" TItem="GroupDto"
+                                Field="IsActive"
+                                Sortable="false"
+                                Caption="@L["IsActive"]">
+                    <DisplayTemplate>
+                        @if (context.IsActive)
+                        {
+                            <Icon Name="IconName.Check" TextColor="TextColor.Success"/>
+                        }
+                        else
+                        {
+                            <Icon Name="IconName.Ban" TextColor="TextColor.Danger"/>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateGroupModal">
+    <ModalContent Centered="true">
+        <Form id="CreateGroupForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewGroup"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateGroupModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["GroupTitle"] *</FieldLabel>
+                    <TextEdit @bind-Text="@NewGroup.Title">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Fid"] *</FieldLabel>
+                    <TextEdit @bind-Text="@NewGroup.Fid">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["GroupName"] *</FieldLabel>
+                    <TextEdit @bind-Text="@NewGroup.Name">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["GroupAltName"]</FieldLabel>
+                    <TextEdit @bind-Text="@NewGroup.AltName">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Description"]</FieldLabel>
+                    <TextEdit @bind-Text="@NewGroup.Description">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Url"] *</FieldLabel>
+                    <TextEdit @bind-Text="@NewGroup.Url">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Point"] *</FieldLabel>
+                    <NumericEdit TValue="double" @bind-Text="@NewGroup.Point">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["GroupCategoryType"] *</FieldLabel>
+                    <Select TValue="GroupCategoryType" @bind-SelectedValue="@NewGroup.GroupCategoryType">
+                        @foreach (var itemValue in Enum.GetValues(typeof(GroupCategoryType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="GroupCategoryType" Value="@((GroupCategoryType)itemValue)">
+                                @L[$"Enum:GroupCategoryType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+
+                @* <Field> *@
+                @*     <FieldLabel>@L["GroupSourceType"] *</FieldLabel> *@
+                @*     <Select TValue="GroupSourceType" @bind-SelectedValue="@NewGroup.GroupSourceType"> *@
+                @*         @foreach (var itemValue in Enum.GetValues(typeof(GroupSourceType))) *@
+                @*         { *@
+                @*             <SelectItem TValue="GroupSourceType" Value="@((GroupSourceType) itemValue)"> *@
+                @*                 @L[$"Enum:GroupSourceType:{Convert.ToInt32(itemValue)}"] *@
+                @*             </SelectItem> *@
+                @*         } *@
+                @*     </Select> *@
+                @* </Field> *@
+
+                <Field>
+                    <FieldLabel>@L["GroupOwnershipType"] *</FieldLabel>
+                    <Select TValue="GroupOwnershipType" @bind-SelectedValue="@NewGroup.GroupOwnershipType">
+                        @foreach (var itemValue in Enum.GetValues(typeof(GroupOwnershipType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="GroupOwnershipType" Value="@((GroupOwnershipType)itemValue)">
+                                @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+               
+                <Field>
+                    <Check TValue="bool" @bind-Checked="@NewGroup.IsActive">@L["IsActive"]</Check>
+                </Field>
+
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateGroupModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateGroupForm" Clicked="CreateGroupAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditGroupModal">
+    <ModalContent Centered="true">
+        <Form id="EditGroupForm">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateGroup"]</ModalTitle>
+                <CloseButton Clicked="CloseEditGroupModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["GroupTitle"] *</FieldLabel>
+                    <TextEdit @bind-Text="@EditingGroup.Title">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Fid"] *</FieldLabel>
+                    <TextEdit @bind-Text="@EditingGroup.Fid">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["GroupName"] *</FieldLabel>
+                    <TextEdit @bind-Text="@EditingGroup.Name">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["GroupAltName"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingGroup.AltName">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Url"] *</FieldLabel>
+                    <TextEdit @bind-Text="@EditingGroup.Url">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Description"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingGroup.Description">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Point"] *</FieldLabel>
+                    <NumericEdit TValue="double" @bind-Value="@EditingGroup.Point">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["GroupCategoryType"] *</FieldLabel>
+                    <Select TValue="GroupCategoryType" @bind-SelectedValue="@EditingGroup.GroupCategoryType">
+                        @foreach (var itemValue in Enum.GetValues(typeof(GroupCategoryType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="GroupCategoryType" Value="@((GroupCategoryType)itemValue)">
+                                @L[$"Enum:GroupCategoryType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["GroupOwnershipType"] *</FieldLabel>
+                    <Select TValue="GroupOwnershipType" @bind-SelectedValue="@EditingGroup.GroupOwnershipType">
+                        @foreach (var itemValue in Enum.GetValues(typeof(GroupOwnershipType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="GroupOwnershipType" Value="@((GroupOwnershipType)itemValue)">
+                                @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+                
+                <Field>
+                    <Check TValue="bool" @bind-Checked="@EditingGroup.IsActive">@L["IsActive"]</Check>
+                </Field>
+
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditGroupModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditGroupForm" Clicked="UpdateGroupAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

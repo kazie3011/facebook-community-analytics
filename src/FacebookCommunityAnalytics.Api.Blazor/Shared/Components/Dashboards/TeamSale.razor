@@ -1,0 +1,192 @@
+﻿@using FacebookCommunityAnalytics.Api.DashBoards
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Contracts
+@inherits BlazorComponentBase
+@inject IJSRuntime JSRuntime
+@inject IDashboardAppService DashboardAppService
+@inject NavigationManager NavigationManager
+<Card>
+    <CardBody>
+        <Row>
+            <h2>
+                @L["Dashboard - Sale"]
+            </h2>
+        </Row>
+        <Row>
+            <Field ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnMobile">
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <DateRangePicker TimePicker="true"
+                                         TimePicker24Hour="true"
+                                         Ranges="_dateRanges"
+                                         DateFormat="@GlobalConsts.DateFormat"
+                                         @bind-StartDate="StartDate"
+                                         @bind-EndDate="EndDate"
+                                         class="form-control form-control-md"
+                                         Style="width: 280px;"
+                                         placeholder="@L["SelectDates"]"/>
+                    </Addon>
+
+                    @if (IsLeaderRole())
+                    {
+                        <Addon AddonType="AddonType.Start">
+                            <div inline>
+                                <Select style="width: 150px" class="form-control form-control-md" TValue="Guid?" @bind-SelectedValue="@Request.SalePersonId">
+                                    <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                        @L["SaleChart.SalePersons"]
+                                    </SelectItem>
+                                    @foreach (var user in SalePersons)
+                                    {
+                                        <SelectItem @key="user" TValue="Guid?" Value="@user.Id">
+                                            @($"{user.UserName}({user.UserCode})")
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </div>
+                        </Addon>
+                    }
+                    <Addon AddonType="AddonType.End">
+                        <Button Color="Color.Primary" Clicked="(async () => await RenderCharts())">
+                            <Icon Name="IconName.Search"></Icon>
+                        </Button>
+                    </Addon>
+                </Addons>
+            </Field>
+        </Row>
+        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableRowCell TextColor="TextColor.Info" VerticalAlignment="VerticalAlignment.Top">
+                            <b>@L["SaleChart.LocalLabel"]</b>
+                        </TableRowCell>
+                        <TableRowCell TextColor="TextColor.Info" TextAlignment="TextAlignment.Right">
+                            @Total.ToVND()
+                        </TableRowCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableRowCell TextColor="TextColor.Success" VerticalAlignment="VerticalAlignment.Top">
+                            <b>@L["SaleChart.PartialPaymentLabel"]</b>
+                        </TableRowCell>
+                        <TableRowCell TextColor="TextColor.Success" TextAlignment="TextAlignment.Right">
+                            @PartialPayment.ToVND()
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell TextColor="TextColor.Danger" VerticalAlignment="VerticalAlignment.Top">
+                            <b>@L["SaleChart.RemainPaymentLabel"]</b>
+                        </TableRowCell>
+                        <TableRowCell TextColor="TextColor.Danger" TextAlignment="TextAlignment.Right">
+                            @RemainPayment.ToVND()
+                        </TableRowCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </Field>
+    </CardBody>
+</Card>
+
+<Card>
+    <CardBody>
+        <div id="Section10">
+            <Card>
+                <CardBody>
+                    <Row>
+                        <ChartJs.Blazor.Chart Config="_configSaleGrowth" @ref="_saleGrowth" SetupCompletedCallback="@SetupCompletedCallback"></ChartJs.Blazor.Chart>
+                    </Row>
+                </CardBody>
+            </Card>
+        </div>
+    </CardBody>
+</Card>
+
+<Card>
+    <CardBody>
+        <DataGrid TItem="ContractWithNavigationPropertiesDto"
+                  Data="Contracts"
+                  TotalItems="Contracts.Count"
+                  Responsive="true"
+                  Narrow="true"
+                  PageSize="Contracts.Count"
+                  Class="text-nowrap"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.ContractCode"
+                                Caption="@L["Contract.ContractCode"]">
+                    <DisplayTemplate>
+                        <Link Clicked="() => ViewDetailsAsync(context.Contract)">@context.Contract.ContractCode </Link>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.SignedAt"
+                                Sortable="true"
+                                Caption="@L["Contract.SignedAt"]">
+                    <DisplayTemplate>
+                        @if (context.Contract?.SignedAt != null)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Contract.SignedAt.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Campaign.Name"
+                                Caption="@L["Contract.CampaignName"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.ContractStatus"
+                                Caption="@L["Contract.ContractStatus"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:ContractStatus:{Convert.ToInt32(context.Contract.ContractStatus)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.TotalValue"
+                                Caption="@L["Contract.TotalValue"]">
+                    <DisplayTemplate>
+                        <Text TextColor="TextColor.Info">
+                            @context.Contract.TotalValue.ToVND()
+                        </Text>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.PartialPaymentValue"
+                                Caption="@L["Contract.PartialPaymentValue"]">
+                    <DisplayTemplate>
+                        <Text TextColor="TextColor.Success">
+                            @context.Contract.PartialPaymentValue.ToVND()
+                        </Text>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.RemainingPaymentValue"
+                                Caption="@L["Contract.RemainingPaymentValue"]">
+                    <DisplayTemplate>
+                        <Text TextColor="TextColor.Danger">
+                            @context.Contract.RemainingPaymentValue.ToVND()
+                        </Text>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.ContractPaymentStatus"
+                                Caption="@L["Contract.ContractPaymentStatus"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(context.Contract.ContractPaymentStatus)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>

@@ -1,0 +1,33 @@
+﻿@page "/tiktok-reports"
+@attribute [Authorize(ApiPermissions.Tiktok.Reports)]
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Microsoft.Extensions.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Permissions
+@inherits BlazorComponentBase
+@inject IStringLocalizer<ApiResource> L
+
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["TiktokReports.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+<Tabs SelectedTab="@selectedTabName" SelectedTabChanged="@OnSelectedTabChanged">
+    <Items>
+        <Tab Name="TikTokDailyReport">@L["TikTok.TikTokDailyReport.TabName"]</Tab>
+        <Tab Name="TiktokWeeklyReport">@L["TikTok.TiktokWeeklyReport.TabName"]</Tab>
+        <Tab Name="TiktokMonthlyReport">@L["TikTok.TiktokMonthlyReport.TabName"]</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="TikTokDailyReport">
+            <TiktokDailyReports @ref="_tiktokDailyReports"/>
+        </TabPanel>
+        <TabPanel Name="TiktokWeeklyReport">
+            <TiktokWeeklyReports @ref="_tiktokWeeklyReports"/>
+        </TabPanel>
+        <TabPanel Name="TiktokMonthlyReport">
+            <TiktokMonthlyReports  @ref="_tiktokMonthlyReports"/>
+        </TabPanel>
+    </Content>
+</Tabs>

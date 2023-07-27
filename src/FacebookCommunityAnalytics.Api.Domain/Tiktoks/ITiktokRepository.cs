@@ -1,0 +1,268 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using FacebookCommunityAnalytics.Api.Core.Enums;
+using FacebookCommunityAnalytics.Api.Posts;
+using Volo.Abp.Domain.Repositories;
+
+namespace FacebookCommunityAnalytics.Api.Tiktoks
+{
+    public interface ITiktokRepository : IRepository<Tiktok, Guid>
+    {
+        Task<TiktokWithNavigationProperties> GetWithNavigationPropertiesAsync(
+            Guid id,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<List<TiktokWithNavigationProperties>> GetListWithNavigationPropertiesAsync(
+            string filterText = null,
+            PostCopyrightType? postCopyrightType = null,
+            string url = null,
+            string shortUrl = null,
+            int? likeCountMin = null,
+            int? likeCountMax = null,
+            int? commentCountMin = null,
+            int? commentCountMax = null,
+            int? shareCountMin = null,
+            int? shareCountMax = null,
+            int? totalCountMin = null,
+            int? totalCountMax = null,
+            string hashtag = null,
+            string fid = null,
+            bool? isNotAvailable = null,
+            PostStatus? status = null,
+            string note = null,
+            DateTime? createdDateTimeMin = null,
+            DateTime? createdDateTimeMax = null,
+            DateTime? lastCrawledDateTimeMin = null,
+            DateTime? lastCrawledDateTimeMax = null,
+            DateTime? submissionDateTimeMin = null,
+            DateTime? submissionDateTimeMax = null,
+            Guid? categoryId = null,
+            string channelId = null,
+            Guid? appUserId = null,
+            Guid? campaignId = null,
+            Guid? partnerId = null,
+            bool? isNew = null,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default);
+
+        Task<List<Tiktok>> GetListAsync(
+            string filterText = null,
+            PostCopyrightType? postCopyrightType = null,
+            string url = null,
+            string shortUrl = null,
+            int? likeCountMin = null,
+            int? likeCountMax = null,
+            int? commentCountMin = null,
+            int? commentCountMax = null,
+            int? shareCountMin = null,
+            int? shareCountMax = null,
+            int? totalCountMin = null,
+            int? totalCountMax = null,
+            string hashtag = null,
+            string fid = null,
+            bool? isNotAvailable = null,
+            PostStatus? status = null,
+            string note = null,
+            DateTime? createdDateTimeMin = null,
+            DateTime? createdDateTimeMax = null,
+            DateTime? lastCrawledDateTimeMin = null,
+            DateTime? lastCrawledDateTimeMax = null,
+            DateTime? submissionDateTimeMin = null,
+            DateTime? submissionDateTimeMax = null,
+            bool? isNew = null,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<long> GetCountAsync(
+            string filterText = null,
+            PostCopyrightType? postCopyrightType = null,
+            string url = null,
+            string shortUrl = null,
+            int? likeCountMin = null,
+            int? likeCountMax = null,
+            int? commentCountMin = null,
+            int? commentCountMax = null,
+            int? shareCountMin = null,
+            int? shareCountMax = null,
+            int? totalCountMin = null,
+            int? totalCountMax = null,
+            string hashtag = null,
+            string fid = null,
+            bool? isNotAvailable = null,
+            PostStatus? status = null,
+            string note = null,
+            DateTime? createdDateTimeMin = null,
+            DateTime? createdDateTimeMax = null,
+            DateTime? lastCrawledDateTimeMin = null,
+            DateTime? lastCrawledDateTimeMax = null,
+            DateTime? submissionDateTimeMin = null,
+            DateTime? submissionDateTimeMax = null,
+            Guid? categoryId = null,
+            string channelId = null,
+            Guid? appUserId = null,
+            Guid? campaignId = null,
+            Guid? partnerId = null,
+            bool? isNew = null,
+            CancellationToken cancellationToken = default);
+
+        Task<long> GetCountExtendAsync(
+            string filterText = null,
+            PostCopyrightType? postCopyrightType = null,
+            string url = null,
+            string shortUrl = null,
+            int? likeCountMin = null,
+            int? likeCountMax = null,
+            int? commentCountMin = null,
+            int? commentCountMax = null,
+            int? shareCountMin = null,
+            int? shareCountMax = null,
+            int? totalCountMin = null,
+            int? totalCountMax = null,
+            string hashtag = null,
+            string fid = null,
+            bool? isNotAvailable = null,
+            bool? isValid = null,
+            PostStatus? status = null,
+            string note = null,
+            DateTime? createdDateTimeMin = null,
+            DateTime? createdDateTimeMax = null,
+            DateTime? lastCrawledDateTimeMin = null,
+            DateTime? lastCrawledDateTimeMax = null,
+            DateTime? submissionDateTimeMin = null,
+            DateTime? submissionDateTimeMax = null,
+            Guid? categoryId = null,
+            string channelId = null,
+            Guid? appUserId = null,
+            Guid? campaignId = null,
+            Guid? partnerId = null,
+            bool? isNew = null,
+            IEnumerable<Guid> appUserIds = null,
+            IEnumerable<string> channelIds = null,
+            IEnumerable<Guid> campaignIds = null,
+            IEnumerable<Guid> groupIds = null,
+            CancellationToken cancellationToken = default);
+
+        Task<List<TiktokWithNavigationProperties>> GetListWithNavigationPropertiesExtendAsync(
+            string filterText = null,
+            PostCopyrightType? postCopyrightType = null,
+            string url = null,
+            string shortUrl = null,
+            int? likeCountMin = null,
+            int? likeCountMax = null,
+            int? commentCountMin = null,
+            int? commentCountMax = null,
+            int? shareCountMin = null,
+            int? shareCountMax = null,
+            int? totalCountMin = null,
+            int? totalCountMax = null,
+            string hashtag = null,
+            string videoId = null,
+            bool? isNotAvailable = null,
+            bool? isValid = null,
+            PostStatus? status = null,
+            string note = null,
+            DateTime? createdDateTimeMin = null,
+            DateTime? createdDateTimeMax = null,
+            DateTime? lastCrawledDateTimeMin = null,
+            DateTime? lastCrawledDateTimeMax = null,
+            DateTime? submissionDateTimeMin = null,
+            DateTime? submissionDateTimeMax = null,
+            Guid? categoryId = null,
+            string channelId = null,
+            Guid? appUserId = null,
+            Guid? campaignId = null,
+            Guid? partnerId = null,
+            bool? isNew = null,
+            IEnumerable<Guid> appUserIds = null,
+            IEnumerable<string> channelIds = null,
+            IEnumerable<Guid> campaignIds = null,
+            IEnumerable<Guid> groupIds = null,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default);
+
+        Task<List<Tiktok>> GetAsync(IEnumerable<string> videoIds);
+        Task<List<Tiktok>> GetByVideoIdsAsync(IEnumerable<string> videoIds);
+        Task<List<Tiktok>> GetUncrawledTiktoks(int intervalHours, DateTime fromDateTime, DateTime? toDateTime);
+
+        Task<List<Tiktok>> GetChartPosts(
+            string channelId = null,
+            DateTime? startDateTime = null,
+            DateTime? endDateTime = null,
+            IEnumerable<Guid?> groupIds = null,
+            CancellationToken cancellationToken = default);
+
+        Task<List<Tiktok>> GetListExtendAsync(
+            string filterText = null,
+            PostCopyrightType? postCopyrightType = null,
+            string url = null,
+            string shortUrl = null,
+            int? likeCountMin = null,
+            int? likeCountMax = null,
+            int? commentCountMin = null,
+            int? commentCountMax = null,
+            int? shareCountMin = null,
+            int? shareCountMax = null,
+            int? totalCountMin = null,
+            int? totalCountMax = null,
+            string hashtag = null,
+            string fid = null,
+            bool? isNotAvailable = null,
+            bool? isValid = null,
+            PostStatus? status = null,
+            string note = null,
+            DateTime? createdDateTimeMin = null,
+            DateTime? createdDateTimeMax = null,
+            DateTime? lastCrawledDateTimeMin = null,
+            DateTime? lastCrawledDateTimeMax = null,
+            DateTime? submissionDateTimeMin = null,
+            DateTime? submissionDateTimeMax = null,
+            Guid? categoryId = null,
+            string channelId = null,
+            Guid? appUserId = null,
+            Guid? campaignId = null,
+            Guid? partnerId = null,
+            bool? isNew = null,
+            IEnumerable<Guid> appUserIds = null,
+            IEnumerable<string> channelIds = null,
+            IEnumerable<Guid> campaignIds = null,
+            IEnumerable<Guid> groupIds = null,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default);
+        
+        Task<List<TiktokWithNavigationProperties>> GetListWithNavigationPropertiesAsync(
+            string tiktokId = null,
+            DateTime? createdDateTimeMin = null,
+            DateTime? createdDateTimeMax = null,
+            bool? sendEmail = null,
+            List<string> channelIds = null,
+            List<Guid> groupIds = null,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default
+        );
+        
+        Task<long> GetCountAsync(
+            string tiktokId = null,
+            DateTime? createdDateTimeMin = null,
+            DateTime? createdDateTimeMax = null,
+            bool? sendEmail = null,
+            List<string> channelIds = null,
+            List<Guid> groupIds = null,
+            CancellationToken cancellationToken = default
+        );
+
+    }
+}

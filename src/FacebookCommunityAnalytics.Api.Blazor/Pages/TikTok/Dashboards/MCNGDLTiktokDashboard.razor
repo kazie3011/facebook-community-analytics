@@ -1,0 +1,336 @@
+﻿@attribute [Authorize(ApiPermissions.Tiktok.Dashboard)]
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Tiktoks;
+@using FA = Blazorise.Icons.FontAwesome;
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Groups
+@using FacebookCommunityAnalytics.Api.TikTokMCNs
+@using Microsoft.AspNetCore.Components
+@using FacebookCommunityAnalytics.Api.GroupStatsHistories
+@using Flurl
+@using Radzen
+@using Radzen.Blazor
+@using System.Globalization
+@inherits BlazorComponentBase
+@inject NavigationManager NavigationManager
+@inject ITiktokStatsAppService TiktokStatsAppService
+@inject ITikTokMCNGdlAppService TikTokMcnGdlAppService
+@inject IGroupExtendAppService GroupExtendAppService
+@inject IJSRuntime JSRuntime
+
+@* ****************************************** Chart ****************************************** *@
+<Card>
+    <CardHeader>
+            <Row>
+                <Column ColumnSize="ColumnSize.Is12">
+                      <div class="absolute-inline-left">
+                      <Select TValue="TikTokTimeFrame" SelectedValue="@tikTokTimeFrame" SelectedValueChanged="@OnTimeStatus_Changed">
+                          @foreach (var itemValue in Enum.GetValues(typeof(TikTokTimeFrame)))
+                          {
+                              <SelectItem @key="itemValue" TValue="TikTokTimeFrame" Value="@((TikTokTimeFrame) itemValue)">
+                                  @L[$"Enum:MCNFrequencyType:{Convert.ToInt32(itemValue)}"]
+                              </SelectItem>
+                          }
+                      </Select>
+                      </div>
+                    <h2 style="color:#037404;text-align: center">@_inoutChartTitle</h2>
+                </Column>
+                
+            </Row>
+        </CardHeader>
+    
+    <CardBody>
+        <Row style="margin-top:-80px">
+            <ChartJs.Blazor.Chart @ref="_chartInOut" Config="_configChartInOut"></ChartJs.Blazor.Chart>
+        </Row>
+    </CardBody>
+</Card>
+<Card>
+    <CardBody>
+        <Row>
+            <Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnTablet.IsFull.OnMobile" class="chart-js-custom">
+                <ChartJs.Blazor.Chart @ref="_chartViewAndCreator" Config="_configChartViewAndCreator"></ChartJs.Blazor.Chart>
+            </Column>
+        </Row>
+    </CardBody>
+</Card>
+<Card>
+    <CardBody>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnTablet.IsFull.OnMobile" class="chart-js-custom">
+                <ChartJs.Blazor.Chart Height="500" @ref="_chartContractStatus" Config="_configContractStatusChart"></ChartJs.Blazor.Chart>
+                <div id="contract-legend-container"></div>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnTablet.IsFull.OnMobile" class="chart-js-custom">
+                <ChartJs.Blazor.Chart Height="500" @ref="_chartCategories" Config="_configCategoriesChart"></ChartJs.Blazor.Chart>
+            </Column>
+        </Row>
+    </CardBody>
+</Card>
+
+@* ****************************************** TOP VIDEO & CHANNEL ****************************************** *@
+<CardDeck>
+    @if (TopVideoOfDay != null)
+    {
+        <Card Margin="Margin.Is2.FromBottom">
+            <CardHeader>
+                <div class="text-center w-100" style="font-size: 20px;color: @_chartFontTitleColor;font-weight: 600">@L["TikTok.MCNGDL.TopVideoOfDay"]</div>
+            </CardHeader>
+            <CardBody>
+                <div class="w-100 text-center">
+                    <a href="@TopVideoOfDay.Url" target="_blank">
+                        <img style="height: 185px" src="@ThumbnailVideoOfDayUrl"/>
+                    </a>
+                </div>
+                <div class="text-center">
+                    <a href="@GetUrlFromChannelId(TopVideoOfDay.ChannelId)" target="_blank">
+                        <strong style="font-size: large">@TopVideoOfDay.ChannelId</strong>
+                    </a>
+                </div>
+            </CardBody>
+        </Card>
+    }
+    @if (TopChannelOfWeek != null)
+    {
+        <Card Margin="Margin.Is2.FromBottom">
+            <CardHeader>
+                <div class="text-center w-100" style="font-size: 20px;color: @_chartFontTitleColor;font-weight: 600">@L["TikTok.MCNGDL.TopChannelOfWeek"]</div>
+            </CardHeader>
+            <CardBody>
+                <Row style="margin-top: 10px">
+                    <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnTablet.IsFull.OnMobile">
+                        <div class="profile-img">
+                            <a href="@TopChannelOfWeek.Group?.Url" target="_blank">
+                                <img style="width: 150px" src="@ThumbnailChannelOfWeekUrl"/>
+                            </a>
+                        </div>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnTablet.IsFull.OnMobile">
+                        <div class="profile-content">
+                            <p>
+                                <a href="@TopChannelOfWeek.Group?.Url" target="_blank">
+                                    <strong style="font-size: large">@TopChannelOfWeek.Group?.Name</strong>
+                                </a>
+                                <br/>
+                                <span style="font-size: medium">@TopChannelOfWeek.Group.Title</span>
+                            </p>
+                            <p>
+                                <br/>
+                                <b>@TopChannelOfWeek.Group?.Stats.GroupMembers.ToCommaStyle()</b> @L["TiktokChannels.Followers"]
+                                <br/>
+                                <b>@TopChannelOfWeek.Group?.Stats.Reactions.ToCommaStyle()</b> @L["TiktokChannels.Likes"]
+                            </p>
+                        </div>
+                    </Column>
+                    <Column>
+                        <div class="text-center">
+                            <br/>
+                            <b>@($"{Math.Round(TopChannelOfWeek.GrowthPercent, 2)}%")</b> @L["TiktokChannels.FollowerIncreasing"]
+                            <b>@($"[{TopChannelOfWeek.StartTotalFollower.NumberToWords()} - {TopChannelOfWeek.EndTotalFollower.NumberToWords()}]")</b>
+                        </div>
+                    </Column>
+                </Row>
+            </CardBody>
+        </Card>
+    }
+</CardDeck>
+
+@* ****************************************** TOP 10 CHANNEL CREATOR ****************************************** *@
+<Card>
+    <CardHeader>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is12" Style="margin-top: 20px">
+                <div class="absolute-inline-left">
+                    <Select TValue="TikTokTimeFrame" SelectedValue="@ChannelTimeFrame" SelectedValueChanged="@OnChannelTimeFrame_Changed" Style="margin-left: 7px;">
+                        @foreach (var itemValue in Enum.GetValues(typeof(TikTokTimeFrame)))
+                        {
+                            <SelectItem @key="itemValue" TValue="TikTokTimeFrame" Value="@((TikTokTimeFrame) itemValue)">
+                                @L[$"Enum:MCNFrequencyType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </div>
+                <h2 style="color:#037404;text-align: center !important;">@RankTitleByTime</h2>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="TopChannelDto"
+                  Data="TopStatChannels"
+                  ReadData="OnDataGridReadAsync"
+                  Responsive="true"
+                  Narrow="true"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridColumn TItem="TopChannelDto"
+                                Field="Index"
+                                Caption="@L["TikTok.MCNGDL.Index"]"
+                                Sortable="false">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TopChannelDto"
+                                Field="Group.Name"
+                                Caption="@L["TikTok.MCNGDL.Name"]"
+                                Sortable="false">
+                </DataGridColumn>
+                <DataGridColumn TItem="TopChannelDto"
+                                Field="Group.Url"
+                                Caption="@L["TikTok.MCNGDL.Url"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @{
+                            string GetGroupDisplayUrl(string urlString)
+                            {
+                                try
+                                {
+                                    var url = new Url(urlString);
+                                    return url.Path;
+                                }
+                                catch (Exception)
+                                {
+                                    return urlString;
+                                }
+                            }
+                        }
+                        <Link To="@context.Group.Url" Target="Target.Blank">@GetGroupDisplayUrl(context.Group.Url)</Link>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="TopChannelDto"
+                                Field="IncrementFollower"
+                                Caption="@L["TikTok.MCNGDL.IncrementFollower"]"
+                                Sortable="false">
+                </DataGridColumn>
+                <DataGridColumn TItem="TopChannelDto"
+                                Field="GrowthPercent"
+                                Caption="@L["TikTok.MCNGDL.GrowthPercent"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @($"{Math.Round(context.GrowthPercent, 2)}%")
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ****************************************** TOP 10 TikTok Videos ****************************************** *@
+<Card>
+    <CardHeader>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is12" Style="margin-top: 20px">
+                <div class="absolute-inline-left">
+                    <Select TValue="TikTokDateTimeFrame" SelectedValue="@_tikTokDateTimeFrame" SelectedValueChanged="@OnTopVideoTimeFrame_Changed" Style="margin-left: 7px;">
+                        @foreach (var itemValue in Enum.GetValues(typeof(TikTokDateTimeFrame)))
+                        {
+                            <SelectItem @key="itemValue" TValue="TikTokDateTimeFrame" Value="@((TikTokDateTimeFrame) itemValue)">
+                                @L[$"Enum:TikTokDateTimeFrame:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </div>
+                <h2 style="color:#037404;text-align: center !important;">@L["TikTok.MCNGDL.TopVideos"]</h2>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="TiktokDto"
+                  Data="TopTikTokVideos"
+                  PageSize="10"
+                  Responsive="true"
+                  Narrow="true"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridColumn TItem="TiktokDto"
+                                Field="Index"
+                                Sortable="false"
+                                Caption="@L["TiktokReports.Index"]"
+                                TextAlignment="TextAlignment.Center">
+                    <DisplayTemplate>
+                        @context.Index
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="TiktokDto"
+                                Field="ChannelId"
+                                Sortable="false"
+                                Caption="@L["Channel"]"
+                                SortDirection="SortDirection.Ascending">
+                    <DisplayTemplate>
+                        @context.ChannelId
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokDto"
+                                Field="Url"
+                                Sortable="false"
+                                Caption="@L["Url"]">
+                    <DisplayTemplate>
+                        <Link To="@context.Url" Target="Target.Blank">@GetVideoUrl(context)</Link>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokDto"
+                                Field="TotalCount"
+                                Caption="@L["TotalCount"]"
+                                Sortable="false" HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.TotalCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokDto"
+                                Field="LikeCount"
+                                Caption="@L["LikeCount"]"
+                                Sortable="false" HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.LikeCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokDto"
+                                Field="CommentCount"
+                                Caption="@L["CommentCount"]"
+                                Sortable="false" HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.CommentCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokDto"
+                                Field="ShareCount"
+                                Caption="@L["ShareCount"]"
+                                Sortable="false" HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.ShareCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokDto"
+                                Field="ViewCount"
+                                Caption="@L["ViewCount"]"
+                                Sortable="false" HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.ViewCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokDto"
+                                Field="CreatedDateTime"
+                                Sortable="false"
+                                Caption="@L["CreatedDateTime"]">
+                    <DisplayTemplate>
+                        @if (context.CreatedDateTime.HasValue)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>

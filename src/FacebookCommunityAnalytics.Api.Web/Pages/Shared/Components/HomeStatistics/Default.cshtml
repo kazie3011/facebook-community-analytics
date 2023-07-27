@@ -1,0 +1,85 @@
+﻿@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@model FacebookCommunityAnalytics.Api.Statistics.GrowthCampaignChartDto
+@inject IHtmlLocalizer<ApiResource> L
+<abp-card>
+    <abp-tabs>
+        <abp-tab title="@L["Statistics"].Value" active="true">
+            @if (Model != null)
+            {
+                <table class="table"
+                       Responsive="true">
+                    <thead>
+                    <p class="text-info" style="font-weight: bold">@L["PostStats"]</p>
+                    <tr>
+                        <th>@L["PartnerStats.Group"]</th>
+                        <th>@L["PartnerStats.Post"]</th>
+                        <th>@L["PartnerStats.AvgReactionPerUser"]</th>
+                        <th>@L["PartnerStats.AvgReactionPerPost"]</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    @foreach (var stat in Model.Stats)
+                    {
+                        <tr>
+                            <td>@stat.Group</td>
+                            <td>@stat.TotalPost.ToCommaStyle()</td>
+                            <td>@stat.TotalReactions.ToCommaStyle()</td>
+                            <td>@stat.AvgReactionPerPost.ToCommaStyle()</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+        </abp-tab>
+        <abp-tab title="@L["TopReactionTable"].Value">
+            <table class="table">
+                <thead FixedHeader="true" FixedHeaderTableHeight="300px">
+                <tr>
+                    <th>@L["AuthorName"]</th>
+                    <th>@L["Group"]</th>
+                    <th>@L["Url"]</th>
+                    <th>@L["TotalCount"]</th>
+                    <th>@L["LikeCount"]</th>
+                    <th>@L["ShareCount"]</th>
+                    <th>@L["CommentCount"]</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (!Model.TopReactionPosts.Any())
+                {
+                    <div style="text-align: center; font-size: 100%;width: 100%;font-weight: bold;">@L["No Record"]</div>
+                }
+                @foreach (var postDto in Model.TopReactionPosts)
+                {
+                    <tr>
+                        <td class="card-title">@postDto.AuthorName</td>
+                        <td class="card-title">@postDto.GroupName</td>
+                        <td>
+                            <a class="card-title" href="@postDto.Url" target="_blank">
+                                @postDto.Fid.ToPostUrl()
+                            </a>
+                        </td>
+                        <td>@postDto.TotalCount.ToCommaStyle()</td>
+                        <td>@postDto.LikeCount.ToCommaStyle()</td>
+                        <td>@postDto.ShareCount.ToCommaStyle()</td>
+                        <td>@postDto.CommentCount.ToCommaStyle()</td>
+                    </tr>
+                }
+                </tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger">@L["TotalCount"]</td>
+                    <td>@Model.GetTotalReactionPosts().ToCommaStyle()</td>
+                    <td>@Model.GetTotalLikePosts().ToCommaStyle()</td>
+                    <td>@Model.GetTotalSharePosts().ToCommaStyle()</td>
+                    <td>@Model.GetTotalCommentPosts().ToCommaStyle()</td>
+                </tr>
+            </table>
+        </abp-tab>
+    </abp-tabs>
+
+</abp-card>

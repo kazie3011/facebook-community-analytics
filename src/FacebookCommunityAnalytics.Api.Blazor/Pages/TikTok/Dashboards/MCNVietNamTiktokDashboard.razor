@@ -1,0 +1,171 @@
+@attribute [Authorize(ApiPermissions.Tiktok.Dashboard)]
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Tiktoks;
+@using FA = Blazorise.Icons.FontAwesome;
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Groups
+@using FacebookCommunityAnalytics.Api.Statistics
+@using FacebookCommunityAnalytics.Api.TikTokMCNs
+@using Radzen
+@inherits BlazorComponentBase
+@inject NavigationManager NavigationManager
+@inject ITiktokStatsAppService TiktokStatsAppService
+@inject IGroupExtendAppService GroupExtendAppService
+@inject IStatAppService StatAppService
+@inject ITikTokMCNGdlAppService TikTokMCNGdlAppService
+@inject IJSRuntime JSRuntime
+
+<Card>
+    <CardHeader>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is5">
+                <div class="absolute-inline-left">
+                    <div class="inline-block" Style="width: 180px;">
+                        <RadzenDropDown AllowClear="true"
+                                        Data="@_topMcnSelectedItems"
+                                        Multiple="false"
+                                        TextProperty="Key" ValueProperty="Value"
+                                        @bind-Value="@SelectedTopValue"
+                                        Placeholder="@L["TikTok.Dashboard.SelectTopMCNs"]"
+                                        Change="@OnSelectedTopMCNChanged">
+                        </RadzenDropDown>
+                    </div>
+                    <div class="inline-block" Style="margin-left: 3px">
+                        <RadzenDropDown AllowClear="true"
+                                        AllowFiltering="true"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        Change="@OnSelectedTikTokMCNChanged"
+                                        @bind-Value=@SelectedTikTokMCNIds
+                                        Multiple="true"
+                                        Placeholder="@L["TikTok.Dashboard.SelectMCNs"]"
+                                        Data=@TikTokMCN
+                                        TextProperty="Name"
+                                        ValueProperty="Id">
+                        </RadzenDropDown>
+                    </div>
+                </div>
+            </Column>
+        </Row>
+        <h2 class="bg-white text-primary text-center" style="margin-top: 45px">@L["TikTokDashBoard.Chart.MCNTikTokChart"].Value</h2>
+    </CardHeader>
+    <CardBody>
+        <Row>
+            <ChartJs.Blazor.Chart Height="700" Config="_configTiktokGrowth" @ref="_tiktokGrowth"></ChartJs.Blazor.Chart>
+        </Row>
+    </CardBody>
+</Card>
+
+<Card Class="card-none-box">
+    <CardHeader>
+        <h2 class="bg-white text-primary text-center">@L["TikTok.DashBoard.MCNVietNamStatsTitle"].ToString()</h2>
+    </CardHeader>
+    <table class="b-table table-striped table-bordered table-sm">
+        <TableHeader>
+            <TableRow TextAlignment="TextAlignment.Center">
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                    @L["TikTok.Dashboard.No"]
+                </TableHeaderCell>
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                    @L["TikTok.Dashboard.Name"]
+                </TableHeaderCell>
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                    @L["TikTok.Dashboard.MCN"]
+                </TableHeaderCell>
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                    @L["TikTok.Dashboard.TotalChannel"]
+                </TableHeaderCell>
+                @foreach (var item in TiktokWeeklyTotalFollowers.GroupBy(_ => _.Title))
+                {
+                    <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                        @($"View ({item.Key})")
+                    </TableHeaderCell>
+                }
+            </TableRow>
+        </TableHeader>
+
+        <TableBody>
+            @{ int index = 1; }
+            @foreach (var items in TiktokWeeklyTotalFollowers.OrderByDescending(x => x.TotalFollowers).GroupBy(_ => _.HashTag))
+            {
+                int temp = index;
+                var cssRow = temp < 6 ? "bg-brand" : string.Empty;
+                if (items.Key.Equals("gdlfamily"))
+                {
+                    cssRow = "bg-primary";
+                }
+
+                if (items.Key.Equals("yan"))
+                {
+                    cssRow = "bg-smooth-red";
+                }
+                var first = items.FirstOrDefault();
+                <TableRow class="@cssRow">
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;" TextAlignment="TextAlignment.Center">@temp</TableRowCell>
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;">@first?.Name</TableRowCell>
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;">@items.Key</TableRowCell>
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;">@first?.TotalChannel.ToCommaStyle()</TableRowCell>
+                    @foreach (var g in TiktokWeeklyTotalFollowers.GroupBy(_ => _.Title))
+                    {
+                        var item = items.FirstOrDefault(x => x.Title == g.Key);
+                        <TableRowCell TextAlignment="TextAlignment.Right" VerticalAlignment="VerticalAlignment.Middle">@item?.TotalFollowers.NumberToWords()</TableRowCell>
+                    }
+                </TableRow>
+                index++;
+            }
+        </TableBody>
+    </table>
+</Card>
+
+<Card Class="card-none-box">
+    <CardHeader>
+        <h2 class="bg-white text-primary text-center">@L["TikTok.MCNVietNameChannel.TabName"].ToString()</h2>
+    </CardHeader>
+    <table class="b-table table-striped table-bordered table-sm">
+        <TableHeader>
+            <TableRow TextAlignment="TextAlignment.Center">
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;width: 40px">
+                    @L["TikTok.MCNVietNameChannel.No"]
+                </TableHeaderCell>
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                    @L["TikTok.MCNVietNameChannel.Name"]
+                </TableHeaderCell>
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                    @L["TikTok.MCNVietNameChannel.Link"]
+                </TableHeaderCell>
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                    <Tooltip Text="@L["TikTok.MCNVietNameChannel.unit"]" Style="display: inline-table">
+                        @L["TikTok.MCNVietNameChannel.Followers"]
+                    </Tooltip>
+                </TableHeaderCell>
+                <TableHeaderCell Style="background-color: lightgrey;vertical-align:middle;">
+                    @L["TikTok.MCNVietNameChannel.CreatedDateTime"]
+                </TableHeaderCell>
+
+            </TableRow>
+        </TableHeader>
+
+        <TableBody>
+            @{ int index = 1; }
+            @foreach (var topVietNamChannel in TopVietNamChannels)
+            {
+                int temp = index;
+                <TableRow>
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;" TextAlignment="TextAlignment.Center">@temp</TableRowCell>
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;">@topVietNamChannel.Name</TableRowCell>
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;">
+                        <a href="@topVietNamChannel.Link" Target="Target.Blank">@topVietNamChannel.Link </a>
+                    </TableRowCell>
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;" TextAlignment="TextAlignment.Right" VerticalAlignment="VerticalAlignment.Middle">
+                            @topVietNamChannel.Followers.ToString("N0")
+                    </TableRowCell>
+                    <TableRowCell Style="font-size: 16px;font-weight: 500;" TextAlignment="TextAlignment.Right" VerticalAlignment="VerticalAlignment.Middle"> @BrowserDateTime.ConvertToBrowserTime(topVietNamChannel.CreatedDateTime.GetValueOrDefault(), GlobalConsts.DateTimeFormat)</TableRowCell>
+                </TableRow>
+                index++;
+            }
+        </TableBody>
+    </table>
+</Card>

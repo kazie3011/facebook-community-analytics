@@ -1,0 +1,595 @@
+﻿@* @page "/user-affiliate" *@
+@* @attribute [Authorize(ApiPermissions.UserAffiliates.Default)] *@
+@* @using FacebookCommunityAnalytics.Api.UserAffiliates *@
+@* @using FacebookCommunityAnalytics.Api.Localization *@
+@* @using FacebookCommunityAnalytics.Api.Shared *@
+@* @using Microsoft.Extensions.Localization *@
+@* @using Volo.Abp.ObjectMapping *@
+@* @using Volo.Abp.AspNetCore.Components.Messages *@
+@* @using Volo.Abp.AspNetCore.Components.Web.Theming.Layout *@
+@* @using FacebookCommunityAnalytics.Api.Permissions *@
+@* @using FacebookCommunityAnalytics.Api.Core.Const *@
+@* @using FacebookCommunityAnalytics.Api.Core.Enums *@
+@* @using FacebookCommunityAnalytics.Api.Core.Extensions *@
+@* @using FacebookCommunityAnalytics.Api.Groups *@
+@* @using FacebookCommunityAnalytics.Api.Posts *@
+@* @using FacebookCommunityAnalytics.Api.Organizations *@
+@* @using FacebookCommunityAnalytics.Api.UserInfos *@
+@* @using Volo.Abp.Users *@
+@* @using Services *@
+@* @inherits BlazorComponentBase *@
+@* *@
+@* @inject IUserAffiliateAppService UserAffiliateAppService *@
+@* @inject IUiMessageService UiMessageService *@
+@* @inject NavigationManager NavigationManager *@
+@* @inject IUserInfosAppService UserInfosAppService *@
+@* @inject IGroupExtendAppService GroupExtendAppService *@
+@* @inject IOrganizationsAppService OrganizationsAppService *@
+@* @inject IPostsExtendAppService PostsExtendAppService *@
+@* @inject IJSRuntime JSRuntime *@
+@* @inject ClipboardService ClipboardService *@
+@* $1$ ************************* PAGE HEADER ************************* #1# *@
+@* <PageHeader Title="@L["UserAffiliate"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar"> *@
+@* *@
+@* </PageHeader> *@
+@* *@
+@* *@
+@* <Tabs SelectedTab="@_selectedTab" SelectedTabChanged="@OnSelectedTabChanged"> *@
+@* <Items> *@
+@*     $1$ <Tab Style="background-color: #9CDCFE" Name="@L["CreateAffiliateTab"]">@L["UserAffiliate.CreateAffiliateTab"]</Tab> #1# *@
+@*     $1$ <Tab Style="background-color: #baeeba" Name="@L["ConversionDetailsTab"]">@L["UserAffiliate.ConversionDetailsTab"]</Tab> #1# *@
+@*     @if (IsManagerRole()) *@
+@*     { *@
+@*         <Tab Name="@L["ConversionSumStats"]">@L["UserAffiliate.ConversionSumStats"]</Tab> *@
+@*     } *@
+@*     <Tab Name="@L["CreateAffiliateTab"]">@L["UserAffiliate.CreateAffiliateTab"]</Tab> *@
+@*     <Tab Name="@L["ConversionDetailsTab"]">@L["UserAffiliate.ConversionDetailsTab"]</Tab> *@
+@* </Items> *@
+@* <Content> *@
+@* <TabPanel Name=@L["ConversionDetailsTab"]> *@
+@* $1$ ************************* SEARCH ************************* #1# *@
+@* <Form id="UserAffiliateSearchForm" class="mb-3"> *@
+@*     <Addons> *@
+@*         <Addon AddonType="AddonType.Start"> *@
+@*             <Select TValue="RelativeDateTimeRange" @bind-SelectedValue="@Filter.RelativeDateTimeRange"> *@
+@*                 @foreach (var itemValue in Enum.GetValues(typeof(RelativeDateTimeRange))) *@
+@*                 { *@
+@*                     <SelectItem @key="itemValue" TValue="RelativeDateTimeRange" Value="@((RelativeDateTimeRange) itemValue)"> *@
+@*                         @L[$"Enum:RelativeDateTimeRange:{Convert.ToInt32(itemValue)}"] *@
+@*                     </SelectItem> *@
+@*                 } *@
+@*             </Select> *@
+@* *@
+@*             <Select TValue="UserAffiliateHasConversionFilter" @bind-SelectedValue="@UserAffiliateHasConversionFilter"> *@
+@*                 @foreach (var itemValue in Enum.GetValues(typeof(UserAffiliateHasConversionFilter))) *@
+@*                 { *@
+@*                     <SelectItem @key="itemValue" TValue="UserAffiliateHasConversionFilter" Value="@((UserAffiliateHasConversionFilter) itemValue)"> *@
+@*                         @L[$"Enum:UserAffiliateHasConversionFilter:{Convert.ToInt32(itemValue)}"] *@
+@*                     </SelectItem> *@
+@*                 } *@
+@*             </Select> *@
+@* *@
+@*         </Addon> *@
+@* *@
+@*         <Addon AddonType="AddonType.Body"> *@
+@*             <TextEdit @bind-Text="@Filter.FilterText" *@
+@*                       Autofocus="true" *@
+@*                       Placeholder="@L["Search"]"> *@
+@*             </TextEdit> *@
+@*         </Addon> *@
+@*         <Addon AddonType="AddonType.End"> *@
+@*             <SubmitButton Form="UserAffiliateSearchForm" Clicked="GetUserAffiliatesAsync"> *@
+@*                 <Icon Name="IconName.Search" Class="mr-1"></Icon> *@
+@*             </SubmitButton> *@
+@*         </Addon> *@
+@*         <Addon> *@
+@*             <SubmitButton Clicked="async () => await ExportPostsAsync()"> *@
+@*                 <Icon Name="IconName.Download" Class="mr-1"></Icon> *@
+@*             </SubmitButton> *@
+@*         </Addon> *@
+@*     </Addons> *@
+@* *@
+@*     <br/> *@
+@*     <Row> *@
+@*         <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*             <Select TValue="Guid?" SelectedValueChanged="@OnTeamSelectedValueChanged"> *@
+@*                 <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Team"]]</SelectItem> *@
+@*                 @foreach (var orgUnit in _organizationUnitDtos) *@
+@*                 { *@
+@*                     <SelectItem @key="orgUnit" TValue="Guid?" Value="@orgUnit.Id"> *@
+@*                         @orgUnit.DisplayName *@
+@*                     </SelectItem> *@
+@*                 } *@
+@*             </Select> *@
+@*         </Field> *@
+@*         <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*             <Select TValue="ConversionOwnerFilter" @bind-SelectedValue="@Filter.ConversionOwnerFilter"> *@
+@*                 @foreach (var itemValue in Enum.GetValues(typeof(ConversionOwnerFilter))) *@
+@*                 { *@
+@*                     <SelectItem @key="itemValue" TValue="ConversionOwnerFilter" Value="@((ConversionOwnerFilter) itemValue)"> *@
+@*                         @L[$"Enum:ConversionOwnerFilter:{Convert.ToInt32(itemValue)}"] *@
+@*                     </SelectItem> *@
+@*                 } *@
+@*             </Select> *@
+@*         </Field> *@
+@* *@
+@*         @if (IsSaleAndAboveRole()) *@
+@*         { *@
+@*             <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*                 $1$ <FieldLabel>@L["Partner"]</FieldLabel> #1# *@
+@*                 <Select TValue="Guid?" SelectedValueChanged="@OnSelectedValuePartner"> *@
+@*                     <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Partner"]]</SelectItem> *@
+@*                     @foreach (var item in PartnersNullable) *@
+@*                     { *@
+@*                         <SelectItem @key="item" TValue="Guid?" Value="@item.Id"> *@
+@*                             @item.DisplayName *@
+@*                         </SelectItem> *@
+@*                     } *@
+@*                 </Select> *@
+@*             </Field> *@
+@* *@
+@*             <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*                 $1$ <FieldLabel>@L["Campaign"]</FieldLabel> #1# *@
+@*                 <Select TValue="Guid?" SelectedValueChanged="@OnSelectedValueCampaign"> *@
+@*                     <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Campaign"]]</SelectItem> *@
+@*                     @foreach (var item in CampaignsNullable) *@
+@*                     { *@
+@*                         <SelectItem @key="item" TValue="Guid?" Value="@item.Id"> *@
+@*                             @item.DisplayName *@
+@*                         </SelectItem> *@
+@*                     } *@
+@*                 </Select> *@
+@*             </Field> *@
+@*         } *@
+@* *@
+@*         <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*             <Autocomplete Data="@CategoriesNullable" *@
+@*                           TItem="LookupDto<Guid?>" *@
+@*                           TValue="Guid?" *@
+@*                           TextField="@((item) => item.DisplayName)" *@
+@*                           ValueField="@((item) => item.Id)" *@
+@*                           SearchChanged="@GetNullableCategoryLookupAsync" *@
+@*                           @bind-SelectedValue="@Filter.CategoryId" *@
+@*                           Placeholder="@L["Autocomplete.DefaultText", L["Category"]]" Filter="AutocompleteFilter.Contains" *@
+@*                           CustomFilter="@((item, searchValue) => item.DisplayName.RemoveDiacritics().IndexOf(searchValue.RemoveDiacritics(), 0, StringComparison.CurrentCultureIgnoreCase) >= 0)"/> *@
+@*         </Field> *@
+@*         <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*             <Autocomplete Data="@GroupsNullable" *@
+@*                           TItem="LookupDto<Guid?>" *@
+@*                           TValue="Guid?" *@
+@*                           TextField="@((item) => item.DisplayName)" *@
+@*                           ValueField="@((item) => item.Id)" *@
+@*                           SearchChanged="@GetNullableGroupLookupAsync" *@
+@*                           @bind-SelectedValue="@Filter.GroupId" *@
+@*                           Placeholder="@L["Autocomplete.DefaultText", L["Group"]]" *@
+@*                           Filter="AutocompleteFilter.Contains" *@
+@*                           CustomFilter="@((item, searchValue) => item.DisplayName.RemoveDiacritics().IndexOf(searchValue.RemoveDiacritics(), 0, StringComparison.CurrentCultureIgnoreCase) >= 0)"/> *@
+@*         </Field> *@
+@*     </Row> *@
+@* </Form> *@
+@* *@
+@* $1$ ************************* DATA GRID ************************* #1# *@
+@* *@
+@* @if (UserAffiliateList.IsNotNullOrEmpty()) *@
+@* { *@
+@*     <Card> *@
+@*         <CardBody> *@
+@*             <DataGrid TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                       Data="UserAffiliateList" *@
+@*                       ReadData="OnDataGridReadAsync" *@
+@*                       TotalItems="TotalCount" *@
+@*                       Responsive="true" *@
+@*                       PageSizes="GlobalConsts.PAGE_SIZES_CONST" *@
+@*                       PageSize="PageSize" *@
+@*                       ShowPageSizes="true" *@
+@*                       ShowPager="true" *@
+@*                       Striped="true"> *@
+@*                 <DataGridColumns> *@
+@*                     <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                     Field="AppUser.UserName" *@
+@*                                     Caption="@L["UserAffiliate.User"]" *@
+@*                                     Sortable="false"> *@
+@*                         <DisplayTemplate> *@
+@*                             @(context.AppUser != null ? $"{context.AppUser.UserName}({context.UserInfo.Code})" : string.Empty) *@
+@*                         </DisplayTemplate> *@
+@*                     </DataGridColumn> *@
+@* *@
+@*                     $1$ <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" #1# *@
+@*                     $1$                 Field="UserAffiliate.MarketplaceType" #1# *@
+@*                     $1$                 Caption="@L["UserAffiliate.MarketplaceType"]"> #1# *@
+@*                     $1$ </DataGridColumn> #1# *@
+@* *@
+@*                     $1$ <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" #1# *@
+@*                     $1$                 Field="UserAffiliate.Url" #1# *@
+@*                     $1$                 Caption="@L["UserAffiliate.Url"]"> #1# *@
+@*                     $1$ </DataGridColumn> #1# *@
+@* *@
+@*                     <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                     Field="UserAffiliate.AffiliateUrl" *@
+@*                                     Sortable="false" *@
+@*                                     Caption="@L["UserAffiliate.AffiliateUrl"]"> *@
+@*                     </DataGridColumn> *@
+@* *@
+@*                     <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                     Field="Category.Name" *@
+@*                                     Sortable="false" *@
+@*                                     Caption="@L["Category"]"> *@
+@*                     </DataGridColumn> *@
+@* *@
+@*                     <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                     Field="Partner.Name" *@
+@*                                     Sortable="false" *@
+@*                                     Caption="@L["Partner"]"> *@
+@*                     </DataGridColumn> *@
+@* *@
+@*                     <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                     Field="Campaign.Name" *@
+@*                                     Sortable="false" *@
+@*                                     Caption="@L["Campaign"]"> *@
+@*                     </DataGridColumn> *@
+@* *@
+@*                     <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                     Field="UserAffiliate.UserAffiliateConversion.ClickCount" *@
+@*                                     Caption="@L["UserAffiliate.ClickCount"]" *@
+@*                                     Sortable="true"> *@
+@*                     </DataGridColumn> *@
+@* *@
+@*                     @if (IsManagerRole()) *@
+@*                     { *@
+@*                         <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                         Field="UserAffiliate.UserAffiliateConversion.ConversionCount" *@
+@*                                         Sortable="false" *@
+@*                                         Caption="@L["UserAffiliate.ConversionDetail"]"> *@
+@*                             <DisplayTemplate> *@
+@*                                 @{ *@
+@*                                     var conversion = context.UserAffiliate.UserAffiliateConversion; *@
+@*                                     string affiliateDetail = (conversion != null) ? $"{conversion.ConversionCount} /{conversion.ConversionAmount.ToCommaStyle()}" : "---"; *@
+@*                                 } *@
+@* *@
+@*                                 @(context.UserAffiliate.UpdatedAt.HasValue ? affiliateDetail : string.Empty) *@
+@*                             </DisplayTemplate> *@
+@*                         </DataGridColumn> *@
+@*                     } *@
+@* *@
+@* *@
+@*                     <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                     Field="UserAffiliate.CreatedAt" *@
+@*                                     Caption="@L["UserAffiliate.CreatedAt"]" *@
+@*                                     Sortable="true" *@
+@*                                     SortDirection="SortDirection.Descending"> *@
+@*                         <DisplayTemplate> *@
+@*                             @(context.UserAffiliate.CreatedAt.HasValue ? context.UserAffiliate.CreatedAt.Value.ToShortDateString() : string.Empty) *@
+@*                         </DisplayTemplate> *@
+@*                     </DataGridColumn> *@
+@* *@
+@*                     <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                     Field="UserAffiliate.UpdatedAt" *@
+@*                                     Sortable="false" *@
+@*                                     Caption="@L["UserAffiliate.UpdatedAt"]"> *@
+@*                         <DisplayTemplate> *@
+@*                             @(context.UserAffiliate.UpdatedAt.HasValue ? context.UserAffiliate.UpdatedAt.Value.ToShortDateString() : string.Empty) *@
+@*                         </DisplayTemplate> *@
+@*                     </DataGridColumn> *@
+@* *@
+@*                     <DataGridEntityActionsColumn TItem="UserAffiliateWithNavigationPropertiesDto" @ref="@EntityActionsColumn"> *@
+@*                         <DisplayTemplate> *@
+@*                             <EntityActions TItem="UserAffiliateWithNavigationPropertiesDto" EntityActionsColumn="@EntityActionsColumn"> *@
+@* *@
+@*                                 $1$ -------------------Lock Edit User Affiliate---------------------- #1# *@
+@*                                 $1$ <EntityAction TItem="UserAffiliateWithNavigationPropertiesDto" #1# *@
+@*                                 $1$               Visible="@CanEditUserAffiliate" #1# *@
+@*                                 $1$               Clicked="() => OpenEditUserAffiliateModal(context.UserAffiliate)" #1# *@
+@*                                 $1$               Text="@L["Edit"]"> #1# *@
+@*                                 $1$ </EntityAction> #1# *@
+@* *@
+@*                                 <EntityAction TItem="UserAffiliateWithNavigationPropertiesDto" *@
+@*                                               Visible="@CanDeleteUserAffiliate" *@
+@*                                               Clicked="() => DeleteUserAffiliateAsync(context.UserAffiliate)" *@
+@*                                               ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])" *@
+@*                                               Text="@L["Delete"]"> *@
+@*                                 </EntityAction> *@
+@*                             </EntityActions> *@
+@*                         </DisplayTemplate> *@
+@*                     </DataGridEntityActionsColumn> *@
+@* *@
+@*                 </DataGridColumns> *@
+@*             </DataGrid> *@
+@*         </CardBody> *@
+@*     </Card> *@
+@* } *@
+@* *@
+@* </TabPanel> *@
+@* <TabPanel Name="@L["ConversionSumStats"]"> *@
+@*             <strong style="display:inline-block;margin:20px;alignment: center;text-align: center;width: 100%;font-size: 20px" class="text-success"> *@
+@*                 @(L["UserAffiliate.DataTime" *@
+@*                     , _conversionModel.FromDate.HasValue ? _conversionModel.FromDate.Value.ToShortDateString() : string.Empty *@
+@*                     , _conversionModel.ToDate.HasValue ? _conversionModel.ToDate.Value.ToShortDateString() : string.Empty]) *@
+@*             </strong> *@
+@*             <Row ColumnSize="ColumnSize.IsFull.OnMobile.IsQuarter.OnDesktop"> *@
+@*                 <Card style="margin:20px;width: 20%;min-width: 300px"> *@
+@*                     <CardTitle style="margin-top:20px;" TextAlignment="TextAlignment.Center"> *@
+@*                         @L["UserAffiliate.ClickTotal"] *@
+@*                     </CardTitle> *@
+@*                     <CardBody TextAlignment="TextAlignment.Center"> *@
+@*                         <strong class="text-info"> *@
+@*                             @_conversionModel.ClickCount.ToString("N0") *@
+@*                         </strong> *@
+@*                     </CardBody> *@
+@*                 </Card> *@
+@* *@
+@*                 <Card style="margin:20px;width: 20%;min-width: 300px"> *@
+@*                     <CardTitle style="margin-top:20px;" TextAlignment="TextAlignment.Center"> *@
+@*                         @L["UserAffiliate.TotalConversion"] *@
+@*                     </CardTitle> *@
+@*                     <CardBody TextAlignment="TextAlignment.Center"> *@
+@*                         <strong class="text-warning"> *@
+@*                             @_conversionModel.ConversionCount.ToString("N0") *@
+@*                         </strong> *@
+@*                     </CardBody> *@
+@*                 </Card> *@
+@* *@
+@*                 <Card style="margin:20px;width: 20%;min-width: 300px"> *@
+@*                     <CardTitle style="margin-top:20px;" TextAlignment="TextAlignment.Center"> *@
+@*                         @L["UserAffiliate.TotalConversionAmount"] *@
+@*                     </CardTitle> *@
+@*                     <CardBody TextAlignment="TextAlignment.Center"> *@
+@*                         <strong class="text-primary"> *@
+@*                             @_conversionModel.ConversionAmount.ToVND() *@
+@*                         </strong> *@
+@*                     </CardBody> *@
+@*                 </Card> *@
+@*                  *@
+@*                 <Card style="margin:20px;width: 20%;min-width: 300px"> *@
+@*                     <CardTitle style="margin-top:20px;" TextAlignment="TextAlignment.Center"> *@
+@*                         @L["UserAffiliate.TotalCommissionAmount"] *@
+@*                     </CardTitle> *@
+@*                     <CardBody TextAlignment="TextAlignment.Center"> *@
+@*                         <strong class="text-danger"> *@
+@*                             @_conversionModel.CommissionAmount.ToVND() *@
+@*                         </strong> *@
+@*                     </CardBody> *@
+@*                 </Card> *@
+@*             </Row> *@
+@*         </TabPanel> *@
+@* *@
+@* <TabPanel Name=@L["CreateAffiliateTab"]> *@
+@*     <Form id="CreateUserAffiliateForm" onsubmit="return false;"> *@
+@*         <Row> *@
+@*             <Validations @ref="@NewUserAffiliateValidations" *@
+@*                          Mode="ValidationMode.Auto" *@
+@*                          Model="@NewUserAffiliate" *@
+@*                          ValidateOnLoad="false"> *@
+@*                 <Validation> *@
+@*                     <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*                         $1$ $2$ <FieldLabel>@L["Group"]</FieldLabel> #2# #1# *@
+@*                         $1$ <Select Disabled="@_disableAfterGetAffiliateUrl" TValue="Guid?" @bind-SelectedValue="@NewUserAffiliate.GroupId"> #1# *@
+@*                         $1$     <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Group"]]</SelectItem> #1# *@
+@*                         $1$     @foreach (var group in _groupDtos) #1# *@
+@*                         $1$     { #1# *@
+@*                         $1$         <SelectItem TValue="Guid?" Value="@group.Id"> #1# *@
+@*                         $1$             @GetNameGroup(group.Id) #1# *@
+@*                         $1$         </SelectItem> #1# *@
+@*                         $1$     } #1# *@
+@*                         $1$ </Select> #1# *@
+@*                         <Autocomplete *@
+@*                             Data="@GroupsNullable" *@
+@*                             TItem="LookupDto<Guid?>" *@
+@*                             TValue="Guid?" *@
+@*                             TextField="@((item) => @GetNameGroup(item.Id))" *@
+@*                             ValueField="@((item) => item.Id)" *@
+@*                             SearchChanged="@GetNullableGroupLookupAsync" *@
+@*                             @bind-SelectedValue="@NewUserAffiliate.GroupId" *@
+@*                             Placeholder="@L["Autocomplete.DefaultText", L["Group"]]" *@
+@*                             Filter="AutocompleteFilter.Contains" *@
+@*                             CustomFilter="@((item, searchValue) => item.DisplayName.RemoveDiacritics().IndexOf(searchValue.RemoveDiacritics(), 0, StringComparison.CurrentCultureIgnoreCase) >= 0)"/> *@
+@*                     </Field> *@
+@*                 </Validation> *@
+@* *@
+@*                 @if (NewUserAffiliate.GroupId.IsNotNullOrEmpty()) *@
+@*                 { *@
+@*                     <Validation> *@
+@*                         $1$ <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> #1# *@
+@*                         $1$     $2$ <FieldLabel>@L["Category"]</FieldLabel> #2# #1# *@
+@*                         $1$     $2$ <Select TValue="Guid?" SelectedValueChanged="@OnSelectedValueCategory"> #2# #1# *@
+@*                         $1$     <Select TValue="Guid?" @bind-SelectedValue="@NewUserAffiliate.CategoryId"> #1# *@
+@*                         $1$         <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Category"]]</SelectItem> #1# *@
+@*                         $1$         @foreach (var item in CategoriesNullable) #1# *@
+@*                         $1$         { #1# *@
+@*                         $1$             <SelectItem TValue="Guid?" Value="@item.Id"> #1# *@
+@*                         $1$                 @item.DisplayName #1# *@
+@*                         $1$             </SelectItem> #1# *@
+@*                         $1$         } #1# *@
+@*                         $1$     </Select> #1# *@
+@*                         $1$ </Field> #1# *@
+@*                         <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*                             <Autocomplete *@
+@*                                 Data="@CategoriesNullable" *@
+@*                                 TItem="LookupDto<Guid?>" *@
+@*                                 TValue="Guid?" *@
+@*                                 TextField="@((item) => item.DisplayName)" *@
+@*                                 ValueField="@((item) => item.Id)" *@
+@*                                 SearchChanged="@GetNullableCategoryLookupAsync" *@
+@*                                 @bind-SelectedValue="@NewUserAffiliate.CategoryId" *@
+@*                                 Placeholder="@L["Autocomplete.DefaultText", L["Category"]]" Filter="AutocompleteFilter.Contains" *@
+@*                                 CustomFilter="@((item, searchValue) => item.DisplayName.RemoveDiacritics().IndexOf(searchValue.RemoveDiacritics(), 0, StringComparison.CurrentCultureIgnoreCase) >= 0)"/> *@
+@*                         </Field> *@
+@* *@
+@*                     </Validation> *@
+@*                     @if (IsSaleAndAboveRole()) *@
+@*                     { *@
+@*                         <Validation> *@
+@*                             <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*                                 $1$ <FieldLabel>@L["Partner"]</FieldLabel> #1# *@
+@*                                 $1$ <Select TValue="Guid?" SelectedValueChanged="@OnSelectedValuePartner"> #1# *@
+@*                                 <Select Disabled="@_disableAfterGetAffiliateUrl" TValue="Guid?" @bind-SelectedValue="@NewUserAffiliate.PartnerId"> *@
+@*                                     <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Partner"]]</SelectItem> *@
+@*                                     @foreach (var item in PartnersNullable) *@
+@*                                     { *@
+@*                                         <SelectItem @key="item" TValue="Guid?" Value="@item.Id"> *@
+@*                                             @item.DisplayName *@
+@*                                         </SelectItem> *@
+@*                                     } *@
+@*                                 </Select> *@
+@*                             </Field> *@
+@*                         </Validation> *@
+@* *@
+@*                         <Validation> *@
+@*                             <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+@*                                 $1$ <FieldLabel>@L["Campaign"]</FieldLabel> #1# *@
+@*                                 $1$ <Select TValue="Guid?" SelectedValueChanged="@OnSelectedValueCampaign"> #1# *@
+@*                                 <Select Disabled="@_disableAfterGetAffiliateUrl" TValue="Guid?" @bind-SelectedValue="@NewUserAffiliate.CampaignId"> *@
+@*                                     <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Campaign"]]</SelectItem> *@
+@*                                     @foreach (var item in CampaignsNullable) *@
+@*                                     { *@
+@*                                         <SelectItem @key="item" TValue="Guid?" Value="@item.Id"> *@
+@*                                             @item.DisplayName *@
+@*                                         </SelectItem> *@
+@*                                     } *@
+@*                                 </Select> *@
+@*                             </Field> *@
+@*                         </Validation> *@
+@*                     } *@
+@* *@
+@*                     <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnDesktop"> *@
+@*                         <Validation> *@
+@*                             <Field> *@
+@*                                 $1$ <FieldLabel>@L["UserAffiliate.Url"]</FieldLabel> #1# *@
+@*                                 <Addons> *@
+@*                                     <Addon AddonType="AddonType.Body"> *@
+@*                                         <TextEdit @bind-Text="@NewUserAffiliate.Url" *@
+@*                                                   Autofocus="true" *@
+@*                                                   Placeholder="@L["UserAffiliate.Url.Placeholder"]"> *@
+@*                                             <Feedback> *@
+@*                                                 <ValidationError/> *@
+@*                                             </Feedback> *@
+@*                                         </TextEdit> *@
+@*                                     </Addon> *@
+@* *@
+@*                                     <Addon AddonType="AddonType.End"> *@
+@*                                         <Button Size="Size.Medium" Outline Color="Color.Primary" Disabled="@_disableShortlinkButton" Clicked="@(async () => await GetAffiliateUrlAsync(NewUserAffiliate.Url, false))"> *@
+@*                                             <Icon Name="IconName.Add" Class="mr-1"></Icon>GDL *@
+@*                                         </Button> *@
+@*                                         <Button Size="Size.Medium" Outline Color="Color.Primary" Disabled="@_disableShortlinkButton" Clicked="@(async () => await GetAffiliateUrlAsync(NewUserAffiliate.Url, true))"> *@
+@*                                             <Icon Name="IconName.Add" Class="mr-1"></Icon>HPD *@
+@*                                         </Button> *@
+@*                                     </Addon> *@
+@*                                 </Addons> *@
+@*                             </Field> *@
+@*                         </Validation> *@
+@* *@
+@*                         <Validation> *@
+@*                             <Field> *@
+@*                                 $1$ <FieldLabel>@L["UserAffiliate.AffiliateUrl"]</FieldLabel> #1# *@
+@*                                 <Addons> *@
+@*                                     <Addon AddonType="AddonType.Body"> *@
+@*                                         <TextEdit @bind-Text="@NewUserAffiliate.AffiliateUrl" Placeholder="Shortlink" ElementId="txtShortlink"> *@
+@*                                             <Feedback> *@
+@*                                                 <ValidationError/> *@
+@*                                             </Feedback> *@
+@*                                         </TextEdit> *@
+@*                                     </Addon> *@
+@*                                     <Addon AddonType="AddonType.End"> *@
+@*                                         $1$ <Select Size="" TValue="MarketplaceType" @bind-SelectedValue="@NewUserAffiliate.MarketplaceType" Disabled="true"> #1# *@
+@*                                         $1$     @foreach (var itemValue in Enum.GetValues(typeof(MarketplaceType))) #1# *@
+@*                                         $1$     { #1# *@
+@*                                         $1$         <SelectItem TValue="MarketplaceType" Value="@((MarketplaceType) itemValue)"> #1# *@
+@*                                         $1$             @L[$"Enum:MarketplaceType:{Convert.ToInt32(itemValue)}"] #1# *@
+@*                                         $1$         </SelectItem> #1# *@
+@*                                         $1$     } #1# *@
+@*                                         $1$ </Select> #1# *@
+@* *@
+@*                                         <Button id="btnCopyToClipBoard" style="background-color: #860404;" data-clipboard-target="#txtShortlink"> *@
+@*                                             <Icon Name="IconName.Save" Class="mr-1"></Icon> *@
+@*                                         </Button> *@
+@* *@
+@*                                         <Button Color="Color.Light" Clicked="@(() => { NewUserAffiliate.AffiliateUrl = string.Empty; NewUserAffiliate.Url = string.Empty; })"> *@
+@*                                             <Icon Name="IconName.Undo" Class="mr-1"></Icon> *@
+@*                                         </Button> *@
+@*                                         <Button Color="Color.Primary" Clicked="ClearUserAffiliateAsync"> *@
+@*                                             <Icon Name="IconName.Delete" Class="mr-1"></Icon> *@
+@*                                         </Button> *@
+@*                                     </Addon> *@
+@*                                 </Addons> *@
+@*                             </Field> *@
+@*                         </Validation> *@
+@*                     </Field> *@
+@*                     $1$<Button Color="Color.Primary" Clicked="ClearUserAffiliateAsync">@L["ClearForm"]</Button>#1# *@
+@*                     $1$<SubmitButton Form="CreateUserAffiliateForm" Clicked="CreateUserAffiliateAsync"/>#1# *@
+@*                 } *@
+@*             </Validations> *@
+@*         </Row> *@
+@* *@
+@*     </Form> *@
+@* </TabPanel> *@
+@* </Content> *@
+@* </Tabs> *@
+@* *@
+@* *@
+@* $1$ ************************* EDIT MODAL ************************* #1# *@
+@* <Modal @ref="EditUserAffiliateModal"> *@
+@*     <ModalContent Centered="true" Size="ModalSize.Large"> *@
+@*         <Form id="EditUserAffiliateForm"> *@
+@*             <ModalHeader> *@
+@*                 <ModalTitle>@L["UpdateUserAffiliate"]</ModalTitle> *@
+@*                 <CloseButton Clicked="CloseEditUserAffiliateModal"/> *@
+@*             </ModalHeader> *@
+@*             <Validations @ref="@EditingUserAffiliateValidations" *@
+@*                          Mode="ValidationMode.Auto" *@
+@*                          Model="@EditingUserAffiliate" *@
+@*                          ValidateOnLoad="false"> *@
+@*                 <ModalBody> *@
+@*                     <Row> *@
+@*                         <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet"> *@
+@*                             <Validation> *@
+@*                                 <Field> *@
+@*                                     <FieldLabel>@L["UserAffiliate.MarketplaceType"]</FieldLabel> *@
+@*                                     <Select TValue="MarketplaceType" @bind-SelectedValue="@EditingUserAffiliate.MarketplaceType"> *@
+@*                                         @foreach (var itemValue in Enum.GetValues(typeof(MarketplaceType))) *@
+@*                                         { *@
+@*                                             <SelectItem @key="itemValue" TValue="MarketplaceType" Value="@((MarketplaceType) itemValue)"> *@
+@*                                                 @L[$"Enum:MarketplaceType:{Convert.ToInt32(itemValue)}"] *@
+@*                                             </SelectItem> *@
+@*                                         } *@
+@*                                     </Select> *@
+@*                                 </Field> *@
+@*                             </Validation> *@
+@* *@
+@* *@
+@*                             <Validation> *@
+@*                                 <Field> *@
+@*                                     <FieldLabel>@L["UserAffiliate.Url"]</FieldLabel> *@
+@*                                     <TextEdit @bind-Text="@EditingUserAffiliate.Url"> *@
+@*                                         <Feedback> *@
+@*                                             <ValidationError/> *@
+@*                                         </Feedback> *@
+@*                                     </TextEdit> *@
+@*                                 </Field> *@
+@*                             </Validation> *@
+@* *@
+@* *@
+@*                             <Validation> *@
+@*                                 <Field> *@
+@*                                     <FieldLabel>@L["UserAffiliate.AffiliateUrl"]</FieldLabel> *@
+@*                                     <TextEdit @bind-Text="@EditingUserAffiliate.AffiliateUrl" ReadOnly="true"> *@
+@*                                         <Feedback> *@
+@*                                             <ValidationError/> *@
+@*                                         </Feedback> *@
+@*                                     </TextEdit> *@
+@*                                 </Field> *@
+@*                             </Validation> *@
+@*                         </Column> *@
+@*                     </Row> *@
+@* *@
+@*                 </ModalBody> *@
+@*             </Validations> *@
+@* *@
+@*             <ModalFooter> *@
+@*                 <Button Color="Color.Dark" *@
+@*                         Clicked="CloseEditUserAffiliateModal"> *@
+@*                     @L["Cancel"] *@
+@*                 </Button> *@
+@*                 <SubmitButton Form="EditUserAffiliateForm" Clicked="UpdateUserAffiliateAsync"/> *@
+@*             </ModalFooter> *@
+@*         </Form> *@
+@*     </ModalContent> *@
+@* </Modal> *@

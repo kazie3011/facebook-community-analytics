@@ -1,0 +1,3 @@
+dotnet "run" "--project" "d:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\FacebookCommunityAnalytics.Api.IdentityServer.csproj"
+dotnet "run" "--project" "d:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Host\FacebookCommunityAnalytics.Api.HttpApi.Host.csproj"
+dotnet "run" "--project" "d:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Blazor\FacebookCommunityAnalytics.Api.Blazor.csproj"

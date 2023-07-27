@@ -1,0 +1,292 @@
+﻿@attribute [Authorize(ApiPermissions.Tiktok.Dashboard)]
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Tiktoks;
+@using FA = Blazorise.Icons.FontAwesome;
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Groups
+@using FacebookCommunityAnalytics.Api.StaffEvaluations
+@using Flurl
+@inherits BlazorComponentBase
+@inject IGroupExtendAppService GroupsExtendAppService
+@inject IStaffEvaluationAppService StaffEvaluationAppService
+
+@* ************************* DATA GRID ************************* *@
+<DataGrid TItem="TikTokChannelKpiModel"
+          Data="TikTokChannels"
+          ReadData="OnDataGridReadAsync"
+          TotalItems="TikTokChannels.Count"
+          Responsive="true"
+          Narrow="true"
+          Striped="true"
+          SortMode="DataGridSortMode.Single">
+    <DataGridColumns>
+        <DataGridColumn TItem="TikTokChannelKpiModel"
+                        Field="Index"
+                        Caption="@L["TikTokInternalChannelKpiModel.Index"]"
+                        Sortable="false"/>
+
+        <DataGridColumn TItem="TikTokChannelKpiModel"
+                        Field="Group.Title"
+                        Caption="@L["TiktokChannels.GroupTitle"]"
+                        Sortable="true"
+                        SortDirection="SortDirection.Ascending">
+        </DataGridColumn>
+
+
+        <DataGridColumn TItem="TikTokChannelKpiModel"
+                        Field="Group.Name"
+                        Sortable="false"
+                        Caption="@L["TiktokChannels.GroupName"]">
+            <DisplayTemplate>
+                @context.Group.Name
+                <br/>
+                @{
+                    string GetGroupDisplayUrl(string urlString)
+                    {
+                        try
+                        {
+                            var url = new Url(urlString);
+                            return url.Path;
+                        }
+                        catch (Exception)
+                        {
+                            return urlString;
+                        }
+                    }
+                }
+                <Link To="@context.Group.Url" Target="Target.Blank">@GetGroupDisplayUrl(context.Group.Url)</Link>
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="TikTokChannelKpiModel"
+                        Field="Index"
+                        Caption="@L["TikTokInternalChannelKpiModel.TotalPoint"]" 
+                        Sortable="true"
+                        VerticalAlignment="VerticalAlignment.Top">
+            <DisplayTemplate>
+                @if (context.StaffEvaluation is not null)
+                {
+                    <div style="width: 140px">
+                        <Progress
+                            Striped="true"
+                            Animated="true"
+                            Color="@(context.StaffEvaluation.TotalPoint >= 100 ? Color.Primary : Color.Warning)"
+                            Value="@((int)context.StaffEvaluation.TotalPoint)"
+                            Max="100"
+                            style="height: 10px">
+                        </Progress>
+                        <strong class="text-danger">@($"{context.StaffEvaluation.TotalPoint:0}")/100</strong>
+                    </div>
+                }
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="TikTokChannelKpiModel"
+                        Field="Index"
+                        Caption="@L["TikTokInternalChannelKpiModel.TargetVideos"]"
+                        Sortable="false"
+                        VerticalAlignment="VerticalAlignment.Top">
+            <DisplayTemplate>
+                @if (context.StaffEvaluation is not null)
+                {
+                    <div style="width: 140px">
+                        <Progress
+                            Striped="true"
+                            Animated="true"
+                            Color="@(context.StaffEvaluation.QuantityKPI >= 50 ? Color.Primary : Color.Warning)"
+                            Value="@((int)context.StaffEvaluation.QuantityKPI)"
+                            Max="50"
+                            style="height: 10px">
+                        </Progress>
+                        <strong class="text-primary">@($"{context.StaffEvaluation.QuantityKPI:0}")/50</strong>
+                        <br/>
+                        @context.StaffEvaluation.QuantityKPIDescription
+                    </div>
+                }
+
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="TikTokChannelKpiModel"
+                        Field="Index"
+                        Caption="@L["TikTokInternalChannelKpiModel.TargetFollowers"]"
+                        Sortable="false"
+                        VerticalAlignment="VerticalAlignment.Top">
+            <DisplayTemplate >
+                @if (context.StaffEvaluation is not null)
+                {
+                    <div style="width: 140px">
+                        <Progress
+                            Striped="true"
+                            Animated="true"
+                            Color="@(context.StaffEvaluation.QualityKPI >= 30 ? Color.Primary : Color.Warning)"
+                            Value="@((int)context.StaffEvaluation.QualityKPI)"
+                            Max="30"
+                            style="height: 10px">
+                        </Progress>
+                        <strong class="text-primary">@($"{context.StaffEvaluation.QualityKPI:0}")/30</strong>
+                        <br/>
+                        @context.StaffEvaluation.QualityKPIDescription
+                    </div>
+                }
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="TikTokChannelKpiModel"
+                        Field="Index"
+                        Caption="@L["TikTokInternalChannelKpiModel.Review"]"
+                        Sortable="false"
+                        VerticalAlignment="VerticalAlignment.Top">
+            <DisplayTemplate >
+                @if (context.StaffEvaluation is not null)
+                {
+                    <div style="width: 140px">
+                        <Progress
+                            Striped="true"
+                            Animated="true"
+                            Color="@(context.StaffEvaluation.ReviewPoint >= 20 ? Color.Primary : Color.Info)"
+                            Value="@((int)context.StaffEvaluation.ReviewPoint)"
+                            Max="20"
+                            style="height: 10px">
+                        </Progress>
+                        <strong class="text-primary">@($"{context.StaffEvaluation.ReviewPoint:0}")/20</strong>
+                        <br/>
+                        @context.StaffEvaluation.DirectorReview
+                    </div>
+                }
+            </DisplayTemplate>
+        </DataGridColumn>
+        @* <DataGridColumn TItem="TikTokChannelKpiModel" *@
+        @*                 Field="Index" *@
+        @*                 Caption="@L["TikTokInternalChannelKpiModel.Review"]" *@
+        @*                 Sortable="false" *@
+        @*                 VerticalAlignment="VerticalAlignment.Top"> *@
+        @*     <DisplayTemplate> *@
+        @*         @if (context.StaffEvaluation is not null) *@
+        @*         { *@
+        @*             <Buttons> *@
+        @*                 <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditStaffEvaluationModal(context.StaffEvaluation)"> *@
+        @*                     <Icon Name="IconName.Search"/> *@
+        @*                 </Button> *@
+        @*             </Buttons> *@
+        @*         } *@
+        @*     </DisplayTemplate> *@
+        @* </DataGridColumn> *@
+    </DataGridColumns>
+</DataGrid>
+
+@* $1$ ************************* EDIT MODAL ************************* #1# *@
+@* <Modal @ref="EditStaffEvaluationModal" Style="z-index: 99999"> *@
+@*     <ModalContent Centered="true" Size="ModalSize.ExtraLarge"> *@
+@*         <Form id="EditStaffEvaluationForm"> *@
+@*             <ModalHeader> *@
+@*                 <ModalTitle>@L["StaffEvaluations.Header"]</ModalTitle> *@
+@*                 <CloseButton Clicked="CloseEditStaffEvaluationModal"/> *@
+@*             </ModalHeader> *@
+@*             <ModalBody> *@
+@*                 <Row> *@
+@*                     <Column ColumnSize="ColumnSize.IsFull.OnDesktop.Is6.OnWidescreen"> *@
+@*                         <Field> *@
+@*                             <Addons> *@
+@*                                 <Addon AddonType="AddonType.Start"> *@
+@*                                     <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.QuantityKPI"]*</AddonLabel> *@
+@*                                 </Addon> *@
+@*                                 <Addon AddonType="AddonType.Body"> *@
+@*                                     <NumericEdit ReadOnly="@(EditingStaffEvaluation.SaleKPIAmount > 0 || IsNotLeaderRole())" TValue="decimal" Max="50" Min="0" Step="5" @bind-Value="@EditingStaffEvaluation.QuantityKPI"> *@
+@*                                     </NumericEdit> *@
+@*                                 </Addon> *@
+@*                             </Addons> *@
+@*                         </Field> *@
+@*                          *@
+@*                         <Field> *@
+@*                             <Addons> *@
+@*                                 <Addon AddonType="AddonType.Start"> *@
+@*                                     <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.QualityKPI"]*</AddonLabel> *@
+@*                                 </Addon> *@
+@*                                 <Addon AddonType="AddonType.Body"> *@
+@*                                     <NumericEdit ReadOnly="IsNotLeaderRole()" TValue="decimal" Max="30" Min="0" Step="5" @bind-Value="@EditingStaffEvaluation.QualityKPI"> *@
+@*                                     </NumericEdit> *@
+@*                                 </Addon> *@
+@*                             </Addons> *@
+@*                         </Field> *@
+@* *@
+@*                         <Field> *@
+@*                             <Addons> *@
+@*                                 <Addon AddonType="AddonType.Start"> *@
+@*                                     <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.ReviewPoint"]*</AddonLabel> *@
+@*                                 </Addon> *@
+@*                                 <Addon AddonType="AddonType.Body"> *@
+@*                                     <NumericEdit ReadOnly="IsNotLeaderRole()" TValue="decimal" Max="20" Min="0" Step="5" @bind-Value="@EditingStaffEvaluation.ReviewPoint"> *@
+@*                                     </NumericEdit> *@
+@*                                 </Addon> *@
+@*                             </Addons> *@
+@*                         </Field> *@
+@*                     </Column> *@
+@* *@
+@*                     <Column ColumnSize="ColumnSize.IsFull.OnDesktop.Is6.OnWidescreen"> *@
+@*                         <Field> *@
+@*                             <FieldLabel>@L["StaffEvaluations.DirectorReview"] *</FieldLabel> *@
+@*                             <RichTextEdit @ref="@richTextEditRef" *@
+@*                                           ReadOnly="IsNotLeaderRole()" *@
+@*                                           ContentChanged="OnDirectorReviewContentChanged" *@
+@*                                           PlaceHolder="@L["ScheduledPost.InputYourContent"]" *@
+@*                                           ToolbarPosition="Placement.Bottom"> *@
+@* *@
+@*                                 <Editor>@((MarkupString) EditingStaffEvaluation.DirectorReview.ToHtmlBreak())</Editor> *@
+@*                                 <Toolbar> *@
+@*                                     <RichTextEditToolbarGroup> *@
+@*                                         <RichTextEditToolbarButton Action="RichTextEditAction.Bold"/> *@
+@*                                         <RichTextEditToolbarButton Action="RichTextEditAction.Italic"/> *@
+@*                                         <RichTextEditToolbarSelect Action="RichTextEditAction.Size"> *@
+@*                                             <RichTextEditToolbarSelectItem Value="small"/> *@
+@*                                             <RichTextEditToolbarSelectItem Selected="true"/> *@
+@*                                             <RichTextEditToolbarSelectItem Value="large"/> *@
+@*                                             <RichTextEditToolbarSelectItem Value="huge">Very Big</RichTextEditToolbarSelectItem> *@
+@*                                         </RichTextEditToolbarSelect> *@
+@*                                         <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered"/> *@
+@*                                         <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet"/> *@
+@*                                     </RichTextEditToolbarGroup> *@
+@*                                 </Toolbar> *@
+@*                             </RichTextEdit> *@
+@*                         </Field> *@
+@*                     </Column> *@
+@* *@
+@*                     $1$ <Column ColumnSize="ColumnSize.IsFull.OnDesktop.Is6.OnWidescreen"> #1# *@
+@*                     $1$     <Field> #1# *@
+@*                     $1$         <FieldLabel>@L["StaffEvaluations.AssignedTasks"] *</FieldLabel> #1# *@
+@*                     $1$         <RichTextEdit @ref="@richTextTaskEditRef" #1# *@
+@*                     $1$                       ContentChanged="OnAssignedTasksContentChanged" #1# *@
+@*                     $1$                       PlaceHolder="@L["ScheduledPost.InputYourContent"]" #1# *@
+@*                     $1$                       ToolbarPosition="Placement.Bottom"> #1# *@
+@*                     $1$ #1# *@
+@*                     $1$             <Editor>@((MarkupString) EditingStaffEvaluation.AssignedTasks.ToHtmlBreak())</Editor> #1# *@
+@*                     $1$             <Toolbar> #1# *@
+@*                     $1$                 <RichTextEditToolbarGroup> #1# *@
+@*                     $1$                     <RichTextEditToolbarButton Action="RichTextEditAction.Bold"/> #1# *@
+@*                     $1$                     <RichTextEditToolbarButton Action="RichTextEditAction.Italic"/> #1# *@
+@*                     $1$                     <RichTextEditToolbarSelect Action="RichTextEditAction.Size"> #1# *@
+@*                     $1$                         <RichTextEditToolbarSelectItem Value="small"/> #1# *@
+@*                     $1$                         <RichTextEditToolbarSelectItem Selected="true"/> #1# *@
+@*                     $1$                         <RichTextEditToolbarSelectItem Value="large"/> #1# *@
+@*                     $1$                         <RichTextEditToolbarSelectItem Value="huge">Very Big</RichTextEditToolbarSelectItem> #1# *@
+@*                     $1$                     </RichTextEditToolbarSelect> #1# *@
+@*                     $1$                     <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered"/> #1# *@
+@*                     $1$                     <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet"/> #1# *@
+@*                     $1$                 </RichTextEditToolbarGroup> #1# *@
+@*                     $1$             </Toolbar> #1# *@
+@*                     $1$         </RichTextEdit> #1# *@
+@*                     $1$     </Field> #1# *@
+@*                     $1$ </Column> #1# *@
+@*                 </Row> *@
+@*             </ModalBody> *@
+@*             <ModalFooter> *@
+@*                 <Button Color="Color.Dark" *@
+@*                         Clicked="CloseEditStaffEvaluationModal"> *@
+@*                     @L["Cancel"] *@
+@*                 </Button> *@
+@*                 <SubmitButton Form="EditStaffEvaluationForm" Clicked="UpdateStaffEvaluationAsync"/> *@
+@*                 <h1/> *@
+@*             </ModalFooter> *@
+@*         </Form> *@
+@*     </ModalContent> *@
+@* </Modal> *@

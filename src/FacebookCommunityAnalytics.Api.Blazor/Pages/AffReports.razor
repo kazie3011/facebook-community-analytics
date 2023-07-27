@@ -1,0 +1,174 @@
+﻿@page "/affreport"
+@attribute [Authorize(ApiPermissions.UserAffiliates.Default)]
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Statistics
+@using FacebookCommunityAnalytics.Api.UserAffiliates
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Helpers;
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Faso.Blazor.SpinKit
+@using FacebookCommunityAnalytics.Api.AffiliateConversions
+@inherits BlazorComponentBase
+@inject IUserAffiliateAppService _userAffiliateAppService
+@inject IJSRuntime JSRuntime
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Aff.Reports.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+    (Chỉ hiển thị báo cáo cho shortlink từ TOOL)
+</PageHeader>
+
+<Row>
+    <Field ColumnSize="ColumnSize.Is4.OnDesktop.IsHalf.OnMobile">
+
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <DateRangePicker
+                    Ranges="_dateRanges"
+                    DateFormat="@(GlobalConsts.DateFormat)"
+                    StartDate="_fromDateTime"
+                    EndDate="_toDateTime"
+                    class="form-control form-control-md"
+                    placeholder="Select dates..." OnClosed="InitDataReport"/>
+            </Addon>
+        </Addons>
+
+
+    </Field>
+    @* *@
+    @* <Field ColumnSize="ColumnSize.Is3.OnDesktop.IsHalf.OnMobile"> *@
+    @*     <Button Color="Color.Primary" Clicked="InitDataReport"> *@
+    @*         <Icon Name="IconName.Eye"></Icon> @L["ViewButton"] *@
+    @*     </Button> *@
+    @* </Field> *@
+</Row>
+
+<Row ColumnSize="ColumnSize.IsFull.OnMobile.IsQuarter.OnDesktop">
+    <Column ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile">
+        <Card Class="card-aff-report" Background="Background.Info" Style="color: white;opacity: 0.7;">
+            <CardBody TextAlignment="TextAlignment.Center">
+                <h2>@L["UserAffiliate.ClickTotal"]</h2>
+                <h1>
+                    @_userAffSummary.Click.ToCommaStyle()
+                </h1>
+            </CardBody>
+        </Card>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile">
+        <Card Class="card-aff-report" Background="Background.Warning" Style="color: white;opacity: 0.7;">
+            <CardBody TextAlignment="TextAlignment.Center">
+                <h2>@L["UserAffiliate.TotalConversion"]</h2>
+                <h1>
+                    @_userAffSummary.Conversion.ToCommaStyle()
+                </h1>
+            </CardBody>
+        </Card>
+    </Column>
+    @if (IsManagerRole())
+    {
+        <Column ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile">
+            <Card Class="card-aff-report" Background="Background.Primary" Style="color: white;opacity: 0.7;">
+                <CardBody TextAlignment="TextAlignment.Center">
+                    <h2>@L["UserAffiliate.TotalConversionAmount"]</h2>
+                    <h1>
+                        @_userAffSummary.Amount.ToVND()
+                    </h1>
+                </CardBody>
+            </Card>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile">
+            <Card Class="card-aff-report" Background="Background.Danger" Style="color: white;opacity: 0.7;">
+                <CardBody TextAlignment="TextAlignment.Center">
+                    <h2>@L["UserAffiliate.TotalCommissionAmount"]</h2>
+                    <h1>
+                        @_userAffSummary.Commission.ToVND()
+                    </h1>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+</Row>
+@if (!_showChart)
+{
+    <SpinKitChasingDots/>
+}
+else
+{
+    if (_userAffSummary.Items.IsNotNullOrEmpty())
+    {
+        <Row>
+
+            @* ************************* DATA GRID ************************* *@
+            <Card ColumnSize="ColumnSize.IsFull">
+                <CardBody>
+                    <DataGrid TItem="UserAffSummaryApiResponse.Item"
+                              Data="_userAffSummary.Items"
+                              TotalItems="TotalCount"
+                              Responsive="true"
+                              PageSize="PageSize"
+                              Narrow="true"
+                              Striped="true">
+                        <DataGridColumns>
+                            <DataGridColumn TItem="UserAffSummaryApiResponse.Item"
+                                            Field="UserDisplayName"
+                                            Caption="@L["UserCode"]"
+                                            Sortable="true">
+                                <DisplayTemplate>
+                                    @context.UserDisplayName
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserAffSummaryApiResponse.Item"
+                                            Field="Team"
+                                            Caption="@L["Team"]"
+                                            Sortable="true">
+                                <DisplayTemplate>
+                                    @context.Team
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserAffSummaryApiResponse.Item"
+                                            Field="Click"
+                                            Caption="@L["Click"]"
+                                            SortDirection="SortDirection.Descending"
+                                            Sortable="true">
+                                <DisplayTemplate>
+                                    @context.Click.ToCommaStyle()
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserAffSummaryApiResponse.Item"
+                                            Field="Conversion"
+                                            Caption="@L["Conversion"]">
+                                <DisplayTemplate>
+                                    @context.Conversion.ToCommaStyle()
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            @if (IsManagerRole())
+                            {
+                                <DataGridColumn TItem="UserAffSummaryApiResponse.Item"
+                                                Field="Amount"
+                                                Caption="@L["Amount"]">
+                                    <DisplayTemplate>
+                                        @context.Amount.ToVND()
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+
+                                <DataGridColumn TItem="UserAffSummaryApiResponse.Item"
+                                                Field="Commission"
+                                                Caption="@L["Commission"]">
+                                    <DisplayTemplate>
+                                        @context.Commission.ToVND()
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+                            }
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Row>
+    }
+}

@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>FacebookCommunityAnalytics.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Domain.Shared\FacebookCommunityAnalytics.Api.Domain.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.7" />
+    <PackageReference Include="Volo.Abp.FluentValidation" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Saas.Host.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Public.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Admin.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LeptonTheme.Management.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.CmsKit.Pro.Application.Contracts" Version="4.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Transactions\ITransactionsAppService.cs" />
+    <Compile Remove="Transactions\TransactionsCreateUpdateDto.cs" />
+  </ItemGroup>
+
+</Project>

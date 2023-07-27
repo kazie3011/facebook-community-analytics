@@ -1,0 +1,121 @@
+{
+  "GlobalConfiguration": {
+    "PartnerConfiguration": {
+      "IsPartnerTool": false
+    },
+    "Environment": "dev",
+    "CrawlConfiguration": {
+      "IntervalHours": 12,
+      "IntervalCampaigns": 2,
+      "BatchSize": 100,
+      "AccountPerProxy": 15
+    },
+    "GlobalPayrollConfiguration": {
+      "PayrollTimeZone": -7,
+      "PayrollStartDay": 26,
+      "PayrollEndDay": 25
+    },
+    "KPIConfig": {
+      "CurrentRate": 1
+    },
+    "AffiliateConfiguration": {
+      "InitDayCount": 7
+    },
+    "ChartConfig": {
+      "TikTokChartHashTag": "gdlfamily"
+    },
+    "CompensationConfiguration": {
+      "KPI_Aff_MinConversionCount_Staff": 6500,
+      "KPI_Aff_MinConversionCount_GroupLeader": 10000,
+      "KPI_Aff_MinPostCount_Staff": 150,
+      "KPI_Aff_MinPostCount_GroupLeader": 150,
+      "KPI_Seeding_MinPostCount_Staff": 224,
+      "KPI_Seeding_MinPostCount_GroupLeader": 140,
+      "KPI_Seeding_MinPostCount_Leader": 112,
+      "KPI_Seeding_MinReactionCount_Staff": 120000,
+      "KPI_Seeding_MinReactionCount_GroupLeader": 135000,
+      "KPI_Seeding_MinReactionCount_Leader": 200000
+    },
+    "EmailConfiguration": {
+      "ApiKey": "apikey",
+      "ApiValue": "ApiValue",
+      "AdminEmail": "AdminEmail",
+      "Recipients": [
+        "email@email.com"
+      ],
+      "Recipients_Test": [
+        "email@email.com"
+      ],
+      "Recipients_PayrollEmail": [
+        "email@email.com"
+      ],
+      "Recipients_AccountantEmail": [
+        "email@email.com"
+      ],
+      "Recipients_Sale": [
+        "email@email.com"
+      ],
+      "Recipients_CampaignEmail_Primary": [
+        "email@email.com"
+      ],
+      "Recipients_CampaignEmail_Secondary": [
+        "email@email.com"
+      ],
+      "Recipients_TiktokEmail": [
+        "email@email.com"
+      ]
+    },
+    "Services": {
+      "IdentityUrl": "https://localhost:44382",
+      "ApiUrl": "https://localhost:44344/",
+      "BackofficeUrl": "https://localhost:44314"
+    },
+    "LazadaConfiguration": {
+      "BaseLink": "https://lazada.vn",
+      "BaseProductLink": "https://www.lazada.vn/products/"
+    },
+    "TikiConfiguration": {
+      "ShortkeyLength": 7,
+      "BaseProductLink": "https://www.lazada.vn/products/"
+    },
+    "BitlyConfiguration": {
+      "RootApiUrl": "https://api-ssl.bitly.com/v4",
+      "AccessToken": "AccessToken"
+    },
+    "MediaBaseUrl": "https://gdlblobstorage.blob.core.windows.net/contract-media-dev/host/",
+    "EvaluationTeams": [
+      "Team 1", "Team 2", "Team 3"
+    ],
+    "TeamTypeMapping": {
+      "Sale": [
+        "Team 1", "Team 2", "Team 3"
+      ],
+      "Content": [
+        "Team 1", "Team 2", "Team 3"
+      ],
+      "Affiliate": [
+        "Team 1", "Team 2", "Team 3"
+      ],
+      "Seeding": [
+        "Team 1", "Team 2", "Team 3"
+      ],
+      "Tiktok": [
+        "TikTok"
+      ]
+    },
+    "SlackConfiguration":{
+      "WebhookUrl":"WebhookUrl"
+    },
+    "MediaConfiguration":{
+      "TiktokRootPathChannel" : "C:\\GDLMedia\\tiktok\\channels\\",
+      "TiktokRootPathVideo" : "C:\\GDLMedia\\tiktok\\videos\\"
+    },
+    "MediaPath": {
+      "FilePath": "C:\\GDLMedia\\media-library\\files\\",
+      "FileContractPath": "C:\\GDLMedia\\media-library\\contract-files\\",
+      "ContentPath": "C:\\GDLMedia\\media-library\\contents\\",
+      "AvatarPath": "C:\\GDLMedia\\media-library\\avatars\\",
+      "ThumpPath": "C:\\GDLMedia\\media-library\\thumbs\\"
+    }
+  }
+}

@@ -1,0 +1,116 @@
+﻿@page
+@model FacebookCommunityAnalytics.Api.Web.Pages.IndexModel
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.PartnerModule
+@using FacebookCommunityAnalytics.Api.Web.Helpers
+@using FacebookCommunityAnalytics.Api.Web.Pages.Shared.Components.GrowthChart
+@using FacebookCommunityAnalytics.Api.Web.Pages.Shared.Components.HomeStatistics
+@using Volo.Abp.Users
+@inject IHtmlLocalizer<ApiResource> L
+@inject ICurrentUser CurrentUser
+@{
+    ViewBag.Title = "GDL - Tracking Tool";
+}
+@section scripts{
+    @if (CurrentUser.IsAuthenticated)
+    {
+        <script src="~/libs/Chart.js/Chart.bundle.min.js"></script>
+        <script src="~/chartjs-plugins/chartjs-plugin-datalabels.min.js"></script>
+        <abp-script src="/Pages/index.js"/>
+    }
+    <script>
+        // function syncTreeViewSelection(treeView, value) {
+        //     if (!value) {
+        //         treeView.unselectAll();
+        //         return;
+        //     }
+        //
+        //     value.forEach(function (key) {
+        //         treeView.selectItem(key);
+        //     });
+        // }
+        //
+        // function treeBox_valueChanged(e) {
+        //     var $treeView = e.component.content().find(".dx-treeview");
+        //     if($treeView.length) {
+        //         syncTreeViewSelection($treeView.dxTreeView("instance"), e.value);
+        //     }
+        // }
+        //
+        function gridBox_valueChanged(e) {
+            var $dataGrid = $("#embedded-datagrid");
+    
+            if ($dataGrid.length) {
+                var dataGrid = $dataGrid.dxDataGrid("instance");
+                dataGrid.selectRows(e.value, false);
+            }
+        }
+    </script>
+
+}
+
+@if (!CurrentUser.IsAuthenticated)
+{
+    <abp-card>
+        <abp-card-header>@L["Welcome"]</abp-card-header>
+        <abp-card-body>
+            <form method="POST">
+                <input type="submit" asp-page-handler="Login" value="LOGIN" class="btn btn-primary"/>
+            </form>
+        </abp-card-body>
+    </abp-card>
+}
+else if(Model.IsPartnerRole())
+{
+    <abp-card>
+        <abp-card-body>
+            <form id="LoadDataForm" autocomplete="off" method="get">
+                <abp-row class="mb-3">
+                    <abp-input asp-for="StartDateTime"/>
+                    <abp-input asp-for="EndDateTime"/>
+                    <abp-column size-md="_4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <input class="form-control" type="text" name="daterange"/>
+                            </div>
+                            <div class="input-group-append">
+                                <abp-button id="btnSubmitFilterData" button-type="Primary" text="@L["ReloadData"].Value" type="button" icon="eye" busy-text="Loading..."/>
+                            </div>
+                        </div>
+                    </abp-column>
+
+                </abp-row>
+            </form>
+        </abp-card-body>
+    </abp-card>
+
+    <div id="HomeWidgets">
+
+        <!--Widget Statistics-->
+
+        @await Component.InvokeAsync(typeof(HomeStatisticsViewComponent), new GetGrowthCampaignChartsInput
+        {
+            PartnerId = Model.CurrentPartnerId,
+            FromDateTime = Model.StartDateTime,
+            ToDateTime = Model.EndDateTime
+        })
+        <!--Widget GrowthChart-->
+        <abp-card>
+            <abp-card-body>
+                <abp-row class="mb-3">
+                    <abp-column size-md="_4">
+                        <abp-select asp-for="CurrentPartnerId" label="@L["Partner"].Value" asp-items="Model.PartnerLookupDtos.ToSelectListItems()"/>
+                    </abp-column>
+                    <abp-column size-md="_6">
+                        <abp-select asp-for="MultipleCampaignIds" label="@L["Campaigns"].Value" asp-items="Model.CampaignLookupDtos.ToSelectListItems()"/>
+                    </abp-column>
+                </abp-row>
+            </abp-card-body>
+        </abp-card>
+
+        @await Component.InvokeAsync(typeof(GrowthChartViewComponent))
+    </div>
+    
+}

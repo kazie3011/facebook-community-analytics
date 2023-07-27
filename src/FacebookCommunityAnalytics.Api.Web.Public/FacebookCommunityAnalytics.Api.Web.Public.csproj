@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <Import Project="..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+        <RootNamespace>FacebookCommunityAnalytics.Api.Web.Public</RootNamespace>
+        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+        <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+        <PreserveCompilationReferences>true</PreserveCompilationReferences>
+        <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+        <UserSecretsId>ca0a604a-5986-4f1f-b758-c256da91e59e</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="Logs\**" />
+        <Content Remove="Logs\**" />
+        <EmbeddedResource Remove="Logs\**" />
+        <None Remove="Logs\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Pages\**\*.js">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Pages\**\*.css">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Dockerfile" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
+        <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\FacebookCommunityAnalytics.Api.HttpApi\FacebookCommunityAnalytics.Api.HttpApi.csproj" />
+        <ProjectReference Include="..\FacebookCommunityAnalytics.Api.HttpApi.Client\FacebookCommunityAnalytics.Api.HttpApi.Client.csproj" />
+        <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="4.3.2" />
+        <PackageReference Include="Volo.Abp.Autofac" Version="4.3.2" />
+        <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="4.3.2" />
+        <PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="4.3.2" />
+        <PackageReference Include="Volo.Abp.AspNetCore.Authentication.OpenIdConnect" Version="4.3.2" />
+        <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="4.3.2" />
+        <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton" Version="4.3.2" />
+        <PackageReference Include="Volo.CmsKit.Pro.Public.Web" Version="4.3.2" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\Configs\globalconfigs.dev.json" Link="Configs\globalconfigs.dev.json" />
+      <Content Include="..\Configs\globalconfigs.json" Link="Configs\globalconfigs.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Configs\" />
+    </ItemGroup>
+
+</Project>

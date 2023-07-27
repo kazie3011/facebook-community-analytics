@@ -1,0 +1,17 @@
+﻿<h3>ErrorBar</h3>
+
+
+@code {
+    bool visible = true;
+
+    Task OnClicked()
+    {
+        visible = false;
+
+        return Task.CompletedTask;
+    }
+}
+<Alert Visible="@visible">
+    ...
+    <CloseButton Clicked="@OnClicked" />
+</Alert>

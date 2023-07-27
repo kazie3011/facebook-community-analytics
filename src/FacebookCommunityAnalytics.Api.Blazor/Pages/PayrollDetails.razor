@@ -1,0 +1,378 @@
+﻿@page "/payroll-details"
+@page "/payroll-details/{PayrollId?}"
+
+@inherits PayrollComponentBase
+
+@attribute [Authorize(ApiPermissions.UserPayrolls.Default)]
+@using FacebookCommunityAnalytics.Api.UserPayrolls
+@using FacebookCommunityAnalytics.Api.UserWaves
+@using FacebookCommunityAnalytics.Api.UserPayrollBonuses
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.ApiConfigurations
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Organizations
+@using FacebookCommunityAnalytics.Api.Payrolls
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using FacebookCommunityAnalytics.Api.UserInfos
+@inject IPayrollsAppService PayrollsAppService
+@inject IUserPayrollsAppService UserPayrollsAppService
+@inject ITeamMemberAppService TeamMemberAppService
+@inject IUserInfosAppService UserInfosAppService
+@inject IUiMessageService UiMessageService
+@inject IApiConfigurationAppService ApiConfigurationAppService
+@inject IJSRuntime JSRuntime
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["PayrollEmail.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* VIEW DETAIL ************************* *@
+@*<Card>
+    <CardBody>
+        <Form id="UserPayrollDetailForm" class="mb-3">
+            <Row>
+                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                    <FieldLabel>@L["PayrollEmail.FromDateTime"]</FieldLabel>
+                    <DateEdit TValue="DateTime" @bind-Date="@FromDate" InputMode="DateInputMode.DateTime"></DateEdit>
+                </Field>
+
+                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                    <FieldLabel>@L["PayrollEmail.ToDateTime"]</FieldLabel>
+                    <DateEdit TValue="DateTime" @bind-Date="@ToDate" InputMode="DateInputMode.DateTime"></DateEdit>
+                </Field>
+
+                <SubmitButton Form="UserPayrollDetail" Clicked="GetPayrollDetailsAsync">
+                    <Icon Name="IconName.Eye"></Icon> @L["PayrollEmail.View"]
+                </SubmitButton>
+            </Row>
+        </Form>
+    </CardBody>
+</Card>*@
+
+@if (PayrollDetail != null)
+{
+    <Card Margin="new FluentMargin().Is4.OnY">
+        <CardBody>
+            <CardTitle Size="20" Alignment="TextAlignment.Center">
+                <h2 class="text-danger">@L["PayrollEmail.General.Title", @BrowserDateTime.ConvertToBrowserTime(FromDate, GlobalConsts.DateTimeFormat), @BrowserDateTime.ConvertToBrowserTime(ToDate, GlobalConsts.DateTimeFormat)] @(PayrollDetail.IsHappyDay ? $" - {PayrollConsts.HappyDay}" : "")</h2>
+            </CardTitle>
+            <Divider></Divider>
+            @if (IsManagerRole())
+            {
+                <Table>
+                    <TableBody>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.TeamCount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                @PayrollDetail.UserPayrolls.Select(_ => _.OrganizationId).Distinct().Count()
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.StaffCount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                @PayrollDetail.UserPayrolls.Count
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.WaveTotalAmount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-success">@PayrollDetail.UserPayrolls.Sum(p => p.WaveAmount).ToVND()</strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.BonusTotalAmount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-success">@((PayrollDetail.UserPayrolls.Sum(p => p.BonusAmount) + PayrollDetail.TeamBonuses.Sum(_ => _.Amount)).ToVND())</strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.TotalAmount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-danger">@((PayrollDetail.UserPayrolls.Sum(p => p.TotalAmount) + PayrollDetail.TeamBonuses.Sum(_ => _.Amount)).ToVND())</strong>
+                            </TableRowCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            }
+        </CardBody>
+    </Card>
+
+    <Row>
+    @foreach (var teamPayroll in _teamPayrolls)
+    {
+        <Column @key="teamPayroll" ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+            <Card Margin="new FluentMargin().Is4.OnY">
+                <CardBody>
+                    <CardTitle Size="10" Alignment="TextAlignment.Center">
+                        <strong class="text-danger" style="font-size: large">@L["Team"] @teamPayroll.Key.TeamName</strong><br/>
+                        <Table Narrow="true" Bordered="true" style="table-layout: fixed; width: 300px;">
+                            <TableBody>
+                                <TableRow>
+                                    <TableRowCell Style="@TextAlignLeft">
+                                        @L["UserPayrollDetails.CountStaff"]
+                                    </TableRowCell>
+                                    <TableRowCell Style="@TextAlignRight">
+                                        @teamPayroll.Key.TotalRecord
+                                    </TableRowCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableRowCell Style="@TextAlignLeft">
+                                        @L["UserPayrollDetails.TotalWave"]
+                                    </TableRowCell>
+                                    <TableRowCell Style="@TextAlignRight">
+                                        @teamPayroll.Key.TotalWave.ToVND()
+                                    </TableRowCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableRowCell Style="@TextAlignLeft">
+                                        @L["UserPayrollDetails.TotalBonus"]
+                                    </TableRowCell>
+                                    <TableRowCell Style="@TextAlignRight">
+                                        @teamPayroll.Key.TotalBonus.ToVND()
+                                    </TableRowCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableRowCell Style="@TextAlignLeft">
+                                        <b>@L["UserPayrollDetails.TotalAmount"]</b>
+                                    </TableRowCell>
+                                    <TableRowCell Style="@TextAlignRight">
+                                        <b>@teamPayroll.Key.TotalAmount.ToVND()</b>
+                                    </TableRowCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </CardTitle>
+                    <Divider></Divider>
+
+                    <DataGrid TItem="UserPayrollDto"
+                              Data="teamPayroll.Value"
+                              TotalItems="teamPayroll.Value.Count"
+                              Responsive="true"
+                              PageSize="100"
+                              Class="text-nowrap"
+                              Striped="true"
+                              Narrow="true">
+
+                        @*<DataGridAggregates>
+                                <DataGridAggregate TItem="UserPayrollDto" Field="@nameof(UserPayrollDto.OrganizationName)" Aggregate="DataGridAggregateType.Count">
+                                    <DisplayTemplate>
+                                        <strong class="text-danger">@L["PayrollEmail.Total"] @context.Value.ToCommaStyle()</strong>
+                                    </DisplayTemplate>
+                                </DataGridAggregate>
+                                <DataGridAggregate TItem="UserPayrollDto" Field="@nameof(UserPayrollDto.WaveAmount)" Aggregate="DataGridAggregateType.Sum">
+                                    <DisplayTemplate>
+                                        <strong class="text-danger">@context.Value.ToVND()</strong>
+                                    </DisplayTemplate>
+                                </DataGridAggregate>
+                                <DataGridAggregate TItem="UserPayrollDto" Field="@nameof(UserPayrollDto.BonusAmount)" Aggregate="DataGridAggregateType.Sum">
+                                    <DisplayTemplate>
+                                        <strong class="text-danger">@context.Value.ToVND()</strong>
+                                    </DisplayTemplate>
+                                </DataGridAggregate>
+                                <DataGridAggregate TItem="UserPayrollDto" Field="@nameof(UserPayrollDto.TotalAmount)" Aggregate="DataGridAggregateType.Sum">
+                                    <DisplayTemplate>
+                                        <strong class="text-danger">@context.Value.ToVND()</strong>
+                                    </DisplayTemplate>
+                                </DataGridAggregate>
+                            </DataGridAggregates>*@
+
+                        <DataGridColumns>
+                            @if (teamPayroll.Key.TeamName != L["PayrollEmail.NoTeamStaff"])
+                            {
+                                <DataGridColumn TItem="UserPayrollDto"
+                                                Field="OrganizationName"
+                                                Caption="@L["PayrollEmail.OrganizationName"]">
+                                    <DisplayTemplate>
+                                        @context.OrganizationName
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+
+                                <DataGridColumn TItem="UserPayrollDto"
+                                                Field="User.Name"
+                                                Caption="@L["PayrollEmail.Name"]">
+                                    <DisplayTemplate>
+                                        @context.User.Name (@context.User.PhoneNumber)
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+                            }
+                            else
+                            {
+                                <DataGridColumn TItem="UserPayrollDto"
+                                                Field="User.Name"
+                                                Caption="@L["PayrollEmail.Name"]">
+                                    <DisplayTemplate>
+                                        @context.User.Name (@context.User.UserName - @context.User.PhoneNumber)
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+                            }
+
+
+                            <DataGridColumn TItem="UserPayrollDto"
+                                            Field="WaveAmount"
+                                            Caption="@L["PayrollEmail.WaveAmount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.WaveAmount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollDto"
+                                            Field="BonusAmount"
+                                            Caption="@L["PayrollEmail.BonusAmount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.BonusAmount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollDto"
+                                            Field="TotalAmount"
+                                            Caption="@L["PayrollEmail.TotalAmount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.TotalAmount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollDto"
+                                            Field="User.Name"
+                                            Caption="@L["PayrollEmail.View"]">
+                                <DisplayTemplate>
+                                    @{
+                                        var viewDetailUrl = $"{GlobalConfiguration.Services.BackofficeUrl}/payslip/{context.UserInfo.Code}/{context.Id}";
+                                    }
+                                    <a href="@viewDetailUrl" target="_blank">@L["PayrollEmail.Detail"]</a>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+
+    @if (_communityBonusBlazorModels != null && !PayrollDetail.IsHappyDay)
+    {
+        <Column ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+            <Card>
+                <CardBody>
+                    <CardTitle Size="20" Alignment="TextAlignment.Center">
+                        <h2 class="text-danger">@BonusTotalCalculator.Name</h2>
+                        <Table Narrow="true" Bordered="true" style="table-layout: fixed; width: 300px;">
+                            <TableBody>
+                                <TableRow>
+                                    <TableRowCell Style="@TextAlignLeft">
+                                        @L["UserPayrollDetails.TotalType"]
+                                    </TableRowCell>
+                                    <TableRowCell Style="@TextAlignRight">
+                                        @BonusTotalCalculator.TotalRecord
+                                    </TableRowCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableRowCell Style="@TextAlignLeft">
+                                        <b>@L["UserPayrollDetails.TotalBonus"]</b>
+                                    </TableRowCell>
+                                    <TableRowCell Style="@TextAlignRight">
+                                        <b>@BonusTotalCalculator.TotalBonus.ToVND()</b>
+                                    </TableRowCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </CardTitle>
+                    <Divider></Divider>
+                    <DataGrid TItem="CommunityBonusBlazorModel"
+                              Data="_communityBonusBlazorModels"
+                              TotalItems="_communityBonusBlazorModels.Count"
+                              Responsive="true"
+                              PageSize="1000"
+                              Class="text-nowrap"
+                              Striped="true"
+                              Narrow="true">
+                        @*<DataGridAggregates>
+                        <DataGridAggregate TItem="CommunityBonusBlazorModel" Field="@nameof( CommunityBonusBlazorModel.OrganizationName )" Aggregate="DataGridAggregateType.Count">
+                            <DisplayTemplate>
+                                <strong class="text-danger">@L["PayrollEmail.Total"] @context.Value.ToCommaStyle()</strong>
+                            </DisplayTemplate>
+                        </DataGridAggregate>
+                        <DataGridAggregate TItem="CommunityBonusBlazorModel" Field="@nameof(CommunityBonusBlazorModel.Amount)" Aggregate="DataGridAggregateType.Sum">
+                            <DisplayTemplate>
+                                <strong class="text-danger">@context.Value.ToVND()</strong>
+                            </DisplayTemplate>
+                        </DataGridAggregate>
+                    </DataGridAggregates>*@
+                        <DataGridColumns>
+
+                            <DataGridColumn TItem="CommunityBonusBlazorModel"
+                                            Field="OrganizationName"
+                                            Caption="@L["PayrollEmail.OrganizationName"]">
+                                <DisplayTemplate>
+                                    @context.OrganizationName
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="CommunityBonusBlazorModel"
+                                            Field="Name"
+                                            Caption="@L["PayrollEmail.Name"]">
+                                <DisplayTemplate>
+                                    @context.Name
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="CommunityBonusBlazorModel"
+                                            Field="PayrollBonusType"
+                                            Caption="@L["PayrollEmail.Type"]">
+                                <DisplayTemplate>
+                                    @context.PayrollBonusType
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="CommunityBonusBlazorModel"
+                                            Field="Amount"
+                                            Caption="@L["PayrollEmail.Amount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Amount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="CommunityBonusBlazorModel"
+                                            Field="Description"
+                                            Caption="@L["Description"]">
+                                <DisplayTemplate>
+                                    @if (IsDescContainUrl(context.Description) @*&& !context.Description.Contains("TB Nhuận")*@)
+                                    {
+                                        <a href="@GetDescriptionUrl(context.Description)" target="_blank">@context.Description</a>
+                                    }
+                                    else
+                                    {
+                                        @context.Description
+                                    }
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+    </Row>
+}

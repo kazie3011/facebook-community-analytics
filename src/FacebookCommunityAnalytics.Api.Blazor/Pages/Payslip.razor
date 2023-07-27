@@ -1,0 +1,636 @@
+﻿@page "/payslip"
+@page "/payslip/{UserCode?}"
+@page "/payslip/{UserCode?}/{UserPayrollId?}"
+
+
+@using Blazorise.Components
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Organizations
+@using FacebookCommunityAnalytics.Api.Payrolls
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using FacebookCommunityAnalytics.Api.UserPayrollBonuses
+@using FacebookCommunityAnalytics.Api.UserPayrollCommissions
+@using FacebookCommunityAnalytics.Api.UserPayrolls
+@using FacebookCommunityAnalytics.Api.UserWaves
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.ObjectMapping
+@using System.Globalization
+@using FacebookCommunityAnalytics.Api.ApiConfigurations
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@inherits PayrollComponentBase
+@*@attribute [Authorize(ApiPermissions.UserPayrolls.Default)]*@
+@attribute [Authorize(ApiPermissions.PaySlip.Default)]
+
+@inject IPayrollsAppService PayrollsAppService
+@inject IUserPayrollsAppService UserPayrollsAppService
+@inject ITeamMemberAppService TeamMemberAppService
+@inject IUserInfosAppService UserInfosAppService
+@inject IUiMessageService UiMessageService
+@inject IApiConfigurationAppService ApiConfigurationAppService
+@inject IJSRuntime JSRuntime
+
+@inject NavigationManager NavigationManager
+
+
+@* @if (CurrentUser is { IsAuthenticated: true } && IsManagerRole()) && UserCode.IsNullOrWhiteSpace() && UserPayrollId.IsNullOrWhiteSpace()) *@
+@* { *@
+@*     @LockLeaderAndManager() *@
+@* } *@
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["UserPayrollDetails.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* VIEW DETAIL ************************* *@
+@*<Card>
+    <CardBody>
+        <Form id="UserPayrollDetailForm" class="mb-3">
+            <Row>
+                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                    <FieldLabel>@L["UserPayrollDetails.FromDate"]</FieldLabel>
+                    <DateEdit TValue="DateTime" @bind-Date="@FromDate" InputMode="DateInputMode.DateTime"></DateEdit>
+                </Field>
+
+                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                    <FieldLabel>@L["UserPayrollDetails.ToDate"]</FieldLabel>
+                    <DateEdit TValue="DateTime" @bind-Date="@ToDate" InputMode="DateInputMode.DateTime"></DateEdit>
+                </Field>
+
+                <SubmitButton Form="UserPayrollDetail" Clicked="OnViewDetailButtonClicked">
+                    <Icon Name="IconName.Eye"></Icon> @L["UserPayrollDetails.ViewDetailButton"]
+                </SubmitButton>
+            </Row>
+        </Form>
+    </CardBody>
+</Card>*@
+@if (UserPayrollNavDto != null && UserPayrollNavDto.UserPayroll != null)
+{
+    @if (UserInfo != null)
+    {
+        <Card Margin="new FluentMargin().Is4.OnY">
+            <CardBody>
+                <CardTitle Size="10" Alignment="TextAlignment.Center">
+                    @if (UserPayrollNavDto?.Payroll?.FromDateTime != null && UserPayrollNavDto?.Payroll?.ToDateTime != null)
+                    {
+                        <h2>@L["UserPayrollDetails.Payslip.Title",@BrowserDateTime.ConvertToBrowserTime(UserPayrollNavDto.Payroll.FromDateTime.Value, GlobalConsts.DateTimeFormat) , @BrowserDateTime.ConvertToBrowserTime(UserPayrollNavDto.Payroll.ToDateTime.Value, GlobalConsts.DateTimeFormat)]</h2>
+                    }
+                    else
+                    {
+                        <h2>@L["UserPayrollDetails.Payslip.Title.Month"]</h2>
+                    }
+                </CardTitle>
+                <Divider></Divider>
+                <strong>@L["UserPayrollDetails.UserInfo"] - @UserInfo.AppUser.Name (@UserInfo.AppUser.PhoneNumber) - @L["Team"]: @_userOrganization - @UserInfo.AppUser.UserName</strong>
+                <Table Striped="true" Narrow="true">
+                    <TableBody>
+                        <TableRow>
+                            <TableRowCell>@L["UserPayrollDetails.WaveAmount"]</TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-success">@UserPayrollNavDto.UserPayroll.WaveAmount.ToVND()</strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>@L["UserPayrollDetails.BonusAmount"]</TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-success">@UserPayrollNavDto.UserPayroll.BonusAmount.ToVND()</strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["UserPayrollDetails.TotalAmount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-danger">@UserPayrollNavDto.UserPayroll.TotalAmount.ToVND()</strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>@L["Description"]</TableRowCell>
+                            <TableRowCell>@UserPayrollNavDto.UserPayroll.Description</TableRowCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+                <br/>
+
+                <strong>@L["PayslipMultiplier"]</strong>
+                <Divider></Divider>
+                <Table Striped="true" Narrow="true">
+                    <TableBody>
+                        <TableRow>
+                            <TableRowCell>@L["AffiliateMultiplier"]</TableRowCell>
+                            <TableRowCell Float="Float.Left">@UserInfo.UserInfo.AffiliateMultiplier</TableRowCell>
+                            <TableRowCell>
+                                <Icon Name="IconName.CalendarCheck"></Icon>
+                            </TableRowCell>
+                            <TableRowCell>@UserInfo.UserInfo.JoinedDateTime?.ToShortDateString()</TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>@L["SeedingMultiplier"]</TableRowCell>
+                            <TableRowCell Float="Float.Left">@UserInfo.UserInfo.SeedingMultiplier</TableRowCell>
+                            <TableRowCell>
+                                <Icon Name="IconName.Hourglass"></Icon>
+                            </TableRowCell>
+                            <TableRowCell>@UserInfo.UserInfo.PromotedDateTime?.ToShortDateString()</TableRowCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </CardBody>
+        </Card>
+    }
+
+    <Row>
+    @* SEEDING WAVES *@
+    @if (UserPayrollNavDto?.UserPayroll?.SeedingWaves.IsNotNullOrEmpty() ?? false)
+    {
+        <Column ColumnSize="ColumnSize.IsFull">
+            <Card Margin="new FluentMargin().Is4.OnY">
+                <CardBody>
+                    <CardTitle Size="10" Alignment="TextAlignment.Center">
+                        <b>@L["UserPayrollDetails.SeedingWaveDetails"]</b>
+                    </CardTitle>
+                    <Divider></Divider>
+                    <DataGrid TItem="UserWaveDto"
+                              Data="UserPayrollNavDto.UserPayroll.SeedingWaves"
+                              TotalItems="UserPayrollNavDto.UserPayroll.SeedingWaves.Count"
+                              Responsive="true"
+                              PageSize="100"
+                              Class="text-nowrap"
+                              Striped="true"
+                              Narrow="true"
+                              Sortable="false">
+
+                        <DataGridAggregates>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.WaveType)" Aggregate="DataGridAggregateType.Count">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@($"{L["UserPayrollDetails.Type"]}: {context.Value.ToCommaStyle()}")</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.TotalPostCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.LikeCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.CommentCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.ShareCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.TotalReactionCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.Amount)" Aggregate="DataGridAggregateType.Sum" DisplayFormatProvider="@CultureInfo.GetCultureInfo("vn")">
+
+                                <DisplayTemplate>
+                                    <strong class="text-danger">@context.Value.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                        </DataGridAggregates>
+                        <DataGridColumns>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="WaveType"
+                                            Caption="@L["UserPayrollDetails.Type"]">
+                                <DisplayTemplate>
+                                    <Tooltip Text="@GetTooltipWaveType(context.WaveType)">
+                                        @L[$"Enum:WaveType:{Convert.ToInt32(context.WaveType)}"]
+                                    </Tooltip>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="TotalPostCount"
+                                            Caption="@L["UserPayrollDetails.TotalPostCount"]">
+                                <DisplayTemplate>@context.TotalPostCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="LikeCount"
+                                            Caption="@L["LikeCount"]">
+                                <DisplayTemplate>@context.LikeCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="CommentCount"
+                                            Caption="@L["CommentCount"]">
+                                <DisplayTemplate>@context.CommentCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="ShareCount"
+                                            Caption="@L["ShareCount"]">
+                                <DisplayTemplate>@context.ShareCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="TotalReactionCount"
+                                            Caption="@L["UserPayrollDetails.TotalReactionCount"]">
+                                <DisplayTemplate>@context.TotalReactionCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="Amount"
+                                            Caption="@L["UserPayrollDetails.Amount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Amount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+
+    @* SEEDING BONUS *@
+    @if (UserPayrollNavDto?.UserPayroll.SeedingBonuses.IsNotNullOrEmpty() ?? false)
+    {
+        <Column ColumnSize="ColumnSize.IsFull">
+            <Card Margin="new FluentMargin().Is4.OnY">
+                <CardBody>
+                    <CardTitle Size="10" Alignment="TextAlignment.Center">
+                        <b>@L["UserPayrollDetails.SeedingBonusDetails"]</b>
+                    </CardTitle>
+                    <Divider></Divider>
+                    <DataGrid TItem="UserPayrollBonusDto"
+                              Data="UserPayrollNavDto.UserPayroll.SeedingBonuses"
+                              TotalItems="UserPayrollNavDto.UserPayroll.SeedingBonuses.Count"
+                              Responsive="true"
+                              PageSize="100"
+                              Class="text-nowrap"
+                              Striped="true"
+                              Narrow="true"
+                              Sortable="false">
+                        <DataGridAggregates>
+                            <DataGridAggregate TItem="UserPayrollBonusDto" Field="@nameof(UserPayrollBonusDto.PayrollBonusType)" Aggregate="DataGridAggregateType.Count">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@($"{L["UserPayrollDetails.Type"]}: {context.Value.ToCommaStyle()}")</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserPayrollBonusDto" Field="@nameof(UserPayrollBonusDto.Amount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-danger">@context.Value.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                        </DataGridAggregates>
+                        <DataGridColumns>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="PayrollBonusType"
+                                            Caption="@L["UserPayrollDetails.Type"]">
+                                <DisplayTemplate>
+                                    <Tooltip Text="@GetToolTipByBonusType(context.PayrollBonusType)">
+                                        @L[$"Enum:PayrollBonusType:{Convert.ToInt32(context.PayrollBonusType)}"]
+                                    </Tooltip>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="Amount"
+                                            Caption="@L["UserPayrollDetails.Amount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Amount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="Description"
+                                            Caption="@L["Description"]">
+                            </DataGridColumn>
+
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+
+    @* AFFLIATE WAVES *@
+    @if (UserPayrollNavDto?.UserPayroll?.AffiliateWaves.IsNotNullOrEmpty() ?? false)
+    {
+        <Column ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+            <Card Margin="new FluentMargin().Is4.OnY">
+                <CardBody>
+                    <CardTitle Size="10" Alignment="TextAlignment.Center">
+                        <b>@L["UserPayrollDetails.AffiliateWaveDetails"]</b>
+                    </CardTitle>
+                    <Divider></Divider>
+                    <DataGrid TItem="UserWaveDto"
+                              Data="UserPayrollNavDto.UserPayroll.AffiliateWaves"
+                              TotalItems="UserPayrollNavDto.UserPayroll.AffiliateWaves.Count"
+                              Responsive="true"
+                              PageSize="100"
+                              Class="text-nowrap"
+                              Striped="true"
+                              Narrow="true"
+                              Sortable="false">
+
+                        <DataGridAggregates>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.WaveType)" Aggregate="DataGridAggregateType.Count">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@($"{L["UserPayrollDetails.Type"]}: {context.Value.ToCommaStyle()}")</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.TotalPostCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle().ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.LikeCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.CommentCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.ShareCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.TotalReactionCount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Value.ToCommaStyle()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserWaveDto" Field="@nameof(UserWaveDto.Amount)" Aggregate="DataGridAggregateType.Sum" DisplayFormatProvider="@CultureInfo.GetCultureInfo("vn")">
+
+                                <DisplayTemplate>
+                                    <strong class="text-danger">@context.Value.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                        </DataGridAggregates>
+                        <DataGridColumns>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="WaveType"
+                                            Caption="@L["UserPayrollDetails.Type"]">
+                                <DisplayTemplate>
+                                    <Tooltip Text="@GetTooltipWaveType(context.WaveType)">
+                                        @L[$"Enum:WaveType:{Convert.ToInt32(context.WaveType)}"]
+                                    </Tooltip>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="TotalPostCount"
+                                            Caption="@L["UserPayrollDetails.TotalPostCount"]">
+                                <DisplayTemplate>@context.TotalPostCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="LikeCount"
+                                            Caption="@L["LikeCount"]">
+                                <DisplayTemplate>@context.LikeCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="CommentCount"
+                                            Caption="@L["CommentCount"]">
+                                <DisplayTemplate>@context.CommentCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="ShareCount"
+                                            Caption="@L["ShareCount"]">
+                                <DisplayTemplate>@context.ShareCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="TotalReactionCount"
+                                            Caption="@L["UserPayrollDetails.TotalReactionCount"]">
+                                <DisplayTemplate>@context.TotalReactionCount.ToCommaStyle()</DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserWaveDto"
+                                            Field="Amount"
+                                            Caption="@L["UserPayrollDetails.Amount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Amount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+
+    @* AFFLIATE BONUS *@
+    @if (UserPayrollNavDto?.UserPayroll?.AffiliateBonuses.IsNotNullOrEmpty() ?? false)
+    {
+        <Column ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+            <Card Margin="new FluentMargin().Is4.OnY">
+                <CardBody>
+                    <CardTitle Size="10" Alignment="TextAlignment.Center">
+                        <b>@L["UserPayrollDetails.AffiliateBonusDetails"]</b>
+                    </CardTitle>
+                    <Divider></Divider>
+                    <DataGrid TItem="UserPayrollBonusDto"
+                              Data="UserPayrollNavDto.UserPayroll.AffiliateBonuses"
+                              TotalItems="UserPayrollNavDto.UserPayroll.AffiliateBonuses.Count"
+                              Responsive="true"
+                              PageSize="100"
+                              Class="text-nowrap"
+                              Striped="true"
+                              Narrow="true"
+                              Sortable="false">
+                        <DataGridAggregates>
+                            <DataGridAggregate TItem="UserPayrollBonusDto" Field="@nameof(UserPayrollBonusDto.PayrollBonusType)" Aggregate="DataGridAggregateType.Count">
+                                <DisplayTemplate>
+                                    <strong class="text-danger">@($"{L["UserPayrollDetails.Type"]}: {context.Value.ToCommaStyle()}")</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserPayrollBonusDto" Field="@nameof(UserPayrollBonusDto.Amount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-danger">@context.Value.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                        </DataGridAggregates>
+                        <DataGridColumns>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="PayrollBonusType"
+                                            Caption="@L["UserPayrollDetails.Type"]">
+                                <DisplayTemplate>
+                                    <Tooltip Text="@GetToolTipByBonusType(context.PayrollBonusType)">
+                                        @L[$"Enum:PayrollBonusType:{Convert.ToInt32(context.PayrollBonusType)}"]
+                                    </Tooltip>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="Amount"
+                                            Caption="@L["UserPayrollDetails.Amount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Amount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="Description"
+                                            Caption="@L["Description"]">
+                            </DataGridColumn>
+
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+
+    @* COMMUNITY BONUS *@
+    @if (UserPayrollNavDto?.UserPayroll?.CommunityBonuses.IsNotNullOrEmpty() ?? false)
+    {
+        <Column ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+            <Card Margin="new FluentMargin().Is4.OnY">
+                <CardBody>
+                    <CardTitle Size="10" Alignment="TextAlignment.Center">
+                        <b>@L["UserPayrollDetails.CommunityBonusDetails"]</b>
+                    </CardTitle>
+                    <Divider></Divider>
+                    <DataGrid TItem="UserPayrollBonusDto"
+                              Data="UserPayrollNavDto.UserPayroll.CommunityBonuses"
+                              TotalItems="UserPayrollNavDto.UserPayroll.CommunityBonuses.Count"
+                              Responsive="true"
+                              PageSize="100"
+                              Class="text-nowrap"
+                              Striped="true"
+                              Narrow="true"
+                              Sortable="false">
+                        <DataGridAggregates>
+                            <DataGridAggregate TItem="UserPayrollBonusDto" Field="@nameof(UserPayrollBonusDto.PayrollBonusType)" Aggregate="DataGridAggregateType.Count">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@($"{L["UserPayrollDetails.Type"]}: {context.Value.ToCommaStyle()}")</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserPayrollBonusDto" Field="@nameof(UserPayrollBonusDto.Amount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-danger">@context.Value.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                        </DataGridAggregates>
+                        <DataGridColumns>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="PayrollBonusType"
+                                            Caption="@L["UserPayrollDetails.Type"]">
+                                <DisplayTemplate>
+                                    <Tooltip Text="@GetToolTipByBonusType(context.PayrollBonusType)">
+                                        @L[$"Enum:PayrollBonusType:{Convert.ToInt32(context.PayrollBonusType)}"]
+                                    </Tooltip>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="Amount"
+                                            Caption="@L["UserPayrollDetails.Amount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Amount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollBonusDto"
+                                            Field="Description"
+                                            Caption="@L["Description"]">
+                                <DisplayTemplate>
+                                    @if (IsDescContainUrl(context.Description))
+                                    {
+                                        <a href="@GetDescriptionUrl(context.Description)" target="_blank">@context.Description</a>
+                                    }
+                                    else
+                                    {
+                                        @context.Description
+                                    }
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+
+    @* LEADER COMMISSION *@
+    @if (UserPayrollNavDto?.UserPayroll?.Commissions.IsNotNullOrEmpty() ?? false)
+    {
+        <Column ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+            <Card Margin="new FluentMargin().Is4.OnY">
+                <CardBody>
+                    <CardTitle Size="10" Alignment="TextAlignment.Center">
+                        <b>@L["UserPayrollDetails.CommissionDetails"]</b>
+                    </CardTitle>
+                    <Divider></Divider>
+                    <DataGrid TItem="UserPayrollCommissionDto"
+                              Data="UserPayrollNavDto.UserPayroll.Commissions"
+                              TotalItems="UserPayrollNavDto.UserPayroll.Commissions.Count"
+                              Responsive="true"
+                              PageSize="100"
+                              Class="text-nowrap"
+                              Striped="true"
+                              Narrow="true"
+                              Sortable="false">
+                        <DataGridAggregates>
+                            <DataGridAggregate TItem="UserPayrollCommissionDto" Field="@nameof(UserPayrollCommissionDto.PayrollCommissionType)" Aggregate="DataGridAggregateType.Count">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@($"{L["UserPayrollDetails.Type"]}: {context.Value.ToCommaStyle()}")</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                            <DataGridAggregate TItem="UserPayrollCommissionDto" Field="@nameof(UserPayrollCommissionDto.Amount)" Aggregate="DataGridAggregateType.Sum">
+                                <DisplayTemplate>
+                                    <strong class="text-danger">@context.Value.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridAggregate>
+                        </DataGridAggregates>
+                        <DataGridColumns>
+
+                            <DataGridColumn TItem="UserPayrollCommissionDto"
+                                            Field="PayrollCommissionType"
+                                            Caption="@L["UserPayrollDetails.Type"]">
+                                <DisplayTemplate>
+                                    @L[$"Enum:PayrollCommissionType:{Convert.ToInt32(context.PayrollCommissionType)}"] @GetOrgName(context.OrganizationId.ToGuidOrDefault())
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollCommissionDto"
+                                            Field="Amount"
+                                            Caption="@L["UserPayrollDetails.Amount"]">
+                                <DisplayTemplate>
+                                    <strong class="text-success">@context.Amount.ToVND()</strong>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="UserPayrollCommissionDto"
+                                            Field="Description"
+                                            Caption="@L["Description"]">
+                            </DataGridColumn>
+
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+    </Row>
+}

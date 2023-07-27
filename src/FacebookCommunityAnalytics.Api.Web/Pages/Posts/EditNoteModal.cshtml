@@ -1,0 +1,24 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using FacebookCommunityAnalytics.Api.Localization
+@inject IHtmlLocalizer<ApiResource> L
+@model FacebookCommunityAnalytics.Api.Web.Pages.Posts.EditNoteModalModel
+@{
+    Layout = null;
+}
+
+<form data-ajaxForm="true" asp-page="/Posts/EditNoteModal" autocomplete="off">
+    <abp-modal size="Default">
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+            <abp-input asp-for="Id"/>
+
+            <abp-input asp-for="PostNoteUpdate" label="@L["Note"].Value"/>
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

@@ -1,0 +1,355 @@
+﻿@page "/compensation-details"
+@page "/compensation-details/{PayrollId?}"
+
+@inherits BlazorComponentBase
+
+@attribute [Authorize(ApiPermissions.UserPayrolls.Default)]
+@using FacebookCommunityAnalytics.Api.UserPayrolls
+@using FacebookCommunityAnalytics.Api.ApiConfigurations
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Organizations
+@using FacebookCommunityAnalytics.Api.Payrolls
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using FacebookCommunityAnalytics.Api.UserCompensations
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime
+@inject IUserCompensationAppService UserCompensationAppService
+@inject ITeamMemberAppService TeamMemberAppService
+@inject IUserInfosAppService UserInfosAppService
+@inject IUiMessageService UiMessageService
+@inject IApiConfigurationAppService ApiConfigurationAppService
+@inject IJSRuntime JSRuntime
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["PayrollEmail.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@if (PayrollDetail != null)
+{
+    <Card Margin="new FluentMargin().Is4.OnY">
+        <CardBody>
+            <CardTitle Size="20" Alignment="TextAlignment.Center">
+                <h2 class="text-danger">
+                    @L["Compensation.General.Title", ToDate.Month] 
+                    @(PayrollDetail.IsHappyDay ? $" - {PayrollConsts.HappyDay}" : "")
+                </h2>
+            </CardTitle>
+            <Divider></Divider>
+            @if (IsManagerRole())
+            {
+                <Table>
+                    <TableBody>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.TeamCount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                @PayrollDetail.TeamCompensations.Count()
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.StaffCount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                @PayrollDetail.TotalStaff
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.TotalSalaryAmount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-success">@((PayrollDetail.TotalAmount - PayrollDetail.BonusAmount).ToVND())</strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.BonusTotalAmount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-success">@(PayrollDetail.BonusAmount.ToVND())</strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.FinesTotalAmount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-success">@(PayrollDetail.FinesAmount.ToVND())</strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["PayrollEmail.TotalAmount"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <strong class="text-danger">@PayrollDetail.TotalAmount.ToVND()</strong>
+                            </TableRowCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            }
+        </CardBody>
+    </Card>
+
+    <Row>
+        <Column ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+            <Accordion Width="new FluentSizing(sizingType: SizingType.Width).WithSize(SizingSize.Is100)">
+                @{
+                    var indexTeam = 0;
+                }
+                @foreach (var teamPayroll in PayrollDetail.TeamCompensations)
+                {
+                    var indexLocal = indexTeam;
+                    <Collapse Visible="@AccordionTeams[indexLocal]">
+                        <CollapseHeader>
+                            <Heading Width="new FluentSizing(sizingType: SizingType.Width).WithSize(SizingSize.Is100)" Size="HeadingSize.Is5">
+                                <Button Clicked="@(() => AccordionTeams[indexLocal] = !AccordionTeams[indexLocal])">@teamPayroll.Team</Button>
+                            </Heading>
+                        </CollapseHeader>
+                        <CollapseBody>
+                            <Card Margin="new FluentMargin().Is4.OnY">
+                                <CardBody>
+                                    <CardTitle Size="10" Alignment="TextAlignment.Center">
+                                        <Table Narrow="true" Bordered="true" style="table-layout: fixed; width: 300px;">
+                                            <TableBody>
+                                                <TableRow>
+                                                    <TableRowCell Style="@TextAlignLeft">
+                                                        @L["UserPayrollDetails.CountStaff"]
+                                                    </TableRowCell>
+                                                    <TableRowCell Style="@TextAlignRight">
+                                                        @teamPayroll.UserCompensations.Count
+                                                    </TableRowCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableRowCell Style="@TextAlignLeft">
+                                                        @L["UserPayrollDetails.TotalWave"]
+                                                    </TableRowCell>
+                                                    <TableRowCell Style="@TextAlignRight">
+                                                        @teamPayroll.TotalSalary.ToVND()
+                                                    </TableRowCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableRowCell Style="@TextAlignLeft">
+                                                        @L["UserPayrollDetails.TotalBonus"]
+                                                    </TableRowCell>
+                                                    <TableRowCell Style="@TextAlignRight">
+                                                        @teamPayroll.BonusAmount.ToVND()
+                                                    </TableRowCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableRowCell Style="@TextAlignLeft">
+                                                        @L["UserPayrollDetails.TotalFines"]
+                                                    </TableRowCell>
+                                                    <TableRowCell Style="@TextAlignRight">
+                                                        @teamPayroll.FinesAmount.ToVND()
+                                                    </TableRowCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableRowCell Style="@TextAlignLeft">
+                                                        <b>@L["UserPayrollDetails.TotalAmount"]</b>
+                                                    </TableRowCell>
+                                                    <TableRowCell Style="@TextAlignRight">
+                                                        <b>@teamPayroll.TotalAmount.ToVND()</b>
+                                                    </TableRowCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </CardTitle>
+                                    <Divider></Divider>
+
+                                    <DataGrid TItem="UserCompensationNavigationPropertiesDto"
+                                              Data="teamPayroll.UserCompensations"
+                                              TotalItems="teamPayroll.UserCompensations.Count"
+                                              Responsive="true"
+                                              PageSize="100"
+                                              Class="text-nowrap"
+                                              Striped="true"
+                                              Narrow="true">
+
+                                        <DataGridColumns>
+                                            <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                                            Field="UserCompensation.Team"
+                                                            Caption="@L["PayrollEmail.OrganizationName"]">
+                                                <DisplayTemplate>
+                                                    @context.UserCompensation.Team
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+
+                                            <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                                            Field="AppUser.Name"
+                                                            Caption="@L["PayrollEmail.Name"]">
+                                                <DisplayTemplate>
+                                                    @context.AppUser.Name (@context.AppUser.UserName)
+                                                    <br/>
+                                                    @(L[$"Enum:UserPosition:{Convert.ToInt32(context.UserInfo.UserPosition)}"])
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+
+                                            <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                                            Field="UserCompensation.SalaryAmount"
+                                                            Caption="@L["PayrollEmail.SalaryAmount"]">
+                                                <DisplayTemplate>
+                                                    <strong class="text-info">@context.UserCompensation.SalaryAmount.ToVND()</strong>
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+
+                                            <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                                            Field="UserCompensation.BonusAmount"
+                                                            Caption="@L["PayrollEmail.BonusAmount"]">
+                                                <DisplayTemplate>
+                                                    <div>
+                                                        @if (context.UserCompensation.BonusAmount != 0)
+                                                        {
+                                                            <strong class="text-success">@($"{L["TotalBonusAmount"]}: {context.UserCompensation.BonusAmount.ToVND()}")</strong>
+                                                            @foreach (var item in context.UserCompensation.Bonuses)
+                                                            {
+                                                                <p class="text-dark"> - @(L[$"Enum:BonusType:{Convert.ToInt32(item.BonusType ?? BonusType.Unknown)}"] + ": " + @item.BonusAmount.ToVND())</p>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+
+                                            <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                                            Field="UserCompensation.FinesAmount"
+                                                            Caption="@L["PayrollEmail.FinesAmount"]">
+                                                <DisplayTemplate>
+                                                    <div>
+                                                        @if (context.UserCompensation.FinesAmount != 0)
+                                                        {
+                                                            <strong class="text-success">@($"{L["TotalFinesAmount"]}: {context.UserCompensation.FinesAmount.ToVND()}")</strong>
+                                                            @foreach (var item in context.UserCompensation.Bonuses)
+                                                            {
+                                                                if (item.FinesDescription.IsNotNullOrEmpty())
+                                                                {
+                                                                    <p class="text-dark">@($"- {item.FinesDescription} : {item.FinesAmount.ToVND()}")</p>
+                                                                }
+                                                            }
+                                                        }
+                                                    </div>
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+
+                                            <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                                            Field="UserCompensation.Description"
+                                                            Caption="@L["Note"]">
+                                                <DisplayTemplate>
+                                                    <div>
+                                                        @* <strong class="text-success">@($"{L["TotalBonusAmount"]}: {context.UserCompensation.BonusAmount.ToVND()}")</strong> *@
+                                                        @if (@context.UserCompensation.Description != null && @context.UserCompensation.Description.Contains(("|")))
+                                                        {
+                                                            foreach (var part in context.UserCompensation.Description.Split('|', StringSplitOptions.RemoveEmptyEntries))
+                                                            {
+                                                                <p class="text-dark"> - @part.TrimSafe()</p>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-dark"> - @context.UserCompensation.Description.TrimSafe()</p>
+                                                        }
+                                                    </div>
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+
+                                            @* ToDoo: Long fix conversion from UI difference with payroll *@
+                                            <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                                            Field="AppUser.Id"
+                                                            Caption="">
+                                                <DisplayTemplate>
+                                                    <Button Color="Color.Info"
+                                                            TextColor="TextColor.White"
+                                                            Clicked="(async () => await OpenShortlinkModal(context.AppUser.Id, context.AppUser.UserName))">
+                                                        <Icon Name="IconName.Search"></Icon>
+                                                    </Button>
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+
+                                            <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                                            Field="UserCompensation.TotalAmount"
+                                                            Caption="@L["PayrollEmail.TotalAmount"]">
+                                                <DisplayTemplate>
+                                                    <strong class="text-danger">@context.UserCompensation.TotalAmount.ToVND()</strong>
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+                                        </DataGridColumns>
+                                    </DataGrid>
+                                </CardBody>
+                            </Card>
+
+                        </CollapseBody>
+                    </Collapse>
+                    indexTeam++;
+                }
+
+            </Accordion>
+        </Column>
+    </Row>
+
+    @* ************************* SHORTLINK MODAL ************************* *@
+    <Modal @ref="ShortlinkModal">
+        <ModalContent Centered="true" Size="ModalSize.Large">
+            <Form id="ShortlinkForm">
+                <ModalHeader>
+                    <ModalTitle>@($"{L["ShortlinkModal"]} - {AffiliateModalUsername}")</ModalTitle>
+                    <CloseButton Clicked="CloseShortlinkModal"/>
+                </ModalHeader>
+                <ModalBody>
+                    <Table Narrow="true" Bordered="true">
+                        <TableBody>
+                            <TableRow>
+                                <TableRowHeader>
+                                    @($"{L["TotalShortLink"]}: {UserCompensationAffiliates.Count}")
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @($"{L["TotalClick"]}: {UserCompensationAffiliates.Sum(_ => _.Click)}")
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @($"{L["TotalConversion"]}: {UserCompensationAffiliates.Sum(_ => _.Conversions)}")
+                                </TableRowHeader>
+                            </TableRow>
+                            <TableRow>
+                                <TableRowHeader>
+                                    @L["Shortlink"]
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @L["Click"]
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @L["Conversion"]
+                                </TableRowHeader>
+                            </TableRow>
+                            @foreach (var item in UserCompensationAffiliates.OrderByDescending(x => x.Conversions))
+                            {
+                                <TableRow @key="item">
+                                    <TableRowCell>
+                                        @item.Shortlink
+                                    </TableRowCell>
+                                    <TableRowCell>
+                                        @item.Click
+                                    </TableRowCell>
+                                    <TableRowCell>
+                                        @if (@item.Conversions > 0)
+                                        {
+                                            <strong>@item.Conversions</strong>
+                                        }
+                                        else
+                                        {
+                                            @item.Conversions
+                                        }
+                                    </TableRowCell>
+                                </TableRow>
+                            }
+                        </TableBody>
+                    </Table>
+                </ModalBody>
+            </Form>
+        </ModalContent>
+    </Modal>
+}

@@ -1,0 +1,113 @@
+@page "/user-profile"
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@inject IHtmlLocalizer<ApiResource> L
+@inject IAuthorizationService Authorization
+@model FacebookCommunityAnalytics.Api.Web.Pages.UserInfos.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["UserInfos"].Value;
+    PageLayout.Content.MenuItemName = ApiMenus.UserInfos;
+}
+
+@section scripts
+{
+    <abp-script src="/Pages/UserInfos/index.js" />
+}
+
+@section content_toolbar {
+    @if (await Authorization.IsGrantedAsync(FacebookCommunityAnalytics.Api.Permissions.ApiPermissions.UserInfos.Create))
+    {
+        <abp-button id="NewUserInfoButton" text="@L["NewUserInfo"].Value" icon="plus" button-type="Primary" />
+    }
+}
+
+<abp-card>
+    <abp-card-body>
+		<abp-row class="mb-3">
+            <abp-column size-md="_12">
+                <form id="SearchForm" autocomplete="off">
+                    <div class="input-group">
+                        <input class="form-control" id="FilterText" placeholder="@L["Search"]"/>
+                        <div class="input-group-append">
+                            <abp-button button-type="Primary" type="submit" icon="search"/>
+                        </div>
+                    </div>
+                </form>
+            </abp-column>
+            <abp-column size-md="_12" class="mt-3">
+                <a href="javascript:;" id="AdvancedFilterSectionToggler">@L["SeeAdvancedFilters"]</a>
+            </abp-column>
+        </abp-row>
+
+        <abp-row id="AdvancedFilterSection" style="display: none;">
+            <abp-column size="_3">
+                <abp-input asp-for="Filter" label="@L["MinHeight"].Value" />
+            </abp-column>
+            @* <abp-column size="_3"> *@
+            @*     <abp-input asp-for="HeightFilterMax" label="@L["MaxHeight"].Value" /> *@
+            @* </abp-column> *@
+            @* <abp-column size="_3"> *@
+            @*     <abp-input asp-for="WeightFilterMin" label="@L["MinWeight"].Value" /> *@
+            @* </abp-column> *@
+            @* <abp-column size="_3"> *@
+            @*     <abp-input asp-for="WeightFilterMax" label="@L["MaxWeight"].Value" /> *@
+            @* </abp-column> *@
+            @* <abp-column size="_3"> *@
+            @*     <abp-input asp-for="BMIFilterMin" label="@L["MinBMI"].Value" /> *@
+            @* </abp-column> *@
+            @* <abp-column size="_3"> *@
+            @*     <abp-input asp-for="BMIFilterMax" label="@L["MaxBMI"].Value" /> *@
+            @* </abp-column> *@
+            @* <abp-column size="_3"> *@
+            @*     <abp-input asp-for="DateOfBirthFilterMin" label="@L["MinDateOfBirth"].Value" type="date"/> *@
+            @* </abp-column> *@
+            @* <abp-column size="_3"> *@
+            @*     <abp-input asp-for="DateOfBirthFilterMax" label="@L["MaxDateOfBirth"].Value" type="date"/> *@
+            @* </abp-column> *@
+                <abp-column size="_3">
+                    <label for="AppUser_Filter_Name">@L["User"]</label>
+                    <div class="input-group mb-3">
+                        <input hidden id="AppUserIdFilter" />
+                        <input type="text" id="AppUser_Filter_Name" class="form-control" disabled>
+                        <div class="input-group-append">
+                            <abp-button button-type="Info" id="AppUserFilterLookupOpenButton" class="text-light">@L["Pick"]</abp-button>
+                            <abp-button button-type="Danger" class="lookupCleanButton"><i class="fa fa-times"></i></abp-button>
+                        </div>
+                    </div>
+                </abp-column>
+        </abp-row>
+
+        <abp-table striped-rows="true" id="UserInfosTable">
+            <thead>
+				<tr>
+					<th>@L["UserCode"]</th>
+					<th>@L["UserName"]</th>
+					<th>@L["Email"]</th>
+					<th>@L["UserInfos.Surname"]</th>
+					<th>@L["UserInfos.Name"]</th>
+					<th>@L["UserInfos.PhoneNumber"]</th>
+					<th>@L["IdentityNumber"]</th>
+					<th>@L["Facebook"]</th>
+					<th>@L["DateOfBirth"]</th>
+					<th>@L["IsGDLStaff"]</th>
+					<th>@L["UserPosition"]</th>
+					<th>@L["Salary"]</th>
+					<th>@L["JoinedDateTime"]</th>
+					<th>@L["PromotedDateTime"]</th>
+					<th>@L["AffiliateMultiplier"]</th>
+					<th>@L["SeedingMultiplier"]</th>
+					<th>@L["ContentRoleType"]</th>
+					<th>@L["IsActive"]</th>
+					<th>@L["IsSystemUser"]</th>
+					<th>@L["EnablePayrollCalculation"]</th>
+					<th>@L["UserInfos.MainTeam"]</th>
+				</tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

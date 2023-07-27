@@ -1,0 +1,198 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>ba17da4e-16d2-44ad-97a2-d43eea4d9f66</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <BlazorLinkOnBuild Condition="'$(Configuration)'!='Release'">false</BlazorLinkOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.*" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.*" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.*" />
+    <PackageReference Include="BlazorDateRangePicker" Version="3.6.0" />
+    <PackageReference Include="Blazored.Localisation" Version="2.0.0" />
+    <PackageReference Include="Blazorise.Charts" Version="0.9.4.1" />
+    <PackageReference Include="Blazorise.Components" Version="0.9.4.1" />
+    <PackageReference Include="Blazorise.DataGrid" Version="0.9.4.1" />
+    <PackageReference Include="Blazorise.RichTextEdit" Version="0.9.4.1" />
+    <PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
+    <PackageReference Include="EPPlus" Version="4.5.3.3" />
+    <PackageReference Include="Faso.Blazor.SpinKit" Version="1.0.1" />
+    <PackageReference Include="Markdig.Signed" Version="0.24.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.7" />
+    <PackageReference Include="Radzen.Blazor" Version="3.16.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.4.1" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.*" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Account.Pro.Public.Application.Contracts" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.EventBus.RabbitMQ" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.OpenIdConnect" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Components.Server.LeptonTheme" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Admin.Blazor.Server" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Blazor.Server" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.Blazor.Server" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LeptonTheme.Management.Blazor.Server" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Blazor.Server" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.Blazor.Server" Version="4.3.2" />
+    <PackageReference Include="Volo.Saas.Host.Blazor.Server" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.Blazor.Server" Version="4.3.2" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Application\FacebookCommunityAnalytics.Api.Application.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Domain\FacebookCommunityAnalytics.Api.Domain.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.HttpApi\FacebookCommunityAnalytics.Api.HttpApi.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.HttpApi.Client\FacebookCommunityAnalytics.Api.HttpApi.Client.csproj" />
+    <PackageReference Include="Volo.CmsKit.Pro.Admin.Web" Version="4.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+    <Content Remove="Themes\Lepton\Layouts\Application\_Footer.cshtml" />
+    <Content Remove="Themes\Lepton\Layouts\Account\_Footer.cshtml" />
+    <None Include="wwwroot\scripts\createPivotGrid3.js" />
+    <None Include="wwwroot\scripts\createPivotGrid.js" />
+    <None Remove="Properties\PublishProfiles\live.gdll.vn.pubxml" />
+    <None Remove="Properties\PublishProfiles\uat.gdll.vn.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Dockerfile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\live.gdll.vn.pubxml" />
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\uat.gdll.vn.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Pages\**\*.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\**\*.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Configs\globalconfigs.dev.json" Link="Configs\globalconfigs.dev.json" />
+    <Content Include="..\Configs\globalconfigs.json" Link="Configs\globalconfigs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Configs\globalconfigs.live.json" Link="Configs\globalconfigs.live.json" />
+    <Content Include="..\Configs\globalconfigs.partner-test.json">
+      <Link>Configs\globalconfigs.partner-test.json</Link>
+    </Content>
+    <Content Include="..\Configs\globalconfigs.partner.json">
+      <Link>Configs\globalconfigs.partner.json</Link>
+    </Content>
+    <Content Include="..\Configs\globalconfigs.test.json">
+      <Link>Configs\globalconfigs.test.json</Link>
+    </Content>
+    <Content Include="..\Configs\globalconfigs.uat.json" Link="Configs\globalconfigs.uat.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configs\" />
+    <Folder Include="Themes\Lepton\Layouts\Account" />
+    <Folder Include="Themes\Lepton\Layouts\Application" />
+    <Folder Include="wwwroot\libs\dist" />
+    <Folder Include="wwwroot\libs\jqwidgets" />
+    <Folder Include="wwwroot\uploadfiles" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\dist\daterangepicker.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\dist\daterangepicker.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\dist\dual-listbox.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\dist\dual-listbox.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\dist\jquery3.6.0.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\dist\moment.min.js" />
+    <_ContentIncludedByDefault Remove="Pages\_Host.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\AccountProxies.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Accounts.razor" />
+    <_ContentIncludedByDefault Remove="Pages\AffiliateStats.razor" />
+    <_ContentIncludedByDefault Remove="Pages\AffLinkDetails.razor" />
+    <_ContentIncludedByDefault Remove="Pages\AffLinks.razor" />
+    <_ContentIncludedByDefault Remove="Pages\AffLinksTiki.razor" />
+    <_ContentIncludedByDefault Remove="Pages\AffReports.razor" />
+    <_ContentIncludedByDefault Remove="Pages\AffSummary.razor" />
+    <_ContentIncludedByDefault Remove="Pages\CampaignDetail.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Campaigns.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Categories.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Cms\CmsPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Cms\Sites.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ContentMedia.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ContractDetails.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Contracts.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dev.razor" />
+    <_ContentIncludedByDefault Remove="Pages\EvaluationConfigurations.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Groups.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Index.razor" />
+    <_ContentIncludedByDefault Remove="Pages\PartnerDetails.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Partners.razor" />
+    <_ContentIncludedByDefault Remove="Pages\PayrollDetails.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Payrolls.razor" />
+    <_ContentIncludedByDefault Remove="Pages\PayrollsConfiguration.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Payslip.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Posts.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Proxies.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ScheduledPosts.razor" />
+    <_ContentIncludedByDefault Remove="Pages\StaffEvaluationCriteria.razor" />
+    <_ContentIncludedByDefault Remove="Pages\StaffEvaluations.razor" />
+    <_ContentIncludedByDefault Remove="Pages\TeamMembers.razor" />
+    <_ContentIncludedByDefault Remove="Pages\TiktokDailyReports.razor" />
+    <_ContentIncludedByDefault Remove="Pages\TiktokWeeklyReports.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ToolPartners\Components\HomePagePartner.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ToolPartners\Contracts.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ToolPartners\PartnerCampaigns.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ToolPartners\PartnerGroups.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ToolPartners\Partners.razor" />
+    <_ContentIncludedByDefault Remove="Pages\UserAffiliates.razor" />
+    <_ContentIncludedByDefault Remove="Pages\UserCompensations\CompensationDetails.razor" />
+    <_ContentIncludedByDefault Remove="Pages\UserCompensations\Compensations.razor" />
+    <_ContentIncludedByDefault Remove="Pages\UserCompensations\UserBonusConfigs.razor" />
+    <_ContentIncludedByDefault Remove="Pages\UserCompensations\UserCompensations.razor" />
+    <_ContentIncludedByDefault Remove="Pages\UserInfos.razor" />
+    <_ContentIncludedByDefault Remove="Shared\ClientScript.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Dashboards\TeamAffiliate.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Dashboards\TeamContent.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Dashboards\TeamSale.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Dashboards\TeamSeeding.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Dashboards\TeamTiktok.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\HomePageDefault.razor" />
+    <_ContentIncludedByDefault Remove="Shared\CreatePostModal.razor" />
+    <_ContentIncludedByDefault Remove="Shared\ErrorBar.razor" />
+    <_ContentIncludedByDefault Remove="Shared\EventConsole.razor" />
+    <_ContentIncludedByDefault Remove="Shared\LongStringComponent.razor" />
+    <_ContentIncludedByDefault Remove="Shared\PostsModals.razor" />
+    <_ContentIncludedByDefault Remove="Shared\SignalRNotification.razor" />
+    <_ContentIncludedByDefault Remove="Shared\TagsInputControl.razor" />
+    <_ContentIncludedByDefault Remove="Shared\TiktokModals.razor" />
+  </ItemGroup>
+
+</Project>

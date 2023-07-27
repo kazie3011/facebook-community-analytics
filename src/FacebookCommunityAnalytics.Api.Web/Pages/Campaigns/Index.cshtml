@@ -1,0 +1,158 @@
+@page "/campaigns"
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Web.Bundling.Kendo
+@inject IHtmlLocalizer<ApiResource> L
+@inject IAuthorizationService Authorization
+@model FacebookCommunityAnalytics.Api.Web.Pages.Campaigns.IndexModel
+@inject IPageLayout PageLayout
+@{
+    ViewBag.Title = $"GDL - {L["Campaigns.PageTitle"].Value}";
+}
+@{
+    PageLayout.Content.Title = L["Campaigns.PageTitle"].Value;
+    PageLayout.Content.MenuItemName = ApiMenus.Campaigns;
+}
+
+@section scripts
+{
+    <abp-script src="/Pages/Campaigns/index.js"/>
+    <!-- Kendo -->
+    @* <abp-script type="typeof(KendoScriptContributor)" /> *@
+}
+
+@section styles
+{
+}
+
+@section content_toolbar {
+    @if (await Authorization.IsGrantedAsync(FacebookCommunityAnalytics.Api.Permissions.ApiPermissions.PartnerModule.PartnerCampaigns))
+    {
+        <abp-button id="NewCampaignButton" text="@L["NewCampaign"].Value" icon="plus" button-type="Primary"/>
+    }
+    
+}
+
+<abp-card>
+    <abp-card-body>
+        <form id="SearchForm" autocomplete="off">
+            <abp-row>
+                <abp-column size-md="_12">
+
+                    <div class="form-group">
+                        <div class="input-group">
+                             <div class="input-group-prepend">
+                                                        <select class="form-control custom-select" id="CampaignStatusFilter" name="CampaignStatusFilter">
+                                                            <option value="">@L[$"Enum:CampaignStatus:{Convert.ToInt32(CampaignStatusFilter.NoSelect)}"]</option>
+                                                            @foreach (var itemValue in Enum.GetValues(typeof(CampaignStatusFilter)))
+                                                            {
+                                                                if ((CampaignStatusFilter)itemValue != CampaignStatusFilter.NoSelect)
+                                                                {
+                                                                    <option value="@((CampaignStatusFilter)itemValue)">@L[$"Enum:CampaignStatus:{Convert.ToInt32(itemValue)}"]</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                            <input class="form-control" id="FilterText" placeholder="@L["Search"]"/>
+                            <div class="input-group-append">
+                                <abp-button button-type="Primary" type="submit" icon="search"/>
+                            </div>
+                        </div>
+                    </div>
+                </abp-column>
+                <abp-column size-md="_6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary text-white">@L["StartDate"]</span>
+                            </div>
+                            <input asp-for="Filter.StartDateTimeMin" data-date-format="dd-MM-yyyy" type="date" class="form-control" placeholder="@L["Campaign.StartDateTimeMinInput"]">
+                            <input asp-for="Filter.StartDateTimeMax" data-date-format="dd-MM-yyyy" type="date" class="form-control" placeholder="@L["Campaign.StartDateTimeMaxInput"]">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-calendar-day"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </abp-column>
+                <abp-column size-md="_6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary text-white">@L["EndDate"]</span>
+                            </div>
+                            <input asp-for="Filter.EndDateTimeMin" data-date-format="dd-MM-yyyy" type="date" class="form-control" placeholder="@L["Campaign.EndDateTimeMinInput"]">
+                            <input asp-for="Filter.EndDateTimeMax" data-date-format="dd-MM-yyyy" type="date" class="form-control" placeholder="@L["Campaign.EndDateTimeMaxInput"]">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-calendar-day"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </abp-column>
+                <abp-column size-md="_6">
+                    <div class="form-group">
+                        <div class="block">
+                            <select class="form-control" asp-for="Filter.CampaignType">
+                                @foreach (var itemValue in Enum.GetValues(typeof(CampaignTypeFilter)))
+                                {
+                                    <option value="@(Convert.ToInt32(itemValue))">
+                                        @L[$"Enum:CampaignType:{Convert.ToInt32(itemValue)}"]
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                </abp-column>
+                <abp-column size-md="_6">
+                    @* <div class="form-group"> *@
+                    @*     <select class="form-control" asp-for="Filter.Status" asp-items="@Html.GetEnumSelectList<CampaignStatusFilter>()"></select> *@
+                    @* </div> *@
+                    <div class="form-group">
+                        <div class="block">
+                            <select class="form-control" asp-for="Filter.Status">
+                                @foreach (var itemValue in Enum.GetValues(typeof(CampaignStatusFilter)))
+                                {
+                                    <option value="@(Convert.ToInt32(itemValue))">
+                                        @L[$"Enum:CampaignStatus:{Convert.ToInt32(itemValue)}"]
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                </abp-column>
+            </abp-row>
+        </form>
+    </abp-card-body>
+</abp-card>
+<abp-card>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="CampaignsTable">
+            <thead>
+            <tr>
+                <th></th>
+                <th>@L["Partner"]</th>
+                <th>@L["Campaign.Name"]</th>
+                <th>@L["Code"]</th>
+                <th>@L["CampaignType"]</th>
+                <th>@L["Hashtags"]</th>
+                <th>@L["Keywords"]</th>
+                <th>@L["Status"]</th>
+                <th>@L["StartDateTime"]</th>
+                <th>@L["EndDateTime"]</th>
+                <th>@L["IsActive"]</th>
+                <th>@L["Actions"]</th>
+            </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

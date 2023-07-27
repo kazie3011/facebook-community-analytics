@@ -1,0 +1,90 @@
+﻿@using FacebookCommunityAnalytics.Api.Permissions
+@using Microsoft.AspNetCore.Components
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.PartnerModule
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Faso.Blazor.SpinKit
+@using Radzen
+@inherits BlazorComponentBase
+@inject IPartnerModuleAppService _partnerModuleAppService
+@attribute [Authorize(ApiPermissions.PartnerModule.Default)]
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Partner.Dashboard.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+<Card>
+    <CardBody>
+        <Row>
+            <Column>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <DateRangePicker TimePicker="true"
+                                         TimePicker24Hour="true"
+                                         Ranges="_dateRanges"
+                                         DateFormat="@GlobalConsts.DateFormat"
+                                         @bind-StartDate="StartDate"
+                                         @bind-EndDate="EndDate"
+                                         class="form-control form-control-md"
+                                         placeholder="@L["SelectDates"]" OnClosed="ReloadChartData"/>
+                    </Addon>
+                </Addons>
+            </Column>
+        </Row>
+        <Row>
+            <Column ColumnSize="ColumnSize.IsHalf.OnDesktop.IsFull.OnTablet.IsFull.OnMobile" class="chart-js-custom">
+                <ChartJs.Blazor.Chart Config="_piePartnerCampaignChartConfig"></ChartJs.Blazor.Chart>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsHalf.OnDesktop.IsFull.OnTablet.IsFull.OnMobile" class="chart-js-custom">
+                <ChartJs.Blazor.Chart Config="_piePartnerPostsContentTypeChartConfig"></ChartJs.Blazor.Chart>
+            </Column>
+        </Row>
+    </CardBody>
+</Card>
+<Card>
+    <CardBody>
+        <h3>@L["Partner.Dashboard.Campaigns"]</h3>
+        <HomePageCampaigns/>
+    </CardBody>
+</Card>
+@* *@
+@* <Row> *@
+@*     <Column ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile"> *@
+@*         <Select TValue="Guid?" SelectedValue="@CurrentPartnerId" SelectedValueChanged="@OnSelectedPartnerValueChanged"> *@
+@*             <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Partner"]]</SelectItem> *@
+@*             @foreach (var item in PartnersLookups) *@
+@*             { *@
+@*                 <SelectItem @key="item" TValue="Guid?" Value="@item.Id"> *@
+@*                     @item.DisplayName *@
+@*                 </SelectItem> *@
+@*             } *@
+@*         </Select> *@
+@*     </Column> *@
+@* *@
+@*     <Column ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile"> *@
+@* *@
+@*         <RadzenDropDown Change="OnSelectedCampaignValueChanged" AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" *@
+@*                                     @bind-Value=@multipleCampaignIds Multiple="true" Placeholder="@L["SelectItem.DefaultText", L["Campaign"]]" Data=@CampaignLookups TextProperty="DisplayName" ValueProperty="Id" *@
+@*                                     Class="w-100" /> *@
+@*     </Column> *@
+@* *@
+@* </Row> *@
+
+@* <Row> *@
+@*     <Column ColumnSize="ColumnSize.IsFull"> *@
+@*         <ChartJs.Blazor.Chart Config="_chartConfig" SetupCompletedCallback="@SetupCompletedCallback"></ChartJs.Blazor.Chart> *@
+@*     </Column> *@
+@* </Row> *@
+
+
+<Card>
+    <CardHeader>
+        <h3>@L["PartnerModule.Dashboard.LatestPost"]</h3>
+    </CardHeader>
+    <HomePagePosts/>
+</Card>

@@ -1,0 +1,232 @@
+@page "/tiktok-mcns"
+@attribute [Authorize(ApiPermissions.Accounts.Default)]
+@using FacebookCommunityAnalytics.Api.Accounts
+@using FacebookCommunityAnalytics.Api.Localization
+@using Microsoft.Extensions.Localization
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.TikTokMCNs
+@inject ITikTokMCNAppService TikTokMcnAppService
+@inject IAccountExtendAppService AccountExtendAppService
+@inject IStringLocalizer<ApiResource> L
+@inject IAuthorizationService AuthorizationService
+@inject IUiMessageService UiMessageService
+@inject IObjectMapper ObjectMapper
+@inject IJSRuntime JSRuntime
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["TikTokMCN.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+<Row >
+    <Column ColumnSize="ColumnSize.IsFull.OnTablet.IsFull.OnMobile">
+
+        @* ************************* SEARCH ************************* *@
+        <Card>
+            <CardBody>
+                <Form id="AccountSearchForm" class="mb-3">
+                    <Row>
+                        <Column ColumnSize="ColumnSize.Is8">
+                            <Addons >
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit @bind-Text="@Filter.FilterText"
+                                              Autofocus="true"
+                                              Style="min-width:100px;max-width: 300px"
+                                              Placeholder="@L["TikTokMCN.Search"]">
+                                    </TextEdit>
+                                </Addon>
+                                <Addon AddonType="AddonType.End">
+                                    <SubmitButton Form="AccountSearchForm" Clicked="GetMCNsAsync">
+                                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                                    </SubmitButton>
+                                </Addon>
+                            </Addons>
+                        </Column>
+                        <Column ColumnSize="ColumnSize.Is4">
+                            <Tooltip Text="@L["TikTokMCN.AddNew"]" Style="float:right">
+                                <Button Form="CreatingModal" Clicked="OpenCreateAccountModal" Color="Color.Primary">
+                                    <Icon Name="IconName.Add" Class="mr-1"> </Icon>
+                                </Button>
+                            </Tooltip>
+                        </Column>
+                    </Row>
+
+                </Form>
+                <DataGrid TItem="TikTokMCNDto"
+                          Data="TikTokMcnDtos"
+                          ReadData="OnDataGridReadAsync"
+                          TotalItems="TotalCount"
+                          ShowPager="true"
+                          Responsive="true"
+                          Narrow="true"
+                          PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                          PageSize="PageSize"
+                          ShowPageSizes="true"
+                          Class="text-nowrap"
+                          Striped="true"
+                          SortMode="DataGridSortMode.Single">
+                    <DataGridColumns>
+                        <DataGridColumn TItem="TikTokMCNDto"
+                                        Field="Name"
+                                        Caption="@L["TikTokMCN.Name"]">
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="TikTokMCNDto"
+                                        Field="HashTag"
+                                        Caption="@L["TikTokMCN.HashTag"]">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="TikTokMCNDto"
+                                        Field="MCNType"
+                                        Caption="@L["TikTokMCN.TikTokMCNType"]">
+                            <DisplayTemplate>
+                                @L[$"Enum:TikTokMCNType:{Convert.ToInt32(context.MCNType)}"]
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="TikTokMCNDto"
+                                        Field="HashTag"
+                                        Caption="@L["Action"]">
+                            <DisplayTemplate>
+                                <Buttons>
+                                    <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditModal(context)">
+                                        <Icon Name="IconName.Edit"/>
+                                    </Button>
+                                    <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeleteAsync(context)">
+                                        <Icon Name="IconName.Delete"/>
+                                    </Button>
+                                </Buttons>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGridColumns>
+                </DataGrid>
+
+            </CardBody>
+        </Card>
+    </Column>
+</Row>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateTikTokMCNModal">
+    <ModalContent Centered="true">
+        <Form id="CreateTikTokMCNForm">
+            <ModalHeader>
+                <ModalTitle>@L["TikTokMCN.AddNew"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@CreateTikTokMcnDto"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["TikTokMCN.Name"] *</FieldLabel>
+                            <TextEdit @bind-Text="@CreateTikTokMcnDto.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["TikTokMCN.HashTag"] *</FieldLabel>
+                            <TextEdit @bind-Text="@CreateTikTokMcnDto.HashTag">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["TikTokMCN.TikTokMCNType"] *</FieldLabel>
+                            <Select TValue="TikTokMCNType" @bind-SelectedValue="@CreateTikTokMcnDto.MCNType">
+                                @foreach (var itemValue in Enum.GetValues(typeof(TikTokMCNType)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="TikTokMCNType" Value="@((TikTokMCNType) itemValue)">
+                                        @L[$"Enum:TikTokMCNType:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateTikTokMCNForm" Clicked="CreateAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="UpdateTikTokMCNModal">
+    <ModalContent Centered="true">
+        <Form id="UpdateTikTokMCNForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@UpdateValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@UpdateTikTokMcnDto"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["TikTokMCN.Name"] *</FieldLabel>
+                            <TextEdit @bind-Text="@UpdateTikTokMcnDto.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["TikTokMCN.HashTag"] *</FieldLabel>
+                            <TextEdit @bind-Text="@UpdateTikTokMcnDto.HashTag">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["TikTokMCN.TikTokMCNType"] *</FieldLabel>
+                            <Select TValue="TikTokMCNType" @bind-SelectedValue="@UpdateTikTokMcnDto.MCNType">
+                                @foreach (var itemValue in Enum.GetValues(typeof(TikTokMCNType)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="TikTokMCNType" Value="@((TikTokMCNType) itemValue)">
+                                        @L[$"Enum:TikTokMCNType:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="UpdateTikTokMCNForm" Clicked="UpdateAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

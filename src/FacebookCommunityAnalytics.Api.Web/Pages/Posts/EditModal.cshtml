@@ -1,0 +1,80 @@
+@page
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using FacebookCommunityAnalytics.Api.Localization
+@inject IHtmlLocalizer<ApiResource> L
+@model FacebookCommunityAnalytics.Api.Web.Pages.Posts.EditModalModel
+@{
+    Layout = null;
+}
+
+<script>
+      $(document).ready(function(){
+        $("#NewPartner_PartnerUserIds").kendoMultiSelect();
+      });
+</script>
+<form data-ajaxForm="true" asp-page="/Posts/EditModal" autocomplete="off">
+    <abp-modal size="Large">
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+            <abp-input asp-for="Id"/>
+            <div class="form-group">
+                <label>@L["Group"]</label>
+                <select class="form-control" asp-for="EditPost.GroupId">
+                    <option value="">
+                        @L["SelectItem.DefaultText", L["Group"]]
+                    </option>
+                    @foreach (var item in Model.GroupLookupDtos)
+                    {
+                        <option value="@item.Id">
+                            @item.DisplayName
+                        </option>
+                    }
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>@L["PostContentType"]</label>
+                <div class="block">
+                    <select class="form-control" asp-for="EditPost.PostContentType">
+                        <option value="@(PostContentType.Seeding)">
+                            @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Seeding)}"]
+                        </option>
+                        <option value="@(PostContentType.Contest)">
+                            @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Contest)}"]
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <abp-input asp-for="EditPost.Url" label="@L["Url"].Value" disabled="true" />
+            <abp-input asp-for="EditPost.CreatedDateTime" disabled="true" value="@Model.EditPost.CreatedDateTime?.ToString(GlobalConsts.DateFormat)" label="@L["CreatedDateTime"].Value" type="text" />
+            
+            <div class="form-group">
+                <label>@L["Campaign"]</label>
+                <select class="form-control" asp-for="EditPost.GroupId">
+                    <option value="">
+                        @L["SelectItem.DefaultText", L["Campaign"]]
+                    </option>
+                    @foreach (var item in Model.CampaignLookupDtos)
+                    {
+                        <option value="@item.Id">
+                            @item.DisplayName
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <abp-input asp-for="EditPost.Note" label="@L["Note"].Value"/>
+
+            <abp-input asp-for="EditPost.IsNotAvailable" label="@L["Post.IsNotAvailable"].Value"/>
+
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

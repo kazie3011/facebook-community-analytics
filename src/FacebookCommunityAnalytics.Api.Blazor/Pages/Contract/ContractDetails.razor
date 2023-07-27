@@ -1,0 +1,549 @@
+﻿@page "/contracts/contract-details"
+@page "/contracts/contract-details/{ContractId?}"
+@using FacebookCommunityAnalytics.Api.Permissions
+@using Volo.Abp.AspNetCore.Components.Messages
+@using FacebookCommunityAnalytics.Api.Contracts
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Medias
+@using Humanizer
+@using Radzen
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Faso.Blazor.SpinKit
+@using FacebookCommunityAnalytics.Api.ContractTransactions
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using System.Globalization
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Localization
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.UI.Navigation
+
+@attribute [Authorize(ApiPermissions.Contracts.Default)]
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+@inject IContractAppService ContractAppService
+@inject IMediaAppService _mediaAppService
+@inject NavigationManager NavigationManager
+@inject IUiMessageService _uiMessageService
+@inject IStringLocalizer<ApiDomainResource> Lv
+@inject IMenuManager MenuManager
+
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@(L["ContractDetails.PageTitle", _contractDto.ContractCode])" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+</PageHeader>
+
+<Card>
+    <CardBody>
+        <Row>
+            <Column ColumnSize="ColumnSize.IsHalf.OnWidescreen.IsFull.OnMobile">
+                <h3>@L["ContractDetails.UploadFiles"]</h3>
+                <ol class="text-danger">
+                    <li>@L["UploadFile.Hint.ChooseFile"]</li>
+                    <li>@L["UploadFile.Hint.UploadFile"]</li>
+                </ol>
+                @if (_showLoading)
+                {
+                    <SpinKitChasingDots/>
+                }
+                <RadzenUpload @ref="createUpload"
+                              Accept=".*"
+                              Auto="false" Multiple="true" Url="@("Upload/UploadContractFiles/" + ContractId)" Style="margin-bottom: 20px;"
+                              Change=@(args => OnChange(args, "Manual Upload"))
+                              Progress=@(args => OnProgress(args, "Manual Upload"))
+                              Error="@(OnError)"
+                              Complete="@(OnComplete)"
+                              ChooseText="@L["ContractDetails.ChooseFiles"]">
+                    @* <RadzenUploadHeader Name="RequestVerificationToken" Value=""></RadzenUploadHeader> *@
+                </RadzenUpload>
+                <RadzenButton @ref="_buttonUpload" Size="ButtonSize.Small" Text="@L["ContractDetails.UploadFiles"]"
+                              Click=@(CreateUploadAsync)
+                              Style="margin-bottom: 20px;"/>
+            </Column>
+
+        </Row>
+    </CardBody>
+</Card>
+@if (_contractDto != null && _contractDto.MediasDtos.IsNotNullOrEmpty())
+{
+    <Card>
+        <Tabs SelectedTab="@_selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+            <Items>
+                @if (_mediaImages.IsNotNullOrEmpty())
+                {
+                    <Tab Name="ContractImageTab">@L["ContractDetails.ImageTab.Title"] (@_mediaImages.Count)</Tab>
+                }
+                @if (_mediaPDFs.IsNotNullOrEmpty())
+                {
+                    <Tab Name="ContractPDFTab">@L["ContractDetails.PDFTab.Title"] (@_mediaPDFs.Count)</Tab>
+                }
+                @if (_mediaOthers.IsNotNullOrEmpty())
+                {
+                    <Tab Name="ContractOtherTab">@L["ContractDetails.OtherTab.Title"] (@_mediaOthers.Count)</Tab>
+                }
+            </Items>
+            <Content>
+                <TabPanel Name="ContractImageTab">
+                    <Row>
+                        @foreach (var model in _mediaImages)
+                        {
+                            <Field @key="model">
+                                <Card Style="margin: 0 5px 0 5px;">
+                                    <div class="content-item-img">
+                                        <img src="@model.ImagePath" alt="@model.FileName" style="width:100%"/>
+                                    </div>
+                                    <div class="content-item-content">
+                                        <div class="content-item-tags">
+                                            @foreach (var tag in model.Tags)
+                                            {
+                                                <Badge @key="tag" Color="Color.Secondary">#@tag</Badge>
+                                            }
+                                        </div>
+                                        <div style="margin-top:5px;">
+                                            <div class="content-item-date">
+                                                @(ConvertToBrowserDateString(model.CreationTime).Result.Humanize())
+                                            </div>
+                                            <Buttons>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await DownloadFile(model.Id)">
+                                                    <Icon Name="IconName.Download"></Icon>
+                                                </Button>
+                                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await RemoveImage(model.Id)">
+                                                    <Icon Name="IconName.Delete"></Icon>
+                                                </Button>
+                                            </Buttons>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </Field>
+                        }
+                    </Row>
+                </TabPanel>
+
+                <TabPanel Name="ContractPDFTab">
+                    <Table Hoverable="true" Narrow="true">
+                        <TableBody>
+                            @foreach (var model in _mediaPDFs)
+                            {
+                                <TableRow>
+                                    <TableRowCell ColumnSpan="1">
+                                        @model.Index
+                                    </TableRowCell>
+                                    <TableRowCell ColumnSpan="3">
+                                        @model.FileName
+                                    </TableRowCell>
+                                    <TableRowCell ColumnSpan="1">
+                                        @model.CreationTime
+                                    </TableRowCell>
+                                    <TableRowCell ColumnSpan="1">
+                                        <Buttons>
+                                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await DownloadFile(model.MediaId)">
+                                                <Icon Name="IconName.Download"></Icon>
+                                            </Button>
+                                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await RemoveImage(model.MediaId)">
+                                                <Icon Name="IconName.Delete"></Icon>
+                                            </Button>
+                                        </Buttons>
+                                    </TableRowCell>
+                                </TableRow>
+                            }
+                        </TableBody>
+                    </Table>
+                </TabPanel>
+
+                <TabPanel Name="ContractOtherTab">
+                    <Table Hoverable="true" Narrow="true">
+                        <TableBody>
+                            @foreach (var model in _mediaOthers)
+                            {
+                                <TableRow>
+                                    <TableRowCell ColumnSpan="1">
+                                        @model.Index
+                                    </TableRowCell>
+                                    <TableRowCell ColumnSpan="3">
+                                        @model.FileName
+                                    </TableRowCell>
+                                    <TableRowCell ColumnSpan="1">
+                                        @model.CreationTime
+                                    </TableRowCell>
+                                    <TableRowCell ColumnSpan="1">
+                                        <Buttons>
+                                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await DownloadFile(model.MediaId)">
+                                                <Icon Name="IconName.Download"/>
+                                            </Button>
+                                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await RemoveImage(model.MediaId)">
+                                                <Icon Name="IconName.Delete"/>
+                                            </Button>
+                                        </Buttons>
+                                    </TableRowCell>
+                                </TableRow>
+                            }
+                        </TableBody>
+                    </Table>
+                </TabPanel>
+
+            </Content>
+        </Tabs>
+    </Card>
+}
+<Card>
+    <CardBody>
+        <DataGrid TItem="ContractTransactionWithNavigationPropertiesDto"
+                  Data="ContractTransactionDtos"
+                  TotalItems="@ContractTransactionDtos.Count"
+                  PageSize="ContractTransactionDtos.Count"
+                  Responsive="true"
+                  Narrow="true"
+                  Class="text-nowrap"
+                  Striped="true">
+            <DataGridColumns>
+                <DataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Field="ContractTransaction.CreatedAt" Caption="@L["Action"]" Sortable="false">
+                    <DisplayTemplate>
+                        <Buttons>
+                            @if (CanEditContract)
+                            {
+                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditTransactionModal(context.ContractTransaction)">
+                                    <Icon Name="IconName.Edit"/>
+                                </Button>
+                            }
+
+                            @if (CanDeleteContract)
+                            {
+                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeleteTransaction(context.ContractTransaction.Id)">
+                                    <Icon Name="IconName.Delete"/>
+                                </Button>
+                            }
+                        </Buttons>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto"
+                                Field="SalePerson.UserName"
+                                Caption="@L["SalePerson"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto"
+                                Field="ContractTransaction.Description"
+                                Caption=@L["Description"]>
+                </DataGridColumn>
+                <DataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto"
+                                Field="ContractTransaction.PartialPaymentValue"
+                                Caption=@L["ContractDetails.NewTransaction.PartialPaymentValue"]>
+                    <DisplayTemplate>
+                        <div>
+                            <strong class="text-success">
+                                @((context.ContractTransaction.PartialPaymentValue).ToVND())
+                            </strong>
+                        </div>
+                        <div>
+                            (@context.ContractTransaction.PartialPaymentValue.ToNonVATAmount(Convert.ToDecimal(context.ContractTransaction.VATPercent)).ToVND())
+                        </div>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto"
+                                Field="ContractTransaction.PaymentDueDate"
+                                Caption=@L["ContractDetails.NewTransaction.PaymentDueDate"]>
+                    <DisplayTemplate>
+                        @BrowserDateTime.ConvertToBrowserTime(context.ContractTransaction.PaymentDueDate.GetValueOrDefault(), GlobalConsts.DateTimeFormat)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto"
+                                Field="ContractTransaction.CreatedAt"
+                                Caption=@L["ContractDetails.NewTransaction.CreatedAt"]>
+                    <DisplayTemplate>
+                        @BrowserDateTime.ConvertToBrowserTime(context.ContractTransaction.CreatedAt, GlobalConsts.DateTimeFormat)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                @if (IsMasterContract)
+                {
+                    <DataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto"
+                                    Field="ContractTransaction.Cost"
+                                    Caption=@L["Contract.Cost"]>
+                        <DisplayTemplate>
+                            @(context.ContractTransaction.Cost.ToVND())
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                }
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@*************************** CREATE TRANSACTION MODAL************************* *@
+<Modal @ref="NewTransactionModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@_createTransactionModalTitle</ModalTitle>
+            <CloseButton Clicked="CloseNewTransactionModal"/>
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit @bind-Text="@NewContractTransaction.Description">
+                        </TextEdit>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.TransactionVATAmount"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="@NewContractTransaction.PartialPaymentValue.ToString("N0")"
+                                  TextChanged="OnNewTransactionValueChanged"/>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <Select ReadOnly="@_isVATReadonly" TValue="decimal" @bind-SelectedValue="@NewContractTransaction.VATPercent">
+                            @foreach (var itemValue in Enum.GetValues(typeof(VAT)))
+                            {
+                                var i = Convert.ToDecimal(itemValue);
+
+                                <SelectItem @key="i" TValue="decimal" Value="@(i)">
+                                    @L[$"Enum:VAT:{i}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-warning text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.TransactionAmount"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit ReadOnly="true" Text="@(NewContractTransaction.PartialPaymentValue.ToNonVATAmount((decimal) NewContractTransaction.VATPercent).ToString("N0"))"></TextEdit>
+
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.NewTransaction.PaymentDueDate"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <DatePicker TValue="DateTime?" Date="createPaymentDueDate" DateChanged="CreatePaymentDueDateAtChange" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+                    </Addon>
+                </Addons>
+            </Field>
+            @if (IsMasterContract)
+            {
+                @if (!NewContractTransaction.IsManualCost && ActiveGroupCosts.IsNotNullOrEmpty())
+                {
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                                    <FieldLabel>@L["Contract.Groups"]</FieldLabel>
+                                </AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <RadzenDropDown AllowClear="true"
+                                                AllowFiltering="false"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                Change="@OnSelectedNewGroupCost"
+                                                Multiple="true"
+                                                Placeholder="@L["Contract.SelectCostGroup"]"
+                                                @bind-Value=@NewContractGroupCostIds
+                                                Data=@ActiveGroupCosts
+                                                TextProperty="GroupName"
+                                                ValueProperty="Id"
+                                                style="width:503px;height:auto">
+                                </RadzenDropDown>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                }
+
+                <Field>
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <AddonLabel Class="bg-primary text-white" Style="width:170px">
+                                <FieldLabel>@L["Contract.Cost"]</FieldLabel>
+                            </AddonLabel>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit @ref="@NewCostField"
+                                      Text="@NewContractTransaction.Cost.ToString("N0")"
+                                      TextChanged="OnNewContractCostAmountChange"
+                                      ChangeTextOnKeyPress="true"
+                                      DefaultValue="0"
+                                      ReadOnly="@(!NewContractTransaction.IsManualCost)">
+                            </TextEdit>
+                        </Addon>
+                    </Addons>
+                </Field>
+            }
+            @if (IsMasterContract)
+            {
+                <Field>
+                    <Check class="text-center" TValue="bool" Checked="@NewContractTransaction.IsManualCost" CheckedChanged="@OnChangedNewManualCost">@L["Contract.IsManualCost"]</Check>
+                </Field>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Dark"
+                    Clicked="CloseNewTransactionModal">
+                @L["Cancel"]
+            </Button>
+            <SubmitButton Disabled="@(!_isValidUploadTransactionImage)" Form="CreateContractForm" Clicked="CreateTransaction"/>
+            <h1/>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+@*************************** Edit TRANSACTION MODAL************************* *@
+<Modal @ref="EditTransactionModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["ContractDetails.EditTransaction.Title"]</ModalTitle>
+            <CloseButton Clicked="CloseNewTransactionModal"/>
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit @bind-Text="@EditContractTransaction.Description">
+                        </TextEdit>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.TransactionVATAmount"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="@EditContractTransaction.PartialPaymentValue.ToString("N0")"
+                                  TextChanged="OnEditTransactionValueChanged"/>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <Select ReadOnly="@_isVATReadonly" TValue="decimal" @bind-SelectedValue="@EditContractTransaction.VATPercent">
+                            @foreach (var itemValue in Enum.GetValues(typeof(VAT)))
+                            {
+                                var i = Convert.ToDecimal(itemValue);
+
+                                <SelectItem @key="i" TValue="decimal" Value="@(i)">
+                                    @L[$"Enum:VAT:{i}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-warning text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.TransactionAmount"]</FieldLabel>
+
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit ReadOnly="true" Text="@(EditContractTransaction.PartialPaymentValue.ToNonVATAmount((decimal) EditContractTransaction.VATPercent).ToString("N0"))"></TextEdit>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.EditTransaction.PaymentDueDate"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <DatePicker TValue="DateTime?" Date="editPaymentDueDate" DateChanged="EditPaymentDueDateAtChange" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+                    </Addon>
+                </Addons>
+            </Field>
+
+            @if (IsMasterContract)
+            {
+                @if (!EditContractTransaction.IsManualCost && ActiveGroupCosts.IsNotNullOrEmpty() )
+                {
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                                    <FieldLabel>@L["Contract.Groups"]</FieldLabel>
+                                </AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <RadzenDropDown AllowClear="true"
+                                                AllowFiltering="false"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                Change="@OnSelectedEditingGroupCost"
+                                                Multiple="true"
+                                                Placeholder="@L["Contract.SelectCostGroup"]"
+                                                @bind-Value=@EditTransactionGroupCostIds
+                                                Data=@EditGroupCosts
+                                                TextProperty="GroupName"
+                                                ValueProperty="Id"
+                                                style="width:503px;height:auto">
+                                </RadzenDropDown>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                }
+
+                <Field>
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <AddonLabel Class="bg-primary text-white" Style="width:170px">
+                                <FieldLabel>@L["Contract.Cost"]</FieldLabel>
+                            </AddonLabel>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit @ref="@EditCostField"
+                                      Text="@EditContractTransaction.Cost.ToString("N0")"
+                                      TextChanged="OnEditContractCostAmountChange"
+                                      ChangeTextOnKeyPress="true"
+                                      DefaultValue="0"
+                                      ReadOnly="@(!EditContractTransaction.IsManualCost)">
+                            </TextEdit>
+                        </Addon>
+                    </Addons>
+                </Field>
+            }
+            @if (IsMasterContract)
+            {
+                <Field>
+                    <Check class="text-center" TValue="bool" Checked="@EditContractTransaction.IsManualCost" CheckedChanged="@OnChangedEditingManualCost">@L["Contract.IsManualCost"]</Check>
+                </Field>
+            }
+
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Dark"
+                    Clicked="CloseEditTransactionModal">
+                @L["Cancel"]
+            </Button>
+            <SubmitButton Form="EditTransactionModal" Clicked="UpdateTransaction"/>
+            <h1/>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

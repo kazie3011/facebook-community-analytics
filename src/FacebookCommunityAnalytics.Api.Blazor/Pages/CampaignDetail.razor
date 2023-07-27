@@ -1,0 +1,1350 @@
+﻿@page "/campaigndetail/{CampaignIdOrCode?}"
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Posts
+@using FacebookCommunityAnalytics.Api.Campaigns
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.PartnerModule
+@using FacebookCommunityAnalytics.Api.Tiktoks
+@using FacebookCommunityAnalytics.Api.UserAffiliates
+@using FacebookCommunityAnalytics.Api.Statistics;
+@using Blazorise.Extensions
+@inject ICampaignsAppService CampaignsAppService
+@inject IPartnerModuleAppService PartnerModuleAppService
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+@inject IUiMessageService _uiMessageService;
+@inherits BlazorComponentBase
+
+<Row>
+    <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnTablet">
+        <PageHeader Title="@L["CampaignDetail.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar"/>
+    </Field>
+    <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnTablet">
+        <br/>
+        <Addon AddonType="AddonType.Start" Style="float:right">
+            <Button Style="float:right;font-size:11px; margin: 4px ;" Color="Color.Primary" Clicked="@OpenPrizeConfigModal">
+                <Icon Name="IconName.Archive"></Icon> @L["CampaignDetail.CreatePrizeConfig"]
+            </Button>
+            <Button Style="float:right;font-size:11px; margin: 4px ;" Color="Color.Primary" Clicked="@ExportExcel">
+                <Icon Name="IconName.Download"></Icon> @L["ExportExcel"]
+            </Button>
+            <Button Style="float:right;font-size: 11px;margin: 4px;" Color="Color.Primary" Clicked="@OpenReportFacebook">
+                <Icon Name="IconName.Add"></Icon> @L["NewPostButton"]
+            </Button>
+            <Button Style="float:right;font-size: 11px;margin: 4px;" Color="Color.Primary" Clicked="@OpenReportTiktok">
+                <Icon Name="IconName.Add"></Icon> @L["AddCampaignTiktokButton"]
+            </Button>
+        </Addon>
+    </Field>
+
+</Row>
+
+
+@if (_campaignDto != null)
+{
+    <Card>
+    <CardBody>
+    <Row>
+    <Column ColumnSize="ColumnSize.IsHalf.OnDesktop.IsFull.OnTablet">
+        <div>
+            <div style="display:inline-block;">
+                <strong class="text-danger" style="font-size: 22px">@_campaignDto.Name</strong>
+                <span style="font-style: normal;font-size: 14px;font-weight: normal;">
+                    - @L[$"{_campaignDto.Status}"] -
+                    <Icon Name="IconName.CalendarDay" Class="mr-1"></Icon>
+                    @ConvertToBrowserDateTime(_campaignDto.StartDateTime).Result?.ToShortDateString() -
+                    @ConvertToBrowserDateTime(_campaignDto.EndDateTime).Result?.ToShortDateString()
+                </span>
+            </div>
+        </div>
+
+        <Divider></Divider>
+        <Table>
+            <TableBody>
+                <TableRow>
+                    <TableRowCell>
+                        <b>@L["Code"]</b>
+                    </TableRowCell>
+                    <TableRowCell>
+                        @_campaignDto.Code
+                    </TableRowCell>
+                </TableRow>
+                @if (_campaignDto.Hashtags.IsNotNullOrEmpty() || _campaignDto.Keywords.IsNotNullOrEmpty())
+                {
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <b>Hashtag - @L["Campaign.Keywords"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+
+                            @foreach (var item in _campaignDto.Hashtags.SplitHashtags())
+                            {
+                                <Badge Color="Color.Success" Style="@CampaignConsts.HashTagFontSize">
+                                    @item
+                                </Badge>
+                            }
+                            @foreach (var item in _campaignDto.Keywords.SplitKeywords())
+                            {
+                                <Badge Style="font-size: 13px;background-color: black;color: white ">
+                                    @item
+                                </Badge>
+                            }
+
+                        </TableRowCell>
+                    </TableRow>
+                }
+                @if (_campaignDto.Description.IsNotNullOrEmpty())
+                {
+                    <TableRow>
+
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <b>@L["Campaign.Description"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            @_campaignDto.Description
+                        </TableRowCell>
+                    </TableRow>
+                }
+                @if (_campaignDto.Emails.IsNotNullOrEmpty())
+                {
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <b>@L["Campaign.Emails"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            @foreach (var item in _campaignDto.Emails.SplitEmails())
+                            {
+                                <Badge Color="Color.Warning" Style="@CampaignConsts.HashTagFontSize">
+                                    @item
+                                </Badge>
+                            }
+                        </TableRowCell>
+                    </TableRow>
+                }
+            </TableBody>
+        </Table>
+
+        @if (_campaignDto.Contracts.IsNotNullOrEmpty())
+        {
+            <Divider></Divider>
+
+            <CardTitle Size="3" Alignment="TextAlignment.Left">
+                <div>
+                    <div style="display:inline-block;">
+                        <strong class="text-success">@L["Contract.Info"]</strong>
+                    </div>
+                </div>
+            </CardTitle>
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <b>@L["Contract.TotalValue"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div>@_campaignDto.Contracts.Sum(x => x.TotalValue).ToVND()</div>
+                        </TableRowCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableRowCell>
+                            <b class="text-primary">@L["Contract.PartialPaymentValue"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div class="text-primary">@_campaignDto.Contracts.Sum(x => x.PartialPaymentValue).ToVND()</div>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <b class="text-danger">@L["Contract.RemainingPaymentValue"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div class="text-danger">@_campaignDto.Contracts.Sum(x => x.RemainingPaymentValue).ToVND()</div>
+                        </TableRowCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        }
+
+    </Column>
+
+    @if (_campaignDto.TotalReaction > 0)
+    {
+        <Column ColumnSize="ColumnSize.IsHalf.OnDesktop.IsFull.OnTablet">
+        <div>
+            <strong style="font-size: 22px">@L["Campaign.TotalReaction"]</strong>
+        </div>
+         <Divider></Divider>
+        <div style="margin-bottom: 15px">
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableRowCell >
+                            <b>@(L["CampaignDetail.TotalReaction"])</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            @_campaignDto.TotalReaction.ToCommaStyle("0") @(L["CampaignDetail.LikeShareComment", _campaignDto.TotalLike.ToCommaStyle("0"), _campaignDto.TotalShare.ToCommaStyle("0"), _campaignDto.TotalComment.ToCommaStyle("0")])
+                        </TableRowCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </div>
+        
+        @if (_campaignDto.Target.Seeding_TotalPost > 0 || _campaignDto.Target.Seeding_TotalReaction > 0
+             || _campaignDto.Target.Affiliate_TotalPost > 0 || _campaignDto.Target.Affiliate_TotalConversionAmount > 0
+             || _campaignDto.Target.Affiliate_TotalClick > 0 || _campaignDto.Target.Affiliate_TotalConversion > 0
+             || _campaignDto.Target.Contest_TotalPost > 0 || _campaignDto.Target.Contest_TotalReaction > 0
+             || _campaignDto.Target.TikTok_TotalVideo > 0 || _campaignDto.Target.TikTok_TotalView > 0)
+        {
+            <div>
+                <strong style="font-size: 22px">@L["CampaignTarget.Title"]</strong>
+                <div style="display:inline-block;font-style: normal;font-size: 12px;font-weight: normal;"> (@L["Current"]/@L["Target"])</div>
+            </div>
+            <Divider></Divider>
+            <Table Hoverable="true" Narrow="true">
+            <TableBody>
+            @if (_seedingPosts.IsNotNullOrEmpty())
+            {
+                @if (@_campaignDto.Target.Seeding_TotalPost > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(SeedingPostProgress >= 100 ? Color.Primary : Color.Warning)" Value="@SeedingPostProgress">
+                                @(SeedingPostProgress < 20 ? "" : $"{SeedingPostProgress}%")
+                            </Progress>
+                        </TableRowCell>
+
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.TotalSeedingPost"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;color: @(_campaignDto.Current.Seeding_TotalPost < _campaignDto.Target.Seeding_TotalPost ? "crimson" : "green");">@_campaignDto.Current.Seeding_TotalPost.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.Seeding_TotalPost.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+
+                @if (@_campaignDto.Target.Seeding_TotalReaction > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(SeedingReactionProgress >= 100 ? Color.Primary : Color.Warning)" Value="@SeedingReactionProgress">
+                                @(SeedingReactionProgress < 20 ? "" : $"{SeedingReactionProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.TotalReaction"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;;color: @(_campaignDto.Current.Seeding_TotalReaction < _campaignDto.Target.Seeding_TotalReaction ? "crimson" : "green");">@_campaignDto.Current.Seeding_TotalReaction.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.Seeding_TotalReaction.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+            }
+
+            @if (_affiliatePosts.IsNotNullOrEmpty())
+            {
+                @if (@_campaignDto.Target.Affiliate_TotalPost > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(AffiliatePostProgress >= 100 ? Color.Primary : Color.Warning)" Value="@AffiliatePostProgress">
+                                @(AffiliatePostProgress < 20 ? "" : $"{AffiliatePostProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.Affiliate_TotalPost"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;color: @(_campaignDto.Current.Affiliate_TotalPost < _campaignDto.Target.Affiliate_TotalPost ? "crimson" : "green");">@_campaignDto.Current.Affiliate_TotalPost.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.Affiliate_TotalPost.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+
+                @if (@_campaignDto.Target.Affiliate_TotalClick > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(AffiliateClickProgress >= 100 ? Color.Primary : Color.Warning)" Value="@AffiliateClickProgress">
+                                @(AffiliateClickProgress < 20 ? "" : $"{AffiliateClickProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.Affiliate_TotalClick"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;color: @(_campaignDto.Current.Affiliate_TotalClick < _campaignDto.Target.Affiliate_TotalClick ? "crimson" : "green");">@_campaignDto.Current.Affiliate_TotalClick.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.Affiliate_TotalClick.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+
+                @if (@_campaignDto.Target.Affiliate_TotalConversion > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(AffiliateConversionProgress >= 100 ? Color.Primary : Color.Warning)" Value="@AffiliateConversionProgress">
+                                @(AffiliateConversionProgress < 20 ? "" : $"{AffiliateConversionProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.Affiliate_TotalConversion"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;color: @(_campaignDto.Current.Affiliate_TotalConversion < _campaignDto.Target.Affiliate_TotalConversion ? "crimson" : "green");">@_campaignDto.Current.Affiliate_TotalConversion.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.Affiliate_TotalConversion.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+
+                @if (@_campaignDto.Target.Affiliate_TotalConversionAmount > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(AffiliateConversionAmountProgress >= 100 ? Color.Primary : Color.Warning)" Value="@AffiliateConversionAmountProgress">
+                                @(AffiliateConversionAmountProgress < 20 ? "" : $"{AffiliateConversionAmountProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.Affiliate_TotalConversionAmount"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;color: @(_campaignDto.Current.Affiliate_TotalConversionAmount < _campaignDto.Target.Affiliate_TotalConversionAmount ? "crimson" : "green");">@_campaignDto.Current.Affiliate_TotalConversionAmount.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.Affiliate_TotalConversionAmount.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+            }
+
+            @if (_contestPosts.IsNotNullOrEmpty())
+            {
+                @if (@_campaignDto.Target.Contest_TotalPost > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(ContestPostProgress >= 100 ? Color.Primary : Color.Warning)" Value="@ContestPostProgress">
+                                @(ContestPostProgress < 20 ? "" : $"{ContestPostProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.Contest_TotalPost"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;color: @(_campaignDto.Current.Contest_TotalPost < _campaignDto.Target.Contest_TotalPost ? "crimson" : "green");">@_campaignDto.Current.Contest_TotalPost.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.Contest_TotalPost.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+
+                @if (@_campaignDto.Target.Contest_TotalReaction > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(ContestReactionProgress >= 100 ? Color.Primary : Color.Warning)" Value="@ContestReactionProgress">
+                                @(ContestReactionProgress < 20 ? "" : $"{ContestReactionProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.Contest_TotalReaction"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;color: @(_campaignDto.Current.Contest_TotalReaction < _campaignDto.Target.Contest_TotalReaction ? "crimson" : "green");">@_campaignDto.Current.Contest_TotalReaction.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.Contest_TotalReaction.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+            }
+
+            @if (_tikTokNavs.IsNotNullOrEmpty())
+            {
+                @if (@_campaignDto.Target.TikTok_TotalVideo > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(TikTokVideoProgress >= 100 ? Color.Primary : Color.Warning)" Value="@TikTokVideoProgress">
+                                @(TikTokVideoProgress < 20 ? "" : $"{TikTokVideoProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.TikTok_TotalVideo"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;color: @(_campaignDto.Current.TikTok_TotalVideo < _campaignDto.Target.TikTok_TotalVideo ? "crimson" : "green");">@_campaignDto.Current.TikTok_TotalVideo.ToCommaStyle()</div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.TikTok_TotalVideo.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+
+                @if (@_campaignDto.Target.TikTok_TotalView > 0)
+                {
+                    <TableRow>
+                        <TableRowCell ColumnSpan="2">
+                            <Progress Striped="true" Animated="false" Color="@(TikTokViewProgress >= 100 ? Color.Primary : Color.Warning)" Value="@TikTokViewProgress">
+                                @(TikTokViewProgress < 20 ? "" : $"{TikTokViewProgress}%")
+                            </Progress>
+                        </TableRowCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableRowCell>
+                            <b>@L["CampaignTarget.TikTok_TotalView"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div style="display:inline-block;font-style: normal;color: @(_campaignDto.Current.TikTok_TotalView < _campaignDto.Target.TikTok_TotalView ? "crimson" : "green");">
+                                @_campaignDto.Current.TikTok_TotalView.ToCommaStyle()
+                            </div>/
+                            <div style="display:inline-block;font-style: normal;font-weight: bold;">@_campaignDto.Target.TikTok_TotalView.ToCommaStyle()</div>
+                        </TableRowCell>
+                    </TableRow>
+                }
+            }
+            </TableBody>
+            </Table>
+        }
+        </Column>
+    }
+
+    </Row>
+    </CardBody>
+   </Card>
+     @if (_campaignDto.CampaignPrizes.IsNotNullOrEmpty()) 
+     { 
+         <Card> 
+             <CardHeader> 
+                 <div class="text-primary text-center font-weight-bold" style="font-size: 20px">@L["CampaignDetail.CampaignPrizeTitle"]</div> 
+             </CardHeader> 
+             <CardBody> 
+                 <DataGrid TItem="CampaignPrizeDto" 
+                           Data="@_campaignDto.CampaignPrizes.OrderBy(_ => _.PrizeNumber).ToList()" 
+                           TotalItems="_campaignDto.CampaignPrizes.Count" 
+                           Responsive="true" 
+                           Narrow="true" 
+                           PageSizes="GlobalConsts.PAGE_SIZES_CONST" 
+                           PageSize="_campaignDto.CampaignPrizes.Count" 
+                           Class="text-nowrap" 
+                           Striped="true" 
+                           SortMode="DataGridSortMode.Single"> 
+                     <DataGridColumns> 
+                         <DataGridColumn TItem="CampaignPrizeDto" 
+                                         Field="PrizeName" 
+                                         Caption="@L["CampaignPrize.PrizeName"]" 
+                                         Sortable="false"> 
+                         </DataGridColumn> 
+    
+                         <DataGridColumn TItem="CampaignPrizeDto" 
+                                         Field="PostFid" 
+                                         Caption="@L["CampaignPrize.PostLink"]" 
+                                         Sortable="false"> 
+                             <DisplayTemplate> 
+                                 @if (context.Post is not null && context.Post.Url.IsNotNullOrEmpty() && context.Post.Fid.IsNotNullOrEmpty()) 
+                                 { 
+                                     <a href="@context.Post.Url" target="_blank">@($"Fid:{context.Post.Fid}")</a> 
+                                 } 
+                             </DisplayTemplate> 
+                         </DataGridColumn> 
+    
+                         <DataGridColumn TItem="CampaignPrizeDto" 
+                                         Field="Author" 
+                                         Caption="@L["Author"]" 
+                                         Sortable="false"> 
+                             <DisplayTemplate> 
+                                 @context.Post?.CreatedBy 
+                             </DisplayTemplate> 
+                         </DataGridColumn> 
+    
+                         <DataGridColumn TItem="CampaignPrizeDto" 
+                                         Field="Note" 
+                                         Caption="@L["Note"]" 
+                                         Sortable="false"> 
+                         </DataGridColumn> 
+                         <DataGridColumn TItem="CampaignPrizeDto" 
+                                         Field="PrizeName" 
+                                         Caption="@L["Action"]" 
+                                         Sortable="false"> 
+                             <DisplayTemplate> 
+                                 <Buttons> 
+                                     <Tooltip Text="@L["Edit"]" Placement="TooltipPlacement.Bottom"> 
+                                         <Button Outline Color="Color.Primary" Clicked="() => OpenSettingPostPrizeModal(context)"> 
+                                             <Icon Name="IconName.Edit"/> 
+                                         </Button> 
+                                     </Tooltip> 
+                                 </Buttons> 
+                             </DisplayTemplate> 
+                         </DataGridColumn> 
+                     </DataGridColumns> 
+                 </DataGrid> 
+             </CardBody> 
+       </Card> 
+     } 
+      <div class="tab-content">
+         <ChartJs.Blazor.Chart Config="_campaignDailyChartConfig" @ref="_campaignDailyChart"></ChartJs.Blazor.Chart>
+     </div>
+    @if (_announcePosts.IsNotNullOrEmpty() || _tikTokNavs.IsNotNullOrEmpty() || _contestPosts.IsNotNullOrEmpty() || _prPosts.IsNotNullOrEmpty())
+        {  
+        <Tabs SelectedTab="@_selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+        <Items>
+            @if (_announcePosts.IsNotNullOrEmpty())
+            {
+                <Tab Name="AnnouncePostTab">@L["CampaignAnnouncePostTab"] (@_announcePosts.Count)</Tab>
+            }
+            @if (_contestPosts.IsNotNullOrEmpty())
+            {
+                <Tab Name="ContestTab">@L["CampaignContestTab"] (@_contestPosts.Count)</Tab>
+            }
+            @if (_affiliates.IsNotNullOrEmpty())
+            {
+                <Tab Name="CampaignAffiliateShortlinkTab">@L["CampaignAffiliateShortlinkTab"] (@_affiliates.Count)</Tab>
+            }
+            @if (_tikTokNavs.IsNotNullOrEmpty())
+            {
+                <Tab Name="TikTokTab">@L["CampaignTikTokTab"] (@_tikTokNavs.Count)</Tab>
+            }
+            @if (_prPosts.IsNotNullOrEmpty())
+            {
+                <Tab Name="PRPostTab">@L["CampaignPRTab"] (@_prPosts.Count)</Tab>
+            }
+        </Items>
+        <Content>
+
+        @if (_facebookPosts.IsNotNullOrEmpty())
+        {
+            <TabPanel Name="AnnouncePostTab">
+                <DataGrid TItem="CampaignPostDto"
+                          Data="_announcePosts"
+                          TotalItems="_announcePosts.Count"
+                          Responsive="true"
+                          Narrow="true"
+                          PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                          PageSize="_announcePosts.Count"
+                          Class="text-nowrap"
+                          Striped="true"
+                          SortMode="DataGridSortMode.Single">
+                    <DataGridColumns>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CreatedBy"
+                                        Caption="@L["AuthorName"]">
+                            <DisplayTemplate>
+                                @if (context.Username.IsNullOrWhiteSpace())
+                                {
+                                    @context.CreatedBy
+                                }
+                                else
+                                {
+                                    <Tooltip Text="@context.Username" Style="display: inline-table">
+                                        @context.CreatedBy
+                                    </Tooltip>
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="PostContentType"
+                                        Caption="@L["PostContentType"]">
+                            <DisplayTemplate>
+                                @L[$"Enum:PostContentType:{Convert.ToInt32(context.PostContentType)}"]
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="Url"
+                                        Sortable="false"
+                                        Caption="@L["Url"]">
+                            <DisplayTemplate>
+                                @if (context.Url.IsNotNullOrEmpty() && context.Fid.IsNotNullOrEmpty())
+                                {
+                                    <a href="@context.Url" target="_blank">@($"Fid:{context.Fid}")</a>
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="GroupName"
+                                        Caption="@L["Group"]">
+                            <DisplayTemplate>
+                                @context.GroupName
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CreatedDateTime"
+                                        Caption="@L["CreatedDateTime"]"
+                                        Sortable="true"
+                                        SortDirection="SortDirection.Descending">
+                            <DisplayTemplate>
+                                @if (context is {CreatedDateTime: { } })
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="TotalCount"
+                                        Caption="@L["TotalCount"]">
+                            <DisplayTemplate>
+                                @context.TotalCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="LikeCount"
+                                        Caption="@L["Like"]">
+                            <DisplayTemplate>
+                                @context.LikeCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CommentCount"
+                                        Caption="@L["CommentCount"]">
+                            <DisplayTemplate>
+                                @context.CommentCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="ShareCount"
+                                        Caption="@L["Share"]">
+                            <DisplayTemplate>
+                                @context.ShareCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto" Field="ShareCount" Caption="@L["Action"]" Sortable="false">
+                            <DisplayTemplate>
+                                <Button title="@L["CampaignDetail.RemovePost"].Value" Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => RemoveCampaignPost(context)">
+                                    <Icon Name="IconName.Delete"/>
+                                </Button>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGridColumns>
+                </DataGrid>
+            </TabPanel>
+        }
+
+        @if (_contestPosts.IsNotNullOrEmpty())
+        {
+            <TabPanel Name="ContestTab">
+                <DataGrid TItem="CampaignPostDto"
+                          Data="_contestPosts"
+                          TotalItems="_contestPosts.Count"
+                          Responsive="true"
+                          Narrow="true"
+                          PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                          PageSize="_contestPosts.Count"
+                          Class="text-nowrap"
+                          Striped="true"
+                          SortMode="DataGridSortMode.Single">
+                    <DataGridColumns>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CreatedBy"
+                                        Caption="@ContestAuthorCaption">
+                            <DisplayTemplate>
+                                @if (context.Username.IsNullOrWhiteSpace())
+                                {
+                                    @context.CreatedBy
+                                }
+                                else
+                                {
+                                    <Tooltip Text="@context.Username" Style="display: inline-table">
+                                        @context.CreatedBy
+                                    </Tooltip>
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="PostContentType"
+                                        Caption="@L["PostContentType"]">
+                            <DisplayTemplate>
+                                @L[$"Enum:PostContentType:{Convert.ToInt32(context.PostContentType)}"]
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="Url"
+                                        Sortable="false"
+                                        Caption="@L["Url"]">
+                            <DisplayTemplate>
+                                @if (context.Url.IsNotNullOrEmpty() && context.Fid.IsNotNullOrEmpty())
+                                {
+                                    <a href="@context.Url" target="_blank">@($"Fid:{context.Fid}")</a>
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="GroupName"
+                                        Caption="@L["Group"]">
+                            <DisplayTemplate>
+                                @context.GroupName
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CreatedDateTime"
+                                        Caption="@L["CreatedDateTime"]"
+                                        Sortable="true"
+                                        SortDirection="SortDirection.Descending">
+                            <DisplayTemplate>
+                                @if (context is {CreatedDateTime: { } })
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="TotalCount"
+                                        Caption="@L["TotalCount"]">
+                            <DisplayTemplate>
+                                @context.TotalCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="LikeCount"
+                                        Caption="@L["Like"]">
+                            <DisplayTemplate>
+                                @context.LikeCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CommentCount"
+                                        Caption="@L["CommentCount"]">
+                            <DisplayTemplate>
+                                @context.CommentCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="ShareCount"
+                                        Caption="@L["Share"]">
+                            <DisplayTemplate>
+                                @context.ShareCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto" Field="ShareCount" Caption="@L["Action"]" Sortable="false">
+                            <DisplayTemplate>
+                                <Button title="@L["CampaignDetail.RemovePost"].Value" Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => RemoveCampaignPost(context)">
+                                    <Icon Name="IconName.Delete"/>
+                                </Button>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGridColumns>
+                </DataGrid>
+            </TabPanel>
+        }
+
+        @if (_affiliates.IsNotNullOrEmpty())
+        {
+            <TabPanel Name="CampaignAffiliateShortlinkTab">
+                <DataGrid TItem="UserAffiliateWithNavigationPropertiesDto"
+                          Data="_affiliates"
+                          TotalItems="_affiliates.Count"
+                          Responsive="true"
+                          Narrow="true"
+                          PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                          PageSize="_affiliates.Count"
+                          Class="text-nowrap"
+                          Striped="true"
+                          SortMode="DataGridSortMode.Single">
+                    <DataGridAggregates>
+                        <DataGridAggregate TItem="UserAffiliateWithNavigationPropertiesDto" Field="UserAffiliate.AffConversionModel.ClickCount" Aggregate="DataGridAggregateType.Sum">
+                            <DisplayTemplate>
+                                <strong class="text-danger">@L["CampaignDetail.TotalClick"] @context.Value.ToCommaStyle()</strong>
+                            </DisplayTemplate>
+                        </DataGridAggregate>
+                        <DataGridAggregate TItem="UserAffiliateWithNavigationPropertiesDto" Field="UserAffiliate.AffConversionModel.ConversionCount" Aggregate="DataGridAggregateType.Sum">
+                            <DisplayTemplate>
+                                <strong class="text-danger">@L["CampaignDetail.TotalConversion"] @context.Value.ToCommaStyle()</strong>
+                            </DisplayTemplate>
+                        </DataGridAggregate>
+                        <DataGridAggregate TItem="UserAffiliateWithNavigationPropertiesDto" Field="UserAffiliate.AffConversionModel.ConversionAmount" Aggregate="DataGridAggregateType.Sum">
+                            <DisplayTemplate>
+                                <strong class="text-danger">@L["CampaignDetail.TotalConversionAmount"] @context.Value.ToVND()</strong>
+                            </DisplayTemplate>
+                        </DataGridAggregate>
+                    </DataGridAggregates>
+                    <DataGridColumns>
+                        <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                        Field="UserAffiliate.AffiliateUrl"
+                                        Sortable="false"
+                                        Caption="@L["Url"]">
+                            <DisplayTemplate>
+                                <a href="@context.UserAffiliate.AffiliateUrl" target="_blank">@($"{context.UserAffiliate.AffiliateUrl}")</a>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                        Field="UserAffiliate.AffConversionModel.ClickCount"
+                                        Caption="@L["UserAffiliate.ClickCount"]">
+                            <DisplayTemplate>
+                                @context.UserAffiliate.AffConversionModel.ClickCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                        Field="UserAffiliate.AffConversionModel.ConversionCount"
+                                        Caption="@L["UserAffiliate.ConversionCount"]">
+                            <DisplayTemplate>
+                                @context.UserAffiliate.AffConversionModel.ConversionCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        @if (CurrentUser.IsInRole(RoleConsts.Sale) || IsManagerRole())
+                        {
+                            <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                            Field="UserAffiliate.AffConversionModel.ConversionAmount"
+                                            Caption="@L["UserAffiliate.ConversionAmount"]">
+                                <DisplayTemplate>
+                                    @context.UserAffiliate.AffConversionModel.ConversionAmount.ToCommaStyle()
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        }
+                    </DataGridColumns>
+                </DataGrid>
+            </TabPanel>
+        }
+
+        @if (_tikTokNavs.IsNotNullOrEmpty())
+        {
+            <TabPanel Name="TikTokTab">
+                <DataGrid TItem="TiktokWithNavigationPropertiesDto"
+                          Data="_tikTokNavs"
+                          TotalItems="_tikTokNavs.Count"
+                          Responsive="true"
+                          Narrow="true"
+                          PageSize="_tikTokNavs.Count"
+                          Class="text-nowrap"
+                          Striped="true">
+                    <DataGridColumns>
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.ChannelId"
+                                        Caption="@L["Channel"]">
+                            <DisplayTemplate>
+                                @if (context.Group != null)
+                                {
+                                    <a href="@context.Group.Url" Target="Target.Blank">@context.Tiktok.ChannelId</a>
+                                }
+                                else
+                                {
+                                    @context.Tiktok.ChannelId
+                                }
+
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.Url"
+                                        Sortable="false"
+                                        Caption="@L["Url"]">
+                            <DisplayTemplate>
+                                <a href="@context.Tiktok.Url" Target="Target.Blank">@GetVideoUrl(context.Tiktok)</a>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.CreatedDateTime"
+                                        Sortable="true"
+                                        Caption="@L["CreatedDateTime"]">
+                            <DisplayTemplate>
+                                @if (context.Tiktok.CreatedDateTime.HasValue)
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.Tiktok.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.LastCrawledDateTime"
+                                        Sortable="true"
+                                        Caption="@L["LastCrawledDateTime"]">
+                            <DisplayTemplate>
+                                @if (context.Tiktok.LastCrawledDateTime.HasValue)
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.Tiktok.LastCrawledDateTime.Value, GlobalConsts.DateTimeFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.Url"
+                                        Caption="@L["Action"]"
+                                        Sortable="false">
+                            <DisplayTemplate>
+                                <Buttons>
+                                    <Tooltip Text="@L["Remove"]" Placement="TooltipPlacement.Bottom">
+                                        <Button Outline Color="Color.Primary" Clicked="() => RemoveCampaignTikTok(context.Tiktok)">
+                                            <Icon Name="IconName.Delete"/>
+                                        </Button>
+                                    </Tooltip>
+                                </Buttons>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                    </DataGridColumns>
+                </DataGrid>
+            </TabPanel>
+        }
+
+        @if (_prPosts.IsNotNullOrEmpty())
+        {
+            <TabPanel Name="PRPostTab">
+                <DataGrid TItem="CampaignPostDto"
+                          Data="_prPosts"
+                          TotalItems="_prPosts.Count"
+                          Responsive="true"
+                          Narrow="true"
+                          PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                          PageSize="_prPosts.Count"
+                          Class="text-nowrap"
+                          Striped="true"
+                          SortMode="DataGridSortMode.Single">
+                    <DataGridColumns>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CreatedBy"
+                                        Caption="@L["AuthorName"]">
+                            <DisplayTemplate>
+                                @if (context.Username.IsNullOrWhiteSpace())
+                                {
+                                    @context.CreatedBy
+                                }
+                                else
+                                {
+                                    <Tooltip Text="@context.Username" Style="display: inline-table">
+                                        @context.CreatedBy
+                                    </Tooltip>
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="PostContentType"
+                                        Caption="@L["PostContentType"]">
+                            <DisplayTemplate>
+                                @L[$"Enum:PostContentType:{Convert.ToInt32(context.PostContentType)}"]
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="Url"
+                                        Sortable="false"
+                                        Caption="@L["Url"]">
+                            <DisplayTemplate>
+                                @if (context.Url.IsNotNullOrEmpty() && context.Fid.IsNotNullOrEmpty())
+                                {
+                                    <a href="@context.Url" target="_blank">@($"Fid:{context.Fid}")</a>
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="GroupName"
+                                        Caption="@L["Group"]">
+                            <DisplayTemplate>
+                                @context.GroupName
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CreatedDateTime"
+                                        Caption="@L["CreatedDateTime"]"
+                                        Sortable="true"
+                                        SortDirection="SortDirection.Descending">
+                            <DisplayTemplate>
+                                @if (context is {CreatedDateTime: { } })
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="TotalCount"
+                                        Caption="@L["TotalCount"]">
+                            <DisplayTemplate>
+                                @context.TotalCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="LikeCount"
+                                        Caption="@L["Like"]">
+                            <DisplayTemplate>
+                                @context.LikeCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="CommentCount"
+                                        Caption="@L["CommentCount"]">
+                            <DisplayTemplate>
+                                @context.CommentCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto"
+                                        Field="ShareCount"
+                                        Caption="@L["Share"]">
+                            <DisplayTemplate>
+                                @context.ShareCount.ToCommaStyle()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="CampaignPostDto" Field="ShareCount" Caption="@L["Action"]" Sortable="false">
+                            <DisplayTemplate>
+                                <Button title="@L["CampaignDetail.RemovePost"].Value" Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => RemoveCampaignPost(context)">
+                                    <Icon Name="IconName.Delete"/>
+                                </Button>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGridColumns>
+                </DataGrid>
+            </TabPanel>
+        }
+        </Content>
+        </Tabs>
+    }
+}
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreatePostModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="CreatePostForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewPost"]</ModalTitle>
+                <CloseButton Clicked="CloseCreatePostModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewPostValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@NewPost"
+                             ValidateOnLoad="false">
+                    <Row>
+                        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnTablet">
+                            @if (!IsPartnerRole())
+                            {
+                                <Field>
+                                    <FieldLabel>@L["PostContentType"]</FieldLabel>
+                                    <Select TValue="PostContentType" SelectedValue="@NewPost.PostContentType" SelectedValueChanged="@OnPostContentTypeChanged">
+                                        <SelectItem TValue="PostContentType" Value="@(PostContentType.Affiliate)">
+                                            @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Affiliate)}"]
+                                        </SelectItem>
+                                        <SelectItem TValue="PostContentType" Value="@(PostContentType.Seeding)">
+                                            @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Seeding)}"]
+                                        </SelectItem>
+                                        <SelectItem TValue="PostContentType" Value="@(PostContentType.Contest)">
+                                            @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Contest)}"]
+                                        </SelectItem>
+                                        <SelectItem TValue="PostContentType" Value="@(PostContentType.PR)">
+                                            @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.PR)}"]
+                                        </SelectItem>
+                                    </Select>
+                                </Field>
+                            }
+
+                            <Validation>
+                                <Field >
+                                    <FieldLabel>@L["Url"] * (fid: @NewPost.Fid) </FieldLabel>
+                                    <MemoEdit Placeholder="@L["DetailsPlaceHolder:PostUrl"]" Rows="6" DelayTextOnKeyPress="false" @bind-Text="@NewPost.Url">
+                                        <Feedback>
+                                            <ValidationError/>
+                                        </Feedback>
+                                    </MemoEdit>
+                                </Field>
+                            </Validation>
+
+                        </Column>
+                        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnTablet">
+                            <Field>
+                                <FieldLabel>@L["Note"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewPost.Note">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Column>
+                    </Row>
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreatePostModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Disabled="@string.IsNullOrEmpty(NewPost.Url)" Form="CreatePostForm" Clicked="CreatePostAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* Add TikTok Campaign MODAL ************************* *@
+<Modal @ref="AddTiktokModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="AddTiktokForm">
+            <ModalHeader>
+                <ModalTitle>@L["AddTiktokCampaign"]</ModalTitle>
+                <CloseButton Clicked="CloseAddTiktokModal"/>
+            </ModalHeader>
+            <ModalBody>
+
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit @bind-Text="@_filterText"
+                                  Autofocus="true"
+                                  Placeholder="@L["Placeholder.SearchTikTok"]">
+                        </TextEdit>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <SubmitButton Clicked="(SearchTikTok)">
+                            <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                        </SubmitButton>
+                    </Addon>
+                </Addons>
+
+                <DataGrid TItem="TiktokWithNavigationPropertiesDto"
+                          Data="_modalPageTikTokNavs"
+                          ReadData="OnDataGridReadAsync"
+                          TotalItems="_modalTikTokNavs.Count"
+                          ShowPager="true"
+                          Responsive="true"
+                          Narrow="true"
+                          PageSizes="GlobalConsts.PAGE_SIZES_5_CONST"
+                          PageSize="ModalTikTokPageSize"
+                          ShowPageSizes="true"
+                          Class="text-nowrap"
+                          Striped="true">
+                    <DataGridColumns>
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.Url"
+                                        Caption="@L["Action"]"
+                                        Sortable="false">
+                            <DisplayTemplate>
+                                <Buttons>
+                                    <Tooltip Text="@L["Add"]" Placement="TooltipPlacement.Bottom">
+                                        <Button Outline Color="Color.Primary" Clicked="() => AddTiktokToCampaign(context.Tiktok)">
+                                            <Icon Name="IconName.PlusSquare"/>
+                                        </Button>
+                                    </Tooltip>
+                                </Buttons>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.ChannelId"
+                                        Caption="@L["Channel"]">
+                            <DisplayTemplate>
+                                @if (context.Group != null)
+                                {
+                                    <a href="@context.Group.Url" Target="Target.Blank">@context.Tiktok.ChannelId</a>
+                                }
+                                else
+                                {
+                                    @context.Tiktok.ChannelId
+                                }
+
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.Url"
+                                        Sortable="false"
+                                        Caption="@L["Url"]">
+                            <DisplayTemplate>
+                                <Link To="@context.Tiktok.Url" Target="Target.Blank">@GetVideoUrl(context.Tiktok)</Link>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.CreatedDateTime"
+                                        Sortable="true"
+                                        Caption="@L["CreatedDateTime"]">
+                            <DisplayTemplate>
+                                @if (context.Tiktok.CreatedDateTime.HasValue)
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.Tiktok.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                        Field="Tiktok.LastCrawledDateTime"
+                                        Sortable="true"
+                                        Caption="@L["LastCrawledDateTime"]">
+                            <DisplayTemplate>
+                                @if (context.Tiktok.LastCrawledDateTime.HasValue)
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.Tiktok.LastCrawledDateTime.Value, GlobalConsts.DateTimeFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGridColumns>
+                </DataGrid>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseAddTiktokModal">
+                    @L["Cancel"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* Campaign Prize Config Modal ************************* *@
+<Modal @ref="CampaignPrizeConfigModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="CampaignPrizeConfig">
+            <ModalHeader>
+                <ModalTitle>@L["CampaignDetail.NewPrizeModal"]</ModalTitle>
+                <CloseButton Clicked="ClosePrizeConfigModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Table Borderless>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHeaderCell TextColor="TextColor.Primary" VerticalAlignment="VerticalAlignment.Middle">
+                                @L["CampaignPrize.PrizeName"]
+                            </TableHeaderCell>
+                            <TableHeaderCell TextColor="TextColor.Primary" VerticalAlignment="VerticalAlignment.Middle">
+                                @L["CampaignPrize.PrizeNumber"]
+                            </TableHeaderCell>
+                            <TableHeaderCell TextColor="TextColor.Primary" TextAlignment="TextAlignment.Right">
+                                <Buttons>
+                                    <Tooltip Text="@L["CampaignDetail.NewPrizeConfig"]" Placement="TooltipPlacement.Bottom">
+                                        <Button Outline Color="Color.Primary" Clicked="() => AddPrizeConfig()">
+                                            <Icon Name="IconName.Add" Class="mr-1"></Icon>
+                                        </Button>
+                                    </Tooltip>
+                                </Buttons>
+                            </TableHeaderCell>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        @foreach (var prizeConfig in _campaignPrizes)
+                        {
+                            <TableRow>
+                                <TableRowCell>
+                                    <TextEdit @bind-Text="@prizeConfig.PrizeName" Placeholder="@L["CampaignPrize.Placeholder.PrizeName"]">
+                                    </TextEdit>
+                                </TableRowCell>
+                                <TableRowCell>
+                                    <NumericEdit Style="width: 50px;" TValue="int" @bind-Value="@prizeConfig.PrizeNumber">
+                                    </NumericEdit>
+                                </TableRowCell>
+                                <TableRowCell TextAlignment="TextAlignment.Right">
+                                    @if (_campaignPrizes.Count > 1)
+                                    {
+                                        <Buttons>
+                                            <Tooltip Text="@L["Delete"]" Placement="TooltipPlacement.Bottom">
+                                                <Button Outline Color="Color.Primary" Clicked="() => DeletePrize(prizeConfig)">
+                                                    <Icon Name="IconName.Delete" Class="mr-1"></Icon>
+                                                </Button>
+                                            </Tooltip>
+                                        </Buttons>
+                                    }
+                                </TableRowCell>
+                            </TableRow>
+                        }
+                    </TableBody>
+                </Table>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="ClosePrizeConfigModal">
+                    @L["Cancel"]
+                </Button>
+                <Button Style="margin-right: 16px"
+                        Color="Color.Primary"
+                        Clicked="CreatePrizeConfigAsync">
+                    @L["Save"]
+                </Button>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* Setting Post Campaign Prize Modal ************************* *@
+<Modal @ref="SettingPostCampaignPrizeModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="SettingPostCampaignPrize">
+            <ModalHeader>
+                <ModalTitle>@L["CampaignDetail.SettingPostPrizeModal"]</ModalTitle>
+                <CloseButton Clicked="CloseSettingPrizeModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <AddonLabel Class="bg-primary text-white" Style="width: 100px;">@L["CampaignPrize.PrizeName"]</AddonLabel>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit ReadOnly="true" @bind-Text="@CampaignPrize.PrizeName">
+                            </TextEdit>
+                        </Addon>
+                    </Addons>
+                </Field>
+                <Field>
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <AddonLabel Class="bg-primary text-white" Style="width: 100px;">@L["CampaignPrize.PrizeNumber"]</AddonLabel>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <NumericEdit ReadOnly="true" TValue="int" @bind-Value="@CampaignPrize.PrizeNumber">
+                            </NumericEdit>
+                        </Addon>
+                    </Addons>
+                </Field>
+                <Field>
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <AddonLabel Class="bg-primary text-white" Style="width: 100px;">@L["CampaignPrize.PostLink"]</AddonLabel>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <Select TValue="Guid?" @bind-SelectedValue="CampaignPrize.PostId">
+                                <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                    @L["CampaignDetail.ChoosePrizePost"]
+                                </SelectItem>
+                                @foreach (var post in _contestPosts)
+                                {
+                                    <SelectItem @key="post" TValue="Guid?" Value="@post.Id">
+                                        @post.Url
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                    </Addons>
+                </Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 100px;">@L["Note"]</AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit @bind-Text="@CampaignPrize.Note">
+                        </TextEdit>
+                    </Addon>
+                </Addons>
+               
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseSettingPrizeModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreatePrizeConfigForm" Disabled="CampaignPrize.PostId.IsNullOrEmpty()" Clicked="UpdatePrizeAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

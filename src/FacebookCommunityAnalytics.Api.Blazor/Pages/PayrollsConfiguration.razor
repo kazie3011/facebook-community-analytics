@@ -1,0 +1,756 @@
+﻿@* @page "/payrolls-configuration" *@
+@* @using FacebookCommunityAnalytics.Api.Permissions *@
+@* @attribute [Authorize(ApiPermissions.PayrollsConfiguration.Default)] *@
+@* *@
+@* *@
+@* @using FacebookCommunityAnalytics.Api.Localization *@
+@* @using FacebookCommunityAnalytics.Api.Shared *@
+@* @using Microsoft.AspNetCore.Authorization *@
+@* @using Microsoft.Extensions.Localization *@
+@* @using Blazorise.Components *@
+@* @using FacebookCommunityAnalytics.Api.ApiConfigurations *@
+@* @using Volo.Abp.BlazoriseUI.Components *@
+@* @using Volo.Abp.ObjectMapping *@
+@* @using Volo.Abp.AspNetCore.Components.Messages *@
+@* @using Volo.Abp.AspNetCore.Components.Web.Theming.Layout *@
+@* @using FacebookCommunityAnalytics.Api.Permissions *@
+@* @using FacebookCommunityAnalytics.Api.Core.Const *@
+@* @using FacebookCommunityAnalytics.Api.Core.Enums *@
+@* @using FacebookCommunityAnalytics.Api.Core.Extensions *@
+@* @using FacebookCommunityAnalytics.Api.UserInfos *@
+@* @using FacebookCommunityAnalytics.Api.Groups *@
+@* @using FacebookCommunityAnalytics.Api.Posts *@
+@* @using Radzen *@
+@* @inherits BlazorComponentBase *@
+@* *@
+@* @inject IApiConfigurationAppService ApiConfigurationAppService *@
+@* @inject IStringLocalizer<ApiResource> L *@
+@* @inject IUserInfosAppService UserInfosAppService *@
+@* @inject IPostsExtendAppService PostsExtendAppService *@
+@* @inject IGroupsAppService GroupsAppService *@
+@* @inject IGroupExtendAppService GroupExtendAppService *@
+@* @inject IAuthorizationService AuthorizationService *@
+@* @inject IUiMessageService UiMessageService *@
+@* @inject NavigationManager NavigationManager *@
+@* @inject IObjectMapper ObjectMapper *@
+@* @inject IJSRuntime JSRuntime *@
+@* @if (PayrollConfiguration != null) *@
+@* { *@
+@*     <Row> *@
+@*     <Column> *@
+@*     <Form id="EditPayrollConfiguration"> *@
+@*     <Card> *@
+@*     <CardHeader> *@
+@*         <CardTitle Size="5">@L["PayrollConfigUI.PayrollConfiguration"]</CardTitle> *@
+@*     </CardHeader> *@
+@*     <CardBody> *@
+@*         <SubmitButton Form="EditPayrollConfiguration" Clicked="UpdateAsync"  Color="Color.Primary" >@L["PayrollConfigUI.ConfirmUpdate"]</SubmitButton> *@
+@*         $1$ <SubmitButton Form="DeleteGroupModeratorForm" Clicked="OpenDeleteGroupModeratorModal"  Color="Color.Secondary" >@L["Open"]</SubmitButton> #1# *@
+@*         <hr/> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.PayrollConfiguration.StartDay"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit TValue="int" @bind-Value="@PayrollConfiguration.StartDay" Placeholder="@L["PayrollConfigUI.PayrollConfiguration.StartDay"]"/> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@* *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.PayrollConfiguration.StartHour"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <Validation UsePattern="true"> #1# *@
+@*         $1$             <NumericEdit Pattern="[A-Za-z]{3}"> #1# *@
+@*         $1$                 <Feedback> #1# *@
+@*         $1$                     <ValidationError>Pattern does not match!</ValidationError> #1# *@
+@*         $1$                 </Feedback> #1# *@
+@*         $1$             </NumericEdit> #1# *@
+@*         $1$         </Validation> #1# *@
+@*         $1$         <NumericEdit MaskType="MaskType.RegEx" EditMask="^[a-zA-Z ]*$" /> #1# *@
+@*         $1$         <NumericEdit Value="TextValue.Email" Placeholder="@L["PayrollConfigUI.PayrollConfiguration.StartHour"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@* *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.PayrollConfiguration.StartHour"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.StartHour" Placeholder="@L["PayrollConfigUI.PayrollConfiguration.StartHour"]"/> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.PayrollConfiguration.EndDay"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.EndDay" Placeholder="@L["PayrollConfigUI.PayrollConfiguration.EndDay"]"/> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@* *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.PayrollConfiguration.EndHour"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.EndHour" Placeholder="@L["PayrollConfigUI.PayrollConfiguration.EndHour"]"/> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.PayrollConfiguration.PayrollTimeZone"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.PayrollTimeZone" Placeholder="@L["PayrollConfigUI.PayrollConfiguration.PayrollTimeZone"]"/> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.PayrollConfiguration.BrandingGroupNames"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <Select TValue="string" Multiple="true"> *@
+@*                     @foreach (var group in _currentBrandingGroupDtos) *@
+@*                     { *@
+@*                         <SelectItem Value="@group">@GetGroupNameByFid(group.Fid)</SelectItem> *@
+@*                     } *@
+@*                 </Select> *@
+@*                 <SubmitButton Form="BrandingGroupForm" Clicked="OpenBrandingGroupModal" Color="Color.Primary" >@L["PayrollConfigUI.BrandingGroupForm"]</SubmitButton> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*     </CardBody> *@
+@* *@
+@*     <CardHeader> *@
+@*         <CardTitle Size="4">@L["PayrollConfigUI.Seeding"]</CardTitle> *@
+@*     </CardHeader> *@
+@*     <CardBody> *@
+@*     <Tabs SelectedTab="@Seeding" SelectedTabChanged="@OnSelectedTabChangedSeeding"> *@
+@*     <Items> *@
+@*         <Tab Name="seeding">@L["PayrollConfigUI.Seeding"]</Tab> *@
+@*         <Tab Name="wave_seeding">@L["PayrollConfigUI.Seeding.Wave"]</Tab> *@
+@*         $1$ <Tab Name="waveBrandingGroup_seeding">@L["PayrollConfigUI.Seeding.WaveBrandingGroup"]</Tab> #1# *@
+@*         <Tab Name="bonus_seeding">@L["PayrollConfigUI.Seeding.Bonus"]</Tab> *@
+@*     </Items> *@
+@*     <Content> *@
+@*     <TabPanel Name="seeding"> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.MinReactionCount"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.Seeding.MinReactionCount" Placeholder="@L["PayrollConfigUI.Seeding.MinReactionCount"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.SeedingGroupExclusive_Threshold_Max"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.Seeding.SeedingGroupExclusive_Threshold_Max" Placeholder="@L["PayrollConfigUI.Seeding.SeedingGroupExclusive_Threshold_Max"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.SeedingCopy_Threshold_Max"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.Seeding.SeedingCopy_Threshold_Max" Placeholder="@L["PayrollConfigUI.Seeding.SeedingCopy_Threshold_Max"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.SeedingVIA_Threshold_Max"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.Seeding.SeedingVIA_Threshold_Max" Placeholder="@L["PayrollConfigUI.Seeding.SeedingVIA_Threshold_Max"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.MinVIAReactionCount"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.Seeding.MinVIAReactionCount" Placeholder="@L["PayrollConfigUI.Seeding.MinVIAReactionCount"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.SeedingKPI_Wave"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.SeedingKPI_Wave" Placeholder="@L["PayrollConfigUI.Seeding.SeedingKPI_Wave"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@* *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.SeedingKPI_Count"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.SeedingKPI_Count" Placeholder="@L["PayrollConfigUI.Seeding.SeedingKPI_Count"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*     </TabPanel> *@
+@*     <TabPanel Name="wave_seeding"> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Wave.SeedingGroupExclusive"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Wave.SeedingGroupExclusive" Placeholder="@L["PayrollConfigUI.Seeding.Wave.SeedingGroupExclusive"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Wave.SeedingCopy"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Wave.SeedingCopy" Placeholder="@L["PayrollConfigUI.Seeding.Wave.SeedingCopy"]"/> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Wave.SeedingFanPageExclusive"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Wave.SeedingFanPageExclusive" Placeholder="@L["PayrollConfigUI.Seeding.Wave.SeedingFanPageExclusive"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Wave.SeedingVIA"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Wave.SeedingVIA" Placeholder="@L["PayrollConfigUI.Seeding.Wave.SeedingVIA"]"/> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*     </TabPanel> *@
+@* *@
+@*     <TabPanel Name="bonus_seeding"> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.LeaderCommission_Percentage"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.LeaderCommission_Percentage" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.LeaderCommission_Percentage"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.LeaderCommission_Max"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.LeaderCommission_Max" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.LeaderCommission_Max"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.BrandingGroupModBonus"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.Seeding.Bonus." Placeholder="@L["PayrollConfigUI.Seeding.Bonus.BrandingGroupModBonus"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTopGroupReactionCount_Level1"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTopGroupReactionCount_Level1" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTopGroupReactionCount_Level1"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTopGroupReactionCount_Level2"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTopGroupReactionCount_Level2" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTopGroupReactionCount_Level2"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1Bonus"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop1Bonus" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1Bonus"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2Bonus"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop2Bonus" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2Bonus"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3Bonus"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop3Bonus" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3Bonus"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingAverageReactionTop100Post"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingAverageReactionTop100Post" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingAverageReactionTop100Post"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1PostCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop1PostCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1PostCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2PostCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop2PostCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2PostCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3PostCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop3PostCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3PostCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1ReactionCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop1ReactionCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1ReactionCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2ReactionCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop2ReactionCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2ReactionCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3ReactionCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop3ReactionCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3ReactionCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1LikeCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop1LikeCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1LikeCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2LikeCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop2LikeCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2LikeCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3LikeCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop3LikeCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3LikeCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1ShareCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop1ShareCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1ShareCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2ShareCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop2ShareCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2ShareCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3ShareCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop3ShareCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3ShareCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1CommentCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop1CommentCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1CommentCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2CommentCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop2CommentCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1CommentCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3CommentCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop3CommentCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1CommentCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1VIAPostCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop1VIAPostCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop1VIAPostCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2VIAPostCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop2VIAPostCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop2VIAPostCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3VIAPostCount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingTop3VIAPostCount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.SeedingTop3VIAPostCount"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingKPI_VIA1_Count"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingKPI_VIA1_Count" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.WavePerformance"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingKPI_VIA1_Amount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingKPI_VIA1_Amount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.WavePerformance"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingKPI_VIA2_Count"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingKPI_VIA2_Count" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.WavePerformance"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         $1$ <Field Horizontal="true"> #1# *@
+@*         $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.SeedingKPI_VIA2_Amount"]</FieldLabel> #1# *@
+@*         $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*         $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.SeedingKPI_VIA2_Amount" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.WavePerformance"]" /> #1# *@
+@*         $1$     </FieldBody> #1# *@
+@*         $1$ </Field> #1# *@
+@*         <Field Horizontal="true"> *@
+@*             <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Seeding.Bonus.WavePerformance"]</FieldLabel> *@
+@*             <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                 <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Seeding.Bonus.WavePerformance" Placeholder="@L["PayrollConfigUI.Seeding.Bonus.WavePerformance"]" /> *@
+@*             </FieldBody> *@
+@*         </Field> *@
+@*     </TabPanel> *@
+@*     </Content> *@
+@*     </Tabs> *@
+@*     </CardBody> *@
+@* *@
+@*     <CardHeader> *@
+@*         <CardTitle Size="4">@L["PayrollConfigUI.Affiliate"]</CardTitle> *@
+@*     </CardHeader> *@
+@*     <CardBody> *@
+@*         <Tabs SelectedTab="@Affiliate" SelectedTabChanged="@OnSelectedTabChangedAffiliate"> *@
+@*             <Items> *@
+@*                 <Tab Name="affiliate">@L["PayrollConfigUI.Affiliate"]</Tab> *@
+@*                 <Tab Name="wave_affiliate">@L["PayrollConfigUI.Affiliate.Wave"]</Tab> *@
+@*                 $1$ <Tab Name="waveEditor_affiliate">@L["PayrollConfigUI.Affiliate.WaveEditor"]</Tab> #1# *@
+@*                 <Tab Name="bonus_affiliate">@L["PayrollConfigUI.Affiliate.Bonus"]</Tab> *@
+@*             </Items> *@
+@*             <Content> *@
+@*                 <TabPanel Name="affiliate"> *@
+@*                     <Field Horizontal="true"> *@
+@*                         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.MinReactionCount"]</FieldLabel> *@
+@*                         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                             <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.Affiliate.MinReactionCount" Placeholder="@L["PayrollConfigUI.Affiliate.MinReactionCount"]" /> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                 </TabPanel> *@
+@*                 <TabPanel Name="wave_affiliate"> *@
+@*                     $1$ <Field Horizontal="true"> #1# *@
+@*                     $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Wave.AffiliateSingleCopy"]</FieldLabel> #1# *@
+@*                     $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*                     $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Wave.AffiliateSingleCopy" Placeholder="@L["PayrollConfigUI.Affiliate.Wave.AffiliateSingleCopy"]" /> #1# *@
+@*                     $1$     </FieldBody> #1# *@
+@*                     $1$ </Field> #1# *@
+@*                     <Field Horizontal="true"> *@
+@*                         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Wave.AffiliateSingleExclusive"]</FieldLabel> *@
+@*                         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Wave.AffiliateSingleExclusive" Placeholder="@L["PayrollConfigUI.Affiliate.Wave.AffiliateSingleExclusive"]" /> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                     $1$ <Field Horizontal="true"> #1# *@
+@*                     $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Wave.AffiliateSingleRemake"]</FieldLabel> #1# *@
+@*                     $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*                     $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Wave.AffiliateSingleRemake" Placeholder="@L["PayrollConfigUI.Affiliate.Wave.AffiliateSingleRemake"]" /> #1# *@
+@*                     $1$     </FieldBody> #1# *@
+@*                     $1$ </Field> #1# *@
+@*                     $1$ <Field Horizontal="true"> #1# *@
+@*                     $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Wave.AffiliateMultipleCopy"]</FieldLabel> #1# *@
+@*                     $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*                     $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Wave.AffiliateMultipleCopy" Placeholder="@L["PayrollConfigUI.Affiliate.Wave.AffiliateMultipleCopy"]" /> #1# *@
+@*                     $1$     </FieldBody> #1# *@
+@*                     $1$ </Field> #1# *@
+@*                     <Field Horizontal="true"> *@
+@*                         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Wave.AffiliateMultipleExclusive"]</FieldLabel> *@
+@*                         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Wave.AffiliateMultipleExclusive" Placeholder="@L["PayrollConfigUI.Affiliate.Wave.AffiliateMultipleExclusive"]" /> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                     $1$ <Field Horizontal="true"> #1# *@
+@*                     $1$     <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Wave.AffiliateMultipleRemake"]</FieldLabel> #1# *@
+@*                     $1$     <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*                     $1$         <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Wave.AffiliateMultipleRemake" Placeholder="@L["PayrollConfigUI.Affiliate.Wave.AffiliateMultipleRemake"]" /> #1# *@
+@*                     $1$     </FieldBody> #1# *@
+@*                     $1$ </Field> #1# *@
+@*                     <Field Horizontal="true"> *@
+@*                         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Wave.AffiliateNotAchieved"]</FieldLabel> *@
+@*                         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Wave.AffiliateNotAchieved" Placeholder="@L["PayrollConfigUI.Affiliate.Wave.AffiliateNotAchieved"]" /> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                 </TabPanel> *@
+@*                 $1$ <TabPanel Name="waveEditor_affiliate"> #1# *@
+@*                 $1$     <Field Horizontal="true"> #1# *@
+@*                 $1$         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.AffiliateSingle"]</FieldLabel> #1# *@
+@*                 $1$         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*                 $1$             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.WaveEditor.AffiliateSingle" Placeholder="@L["PayrollConfigUI.Affiliate.AffiliateSingle"]" /> #1# *@
+@*                 $1$         </FieldBody> #1# *@
+@*                 $1$     </Field> #1# *@
+@*                 $1$     <Field Horizontal="true"> #1# *@
+@*                 $1$         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.AffiliateMultiple"]</FieldLabel> #1# *@
+@*                 $1$         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> #1# *@
+@*                 $1$             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.WaveEditor.AffiliateMultiple" Placeholder="@L["PayrollConfigUI.Affiliate.AffiliateMultiple"]" /> #1# *@
+@*                 $1$         </FieldBody> #1# *@
+@*                 $1$     </Field> #1# *@
+@*                 $1$ </TabPanel> #1# *@
+@*                 <TabPanel Name="bonus_affiliate"> *@
+@*                     <Field Horizontal="true"> *@
+@*                         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Bonus.ShopeeAmountPerConversion"]</FieldLabel> *@
+@*                         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Bonus.ShopeeAmountPerConversion" Placeholder="@L["PayrollConfigUI.Affiliate.Bonus.ShopeeAmountPerConversion"]" /> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                     <Field Horizontal="true"> *@
+@*                         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Bonus.LazadaAmountPerConversion"]</FieldLabel> *@
+@*                         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Bonus.LazadaAmountPerConversion" Placeholder="@L["PayrollConfigUI.Affiliate.Bonus.LazadaAmountPerConversion"]" /> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                     <Field Horizontal="true"> *@
+@*                         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Bonus.LeaderCommission_Percentage"]</FieldLabel> *@
+@*                         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Bonus.LeaderCommission_Percentage" Placeholder="@L["PayrollConfigUI.Affiliate.Bonus.LeaderCommission_Percentage"]" /> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                     <Field Horizontal="true"> *@
+@*                         <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.Affiliate.Bonus.LeaderCommission_Max"]</FieldLabel> *@
+@*                         <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                             <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.Affiliate.Bonus.LeaderCommission_Max" Placeholder="@L["PayrollConfigUI.Affiliate.Bonus.LeaderCommission_Max"]" /> *@
+@*                         </FieldBody> *@
+@*                     </Field> *@
+@*                 </TabPanel> *@
+@*             </Content> *@
+@*         </Tabs> *@
+@*     </CardBody> *@
+@* *@
+@*     <CardHeader> *@
+@*         <CardTitle Size="4">@L["PayrollConfigUI.WaveMultiplier"]</CardTitle> *@
+@*     </CardHeader> *@
+@*     <CardBody> *@
+@*         <CardBody> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.BasePromotionRate"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.WaveMultiplier.BasePromotionRate" Placeholder="@L["PayrollConfigUI.WaveMultiplier.BasePromotionRate"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.AffiliateMultiplierBase"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.WaveMultiplier.AffiliateMultiplierBase" Placeholder="@L["PayrollConfigUI.WaveMultiplier.AffiliateMultiplierBase"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.AffiliateMultiplierMax"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.WaveMultiplier.AffiliateMultiplierMax" Placeholder="@L["PayrollConfigUI.WaveMultiplier.AffiliateMultiplierMax"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@* *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Seeding_Staff_MultiplierBase"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.WaveMultiplier.Seeding_Staff_MultiplierBase" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Seeding_Staff_MultiplierBase"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Seeding_Staff_MultiplierMax"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.WaveMultiplier.Seeding_Staff_MultiplierMax" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Seeding_Staff_MultiplierMax"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Seeding_Staff_PromotionDayCountBase"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.WaveMultiplier.Seeding_Staff_PromotionDayCountBase" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Seeding_Staff_PromotionDayCountBase"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Seeding_Staff_PromotionDayCountMax"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.WaveMultiplier.Seeding_Staff_PromotionDayCountMax" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Seeding_Staff_PromotionDayCountMax"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Affiliate_PromotionDayCountBase"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.WaveMultiplier.Affiliate_PromotionDayCountBase" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Affiliate_PromotionDayCountBase"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Seeding_Leader_MultiplierBase"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.WaveMultiplier.Seeding_Leader_MultiplierBase" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Seeding_Leader_MultiplierBase"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Seeding_Leader_MultiplierMax"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="decimal" @bind-Value="@PayrollConfiguration.WaveMultiplier.Seeding_Leader_MultiplierMax" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Seeding_Leader_MultiplierMax"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Seeding_Leader_PromotionDayCountBase"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.WaveMultiplier.Seeding_Leader_PromotionDayCountBase" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Seeding_Leader_PromotionDayCountBase"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*             <Field Horizontal="true"> *@
+@*                 <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is2.OnDesktop">@L["PayrollConfigUI.WaveMultiplier.Seeding_Leader_PromotionDayCountMax"]</FieldLabel> *@
+@*                 <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is10.OnDesktop"> *@
+@*                     <NumericEdit  TValue="int" @bind-Value="@PayrollConfiguration.WaveMultiplier.Seeding_Leader_PromotionDayCountMax" Placeholder="@L["PayrollConfigUI.WaveMultiplier.Seeding_Leader_PromotionDayCountMax"]" /> *@
+@*                 </FieldBody> *@
+@*             </Field> *@
+@*         </CardBody> *@
+@*         <CardBody> *@
+@*             <Table> *@
+@*                 <TableHeader> *@
+@*                     <TableRow> *@
+@*                         <TableHeaderCell>@L["PayrollConfigUI.GroupModerator.UserMod"]</TableHeaderCell> *@
+@*                         <TableHeaderCell>@L["PayrollConfigUI.GroupModerator.GroupName"]</TableHeaderCell> *@
+@*                         <TableHeaderCell>@L["PayrollConfigUI.GroupModerator.Wave"]</TableHeaderCell> *@
+@*                     </TableRow> *@
+@*                 </TableHeader> *@
+@*                 <TableBody> *@
+@*                     @foreach (var groupMod in PayrollConfiguration.GroupModerators) *@
+@*                     { *@
+@* *@
+@*                             @foreach (var group in groupMod.GroupWave) *@
+@*                             { *@
+@*                                 <TableRow> *@
+@*                                     <TableRowCell>@GetUserName(groupMod.UserCode)</TableRowCell> *@
+@*                                     <TableRowCell>@GetGroupNameByFid(group.Key)</TableRowCell> *@
+@*                                     <TableRowCell>@group.Value.ToVND()</TableRowCell> *@
+@*                                 </TableRow> *@
+@*                             } *@
+@*                     } *@
+@*                 </TableBody> *@
+@*             </Table> *@
+@*             <SubmitButton Form="CreateGroupModeratorForm" Clicked="OpenCreateGroupModeratorModal"  Color="Color.Primary" >@L["PayrollConfigUI.CreateGroupModerator"]</SubmitButton> *@
+@*             <SubmitButton Form="UpdateGroupModeratorForm" Clicked="OpenUpdateAndDeleteGroupModeratorModal"  Color="Color.Secondary" >@L["PayrollConfigUI.UpdateAndDeleteGroupModerator"]</SubmitButton> *@
+@*         </CardBody> *@
+@*     </CardBody> *@
+@*     </Card> *@
+@*     </Form> *@
+@*     </Column> *@
+@*     </Row> *@
+@* *@
+@*     // ****************************************Update Branding Group Modal***************************************************************** *@
+@* *@
+@*     <Modal @ref="BrandingGroupModal"> *@
+@*         <ModalContent Centered="true" Size="ModalSize.Large"> *@
+@*             <Form id="BrandingGroupForm"> *@
+@*                 <ModalHeader> *@
+@*                     <ModalTitle>@L["BrandingGroup"]</ModalTitle> *@
+@*                     <CloseButton Clicked="CloseBrandingGroupModal" /> *@
+@*                 </ModalHeader> *@
+@*                 <ModalBody> *@
+@*                     <RadzenDataGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="100" *@
+@*                                     AllowSorting="false" Data="@_typeGroupDtos" TItem="GroupDto" ColumnWidth="200px" *@
+@*                                     SelectionMode="Radzen.DataGridSelectionMode.Multiple" @bind-Value=@_currentBrandingGroupDtos> *@
+@*                         <Columns> *@
+@*                             <RadzenDataGridColumn TItem="GroupDto" Width="40px" Sortable="false" Filterable="false"> *@
+@*                                 <Template Context="data"> *@
+@*                                     <RadzenCheckBox TriState="false" Value="@(_currentBrandingGroupDtos != null && _currentBrandingGroupDtos.Contains(data))" /> *@
+@*                                 </Template> *@
+@*                             </RadzenDataGridColumn> *@
+@*                             <RadzenDataGridColumn TItem="GroupDto" Property="Fid" Title="@L["Fid"]" /> *@
+@*                             <RadzenDataGridColumn TItem="GroupDto" Property="Name" Title="@L["GroupName"]" /> *@
+@*                             <RadzenDataGridColumn TItem="GroupDto" Property="Title" Title="@L["GroupTitle"]" /> *@
+@*                         </Columns> *@
+@*                     </RadzenDataGrid> *@
+@*                     <SubmitButton Form="BrandingGroupForm" Clicked="UpdateBrandingGroup"  Color="Color.Success" >@L["PayrollConfigUI.SaveBtn"]</SubmitButton> *@
+@*                     <SubmitButton Form="BrandingGroupForm" Clicked="CloseBrandingGroupModal"  Color="Color.Dark" >@L["PayrollConfigUI.CancleBtn"]</SubmitButton> *@
+@*                 </ModalBody> *@
+@*             </Form> *@
+@*         </ModalContent> *@
+@*     </Modal> *@
+@* *@
+@*     // ****************************************Create Group Moderator Modal***************************************************************** *@
+@* *@
+@*     <Modal @ref="CreateGroupModeratorModal"> *@
+@*         <ModalContent Centered="true" Size="ModalSize.Large"> *@
+@*             <Form id="CreateGroupModeratorForm"> *@
+@*                 <ModalHeader> *@
+@*                     <ModalTitle>@L["PayrollConfigUI.CreateGroupModerator"]</ModalTitle> *@
+@*                     <CloseButton Clicked="CloseCreateGroupModeratorModal" /> *@
+@*                 </ModalHeader> *@
+@*                 <ModalBody> *@
+@*                     <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet"> *@
+@*                         <FieldLabel>@L["AuthorName"]</FieldLabel> *@
+@*                         <Select TValue="Guid?" SelectedValueChanged="OnChangeNewUserId"> *@
+@*                             <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["AuthorName"]]</SelectItem> *@
+@*                             @foreach (var user in _userInfoNavs) *@
+@*                             { *@
+@*                                 <SelectItem TValue="Guid?" Value="@user.AppUser.Id"> *@
+@*                                     @L["PayrollConfigUI.NameFormat",user.AppUser.UserName,user.AppUser.Email] *@
+@*                                 </SelectItem> *@
+@*                             } *@
+@*                         </Select> *@
+@*                     </Field> *@
+@* *@
+@*                     <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet"> *@
+@*                         <FieldLabel>@L["Group"]</FieldLabel> *@
+@*                         <Select TValue="Guid?" SelectedValueChanged="OnChangeNewGroupId"> *@
+@*                         <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Group"]]</SelectItem> *@
+@*                             @foreach (var group in _groupDtos) *@
+@*                             { *@
+@*                                 <SelectItem TValue="Guid?" Value="@group.Id"> *@
+@*                                     @L["PayrollConfigUI.NameFormat",group.Title,group.GroupSourceType] *@
+@*                                 </SelectItem> *@
+@*                             } *@
+@*                         </Select> *@
+@*                     </Field> *@
+@* *@
+@*                     <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet"> *@
+@*                         <FieldLabel>@L["PayrollConfigUI.GroupModerator.Wave"]</FieldLabel> *@
+@*                         <NumericEdit TValue="decimal" @bind-Value="@_newGroupModerator.Wave" Placeholder="@L["PayrollConfigUI.Seeding.WaveGroupModerator"]"/> *@
+@*                     </Field> *@
+@*                     <SubmitButton Disabled="@(_newGroupModerator.UserId == null || _newGroupModerator.GroupId == null)" Form="CreateGroupModeratorForm" Clicked="CreateGroupModerator" Color="Color.Success">@L["PayrollConfigUI.CreateBtn"]</SubmitButton> *@
+@*                     <SubmitButton Form="CreateGroupModeratorForm" Clicked="CloseCreateGroupModeratorModal" Color="Color.Dark">@L["PayrollConfigUI.CancleBtn"]</SubmitButton> *@
+@*                 </ModalBody> *@
+@*             </Form> *@
+@*         </ModalContent> *@
+@*     </Modal> *@
+@* *@
+@*     // ****************************************Update Group Moderator Modal***************************************************************** *@
+@* *@
+@*     <Modal @ref="UpdateAndDeleteGroupModeratorModal"> *@
+@*         <ModalContent Centered="true" Size="ModalSize.Large"> *@
+@*             <Form id="UpdateGroupModeratorForm"> *@
+@*                 <ModalHeader> *@
+@*                     <ModalTitle>@L["PayrollConfigUI.UpdateAndDeleteGroupModerator"]</ModalTitle> *@
+@*                     <CloseButton Clicked="CloseUpdateAndDeleteGroupModeratorModal" /> *@
+@*                 </ModalHeader> *@
+@*                 <ModalBody> *@
+@*                     <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet"> *@
+@*                         <FieldLabel>@L["AuthorName"]</FieldLabel> *@
+@*                         <Select SelectedValueChanged="OnChangeEditingUserCode" TValue="Guid?" SelectedValue="@_groupModAppUserId"> *@
+@*                             <SelectItem TValue="Guid?" Value="null">@L["SelectItem.DefaultText", L["AuthorName"]]</SelectItem> *@
+@*                             @foreach (var user in _currentGroupModDtos) *@
+@*                             { *@
+@*                                 <SelectItem TValue="Guid?" Value="@user.AppUser.Id"> *@
+@*                                 @L["PayrollConfigUI.NameFormat",user.AppUser.UserName,user.AppUser.Email] *@
+@*                                 </SelectItem> *@
+@*                             } *@
+@*                         </Select> *@
+@*                     </Field> *@
+@* *@
+@*                     <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet"> *@
+@*                         <FieldLabel>@L["Group"]</FieldLabel> *@
+@*                         <Select SelectedValueChanged="OnChangeEditingGroup" TValue="Guid?" SelectedValue="@_groupId"> *@
+@*                             <SelectItem TValue="Guid?" Value="null">@L["SelectItem.DefaultText", L["Group"]]</SelectItem> *@
+@*                             @foreach (var group in _currentUserGroupDtos) *@
+@*                             { *@
+@*                                 <SelectItem TValue="Guid?" Value="@group.Id"> *@
+@*                                     @L["PayrollConfigUI.NameFormat",group.Title,group.GroupSourceType] *@
+@*                                 </SelectItem> *@
+@*                             } *@
+@*                         </Select> *@
+@*                     </Field> *@
+@* *@
+@*                     <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet"> *@
+@*                         <FieldLabel>@L["Wave"]</FieldLabel> *@
+@*                         <NumericEdit TValue="decimal" @bind-Value="@_editAndDeleteGroupModerator.Wave" Placeholder="@L["PayrollConfigUI.Seeding.WaveGroupModerator"]"/> *@
+@*                     </Field> *@
+@* *@
+@*                     <SubmitButton Disabled="@(string.IsNullOrWhiteSpace(_editAndDeleteGroupModerator.UserCode) || string.IsNullOrWhiteSpace(_editAndDeleteGroupModerator.GroupFid))" Form="UpdateGroupModeratorForm" Clicked="UpdateGroupModerator"  Color="Color.Success" >@L["PayrollConfigUI.UpdateBtn"]</SubmitButton> *@
+@*                     <SubmitButton Disabled="@(string.IsNullOrWhiteSpace(_editAndDeleteGroupModerator.UserCode) || string.IsNullOrWhiteSpace(_editAndDeleteGroupModerator.GroupFid))" Form="UpdateGroupModeratorForm" Clicked="DeleteGroupModerator"  Color="Color.Danger" >@L["PayrollConfigUI.DeleteBtn"]</SubmitButton> *@
+@*                     <SubmitButton Form="UpdateGroupModeratorForm" Clicked="CloseUpdateAndDeleteGroupModeratorModal"  Color="Color.Dark" >@L["PayrollConfigUI.CancleBtn"]</SubmitButton> *@
+@*                 </ModalBody> *@
+@*             </Form> *@
+@*         </ModalContent> *@
+@*     </Modal> *@
+@*     $1$ #1# *@
+@*     $1$ // ****************************************Delete Group Moderator Modal***************************************************************** #1# *@
+@*     $1$ #1# *@
+@*     $1$ <Modal @ref="DeleteGroupModeratorModal"> #1# *@
+@*     $1$     <ModalContent Centered="true" Size="ModalSize.Large"> #1# *@
+@*     $1$         <Form id="DeleteGroupModeratorForm"> #1# *@
+@*     $1$             <ModalHeader> #1# *@
+@*     $1$                 <ModalTitle>@L["DeleteGroupModerator"]</ModalTitle> #1# *@
+@*     $1$                 <CloseButton Clicked="CloseDeleteGroupModeratorModal" /> #1# *@
+@*     $1$             </ModalHeader> #1# *@
+@*     $1$             <ModalBody> #1# *@
+@*     $1$                  #1# *@
+@*     $1$                 <SubmitButton Form="DeleteGroupModeratorForm" Clicked="DeleteGroupModerator"  Color="Color.Dark" >@L["Submit"]</SubmitButton> #1# *@
+@*     $1$             </ModalBody> #1# *@
+@*     $1$         </Form> #1# *@
+@*     $1$     </ModalContent> #1# *@
+@*     $1$ </Modal> #1# *@
+@* } *@

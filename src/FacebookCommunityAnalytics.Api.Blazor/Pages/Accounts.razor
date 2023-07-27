@@ -1,0 +1,474 @@
+@page "/accounts"
+@page "/account"
+@attribute [Authorize(ApiPermissions.Accounts.Default)]
+@using FacebookCommunityAnalytics.Api.Accounts
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@inject IAccountsAppService AccountsAppService
+@inject IAccountExtendAppService AccountExtendAppService
+@inject IStringLocalizer<ApiResource> L
+@inject IAuthorizationService AuthorizationService
+@inject IUiMessageService UiMessageService
+@inject IObjectMapper ObjectMapper
+@inject IJSRuntime JSRuntime
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Accounts"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="AccountSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="AccountSearchForm" Clicked="GetAccountsAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+        <br/>
+        <Row>
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is4.OnDesktop">
+                <Select TValue="AccountTypeFilter" @bind-SelectedValue="@_typeFilterInput">
+                    @foreach (var itemValue in Enum.GetValues(typeof(AccountTypeFilter)))
+                    {
+                        <SelectItem @key="itemValue" TValue="AccountTypeFilter" Value="@((AccountTypeFilter) itemValue)">
+                            @itemValue.ToString()
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is4.OnDesktop">
+                <Select TValue="AccountStatusFilter" @bind-SelectedValue="@_statusFilterInput">
+                    @foreach (var itemValue in Enum.GetValues(typeof(AccountStatusFilter)))
+                    {
+                        <SelectItem @key="itemValue" TValue="AccountStatusFilter" Value="@((AccountStatusFilter) itemValue)">
+                            @itemValue.ToString()
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is4.OnDesktop">
+                <Select TValue="AccountCountryFilter" @bind-SelectedValue="@_countryFilterInput">
+                    @foreach (var itemValue in Enum.GetValues(typeof(AccountCountryFilter)))
+                    {
+                        <SelectItem @key="itemValue" TValue="AccountCountryFilter" Value="@((AccountCountryFilter) itemValue)">
+                            @itemValue.ToString()
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+        </Row>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="AccountDto"
+                  Data="AccountList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  ShowPageSizes="true"
+                  Class="text-nowrap"
+                  Narrow="true"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="AccountDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="AccountDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="AccountDto"
+                                          Visible="@CanEditAccount"
+                                          Clicked="() => OpenEditAccountModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="AccountDto"
+                                          Visible="@CanDeleteAccount"
+                                          Clicked="() => DeleteAccountAsync(context)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="Description"
+                                Caption="@L["Description"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="Username"
+                                Caption="@L["Username"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="Password"
+                                Caption="@L["Password"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="TwoFactorCode"
+                                Caption="@L["TwoFactorCode"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="AccountType"
+                                Caption="@L["AccountType"]">
+                </DataGridColumn>
+
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="AccountStatus"
+                                Caption="@L["AccountStatus"]">
+                </DataGridColumn>
+                
+                <DataGridColumn TItem="AccountDto"
+                                Field="AccountCountry"
+                                Caption="@L["AccountCountry"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="Email"
+                                Caption="@L["Email"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="EmailPassword"
+                                Caption="@L["EmailPassword"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountDto"
+                                Field="IsActive"
+                                Caption="@L["ActiveFilter"]">
+                    <DisplayTemplate>
+                        @(context.IsActive ? L["Yes"] : L["No"])
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateAccountModal">
+    <ModalContent Centered="true">
+        <Form id="CreateAccountForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewAccount"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateAccountModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewAccountValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@NewAccount"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Username"] *</FieldLabel>
+                            <TextEdit @bind-Text="@NewAccount.Username">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Password"] *</FieldLabel>
+                            <TextEdit @bind-Text="@NewAccount.Password">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["TwoFactorCode"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewAccount.TwoFactorCode">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Field>
+                        <FieldLabel>@L["AccountType"]</FieldLabel>
+                        <Select TValue="AccountType" @bind-SelectedValue="@NewAccount.AccountType">
+                            @foreach (var itemValue in Enum.GetValues(typeof(AccountType)))
+                            {
+                                <SelectItem @key="itemValue" TValue="AccountType" Value="@((AccountType) itemValue)">
+                                    @((AccountType) itemValue)
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>@L["AccountStatus"]</FieldLabel>
+                        <Select TValue="AccountStatus" @bind-SelectedValue="@NewAccount.AccountStatus">
+                            @foreach (var itemValue in Enum.GetValues(typeof(AccountStatus)))
+                            {
+                                <SelectItem @key="itemValue" TValue="AccountStatus" Value="@((AccountStatus) itemValue)">
+                                    @((AccountStatus) itemValue)
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>@L["AccountCountry"]</FieldLabel>
+                        <Select TValue="AccountCountry" @bind-SelectedValue="@NewAccount.AccountCountry">
+                            @foreach (var itemValue in Enum.GetValues(typeof(AccountCountry)))
+                            {
+                                <SelectItem @key="itemValue" TValue="AccountCountry" Value="@((AccountCountry) itemValue)">
+                                    @((AccountCountry) itemValue)
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+
+                    <Field>
+                        <Check TValue="bool" @bind-Checked="@NewAccount.IsActive">@L["IsActive"]</Check>
+                    </Field>
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewAccount.Description">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Email"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewAccount.Email">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["EmailPassword"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewAccount.EmailPassword">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateAccountModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateAccountForm" Clicked="CreateAccountAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditAccountModal">
+    <ModalContent Centered="true">
+        <Form id="EditAccountForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditAccountModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditingAccountValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@EditingAccount"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Username"] *</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAccount.Username">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Password"] *</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAccount.Password">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["TwoFactorCode"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAccount.TwoFactorCode">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+                    <Field>
+                        <FieldLabel>@L["AccountType"]</FieldLabel>
+                        <Select TValue="AccountType" @bind-SelectedValue="@EditingAccount.AccountType">
+                            @foreach (var itemValue in Enum.GetValues(typeof(AccountType)))
+                            {
+                                <SelectItem @key="itemValue" TValue="AccountType" Value="@((AccountType) itemValue)">
+                                    @((AccountType) itemValue)
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>@L["AccountStatus"]</FieldLabel>
+                        <Select TValue="AccountStatus" @bind-SelectedValue="@EditingAccount.AccountStatus">
+                            @foreach (var itemValue in Enum.GetValues(typeof(AccountStatus)))
+                            {
+                                <SelectItem @key="itemValue" TValue="AccountStatus" Value="@((AccountStatus) itemValue)">
+                                    @((AccountStatus) itemValue)
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>@L["AccountCountry"]</FieldLabel>
+                        <Select TValue="AccountCountry" @bind-SelectedValue="@EditingAccount.AccountCountry">
+                            @foreach (var itemValue in Enum.GetValues(typeof(AccountCountry)))
+                            {
+                                <SelectItem @key="itemValue" TValue="AccountCountry" Value="@((AccountCountry) itemValue)">
+                                    @((AccountCountry) itemValue)
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+
+                    <Field>
+                        <Check TValue="bool" @bind-Checked="@EditingAccount.IsActive">@L["IsActive"]</Check>
+                    </Field>
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAccount.Description">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Email"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAccount.Email">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["EmailPassword"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAccount.EmailPassword">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditAccountModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditAccountForm" Clicked="UpdateAccountAsync"/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* IMPORT Account MODAL ************************* *@
+<Modal @ref="ImportAccountModal">
+    <ModalContent Centered="true">
+        <Form id="ImportAccountModal">
+            <ModalHeader>
+                <ModalTitle>@L["ImportAccount"]</ModalTitle>
+                <CloseButton Clicked="CloseImportAccountModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["ImportAccountFileType"] </FieldLabel>
+                    <FileEdit Changed="@OnFileImportAccountsChanged" Filter=".xls, .xlsx" AutoReset="false"/>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseImportAccountModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="ImportAccountModal" Clicked="ImportAccountsAsync"/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

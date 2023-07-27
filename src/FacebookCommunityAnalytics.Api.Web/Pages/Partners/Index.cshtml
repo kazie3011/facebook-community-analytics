@@ -1,0 +1,78 @@
+@page "/partners"
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Web.Bundling.Kendo
+@inject IHtmlLocalizer<ApiResource> L
+@inject IAuthorizationService Authorization
+@model FacebookCommunityAnalytics.Api.Web.Pages.Partners.IndexModel
+@inject IPageLayout PageLayout
+@{
+    ViewBag.Title = $"GDL - {L["Partners.PageTitle"].Value}";
+    PageLayout.Content.Title = $"GDL - {L["Partners.PageTitle"].Value}";
+    PageLayout.Content.MenuItemName = ApiMenus.Partners;
+}
+@section scripts
+{
+    <abp-script src="/Pages/Partners/index.js"/>
+<!-- Kendo -->
+    @* <abp-script type="typeof(KendoScriptContributor)" /> *@
+}
+
+@section styles 
+{
+}
+
+@section content_toolbar {
+    @if (await Authorization.IsGrantedAsync(ApiPermissions.PartnerModule.Default))
+    {
+        <abp-button id="NewPartnerButton" text="@L["NewPartner"].Value" icon="plus" button-type="Primary"/>
+    }
+}
+
+<abp-card>
+    <abp-card-body>
+        <abp-row class="mb-3">
+            <abp-column size-md="_12">
+                <form id="SearchForm" autocomplete="off">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <select class="form-control custom-select" id="PartnerTypeFilter" name="PartnerTypeFilter">
+                                <option value="">@L[$"Enum:PartnerType:{Convert.ToInt32(PartnerType.FilterNoSelect)}"]</option>
+                                @foreach (var itemValue in Enum.GetValues(typeof(PartnerType)))
+                                {
+                                    if ((PartnerType)itemValue != PartnerType.FilterNoSelect)
+                                    {
+                                        <option value="@((PartnerType)itemValue)">@L[$"Enum:PartnerType:{Convert.ToInt32(itemValue)}"]</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <input class="form-control" id="FilterText" placeholder="@L["Search"]"/>
+                        <div class="input-group-append">
+                            <abp-button button-type="Primary" type="submit" icon="search"/>
+                        </div>
+                    </div>
+                </form>
+            </abp-column>
+        </abp-row>
+
+        <abp-table striped-rows="true" id="PartnersTable">
+            <thead>
+            <tr>
+                <th></th>
+                <th>@L["Partner.Name"]</th>
+                <th>@L["TotalCampagin"]</th>
+                <th>@L["Description"]</th>
+                <th>@L["Url"]</th>
+                <th>@L["PartnerType"]</th>
+                <th>@L["Actions"]</th>
+            </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

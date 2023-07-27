@@ -1,0 +1,422 @@
+@page "/compensations"
+@attribute [Authorize(ApiPermissions.Payrolls.Default)]
+@using FacebookCommunityAnalytics.Api.Payrolls
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.ApiConfigurations
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.UserCompensations
+@using Faso.Blazor.SpinKit
+@using Blazored.Localisation.Services
+
+@using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical
+@inject IPayrollsAppService PayrollsAppService
+@inject IUserCompensationAppService UserCompensationAppService
+@inject IUiMessageService UiMessageService
+@inject NavigationManager NavigationManager
+@inject IApiConfigurationAppService ApiConfigurationAppService
+@inherits BlazorComponentBase
+@inject IBrowserDateTimeProvider BrowserDateTimeProvider
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["PayrollScreen.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Row>
+            <Field ColumnSize="ColumnSize.Is5.OnDesktop">
+                <Form id="PayrollSearchForm" class="mb-3">
+                    <Addons>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit @bind-Text="@Filter.FilterText"
+                                      Autofocus="true"
+                                      Placeholder="@L["Search"]">
+                            </TextEdit>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <SubmitButton Form="PayrollSearchForm" Clicked="GetPayrollsAsync">
+                                <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                            </SubmitButton>
+                        </Addon>
+                    </Addons>
+                </Form>
+            </Field>
+            
+            <Field ColumnSize="ColumnSize.Is7.OnDesktop">
+                <Button style="margin-left: 5px;float:right" Color="Color.Primary" Clicked="() =>{OpenCreatePayrollCaculationModal(false);}">@L["CalculatePayrollButton"]</Button>
+                <Button style="margin-left: 5px;float:right" Color="Color.Primary" Clicked="() =>{OpenCreatePayrollCaculationModal(true);}">@L["CalculatePayrollHappyDayButton"]</Button>
+            </Field>
+
+        </Row>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+
+
+        <DataGrid TItem="PayrollDto"
+                  Data="PayrollList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                @* <DataGridEntityActionsColumn TItem="PayrollDto" @ref="@EntityActionsColumn"> *@
+                @*     <DisplayTemplate> *@
+                @*         <EntityActions TItem="PayrollDto" EntityActionsColumn="@EntityActionsColumn"> *@
+                @*             <EntityAction TItem="PayrollDto" *@
+                @*                           Clicked="() => ViewCompensationDetail(context)" *@
+                @*                           Text="@L["Payrolls.Detail"]"> *@
+                @*             </EntityAction> *@
+                @*             @if (!context.Code.StartsWith(PayrollConsts.Payroll)) *@
+                @*             { *@
+                @*                 <EntityAction TItem="PayrollDto" *@
+                @*                               Visible="@CanEditPayroll" *@
+                @*                               Clicked="() => ChooseMainPayroll(context.Id)" *@
+                @*                               ConfirmationMessage="@(() => L["Payrolls.ConfirmOfficialMessage"])" *@
+                @*                               Text="@L["Payrolls.ConfirmOfficialButton"]"> *@
+                @*                 </EntityAction> *@
+                @*             } *@
+                @*             <EntityAction TItem="PayrollDto" *@
+                @*                           Visible="@CanEditPayroll" *@
+                @*                           Clicked="() => ExportExcelAsync(context.Id)" *@
+                @*                           ConfirmationMessage="@(() => L["Compensations.ExportExcel"])" *@
+                @*                           Text="@L["Compensations.ExportExcel"]"> *@
+                @*             </EntityAction> *@
+                @*             <EntityAction TItem="PayrollDto" *@
+                @*                           Visible="@CanEditPayroll" *@
+                @*                           Clicked="() => OpenEditPayrollModal(context)" *@
+                @*                           Text="@L["Edit"]"> *@
+                @*             </EntityAction> *@
+                @*             @if (!context.Code.StartsWith(PayrollConsts.Payroll)) *@
+                @*             { *@
+                @*                 <EntityAction TItem="PayrollDto" *@
+                @*                               Visible="@CanDeletePayroll" *@
+                @*                               Clicked="() => DeletePayrollAsync(context)" *@
+                @*                               ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])" *@
+                @*                               Text="@L["Delete"]"> *@
+                @*                 </EntityAction> *@
+                @*             } *@
+                @*         </EntityActions> *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridEntityActionsColumn> *@
+
+                <DataGridColumn TItem="PayrollDto"
+                                Field="Description"
+                                Caption="@L["Description"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PayrollDto"
+                                Field="FromDateTime"
+                                Caption="@L["FromDateTime"]">
+                    <DisplayTemplate>
+                        @if (context.FromDateTime.HasValue)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.FromDateTime.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PayrollDto"
+                                Field="ToDateTime"
+                                Caption="@L["ToDateTime"]">
+                    <DisplayTemplate>
+                        @if (context.ToDateTime.HasValue)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.ToDateTime.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PayrollDto" Field="Id" Caption="@L["Action"]" Sortable="false">
+                    <DisplayTemplate>
+                        <Buttons>
+                            <Button Outline Color="Color.Primary" Clicked="() => ViewCompensationDetail(context)">
+                                <Icon Name="IconName.Search"/>
+                            </Button>
+                            @if (CanEditPayroll)
+                            {
+                                <Button Outline Color="Color.Primary" Clicked="() => ExportExcelAsync(context.Id)">
+                                    <Icon Name="IconName.Download"/>
+                                </Button>
+                            }
+                            @if (CanEditPayroll)
+                            {
+                                <Button Outline Color="Color.Primary" Clicked="() => OpenEditPayrollModal(context)">
+                                    <Icon Name="IconName.Edit"/>
+                                </Button>
+                            }
+                            @if (!context.Code.StartsWith(PayrollConsts.Payroll))
+                            {
+                                @if (CanEditPayroll)
+                                {
+                                    <Button Outline Color="Color.Primary" Clicked="() => ChooseMainPayroll(context.Id)">
+                                        <Icon Name="IconName.Check"/>
+                                    </Button>
+                                }
+                            }
+                            @if (!context.Code.StartsWith(PayrollConsts.Payroll))
+                            {
+                                @if (CanDeletePayroll)
+                                {
+                                    <Button Outline Color="Color.Primary" Clicked="() => DeletePayrollAsync(context)">
+                                        <Icon Name="IconName.Delete"/>
+                                    </Button>
+                                }
+                            }
+                        </Buttons>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+@* ************************* CREATE Payroll MODAL ************************* *@
+<Modal @ref="CreatePayrollCaculationModal">
+    <ModalContent Centered="true">
+        <Form id="CreatePayrollCaculationForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewPayroll"]</ModalTitle>
+                <CloseButton Clicked="CloseCreatePayrollModal"/>
+            </ModalHeader>
+            <ModalBody>
+
+                <Field>
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Compensation.Year"]</AddonLabel>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <Select @bind-SelectedValue="@year">
+                                @foreach (var item in Years)
+                                {
+                                    <SelectItem Value="@item">@item</SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                    </Addons>
+                </Field>
+                <Field>
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Compensation.Month"]</AddonLabel>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <Select @bind-SelectedValue="@month">
+                                @foreach (var item in Months)
+                                {
+                                    <SelectItem Value="@item">
+                                        @string.Format(L["Month"], item)
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                    </Addons>
+                </Field>
+
+
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="ClosePayrollCaculationModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreatePayrollCaculationForm" Clicked="async () =>{await CalculatePayroll();}"/>
+             
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreatePayrollModal">
+    <ModalContent Centered="true">
+        <Form id="CreatePayrollForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewPayroll"]</ModalTitle>
+                <CloseButton Clicked="CloseCreatePayrollModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewPayrollValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@NewPayroll"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Code"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewPayroll.Code">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Title"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewPayroll.Title">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewPayroll.Description">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["FromDateTime"]</FieldLabel>
+                            <DateEdit TValue="DateTime?" @bind-Date="@NewPayroll.FromDateTime">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </DateEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["ToDateTime"]</FieldLabel>
+                            <DateEdit TValue="DateTime?" @bind-Date="@NewPayroll.ToDateTime">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </DateEdit>
+                        </Field>
+                    </Validation>
+
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreatePayrollModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreatePayrollForm" Clicked="CreatePayrollAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditPayrollModal">
+    <ModalContent Centered="true">
+        <Form id="EditPayrollForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditPayrollModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditingPayrollValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@EditingPayroll"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Code"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingPayroll.Code">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Title"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingPayroll.Title">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingPayroll.Description">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["FromDateTime"]</FieldLabel>
+                            <DateEdit TValue="DateTime?" @bind-Date="@EditingPayroll.FromDateTime">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </DateEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["ToDateTime"]</FieldLabel>
+                            <DateEdit TValue="DateTime?" @bind-Date="@EditingPayroll.ToDateTime">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </DateEdit>
+                        </Field>
+                    </Validation>
+
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditPayrollModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreatePayrollForm" Clicked="UpdatePayrollAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

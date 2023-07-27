@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>FacebookCommunityAnalytics.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Application.Contracts\FacebookCommunityAnalytics.Api.Application.Contracts.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Domain.Shared\FacebookCommunityAnalytics.Api.Domain.Shared.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Integrations\FacebookCommunityAnalytics.Api.Integrations.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.MailKitMailer" Version="1.1.3" />
+    <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
+    <PackageReference Include="CsvHelper" Version="15.0.5" />
+    <PackageReference Include="Hangfire.Core" Version="1.7.22" />
+    <PackageReference Include="Humanizer.Core" Version="2.11.10" />
+    <PackageReference Include="MongoDB.Driver" Version="2.12.1" />
+    <PackageReference Include="Volo.Abp.Emailing" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.BlobStoring.Database.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LeptonTheme.Management.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Saas.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.Domain" Version="4.3.2" />
+    <PackageReference Include="Volo.CmsKit.Pro.Domain" Version="4.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Transactions\Transaction.cs" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,183 @@
+﻿@page "/uncrawled-posts"
+@attribute [Authorize(ApiPermissions.UncrawledPosts.Default)]
+
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.UncrawledPosts
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Localization
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Messages
+@inherits BlazorComponentBase
+@inject IUncrawledPostsAppService UncrawledPostsAppService
+@inject IStringLocalizer<ApiResource> L
+@inject IUiMessageService _uiMessageService;
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="UncrawledPostDtoForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    <DateRangePicker
+                        Ranges="_dateRanges"
+                        DateFormat="@(GlobalConsts.DateFormat)"
+                        StartDate="StartDate"
+                        EndDate="EndDate"
+                        EndDateChanged="EndDateChanged"
+                        StartDateChanged="StartDateChanged"
+                        class="form-control form-control-md"
+                        placeholder="@L["SelectDates"]"
+                        OnClosed="OnSelectFilter" />
+
+                </Addon>
+
+                <Addon AddonType="AddonType.Start">
+                    <Select class="heigh-auto" TValue="PostSourceTypeFilter" SelectedValue="PostSourceTypeFilter" SelectedValueChanged="OnPostStatus_Changed">
+                        @foreach (var itemValue in Enum.GetValues(typeof(PostSourceTypeFilter)))
+                        {
+                            <SelectItem @key="itemValue" TValue="PostSourceTypeFilter" Value="@((PostSourceTypeFilter) itemValue)">
+                                @L[$"Enum:PostSourceTypeFilter:{(int) itemValue}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="AccountProxySearchForm" Clicked="DoSearch">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+<Card>
+    <CardBody>
+        <DataGrid TItem="UncrawledPostDto"
+                  Data="UncrawledPostList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  ShowPageSizes="true"
+                  Class="text-nowrap"
+                  Narrow="true"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+
+                <DataGridColumn TItem="UncrawledPostDto"
+                                Field="Url"
+                                Caption="@L["Url"]"
+                                Sortable="false">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UncrawledPostDto"
+                                Field="PostSourceType"
+                                Caption="@L["PostSourceType"]"
+                                Sortable="false">
+                </DataGridColumn>
+                <DataGridColumn TItem="UncrawledPostDto"
+                                Field="UpdatedAt"
+                                Caption="@L["UpdatedAt"]"
+                                Sortable="true"
+                                SortDirection="SortDirection.Descending">
+                    <DisplayTemplate>
+                        @if (context?.UpdatedAt != null)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.UpdatedAt, GlobalConsts.DateTimeFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UncrawledPostDto" Field="PostSourceType" Caption="@L["Action"]" Sortable="false">
+                    <DisplayTemplate>
+                        <Buttons>
+                            @*     <Button Outline Color="Color.Primary" Clicked="async () => await OpenEditPostModal(context)"> *@
+                            @*         <Icon Name="IconName.Edit"/> *@
+                            @*     </Button> *@
+                            <Button Outline Color="Color.Primary" Clicked="() => DeletePostModal(context)">
+                                <Icon Name="IconName.Delete"/>
+                            </Button>
+                        </Buttons>
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+@* ************************* Edit Modal ************************* *@
+@* <Modal @ref="EditPostModal"> *@
+@*     <ModalContent Centered="true" Size="ModalSize.Large"> *@
+@*         <Form id="EditPostForm"> *@
+@*             <ModalHeader> *@
+@*                 <ModalTitle>@L["Update"]</ModalTitle> *@
+@*                 <CloseButton Clicked="CloseEditPostModal"/> *@
+@*             </ModalHeader> *@
+@*             <ModalBody> *@
+@*                 <Field > *@
+@*                     <Addons> *@
+@*                         <Addon AddonType="AddonType.Start"> *@
+@*                             <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Url"] </AddonLabel> *@
+@*                         </Addon> *@
+@*                         <Addon AddonType="AddonType.Body"> *@
+@*                             <TextEdit @bind-Text="@EditingPost.Url"> *@
+@*                             </TextEdit> *@
+@*                         </Addon> *@
+@*                     </Addons> *@
+@*                 </Field> *@
+@*                 <Field > *@
+@*                     <Addons> *@
+@*                         <Addon AddonType="AddonType.Start"> *@
+@*                             <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["PostSourceType"] </AddonLabel> *@
+@*                         </Addon> *@
+@*                         <Addon AddonType="AddonType.Body"> *@
+@*                             <Select class="heigh-auto" TValue="PostSourceType" @bind-SelectedValue="@EditingPost.PostSourceType"> *@
+@* *@
+@*                                 @foreach (var itemValue in Enum.GetValues(typeof(PostSourceTypeFilter))) *@
+@*                                 { *@
+@*                                     <SelectItem @key="itemValue" TValue="PostSourceType" Value="@((PostSourceType) itemValue)"> *@
+@*                                         @L[$"Enum:PostSourceType:{(int) itemValue}"] *@
+@*                                     </SelectItem> *@
+@*                                 } *@
+@*                             </Select> *@
+@* *@
+@*                         </Addon> *@
+@*                     </Addons> *@
+@*                 </Field> *@
+@*                 <Field > *@
+@*                     <Addons> *@
+@*                         <Addon AddonType="AddonType.Start"> *@
+@*                             <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["UpdatedAt"] </AddonLabel> *@
+@*                         </Addon> *@
+@*                         <Addon AddonType="AddonType.Body"> *@
+@*                             <DatePicker TValue="DateTime?" Date="@editStartDateTime" DateChanged="EditStartDateTimeChange" DisplayFormat="@GlobalConsts.DateFormat"> *@
+@*                             </DatePicker> *@
+@*                         </Addon> *@
+@*                     </Addons> *@
+@*                 </Field> *@
+@*             </ModalBody> *@
+@*             <ModalFooter> *@
+@*                 <Button Color="Color.Dark" *@
+@*                         Clicked="CloseEditPostModal"> *@
+@*                     @L["Cancel"] *@
+@*                 </Button> *@
+@*                 <SubmitButton Form="EditPostModal" Clicked="UpdatePostAsyn"/> *@
+@*             </ModalFooter> *@
+@*         </Form> *@
+@*     </ModalContent> *@
+@* </Modal> *@

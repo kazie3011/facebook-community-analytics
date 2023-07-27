@@ -1,0 +1,388 @@
+@page "/partnerlist"
+@attribute [Authorize(ApiPermissions.PartnerModule.Default)]
+@using FacebookCommunityAnalytics.Api.Partners
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Crawl
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.PartnerModule
+
+@inject ICrawlAppService CrawlAppService
+@inject IPartnerModuleAppService _partnerModuleAppService
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["PartnerModule.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="PartnerSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <Select TValue="PartnerType" SelectedValue="@selectedPartnerType" SelectedValueChanged="OnPartnerType_Changed">
+                        @foreach (var itemValue in Enum.GetValues(typeof(PartnerType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="PartnerType" Value="@((PartnerType) itemValue)">
+                                @L[$"Enum:PartnerType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Partner.Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="PartnerSearchForm" Clicked="DoSearch">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="PartnerDto"
+                  Data="PartnerList"
+                  ReadData="OnDataGridReadAsync"
+                  SelectionMode="DataGridSelectionMode.Single"
+                  @bind-SelectedRows="selectedPartners"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  Narrow="true"
+                  Striped="true"
+                  ShowPageSizes="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns >
+
+                <DataGridColumn TItem="PartnerDto"
+                                Field="Name"
+                                Caption="@L["Partner.Name"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        <span>@context.Name</span>
+                        <p class="font-italic" style="font-size: 12px;">@context.Code</p>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PartnerDto"
+                                Field="TotalCampaigns"
+                                Caption="@L["Partner.TotalCampaigns"]"
+                                Sortable="false" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.TotalCampaigns.ToCommaStyle()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PartnerDto"
+                                Field="Description"
+                                Caption="@L["Desc"]"
+                                Sortable="true">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PartnerDto"
+                                Field="Url"
+                                Caption="@L["Url"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @if (context.Url.IsNotNullOrEmpty())
+                        {
+                            <a href="@context.Url" target="_blank">
+                                <!--!--><i class="fas fa-link mr-1"></i> @context.Url
+                            </a>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PartnerDto"
+                                Field="PartnerType"
+                                Caption="@L["PartnerType"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @L[$"Enum:PartnerType:{Convert.ToInt32(context.PartnerType)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PartnerDto" Field="IsActive" Caption="@L["Action"]" Sortable="false">
+                    <DisplayTemplate>
+                        <Buttons>
+                            @if (CanEditPartner)
+                            {
+                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditPartnerModal(context)">
+                                    <Icon Name="IconName.Edit"/>
+                                </Button>
+                            }
+                            @if (CanDeletePartner)
+                            {
+                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeletePartnerAsync(context)">
+                                    <Icon Name="IconName.Delete"/>
+                                </Button>
+                            }
+                        </Buttons>
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreatePartnerModal">
+    <ModalContent Centered="true">
+        <Form id="CreatePartnerForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewPartner"]</ModalTitle>
+                <CloseButton Clicked="CloseCreatePartnerModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewPartnerValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@NewPartner"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 145px">
+                                        <FieldLabel>@L["Partner.Name"] *</FieldLabel>
+                                    </AddonLabel>
+
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit @bind-Text="@NewPartner.Name">
+                                        <Feedback>
+                                            <ValidationError/>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Addon>
+                            </Addons>
+
+
+                        </Field>
+
+                    </Validation>
+
+                    <Validation>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" Style="width: 145px">
+                                    <FieldLabel>@L["Description"]</FieldLabel>
+                                </AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@NewPartner.Description">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                        <Field>
+
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Url"] </AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit @bind-Text="@NewPartner.Url">
+                                        <Feedback>
+                                            <ValidationError/>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Addon>
+                            </Addons>
+
+
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Code"] </AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit @bind-Text="@NewPartner.Code">
+                                        <Feedback>
+                                            <ValidationError/>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Addon>
+                            </Addons>
+
+
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["PartnerType"] </AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <Select TValue="PartnerType" @bind-SelectedValue="@NewPartner.PartnerType">
+                                        @foreach (var itemValue in Enum.GetValues(typeof(PartnerType)))
+                                        {
+                                            <SelectItem @key="itemValue" TValue="PartnerType" Value="@((PartnerType) itemValue)">
+                                                @L[$"Enum:PartnerType:{Convert.ToInt32(itemValue)}"]
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Addon>
+                            </Addons>
+
+
+                        </Field>
+                    </Validation>
+
+                    @* <Validation> *@
+                    @*     <Field> *@
+                    @*         <Check TValue="bool" @bind-Checked="@NewPartner.IsActive">@L["Partner.IsActive"]</Check> *@
+                    @*     </Field> *@
+                    @* </Validation> *@
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreatePartnerModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreatePartnerForm" Clicked="CreatePartnerAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditPartnerModal">
+    <ModalContent Centered="true">
+        <Form id="EditPartnerForm">
+            <ModalHeader>
+                <ModalTitle>@L["Partner.Update"] - (@EditingPartner.Code)</ModalTitle>
+                <CloseButton Clicked="CloseEditPartnerModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditPartnerValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@EditingPartner"
+                             ValidateOnLoad="false">
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Partner.Name"] *</FieldLabel>
+                            <TextEdit @bind-Text="@EditingPartner.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+
+                    </Validation>
+
+                    <Validation>
+
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingPartner.Description">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+
+                    </Validation>
+
+                    <Validation>
+
+                        <Field>
+                            <FieldLabel>@L["Url"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingPartner.Url">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+
+                    </Validation>
+
+                    @* <Validation> *@
+                    @* *@
+                    @*     <Field> *@
+                    @*         <FieldLabel>@L["Code"]</FieldLabel> *@
+                    @*         <TextEdit @bind-Text="@EditingPartner.Code"> *@
+                    @*             <Feedback> *@
+                    @*                 <ValidationError/> *@
+                    @*             </Feedback> *@
+                    @*         </TextEdit> *@
+                    @*     </Field> *@
+                    @* *@
+                    @* </Validation> *@
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["PartnerType"]</FieldLabel>
+                            <Select TValue="PartnerType" @bind-SelectedValue="@EditingPartner.PartnerType">
+                                @foreach (var itemValue in Enum.GetValues(typeof(PartnerType)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="PartnerType" Value="@((PartnerType) itemValue)">
+                                        @L[$"Enum:PartnerType:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+
+                    </Validation>
+
+                    <Validation>
+                        <Field>
+                            <Check TValue="bool" @bind-Checked="@EditingPartner.IsActive">@L["Partner.IsActive"]</Check>
+                        </Field>
+                    </Validation>
+
+                </Validations>
+
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditPartnerModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreatePartnerForm" Clicked="UpdatePartnerAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

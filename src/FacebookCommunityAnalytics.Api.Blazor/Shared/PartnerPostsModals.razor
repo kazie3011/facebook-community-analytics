@@ -1,0 +1,37 @@
+﻿@using FacebookCommunityAnalytics.Api.Posts
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.ObjectMapping
+@using FacebookCommunityAnalytics.Api.Localization
+
+@inherits BlazorComponentBase
+@inject IPostsExtendAppService PostsExtendAppService
+
+<Modal @ref="ExportPostModal">
+    <ModalContent Centered="true">
+        <Form id="ExportPostModal">
+            <ModalHeader>
+                <ModalTitle>@L["ExportExcel"]</ModalTitle>
+                <CloseButton Clicked="CloseExportPostModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["ExportPostFileName"] </FieldLabel>
+                    <TextEdit @bind-Text="@ExportPostFileName"></TextEdit>
+                </Field>
+                <Field>
+                    <FieldLabel>@L["ExportAllPosts"] </FieldLabel>
+                    <Check TValue="bool" Checked="@isExportAll" CheckedChanged="@OnExportAllChange">@L["IsCheckExportAllPosts"]</Check>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseExportPostModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="ExportPostForm" Clicked="async () => await ExportPostsAsync()" />
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

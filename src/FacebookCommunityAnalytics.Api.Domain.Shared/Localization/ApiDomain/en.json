@@ -1,0 +1,67 @@
+﻿{
+  "Culture": "en",
+  "Texts": {
+    "ApiDomain:SampleError": "This is sample localized error message",
+    "ApiDomain:InvalidUrl": "Post url format is invalid",
+    "ApiDomain:DuplicatedUrl": "Post url already existed",
+    "ApiDomain:PostSourceTypeMustSame": "Post source type must be same",
+    "ApiDomain:MaxUrlReached": "Max urls reached is {0}",
+    "ApiDomain:InvalidFacebookId": "Only number (Facebook Id)",
+    
+    "ApiDomain:TiktokCrawl.NoChannelFound": "No Channel Found",
+    "ApiDomain:TiktokCrawl.EmptyData": "Empty Data",
+    
+    "ApiDomain:InvalidOrExistingUrl": "Url is invalid or existing {0}",
+    "ApiDomain:InvalidGroupUrl": "Group url is invalid",
+    "ApiDomain:GroupNotExist": "Group does not exist",
+    "ApiDomain:InsMustHaveGroup": "Must have group",
+    "ApiDomain:DuplicateGroup": "Duplicate group {0}",
+    "ApiDomain:CategoryNotExist": "Category does not exist {0}",
+    "ApiDomain:InvalidContent": "Content is invalid",
+    "ApiDomain:InvalidGroup": "Group is invalid",
+    "ApiDomain:InValidDateTime": "Date time is invalid",
+    "ApiDomain:UserAffiliate.ShortlinkCreationFailure": "Shortlink creation failure, please contact admin",
+    "ApiDomain:UserAffiliate.InvalidUrl": "Url is invalid",
+    "ApiDomain:UserAffiliate.InvalidUrl.Tiki": "Only input TIKI url",
+    "ApiDomain:InvalidShortlink": "Short link is invalid",
+    "ApiDomain:InvalidLazadaUrl": "Lazada url is invalid",
+
+    "ApiDomain:UserInfo:InvalidFacebookId": "Only input numberic (Facebook Id)",
+    "ApiDomain:UserInfo:DuplicatedSeedingAccountFid": "Seeding account has used",
+
+    "ApiDomain:InvalidName": "Campaign name is invalid",
+    "ApiDomain:InvalidEmails": "Email is invalid",
+    "ApiDomain:Campaign:PermissionNotGranted": "You have no permission to access this campaign",
+    "ApiDomain:Campaign:NameExisted": "Campaign existed with same name",
+    "ApiDomain:Campaign:PrizeExisted": "Prize existed with same name",
+
+    "ApiDomain:Contract.InvalidTransaction": "Transaction is invalid",
+    "ApiDomain:Contract.InvalidValue": "Contract value is invalid",
+    "ApiDomain:Contract.InvalidContractCode": "Contract code is invalid",
+    
+    "ApiDomain:InvalidUser": "Invalid User",
+    "ApiDomain:DuplicateCriteria": "Duplicate Criteria",
+    "ApiDomain:InvalidCriteria": "Invalid Criteria",
+    "ApiDomain:WrongCriteriaPoint": "Wrong Criteria Point",
+    "ApiDomain:PartnerIsRequired" : "Partner is required",
+    "ApiDomain:ContractTypeIsRequired" : "Contract type is required",
+    "ApiDomain:ContractRequiresTnxAmount" : "Transaction amount is required",
+    "ApiDomain:ContractAmountRequired" : "Contract amount is required",
+    "ApiDomain:Cotract.DoNotGroupNameSync": "Currently the data is not synchronized. Please reload the page",
+    "ApiDomain:TransactionAmountInvalid" : "Total transactions amount can not greater than total contract amount",
+    "ApiDomain:ContractNotFound" : "Contract not found",
+    "ApiDomain:TransactionNotFound" : "Transaction not found",
+    "ApiDomain:PartnerExist" : "Partner exist",
+    "ApiDomain:PostNullData" : "Post data is null",
+    "TriggerCrawler:PartnerIsRequired" : "Please select partner",
+    "TriggerCrawler:CampaignIsRequired" : "Please select campaign",
+    "Partner.EmailExisted" : "Email existed",
+
+    "ApiDomain:Transaction.InvalidTransaction": "Invalid transaction",
+    "ApiDomain:Transaction.AmountRequired" : "Transaction amount is required",
+    "ApiDomain:UserRoleNotRemoveOrg" : "Can't remove manager and above users",
+
+    "ApiDomain.GroupCost.ExistedName" : "Exist Group Name"
+
+  }
+}

@@ -1,0 +1,151 @@
+@page "/partner-posts"
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@inject IHtmlLocalizer<ApiResource> L
+@inject IAuthorizationService Authorization
+@model FacebookCommunityAnalytics.Api.Web.Pages.Posts.IndexModel
+@inject IPageLayout PageLayout
+@{
+    ViewBag.Title = $"GDL - {L["Post.PageTitle"].Value}";
+    PageLayout.Content.Title = $"GDL - {L["Post.PageTitle"].Value}";
+    PageLayout.Content.MenuItemName = ApiMenus.Posts;
+}
+
+@section scripts
+{
+    <abp-script src="/Pages/Posts/index.js"/>
+    @* <script> *@
+    @*     $(function (){ *@
+    @*          $("#@Html.IdFor(x=>x.Filter.GroupIds)").kendoMultiSelect();     *@
+    @*          $("#@Html.IdFor(x=>x.Filter.PartnerId)").kendoMultiSelect();     *@
+    @*     }); *@
+    @* </script> *@
+}
+
+@section styles
+{
+}
+
+@section content_toolbar {
+    @if (await Authorization.IsGrantedAsync(ApiPermissions.PartnerModule.PartnerPosts))
+    {
+        <abp-button id="NewPostButton" text="@L["NewPost"].Value" icon="plus" button-type="Primary"/>
+    }
+}
+
+<abp-card>
+    <abp-card-body>
+        <form id="SearchForm" autocomplete="off">
+            <abp-row class="mb-3">
+                <abp-column size-md="_12">
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <input class="form-control" type="text" name="daterange"/>
+                        </div>
+                        <input class="form-control" id="FilterText" placeholder="@L["Search"]"/>
+                        <div class="input-group-append">
+                            <abp-button button-type="Primary" type="submit" icon="search" text="@L["ReloadData"].Value" busy-text="Loading..."/>
+                        </div>
+                    </div>
+                </abp-column>
+                <abp-column size-md="_12" class="mt-3">
+                    <button id="AdvancedFilterSectionToggler" type="button" class="btn btn-success btn-sm">@L["SeeAdvancedFilters"]</button>
+                    <button id="btnClear" type="button" class="btn btn-warning btn-sm">@L["ClearFilter"]</button>
+                </abp-column>
+            </abp-row>
+
+            <abp-row id="AdvancedFilterSection" style="display: none;">
+                <abp-column size="_4">
+                    @* <abp-select asp-for="Filter.PostSourceType" asp-items="Html.GetEnumSelectList<PostSourceTypeFilter>()" label="@L["PostSourceType"].Value"/> *@
+                    <div class="form-group">
+                        <label>@L["PostSourceType"].Value</label>
+                        <select class="form-control" asp-for="Filter.PostSourceType">
+                            @foreach (var itemValue in Enum.GetValues(typeof(PostSourceTypeFilter)))
+                            {
+                                <option value="@(Convert.ToInt32(itemValue))">
+                                    @L[$"Enum:CampaignType:{Convert.ToInt32(itemValue)}"]
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                </abp-column>
+                <abp-column size="_4">
+                    @* <abp-select asp-for="Filter.PostCopyrightType" asp-items="Html.GetEnumSelectList<PostCopyrightTypeFilter>()" label="@L["PostCopyrightType"].Value"/> *@
+                    <div class="form-group">
+                        <label>@L["PostCopyrightType"].Value</label>
+                        <select class="form-control" asp-for="Filter.PostCopyrightType">
+                            @foreach (var itemValue in Enum.GetValues(typeof(PostCopyrightTypeFilter)))
+                            {
+                                <option value="@(Convert.ToInt32(itemValue))">
+                                    @L[$"Enum:CampaignType:{Convert.ToInt32(itemValue)}"]
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                </abp-column>
+                <abp-column size="_4">
+                    @* <abp-select asp-for="Filter.IsNotAvailable" label="@L["PostIsNotAvailableFilter"].Value" asp-items="Html.GetEnumSelectList<PostIsNotAvailableFilter>()"/> *@
+                    <div class="form-group">
+                        <label>@L["PostCopyrightType"].Value</label>
+                        <select class="form-control" asp-for="Filter.PostCopyrightType">
+                            @foreach (var itemValue in Enum.GetValues(typeof(PostIsNotAvailableFilter)))
+                            {
+                                <option value="@(Convert.ToInt32(itemValue))">
+                                    @L[$"Enum:CampaignType:{Convert.ToInt32(itemValue)}"]
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+
+                </abp-column>
+                <abp-column size="_4">
+                    <abp-select asp-for="Filter.GroupId" label="@L["Group"].Value" asp-items="Model.GroupsFilter"/>
+                </abp-column>
+
+                <abp-column size="_4">
+                    <abp-select asp-for="Filter.PartnerId" label="@L["Partner"].Value" asp-items="Model.PartnerFilter"/>
+                </abp-column>
+
+                <abp-column size="_4">
+                    <abp-select asp-for="Filter.CampaignId" label="@L["Campaign"].Value" asp-items="Model.CampaignFilter"/>
+                </abp-column>
+            </abp-row>
+        </form>
+    </abp-card-body>
+</abp-card>
+<abp-card>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="PostsTable">
+            <thead>
+            <tr>
+                <th></th>
+                <th>@L["Group"]</th>
+                <th>@L["Campaign"]</th>
+                <th>@L["AuthorName"]</th>
+                <th>@L["PostContentType"]</th>
+                <th>@L["PostGrid.PostCopyrightType"]</th>
+                <th>@L["Url"]</th>
+                <th>@L["ShortUrl"]</th>
+                <th>@L["TotalCount"]</th>
+                <th>@L["LikeCount"]</th>
+                <th>@L["CommentCount"]</th>
+                <th>@L["ShareCount"]</th>
+                <th>@L["Note"]</th>
+                <th>@L["CreatedDateTime"]</th>
+                <th>@L["LastCrawledDateTime"]</th>
+                <th>@L["SubmissionDateTime"]</th>
+                <th>@L["Actions"]</th>
+            </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

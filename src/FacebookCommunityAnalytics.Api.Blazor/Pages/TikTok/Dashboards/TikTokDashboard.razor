@@ -1,0 +1,34 @@
+@page "/tiktok-dashboard"
+@attribute [Authorize(ApiPermissions.Tiktok.Dashboard)]
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Microsoft.Extensions.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@inherits BlazorComponentBase
+@inject IStringLocalizer<ApiResource> L
+
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["TikTok.Dashboard.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+<Tabs SelectedTab="@selectedTabName" SelectedTabChanged="@OnSelectedTabChanged">
+    <Items>
+        <Tab Name="MCNVietNam">@L["TikTok.MCNVietNam.TabName"]</Tab>
+        <Tab Name="MCNGDL">@L["TikTok.MCNGDL.TabName"]</Tab>
+        <Tab Name="MCNChannelKPI">@L["TikTok.MCNChannelKPI.TabName"]</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="MCNVietNam">
+            <MCNVietNamTiktokDashboard @ref="_mcnVietNamTiktokDashboard"/>
+        </TabPanel>
+        <TabPanel Name="MCNGDL">
+            <MCNGDLTiktokDashboard @ref="_mcngdlTiktokDashboard"/>
+        </TabPanel>
+        <TabPanel Name="MCNChannelKPI">
+            <MCNInternalKPIDashboard  @ref="_mcnInternalChannelTiktokDashboard"/>
+        </TabPanel>
+    </Content>
+</Tabs>

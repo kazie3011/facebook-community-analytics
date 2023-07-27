@@ -1,0 +1,445 @@
+﻿@inherits BlazorComponentBase
+
+@using FacebookCommunityAnalytics.Api.Posts
+@using FacebookCommunityAnalytics.Api.Localization
+@using Microsoft.Extensions.Localization
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Dev
+@using FacebookCommunityAnalytics.Api.Groups
+@using FacebookCommunityAnalytics.Api.Organizations
+@using FacebookCommunityAnalytics.Api.Statistics
+@using Faso.Blazor.SpinKit
+@using FacebookCommunityAnalytics.Api.AffiliateStats
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.TeamMembers
+
+@inject IGroupExtendAppService GroupExtendAppService;
+@inject IPostsAppService PostsAppService;
+@inject IPostsExtendAppService PostsExtendAppService;
+@inject IStatAppService _statAppService;
+@inject ITeamMemberAppService TeamMemberAppService
+@inject IAffiliateStatsAppService AffiliateStatsAppService
+
+@if (CurrentUser is { IsAuthenticated: true })
+{
+    if (IsManagerRole())
+    {
+        <Card>
+            <CardBody>
+                <Row>
+                    <Heading Size="HeadingSize.Is2">
+                        @DashBoardHeader
+                    </Heading>
+                </Row>
+                <Divider></Divider>
+                <Row>
+                    <Column>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <DateRangePicker TimePicker="true"
+                                                 TimePicker24Hour="true"
+                                                 Ranges="_dateRanges"
+                                                 DateFormat="@GlobalConsts.DateFormat"
+                                                 @bind-StartDate="StartDate"
+                                                 @bind-EndDate="EndDate"
+                                                 class="form-control form-control-md"
+                                                 Style="width: 200px;"
+                                                 placeholder="@L["SelectDates"]" OnClosed="RenderCharts"/>
+                            </Addon>
+                        </Addons>
+                    </Column>
+                </Row>
+            </CardBody>
+        </Card>
+
+        <div id="Section0">
+        <Tabs SelectedTab="@_selectedTabSection0" SelectedTabChanged="@OnSelectedTabSection0Changed">
+        <Items>
+            <Tab Name="TabAvgPostStats">@L["Statistics.Facebook"]</Tab>
+            <Tab Name="TabTopReactionPosts">@L["TopReactionTable"]</Tab>
+            <Tab Name="TabTopReactionAffiliatePosts">@L["TopReactionAffiliateTable"]</Tab>
+        </Items>
+        <Content>
+        <TabPanel Name="TabAvgPostStats">
+            @if (_showLoading)
+            {
+                <SpinKitChasingDots/>
+            }
+            else
+            {
+                @if (_statistics != null)
+                {
+                    <p>
+                        <b>@L["TotalUser"]</b> : @_statistics.Total_User.ToCommaStyle()
+                        -
+                        <b>@L["TotalPost"]</b> : @_statistics.Total_Post.ToCommaStyle()
+                        -
+                        <b>@L["TotalGroups"]</b> : @_statistics.Total_Group.ToCommaStyle()
+                        -
+                        <b>@L["TotalPages"]</b> : @_statistics.Total_Page.ToCommaStyle()
+                    </p>
+                    <hr/>
+                    <Fields>
+                        <Field ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnMobile">
+                            <table class="table"
+                                   Responsive="true">
+                                <thead>
+                                <tr>
+                                    <th>@L["Type"]</th>
+                                    <th class="text-right">@L["Post"]</th>
+                                    <th class="text-right">@L["Staff"]</th>
+                                    <th class="text-right">@L["AvgPostPerUser"]</th>
+                                    <th class="text-right">@L["AvgReactionPerUser"]</th>
+                                    <th class="text-right">@L["AvgReactionPerPost"]</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                @foreach (var stat in _statistics.Stats)
+                                {
+                                    <tr @key="stat">
+                                        <td>@stat.Type</td>
+                                        <td class="text-right">@stat.TotalPost.ToCommaStyle()</td>
+                                        <td class="text-right">@stat.TotalUser.ToCommaStyle()</td>
+                                        <td class="text-right">@stat.AvgPostPerUser.ToCommaStyle()</td>
+                                        <td class="text-right">@stat.AvgReactionPerUser.ToCommaStyle()</td>
+                                        <td class="text-right">@stat.AvgReactionPerPost.ToCommaStyle()</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </Field>
+                        @* <Field ColumnSize="ColumnSize.IsHalf.OnDesktop.IsFull.OnMobile"> *@
+                        @*     <table class="table" Responsive="true"> *@
+                        @*         <thead> *@
+                        @*         <p class="text-success" style="white-space: nowrap; font-weight: bold">@L["AffiliatesStats"]</p> *@
+                        @*         <tr> *@
+                        @*             <th>@L["AffiliatesName"]</th> *@
+                        @*             <th>@L["Click"]</th> *@
+                        @*             <th>@L["Conversion"]</th> *@
+                        @*             <th>@L["Amount"]</th> *@
+                        @*             <th>@L["Commission"]</th> *@
+                        @*         </tr> *@
+                        @*         </thead> *@
+                        @*         <tbody> *@
+                        @* *@
+                        @*         @foreach (var affiliate in _statistics.Affiliates) *@
+                        @*         { *@
+                        @*             <tr @key="affiliate"> *@
+                        @*                 <td style="font-weight: bold">@affiliate.Name</td> *@
+                        @*                 <td class="text-info">@affiliate.Click.ToCommaStyle()</td> *@
+                        @*                 <td class="text-warning">@affiliate.Conversion.ToCommaStyle()</td> *@
+                        @*                 <td class="text-success">@affiliate.Amount.ToVND()</td> *@
+                        @*                 <td class="text-danger">@affiliate.Commission.ToVND()</td> *@
+                        @*             </tr> *@
+                        @*         } *@
+                        @*         </tbody> *@
+                        @*     </table> *@
+                        @* </Field> *@
+                    </Fields>
+                }
+            }
+        </TabPanel>
+        <TabPanel Name="TabTopReactionPosts">
+            <!--Chart - Top Reaction-->
+            @if (_showLoading)
+            {
+                <SpinKitChasingDots/>
+            }
+            else
+            {
+                <table class="table table-responsive">
+                    <TableHeader FixedHeader="true" FixedHeaderTableHeight="300px">
+                        <tr>
+                            <th>@L["AuthorName"]</th>
+                            <th>@L["Group"]</th>
+                            <th>@L["PostContentType"]</th>
+                            <th>@L["Url"]</th>
+                            <th>@L["TotalCount"]</th>
+                            <th>@L["LikeCount"]</th>
+                            <th>@L["ShareCount"]</th>
+                            <th>@L["CommentCount"]</th>
+                        </tr>
+                    </TableHeader>
+                    <tbody>
+                    @if (!_unRendered && !_statistics.TopReactionPosts.Any())
+                    {
+                        <div style="text-align: center; font-size: 100%;width: 100%;font-weight: bold;">@L["No Record"]</div>
+                    }
+                    @foreach (var postDto in _statistics.TopReactionPosts)
+                    {
+                        <tr @key="postDto">
+                            <td class="card-title">@postDto.AuthorName</td>
+                            <td class="card-title">@postDto.GroupName</td>
+                            <td>@L[$"Enum:PostContentType:{Convert.ToInt32(postDto.PostContentType)}"]</td>
+                            <td>
+                                <a class="card-title" href="@postDto.Url" target="_blank">
+                                    @GetPostUrl(@postDto.Fid)
+                                </a>
+                            </td>
+                            <td class="text-right">@postDto.TotalCount.ToCommaStyle()</td>
+                            <td class="text-right">@postDto.LikeCount.ToCommaStyle()</td>
+                            <td class="text-right">@postDto.ShareCount.ToCommaStyle()</td>
+                            <td class="text-right">@postDto.CommentCount.ToCommaStyle()</td>
+                        </tr>
+                    }
+                    </tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-danger">@L["TotalCount"]</td>
+                        <td class="text-danger text-right">@_statistics.GetTotalReactionPosts().ToCommaStyle()</td>
+                        <td class="text-danger text-right">@_statistics.GetTotalLikePosts().ToCommaStyle()</td>
+                        <td class="text-danger text-right">@_statistics.GetTotalSharePosts().ToCommaStyle()</td>
+                        <td class="text-danger text-right">@_statistics.GetTotalCommentPosts().ToCommaStyle()</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" colspan="4">
+                            <Column Style="float: right;left: 33px">
+                                <NumericEdit class="float-right" Style="width: 65px; margin-right: 10px" EnableStep="false" TValue="int" @bind-Value="_postRequiredQuantity"/>
+                                <Button class="float-right" Disabled="@_unRendered" Color="Color.Primary" Clicked="(ExportTopReactionPosts)">
+                                    <Icon Name="IconName.Download"></Icon>
+                                </Button>
+                            </Column>
+
+                        </td>
+                    </tr>
+                </table>
+            }
+        </TabPanel>
+
+        <TabPanel Name="TabTopReactionAffiliatePosts">
+            @if (_showLoading)
+            {
+                <SpinKitChasingDots/>
+            }
+            else
+            {
+                <table class="table table-responsive">
+                    <TableHeader FixedHeader="true" FixedHeaderTableHeight="300px">
+                        <tr>
+                            <th>@L["AuthorName"]</th>
+                            <th>@L["Group"]</th>
+                            <th>@L["PostContentType"]</th>
+                            <th>@L["Url"]</th>
+                            <th>@L["TotalCount"]</th>
+                            <th>@L["LikeCount"]</th>
+                            <th>@L["ShareCount"]</th>
+                            <th>@L["CommentCount"]</th>
+                        </tr>
+                    </TableHeader>
+                    <tbody>
+                    @if (!_unRendered && !_statistics.TopReactionAffiliatePosts.Any())
+                    {
+                        <div style="text-align: center; font-size: 100%;width: 100%;font-weight: bold;">@L["No Record"]</div>
+                    }
+                    @foreach (var postDto in _statistics.TopReactionAffiliatePosts)
+                    {
+                        <tr @key="postDto">
+                            <td class="card-title">@postDto.AuthorName</td>
+                            <td class="card-title">@postDto.GroupName</td>
+                            <td>@L[$"Enum:PostContentType:{Convert.ToInt32(postDto.PostContentType)}"]</td>
+                            <td>
+                                <a class="card-title" href="@postDto.Url" target="_blank">
+                                    @GetPostUrl(@postDto.Fid)
+                                </a>
+                            </td>
+                            <td class="text-right">@postDto.TotalCount.ToCommaStyle()</td>
+                            <td class="text-right">@postDto.LikeCount.ToCommaStyle()</td>
+                            <td class="text-right">@postDto.ShareCount.ToCommaStyle()</td>
+                            <td class="text-right">@postDto.CommentCount.ToCommaStyle()</td>
+                        </tr>
+                    }
+                    </tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-danger">@L["TotalCount"]</td>
+                        <td class="text-danger text-right">@_statistics.GetTotalReactionAffPosts().ToCommaStyle()</td>
+                        <td class="text-danger text-right">@_statistics.GetTotalLikeAffPosts().ToCommaStyle()</td>
+                        <td class="text-danger text-right">@_statistics.GetTotalShareAffPosts().ToCommaStyle()</td>
+                        <td class="text-danger text-right">@_statistics.GetTotalCommentAffPosts().ToCommaStyle()</td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" colspan="4">
+                            <Column Style="float: right;left: 33px">
+                                <NumericEdit class="float-right" Style="width: 65px;; margin-right: 10px" EnableStep="false" TValue="int" @bind-Value="_affiliateRequiredQuantity"/>
+                                <Button class="float-right" Disabled="@_unRendered" Color="Color.Primary" Clicked="(() => ExportTopReactionAffiliatePosts())">
+                                    <Icon Name="IconName.Download"></Icon>
+                                </Button>
+                            </Column>
+                        </td>
+                    </tr>
+                </table>
+            }
+        </TabPanel>
+        </Content>
+        </Tabs>
+        </div>
+
+        <br/>
+        <div id="Section1">
+            <Card>
+                <CardBody>
+                    <Row>
+                        <ChartJs.Blazor.Chart Config="_configGrowth" @ref="_chartGrowth"></ChartJs.Blazor.Chart>
+                    </Row>
+                </CardBody>
+            </Card>
+        </div>
+
+        <br/>
+        <div id="Section2">
+            <Card>
+                <CardBody>
+                    <Row>
+                        <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnFullHD">
+                            <Label>
+                                <strong style="font-size: 20px" class="text-primary">@L["TiktokFollowerTable.Label"]</strong>
+                            </Label>
+                            <Table class="table table-responsive" @ref="@_tableRef" FixedHeader="true" Narrow="true" FixedHeaderTableHeight="350px">
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHeaderCell>
+                                            <b>@L["TiktokFollowerTable.Date"]</b>
+                                        </TableHeaderCell>
+                                        <TableHeaderCell>
+                                            <b>@L["TiktokFollowerTable.Follower"]</b>
+                                        </TableHeaderCell>
+                                        <TableHeaderCell>
+                                            <b>@L["TiktokFollowerTable.Change"]</b>
+                                        </TableHeaderCell>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    @foreach (var item in TiktokFollowerGrowths)
+                                    {
+                                        <TableRow>
+                                            <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                                                @item.Date
+                                            </TableRowCell>
+                                            <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                                                @item.Follower.ToCommaStyle()
+                                            </TableRowCell>
+                                            <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                                                @if (item.FollowerChange < 0)
+                                                {
+                                                    <strong class="text-danger">@item.FollowerChange.ToCommaStyle()</strong>
+                                                }
+                                                else if (item.FollowerChange > 0)
+                                                {
+                                                    <strong class="text-success">@($"+{item.FollowerChange.ToCommaStyle()}")</strong>
+                                                }
+                                                else
+                                                {
+                                                    <strong class="text-success">@item.FollowerChange.ToCommaStyle()</strong>
+                                                }
+                                            </TableRowCell>
+                                        </TableRow>
+                                    }
+                                </TableBody>
+                            </Table>
+                        </Field>
+                        <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnFullHD">
+                            <ChartJs.Blazor.Chart Config="_configTiktokGrowth" @ref="_tiktokGrowth"></ChartJs.Blazor.Chart>
+                        </Field>
+                    </Row>
+                </CardBody>
+            </Card>
+        </div>
+
+        <br/>
+        <div id="Section3">
+            <Tabs name="Section3" SelectedTab="@_selectedTabSection2" SelectedTabChanged="@OnSelectedTabSection2Changed">
+                <Items>
+                    <Tab Name="TabAvgPosts">@L["Index.Chart.AvgPostsChart"]</Tab>
+                    <Tab Name="TabTotalPostsByDate">@L["Index.Chart.PostsByTeamChart"]</Tab>
+                </Items>
+                <Content>
+                    <TabPanel Name="TabAvgPosts">
+                        <Row>
+                            <ChartJs.Blazor.Chart Config="_configAvgPostChart" @ref="_chart_AvgPostStats"></ChartJs.Blazor.Chart>
+                        </Row>
+                    </TabPanel>
+                    <TabPanel Name="TabTotalPostsByDate">
+                        <h3 class="text-center">@L["Index.Chart.PostsByTeamChart"]</h3>
+                        <LineChart @ref="_chart_totalPostsByDate" TItem="int"/>
+                    </TabPanel>
+                </Content>
+            </Tabs>
+        </div>
+
+        <br/>
+        <!-- campaign post -->
+        <div id="Section4">
+            <Card>
+                <CardBody>
+                    <Row>
+                        <ChartJs.Blazor.Chart Config="_configAvgCampaignPostChart" @ref="_chart_AvgCampaignPostStats"></ChartJs.Blazor.Chart>
+                    </Row>
+                </CardBody>
+            </Card>
+        </div>
+
+        <br/>
+        <div id="Section5">
+            <Card>
+                <CardHeader>
+                    <Row>
+                        <Field ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile">
+                            <Select TValue="AffiliateSummaryType" SelectedValue="_affiliateSummaryType" SelectedValueChanged="RenderChart_AffiliateSummaryChart">
+                                @foreach (var itemValue in Enum.GetValues(typeof(AffiliateSummaryType)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="AffiliateSummaryType" Value="@((AffiliateSummaryType) itemValue)">
+                                        @L[$"Enum:AffiliateSummaryType:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                    </Row>
+                </CardHeader>
+                <CardBody>
+                    <ChartJs.Blazor.Chart Config="_configAffiliateChart" @ref="_chart_AffiliateSummary" Height="120"></ChartJs.Blazor.Chart>
+                </CardBody>
+            </Card>
+        </div>
+    @code{
+        Table _tableRef;
+
+        private Task ScrollToRow()
+            => _tableRef.ScrollToRow(1).AsTask();
+
+        private Task ScrollToPixels()
+            => _tableRef.ScrollToPixels(250).AsTask();
+
+        private string _selectedTabSection0 = "TabAvgPostStats";
+
+        private void OnSelectedTabSection0Changed(string name)
+        {
+            _selectedTabSection0 = name;
+        }
+
+        private string _selectedTabSection2 = "TabAvgPosts";
+
+        private void OnSelectedTabSection2Changed(string name)
+        {
+            _selectedTabSection2 = name;
+        }
+
+    }}
+}

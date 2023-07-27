@@ -1,0 +1,90 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RootNamespace>FacebookCommunityAnalytics.Api</RootNamespace>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>d7e29b6f-3a29-4983-b1fb-c75d6246edd5</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.Dashboard.Basic.Authentication" Version="5.0.0" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.7.22" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.HangFire" Version="4.3.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.*" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.*" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.*" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.*" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.EventBus.RabbitMQ" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="4.3.2" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Application\FacebookCommunityAnalytics.Api.Application.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.MongoDB\FacebookCommunityAnalytics.Api.MongoDB.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.HttpApi\FacebookCommunityAnalytics.Api.HttpApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Dockerfile" />
+    <None Remove="Emails\Sample.tpl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\live.api.gdll.vn.pubxml" />
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\test.api.gdll.vn.pubxml" />
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\uat.api.gdll.vn.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\Configs\globalconfigs.dev.json" Link="Configs\globalconfigs.dev.json" />
+    <Content Include="..\Configs\globalconfigs.json" Link="Configs\globalconfigs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Configs\globalconfigs.live.json" Link="Configs\globalconfigs.live.json" />
+    <Content Include="..\Configs\globalconfigs.partner-test.json">
+      <Link>Configs\globalconfigs.partner-test.json</Link>
+    </Content>
+    <Content Include="..\Configs\globalconfigs.partner.json">
+      <Link>Configs\globalconfigs.partner.json</Link>
+    </Content>
+    <Content Include="..\Configs\globalconfigs.test.json">
+      <Link>Configs\globalconfigs.test.json</Link>
+    </Content>
+    <Content Include="..\Configs\globalconfigs.uat.json" Link="Configs\globalconfigs.uat.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Emails\Sample.tpl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configs\" />
+  </ItemGroup>
+
+</Project>

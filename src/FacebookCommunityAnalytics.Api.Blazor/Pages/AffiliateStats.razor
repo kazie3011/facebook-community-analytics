@@ -1,0 +1,348 @@
+@page "/affiliate-stats"
+@attribute [Authorize(ApiPermissions.AffiliateStats.Default)]
+@using FacebookCommunityAnalytics.Api.AffiliateStats
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+
+@inject IAffiliateStatsAppService AffiliateStatsAppService
+@inject IStringLocalizer<ApiResource> L
+@inject IAuthorizationService AuthorizationService
+@inject IUiMessageService UiMessageService
+@inject IObjectMapper ObjectMapper
+@inject IJSRuntime JSRuntime
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["AffiliateStats"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="AffiliateStatSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="AffiliateStatSearchForm" Clicked="GetAffiliateStatsAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="AffiliateStatDto"
+                  Data="AffiliateStatList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="AffiliateStatDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="AffiliateStatDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="AffiliateStatDto"
+                                          Visible="@CanEditAffiliateStat"
+                                          Clicked="() => OpenEditAffiliateStatModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="AffiliateStatDto"
+                                          Visible="@CanDeleteAffiliateStat"
+                                          Clicked="() => DeleteAffiliateStatAsync(context)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="AffiliateStatDto"
+                                Field="AffiliateOwnershipType"
+                                Caption="@L["AffiliateOwnershipType"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:AffiliateOwnershipType:{Convert.ToInt32(context.AffiliateOwnershipType)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+
+                <DataGridColumn TItem="AffiliateStatDto"
+                                Field="Click"
+                                Caption="@L["Click"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AffiliateStatDto"
+                                Field="Conversion"
+                                Caption="@L["Conversion"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AffiliateStatDto"
+                                Field="Amount"
+                                Caption="@L["Amount"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AffiliateStatDto"
+                                Field="Commission"
+                                Caption="@L["Commission"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AffiliateStatDto"
+                                Field="CommisionBonus"
+                                Caption="@L["CommisionBonus"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AffiliateStatDto"
+                                Field="CreatedAt"
+                                Caption="@L["CreatedAt"]">
+                    <DisplayTemplate>
+                        @context.CreatedAt.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateAffiliateStatModal">
+    <ModalContent Centered="true">
+        <Form id="CreateAffiliateStatForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewAffiliateStat"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateAffiliateStatModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewAffiliateStatValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@NewAffiliateStat"
+                             ValidateOnLoad="false">
+
+                    <Field>
+                        <FieldLabel>@L["AffiliateOwnershipType"]</FieldLabel>
+                        <Select TValue="AffiliateOwnershipType" @bind-SelectedValue="@NewAffiliateStat.AffiliateOwnershipType">
+                            @foreach (var itemValue in Enum.GetValues(typeof(AffiliateOwnershipType)))
+                            {
+                                <SelectItem @key="itemValue" TValue="AffiliateOwnershipType" Value="@((AffiliateOwnershipType) itemValue)">
+                                    @L[$"Enum:AffiliateOwnershipType:{Convert.ToInt32(itemValue)}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Click"]</FieldLabel>
+                            <NumericEdit TValue="int" @bind-Value="@NewAffiliateStat.Click">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Conversion"]</FieldLabel>
+                            <NumericEdit TValue="int" @bind-Value="@NewAffiliateStat.Conversion">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Amount"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@NewAffiliateStat.Amount">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Commission"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@NewAffiliateStat.Commission">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["CommisionBonus"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@NewAffiliateStat.CommissionBonus">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["CreatedAt"]</FieldLabel>
+                            <DateEdit TValue="DateTime" @bind-Date="@NewAffiliateStat.CreatedAt">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </DateEdit>
+                        </Field>
+                    </Validation>
+
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateAffiliateStatModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateAffiliateStatForm" Clicked="CreateAffiliateStatAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditAffiliateStatModal">
+    <ModalContent Centered="true">
+        <Form id="EditAffiliateStatForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditAffiliateStatModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditingAffiliateStatValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@EditingAffiliateStat"
+                             ValidateOnLoad="false">
+
+                    <Field>
+                        <FieldLabel>@L["AffiliateOwnershipType"]</FieldLabel>
+                        <Select TValue="AffiliateOwnershipType" @bind-SelectedValue="@EditingAffiliateStat.AffiliateOwnershipType">
+                            @foreach (var itemValue in Enum.GetValues(typeof(AffiliateOwnershipType)))
+                            {
+                                <SelectItem @key="itemValue" TValue="AffiliateOwnershipType" Value="@((AffiliateOwnershipType) itemValue)">
+                                    @L[$"Enum:AffiliateOwnershipType:{Convert.ToInt32(itemValue)}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Click"]</FieldLabel>
+                            <NumericEdit TValue="int" @bind-Value="@EditingAffiliateStat.Click">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Conversion"]</FieldLabel>
+                            <NumericEdit TValue="int" @bind-Value="@EditingAffiliateStat.Conversion">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Amount"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@EditingAffiliateStat.Amount">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Commission"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@EditingAffiliateStat.Commission">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["CommisionBonus"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@EditingAffiliateStat.CommissionBonus">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </NumericEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["CreatedAt"]</FieldLabel>
+                            <DateEdit TValue="DateTime" @bind-Date="@EditingAffiliateStat.CreatedAt">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </DateEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditAffiliateStatModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateAffiliateStatForm" Clicked="UpdateAffiliateStatAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

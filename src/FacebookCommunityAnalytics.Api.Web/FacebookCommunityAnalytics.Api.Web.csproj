@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RootNamespace>FacebookCommunityAnalytics.Api.Web</RootNamespace>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ChartJSCore" Version="1.5.8" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Autofac" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.OpenIdConnect" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Admin.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LeptonTheme.Management.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Saas.Host.Web" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.Web" Version="4.3.2" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Application\FacebookCommunityAnalytics.Api.Application.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.HttpApi\FacebookCommunityAnalytics.Api.HttpApi.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.HttpApi.Client\FacebookCommunityAnalytics.Api.HttpApi.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+    <Content Remove="Pages\UserInfos\CreateModal.cshtml" />
+    <Compile Remove="Pages\UserInfos\CreateModal.cshtml.cs" />
+    <Content Remove="Pages\UserInfos\EditModal.cshtml" />
+    <Compile Remove="Pages\UserInfos\EditModal.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\**\*.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Pages\**\*.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Shared" />
+    <Folder Include="wwwroot\telerik-ui" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Contracts\CreateModal.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Contracts\EditModal.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Contracts\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Components\Widgets\Homes\Default.cshtml" />
+  </ItemGroup>
+</Project>

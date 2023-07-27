@@ -1,0 +1,116 @@
+﻿@page "/afflink/tiki"
+
+@attribute [Authorize(ApiPermissions.UserAffiliates.Default)]
+@using FacebookCommunityAnalytics.Api.UserAffiliates
+
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Posts
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using Microsoft.Extensions.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@inherits BlazorComponentBase
+@inject IStringLocalizer<ApiDomainResource> Lv
+@inject IPostsExtendAppService PostsExtendAppService
+@inject IUserAffiliateAppService UserAffiliateAppService
+@inject IUserInfosAppService UserInfosAppService
+@inject IJSRuntime JSRuntime
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["AffTiki.Links.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+<Row>
+    <Card ColumnSize="ColumnSize.IsFull">
+        <CardBody>
+            <Form id="CreateUserAffiliateForm" onsubmit="return false;">
+                <Row>
+                    <Validations @ref="@NewUserAffiliateValidations"
+                                 Mode="ValidationMode.Auto"
+                                 Model="@NewUserAffiliate"
+                                 ValidateOnLoad="false">
+                        @if (IsSaleAndAboveRole())
+                        {
+                            <Validation>
+                                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop">
+                                    <Select Disabled="@_disableAfterGetAffiliateUrl" TValue="Guid?" @bind-SelectedValue="@NewUserAffiliate.PartnerId">
+                                        <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Partner"]]</SelectItem>
+                                        @foreach (var item in PartnersNullable)
+                                        {
+                                            <SelectItem @key="item" TValue="Guid?" Value="@item.Id">
+                                                @item.DisplayName
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Field>
+                            </Validation>
+
+                            <Validation>
+                                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop">
+                                    <Select Disabled="@_disableAfterGetAffiliateUrl" TValue="Guid?" @bind-SelectedValue="@NewUserAffiliate.CampaignId">
+                                        <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Campaign"]]</SelectItem>
+                                        @foreach (var item in CampaignsNullable)
+                                        {
+                                            <SelectItem @key="item" TValue="Guid?" Value="@item.Id">
+                                                @item.DisplayName
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Field>
+                            </Validation>
+                        }
+
+                        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnDesktop">
+                            <Validation>
+                                <Field>
+                                    <Addons>
+                                        <Addon AddonType="AddonType.Body">
+                                            <TextEdit @bind-Text="@NewUserAffiliate.Url"
+                                                      Autofocus="true"
+                                                      Placeholder="@L["UserAffiliate.Url.Placeholder.Tiki"]">
+                                                <Feedback>
+                                                    <ValidationError/>
+                                                </Feedback>
+                                            </TextEdit>
+                                        </Addon>
+
+                                        <Addon AddonType="AddonType.End">
+                                            <Button Color="Color.Primary" Disabled="@_disableShortlinkButton" Clicked="@(async () => await GetAffiliateUrlAsync(NewUserAffiliate.Url))">
+                                                <Icon Name="IconName.Add" Class="mr-1"></Icon>GDL
+                                            </Button>
+                                        </Addon>
+                                    </Addons>
+                                </Field>
+                            </Validation>
+
+                            <Validation>
+                                <Field>
+                                    @* <FieldLabel>@L["UserAffiliate.AffiliateUrl"]</FieldLabel> *@
+                                    <Addons>
+                                        <Addon AddonType="AddonType.Body">
+                                            <TextEdit @bind-Text="@NewUserAffiliate.AffiliateUrl" Placeholder="Shortlink" ElementId="txtShortlink">
+                                                <Feedback>
+                                                    <ValidationError/>
+                                                </Feedback>
+                                            </TextEdit>
+                                        </Addon>
+                                        <Addon AddonType="AddonType.End">
+                                            <Button id="btnCopyToClipBoard" style="background-color: #860404;" data-clipboard-target="#txtShortlink">
+                                                <Icon Name="IconName.Save" Class="mr-1"></Icon>
+                                            </Button>
+                                            <Button Color="Color.Primary" Clicked="ClearUserAffiliateAsync">
+                                                <Icon Name="IconName.Delete" Class="mr-1"></Icon>
+                                            </Button>
+                                        </Addon>
+                                    </Addons>
+                                </Field>
+                            </Validation>
+                        </Field>
+                    </Validations>
+                </Row>
+
+            </Form>
+        </CardBody>
+    </Card>
+</Row>

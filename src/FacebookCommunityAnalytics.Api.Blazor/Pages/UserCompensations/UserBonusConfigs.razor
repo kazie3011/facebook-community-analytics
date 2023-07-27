@@ -1,0 +1,187 @@
+﻿@page "/user-bonus-configs"
+
+@attribute [Authorize(ApiPermissions.UserBonusConfigs.Default)]
+
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using FacebookCommunityAnalytics.Api.UserCompensations
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Permissions
+@using Microsoft.AspNetCore.Components
+@inherits BlazorComponentBase
+
+@inject IUserInfosAppService UserInfosAppService
+@inject IUserBonusConfigAppService UserBonusConfigAppService
+@inject IUiMessageService UiMessageService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["UserBonusConfig.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+@* <Card> *@
+@*     <CardBody> *@
+@*         <Form id="UserCompensationSearchForm" class="mb-3"> *@
+@*             <Addons> *@
+@*                 <Addon AddonType="AddonType.Body"> *@
+@*                     <TextEdit @bind-Text="@Filter.FilterText" *@
+@*                               Autofocus="true" *@
+@*                               Placeholder="@L["Search"]"> *@
+@*                     </TextEdit> *@
+@*                 </Addon> *@
+@*                 <Addon AddonType="AddonType.End"> *@
+@*                     <SubmitButton Form="UserInfoSearchForm" Clicked="GetUserBonusConfigsAsync"> *@
+@*                         <Icon Name="IconName.Search" Class="mr-1"></Icon> *@
+@*                     </SubmitButton> *@
+@*                 </Addon> *@
+@*             </Addons> *@
+@*         </Form> *@
+@*     </CardBody> *@
+@* </Card> *@
+
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="UserBonusConfigDto"
+                  Data="UserBonusConfigsDtos"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  Responsive="true"
+                  Striped="true"
+                  Narrow="true"
+                  Sortable="true">
+            <DataGridColumns>
+                @* <DataGridEntityActionsColumn TItem="UserBonusConfigDto" @ref="@EntityActionsColumn"> *@
+                @*     <DisplayTemplate> *@
+                @*         <EntityActions TItem="UserBonusConfigDto" EntityActionsColumn="@EntityActionsColumn"> *@
+                @*             <EntityAction TItem="UserBonusConfigDto" *@
+                @*                           Visible="@CanEdit" *@
+                @*                           Clicked="() => OpenEditModal(context)" *@
+                @*                           Text="@L["Edit"]"> *@
+                @*             </EntityAction> *@
+                @*         </EntityActions> *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridEntityActionsColumn> *@
+
+                <DataGridColumn TItem="UserBonusConfigDto"
+                                Field="BonusType"
+                                Caption="@L["UserBonusConfig.BonusType"]" Sortable="true">
+                    <DisplayTemplate>
+                        @L[$"Enum:BonusType:{Convert.ToInt32(context.BonusType)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserBonusConfigDto"
+                                Field="BonusAmount"
+                                Caption="@L["UserBonusConfig.BonusAmount"]" Sortable="false">
+                    <DisplayTemplate>
+                        @context.BonusAmount.ToVND()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserBonusConfigDto" Field="Id" Caption="@L["Action"]" Sortable="false">
+                    <DisplayTemplate>
+                        <Buttons>
+                            @if (CanEdit)
+                            {
+                                <Button Outline Color="Color.Primary" Clicked="() => OpenEditModal(context)">
+                                    <Icon Name="IconName.Edit"/>
+                                </Button>
+                            }
+                        </Buttons>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateModal">
+    <ModalContent Centered="true">
+        <Form id="CreateForm">
+            <ModalHeader>
+                <ModalTitle>@L["UserBonusConfig.Title"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["UserBonusConfig.BonusType"]</FieldLabel>
+                    <Select TValue="BonusType" @bind-SelectedValue="@CreateUserBonusConfig.BonusType">
+                        @foreach (var itemValue in Enum.GetValues(typeof(BonusType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="BonusType" Value="@((BonusType) itemValue)">
+                                @L[$"Enum:BonusType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+                <Field>
+                    <FieldLabel>@L["UserBonusConfig.BonusAmount"]</FieldLabel>
+                    <NumericEdit TValue="decimal" @bind-Value="@CreateUserBonusConfig.BonusAmount">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateForm" Clicked="CreateUserBonusConfigAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditModal">
+    <ModalContent Centered="true">
+        <Form id="EditForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["UserBonusConfig.BonusType"]</FieldLabel>
+                    <Select TValue="BonusType" @bind-SelectedValue="@EditUserBonusConfig.BonusType">
+                        @foreach (var itemValue in Enum.GetValues(typeof(BonusType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="BonusType" Value="@((BonusType) itemValue)">
+                                @L[$"Enum:BonusType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+                <Field>
+                    <FieldLabel>@L["UserBonusConfig.BonusAmount"]</FieldLabel>
+                    <NumericEdit TValue="decimal" @bind-Value="@EditUserBonusConfig.BonusAmount">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </NumericEdit>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditForm" Clicked="UpdateUserBonusConfigAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

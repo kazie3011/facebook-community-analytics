@@ -1,0 +1,229 @@
+﻿@page "/campaign-detail/{campaignId}"
+@model FacebookCommunityAnalytics.Api.Web.Pages.Campaigns.CampaignDetail
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using FacebookCommunityAnalytics.Api.Web.Menus
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
+@inject IHtmlLocalizer<ApiResource> L
+@inject IAuthorizationService Authorization
+@inject IPageLayout PageLayout
+@{
+    ViewBag.Title = $"GDL - {string.Format(L["CampaignDetailPage.Title"].Value, Model.CampaignDto.Name)}";
+}
+@{
+    PageLayout.Content.Title = L["CampaignDetail.Title"].Value;
+    PageLayout.Content.MenuItemName = ApiMenus.Campaigns;
+}
+
+@section scripts{
+    <abp-script src="/Pages/Campaigns/campaignDetail.js"/>
+    <script>
+        var l = abp.localization.getResource("Api");
+        function RemovePostCampaign($postId){
+            abp.message.confirm(l("DeleteConfirmationMessage"))
+            .then(function(confirmed){
+              if(confirmed){
+                  let partnerService = window.facebookCommunityAnalytics.api.controllers.partnerModules.partnerModule;
+                  partnerService.removeCampaignPost($postId).then(function (){
+                     window.location.reload();
+                  });
+              }
+            }); 
+        }
+    </script>
+}
+
+@section content_toolbar {
+    @if (await Authorization.IsGrantedAsync(FacebookCommunityAnalytics.Api.Permissions.ApiPermissions.PartnerModule.PartnerPosts))
+    {
+        <abp-button id="ExportPostButton" text="@L["ExportPost"].Value" icon="file-excel" button-type="Primary"/>
+        <abp-button id="NewPostButton" text="@L["NewPostButton"].Value" icon="plus" button-type="Primary"/>
+    }
+    
+}
+<input type="hidden" id="CurrentCampaignId" value="@Model.CampaignId"/>
+<abp-row>
+    <abp-column size="_12">
+        <abp-card>
+            <abp-card-header>
+                <h4 class="text-danger">@Model.CampaignDto.Name</h4>
+            </abp-card-header>
+            <abp-card-body>
+                <abp-table striped-rows="true">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <strong>@L["CampaignStatus"]</strong>
+                        </td>
+                        <td>
+                            @{
+                                if (Model.CampaignDto.Status == CampaignStatus.Started)
+                                {
+                                    <span class="text-success">@L[$"Enum:CampaignStatus:{Convert.ToInt32(Model.CampaignDto.Status)}"]</span>
+                                }
+                                else if (Model.CampaignDto.Status == CampaignStatus.Ended)
+                                {
+                                    <span class="text-danger">@L[$"Enum:CampaignStatus:{Convert.ToInt32(Model.CampaignDto.Status)}"]</span>
+                                }
+                                else
+                                {
+                                    <span>@L[$"Enum:CampaignStatus:{Convert.ToInt32(Model.CampaignDto.Status)}"]</span>
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>@L["CampaignDetail.StartEndDate"]</strong>
+                        </td>
+                        <td>@Model.CampaignDto.StartDateTime?.ToString(GlobalConsts.DateFormat) - @Model.CampaignDto.EndDateTime?.ToString(GlobalConsts.DateFormat)</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>@L["Code"]</strong>
+                        </td>
+                        <td>@Model.CampaignDto.Code</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Hashtag</strong>
+                        </td>
+                        <td>
+                            @{
+                                if (Model.CampaignDto.Hashtags != null)
+                                {
+                                    foreach (var hashtag in Model.CampaignDto.Hashtags.Split("#", StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        if (hashtag.IsNotNullOrEmpty())
+                                        {
+                                            <span abp-badge="Primary">#@hashtag</span>
+                                        }
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>@L["Campaign.Keywords"]</strong>
+                        </td>
+                        <td>
+                            @{
+                                if (Model.CampaignDto.Keywords.IsNotNullOrEmpty())
+                                {
+                                    foreach (var keyword in Model.CampaignDto.Keywords.Split(",", StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        if (keyword.IsNotNullOrEmpty())
+                                        {
+                                            <span abp-badge="Primary">@keyword</span>
+                                        }
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>@L["Campaign.Description"]</strong>
+                        </td>
+                        <td>@Model.CampaignDto.Description</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>@L["Campaign.Emails"]</strong>
+                        </td>
+                        <td>@Model.CampaignDto.Emails</td>
+                    </tr>
+                    </tbody>
+                </abp-table>
+            </abp-card-body>
+        </abp-card>
+    </abp-column>
+</abp-row>
+
+
+<abp-tabs name="TabPosts">
+    <abp-tab active="true" name="CampaignSeedingPostTab" title="@($"{L["CampaignSeedingPostTab"].Value} ({Model.SeedingPosts.Count})")">
+        <abp-table striped-rows="true">
+            <thead>
+            <tr>
+                <th>@L["AuthorName"]</th>
+                <th>@L["Url"]</th>
+                <th>@L["Group"]</th>
+                <th>@L["CreatedDateTime"]</th>
+                <th>@L["TotalCount"]</th>
+                <th>@L["Like"]</th>
+                <th>@L["Comment"]</th>
+                <th>@L["Share"]</th>
+                <th>@L["Actions"]</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var row in Model.SeedingPosts)
+            {
+                <tr>
+                    <td>@row.CreatedBy</td>
+                    <td>
+                        <a href="@row.Url" target="_blank">@($"Fid:{row.Fid}")</a>
+                    </td>
+                    <td>@row.GroupName</td>
+                    <td>@row.CreatedDateTime?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@row.TotalCount.ToCommaStyle()</td>
+                    <td>@row.LikeCount.ToCommaStyle()</td>
+                    <td>@row.CommentCount.ToCommaStyle()</td>
+                    <td>@row.ShareCount.ToCommaStyle()</td>
+                    <td>
+                        <button type="button" class="btn-sm btn-danger" onclick="RemovePostCampaign('@row.Id');">
+                            <i class="fa fa-trash"></i> @L["CampaignDetail.RemovePost"]
+                        </button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </abp-table>
+    </abp-tab>
+    <abp-tab name="CampaignContestPostTab" title="@($"{L["CampaignContestPostTab"].Value} ({Model.ContestPosts.Count})")">
+        <abp-table striped-rows="true">
+            <thead>
+            <tr>
+                <th>@L["AuthorName"]</th>
+                <th>@L["Url"]</th>
+                <th>@L["Group"]</th>
+                <th>@L["CreatedDateTime"]</th>
+                <th>@L["TotalCount"]</th>
+                <th>@L["Like"]</th>
+                <th>@L["Comment"]</th>
+                <th>@L["Share"]</th>
+                <th>@L["Actions"]</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var row in Model.ContestPosts)
+            {
+                <tr>
+                    <td>@row.CreatedBy</td>
+                    <td>
+                        <a href="@row.Url" target="_blank">@($"Fid:{row.Fid}")</a>
+                    </td>
+                    <td>@row.GroupName</td>
+                    <td>@row.CreatedDateTime?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@row.TotalCount.ToCommaStyle()</td>
+                    <td>@row.LikeCount.ToCommaStyle()</td>
+                    <td>@row.CommentCount.ToCommaStyle()</td>
+                    <td>@row.ShareCount.ToCommaStyle()</td>
+                    <td>
+                        <button type="button" class="btn-sm btn-danger" onclick="RemovePostCampaign('@row.Id');">
+                            <i class="fa fa-trash"></i> @L["CampaignDetail.RemovePost"]
+                        </button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </abp-table>
+    </abp-tab>
+</abp-tabs>

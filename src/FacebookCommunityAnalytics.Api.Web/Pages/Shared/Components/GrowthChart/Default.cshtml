@@ -1,0 +1,13 @@
+﻿@using FacebookCommunityAnalytics.Api.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<ApiResource> L
+
+<abp-card>
+    <abp-card-header>@L["Chart"]</abp-card-header>
+    <abp-card-body>
+        <div>
+            <canvas id="lineChart"></canvas>
+        </div>
+    </abp-card-body>
+</abp-card>

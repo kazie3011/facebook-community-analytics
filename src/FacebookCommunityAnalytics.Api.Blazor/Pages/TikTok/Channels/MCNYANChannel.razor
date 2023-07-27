@@ -1,0 +1,405 @@
+﻿@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Groups
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Flurl
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using Microsoft.AspNetCore.Components
+@using Radzen
+@using Volo.Abp.AspNetCore.Components.Messages
+@inherits BlazorComponentBase
+@inject IGroupsAppService GroupsAppService
+@inject IGroupExtendAppService GroupsExtendAppService
+@inject IUiMessageService UiMessageService;
+
+@attribute [Authorize(ApiPermissions.Tiktok.Channels)]
+
+@* ************************* SEARCH ************************* *@
+<Form id="TiktokChannelSearchForm">
+    <Row>
+        <Column>
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <Select TValue="GroupCategoryType" SelectedValue="@_categoryFilter" SelectedValueChanged="@OnChanged_Category">
+                        @foreach (var itemValue in Enum.GetValues(typeof(GroupCategoryType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="GroupCategoryType" Value="@((GroupCategoryType)itemValue)">
+                                @L[$"Enum:GroupCategoryType:{(int)itemValue}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Addon>
+            
+                <Addon AddonType="AddonType.Start" Style="display:flex;align-items: center;padding:0 5px; border: solid lightgray 1px;margin-left: 5px">
+                    <Check TValue="bool" Checked="Filter.IsActive" CheckedChanged="@OnChecked_Active">@L["TiktokChannels.ActiveFilter"]</Check>
+                </Addon>
+            
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Style="margin-left: 5px;min-width:100px;max-width: 300px"
+                              Autofocus="true"
+                              Placeholder="@L["TiktokChannel.Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="TiktokChannelSearchForm" Clicked="DoSearch">
+                        <Icon Name="IconName.Search" Class="mr-1"/>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Column>
+    </Row>
+</Form>
+
+@* ************************* DATA GRID ************************* *@
+<Card Class="card-none-box">
+    <DataGrid TItem="GroupDto"
+              Data="GroupList"
+              ReadData="OnDataGridReadAsync"
+              TotalItems="TotalCount"
+              ShowPager="true"
+              Responsive="true"
+              Narrow="true"
+              Striped="true"
+              SortMode="DataGridSortMode.Single"
+              PageSizes="GlobalConsts.PAGE_SIZES_CONST" PageSize="PageSize" ShowPageSizes="true">
+        <DataGridColumns>
+
+
+            <DataGridColumn TItem="GroupDto"
+                            Field="GroupOwnershipType"
+                            Caption="@L["TiktokChannels.GroupOwnershipType"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(context.GroupOwnershipType)}"]
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="GroupDto"
+                            Field="Title"
+                            Caption="@L["TiktokChannels.GroupTitle"]"
+                            Sortable="true"
+                            SortDirection="SortDirection.Ascending">
+            </DataGridColumn>
+
+
+            <DataGridColumn TItem="GroupDto"
+                            Field="Name"
+                            Sortable="false"
+                            Caption="@L["TiktokChannels.GroupName"]">
+            </DataGridColumn>
+
+            <DataGridColumn TItem="GroupDto"
+                            Field="Url"
+                            Sortable="false"
+                            Caption="@L["TiktokChannels.Url"]">
+                <DisplayTemplate>
+                    @{
+                        string GetGroupDisplayUrl(string urlString)
+                        {
+                            try
+                            {
+                                var url = new Url(urlString);
+                                return url.Path;
+                            }
+                            catch (Exception)
+                            {
+                                return urlString;
+                            }
+                        }
+                    }
+                    <Link To="@context.Url" Target="Target.Blank">@GetGroupDisplayUrl(context.Url)</Link>
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="GroupDto"
+                            Field="GroupCategoryType"
+                            Caption="@L["TiktokChannels.GroupCategoryType"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @context.GroupCategoryType.ToString()
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="GroupDto"
+                            Field="TikTokTarget.TargetVideo"
+                            Caption="@L["TiktokChannels.TargetVideo"]"
+                            Sortable="true"
+                            HeaderTextAlignment="TextAlignment.Center"
+                            TextAlignment="TextAlignment.Right">
+                <DisplayTemplate >
+                    @(context.TikTokTarget?.TargetVideo != null ? context.TikTokTarget.TargetVideo.Value.ToString("N0") : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="GroupDto"
+                            Field="TikTokTarget.TargetFollower"
+                            Caption="@L["TiktokChannels.TargetFollowers"]"
+                            Sortable="true"
+                            HeaderTextAlignment="TextAlignment.Center"
+                            TextAlignment="TextAlignment.Right">
+                <DisplayTemplate >
+                    @(context.TikTokTarget?.TargetFollower != null ? context.TikTokTarget.TargetFollower.Value.ToString("N0") : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="GroupDto"
+                            Field="Stats.GroupMembers"
+                            Caption="@L["TiktokChannels.Followers"]"
+                            Sortable="true"
+                            HeaderTextAlignment="TextAlignment.Center"
+                            TextAlignment="TextAlignment.Right">
+                <DisplayTemplate >
+                    @(context.Stats?.GroupMembers != null ? context.Stats.GroupMembers.ToString("N0") : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+            
+            <DataGridColumn TItem="GroupDto"
+                            Field="TikTokUserId"
+                            Sortable="false"
+                            Caption="@L["TikTokUserId"]">
+            </DataGridColumn>
+
+            <DataGridColumn TItem="GroupDto"
+                            Field="CreationTime"
+                            Sortable="false"
+                            Caption="@L["TiktokChannels.CreatedAt"]">
+                <DisplayTemplate>
+                    <Tooltip Text="@(ConvertToBrowserDateTime(context.CreationTime).Result.ToLongDateString())">
+                        @(ConvertToBrowserDateString(context.CreationTime).Result)
+                    </Tooltip>
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="GroupDto"
+                            Field="IsActive"
+                            Caption="@L["Action"]"
+                            Sortable="false">
+                <DisplayTemplate>
+                    <Buttons>
+                        <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditGroupModal(context)">
+                            <Icon Name="IconName.Edit"/>
+                        </Button>
+
+                        @if (context.IsActive)
+                        {
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeactivatedGroupAsync(context)">
+                                <Icon Name="IconName.Lock"/>
+                            </Button>
+                        }
+                        else
+                        {
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => ActivatedGroupAsync(context)">
+                                <Icon Name="IconName.Unlock"/>
+                            </Button>
+                        }
+                        <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeleteGroupAsync(context)">
+                            <Icon Name="IconName.Delete"/>
+                        </Button>
+                    </Buttons>
+                </DisplayTemplate>
+            </DataGridColumn>
+        </DataGridColumns>
+
+    </DataGrid>
+</Card>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditChannelModal">
+    <ModalContent Centered="true">
+        <Form id="EditChannelForm">
+            <ModalHeader>
+                <ModalTitle>@L["TiktokChannels.UpdateChannel"]</ModalTitle>
+                <CloseButton Clicked="CloseEditGroupModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="editingValidations" Mode="ValidationMode.Manual">
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.GroupOwnershipType"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <Select TValue="GroupOwnershipType" @bind-SelectedValue="@EditingGroup.GroupOwnershipType">
+                                    <SelectItem @key="GroupOwnershipType.GDLExternal" TValue="GroupOwnershipType" Value="@(GroupOwnershipType.GDLExternal)">
+                                        @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(GroupOwnershipType.GDLExternal)}"]
+                                    </SelectItem>
+                                    <SelectItem @key="GroupOwnershipType.GDLInternal" TValue="GroupOwnershipType" Value="@(GroupOwnershipType.GDLInternal)">
+                                        @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(GroupOwnershipType.GDLInternal)}"]
+                                    </SelectItem>
+                                    <SelectItem @key="GroupOwnershipType.YAN" TValue="GroupOwnershipType" Value="@(GroupOwnershipType.YAN)">
+                                        @L[$"Enum:GroupOwnershipType:{Convert.ToInt32(GroupOwnershipType.YAN)}"]
+                                    </SelectItem>
+                                </Select>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.TikTokContractStatus"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <Select TValue="TikTokContractStatus" @bind-SelectedValue="@EditingGroup.ContractStatus">
+                                    @foreach (var itemValue in Enum.GetValues(typeof(TikTokContractStatus)))
+                                    {
+                                        <SelectItem @key="itemValue" TValue="TikTokContractStatus" Value="@((TikTokContractStatus) itemValue)">
+                                            @L[$"Enum:TikTokContractStatus:{Convert.ToInt32(itemValue)}"]
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.GroupTitle"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@EditingGroup.Title">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.Fid"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@EditingGroup.Fid">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.Url"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <Validation UsePattern="true">
+                                    <TextEdit @bind-Text="@EditingGroup.Url" Pattern="(https://(www.)?tiktok.com/){1}[\S]+">
+                                        <Feedback>
+                                            <ValidationError>Invalid Tiktok Url.</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.TargetFollower"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                    <NumericEdit TValue="long?" @bind-Value="@EditingGroup.TikTokTarget.TargetFollower"></NumericEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.TargetVideo"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <NumericEdit TValue="long?" @bind-Value="@EditingGroup.TikTokTarget.TargetVideo"></NumericEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.TargetDateTime"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <DateEdit TValue="DateTime?" @bind-Text="@EditingGroup.TikTokTarget.TargetDateTime"></DateEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["TiktokChannels.GroupCategoryType"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <Select TValue="GroupCategoryType" @bind-SelectedValue="@EditingGroup.GroupCategoryType">
+                                    @foreach (var itemValue in Enum.GetValues(typeof(GroupCategoryType)))
+                                    {
+                                        <SelectItem @key="itemValue" TValue="GroupCategoryType" Value="@((GroupCategoryType) itemValue)">
+                                            @L[$"Enum:GroupCategoryType:{Convert.ToInt32(itemValue)}"]
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["Description"]</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@EditingGroup.Description">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 130px">@L["Moderator"] *</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                @bind-Value=@ModeratorUserIds Multiple="true" Placeholder="@L["SelectModerator"]" Data=@StaffUsersLookupDtos TextProperty="DisplayName" ValueProperty="Id"
+                                                Change=@(EditModeratorIdsSelectedValuesChanged) Class="rz-gdl-custom">
+                                </RadzenDropDown>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                    
+                    <Field>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel Class="bg-primary text-white" style="width: 135px">@L["TikTokUserId"]</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit @bind-Text="@EditingGroup.TikTokUserId">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                    
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditGroupModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditGroupForm" Clicked="UpdateChannel"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

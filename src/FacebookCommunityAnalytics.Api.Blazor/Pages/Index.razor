@@ -1,0 +1,17 @@
+﻿@page "/"
+@inherits BlazorComponentBase
+@using FacebookCommunityAnalytics.Api.Blazor.Shared.Components
+@using FacebookCommunityAnalytics.Api.Blazor.Pages.PartnerModule.Components
+@inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime
+@if (CurrentUser.IsAuthenticated)
+{
+    if (IsPartnerRole())
+    {
+        <HomePagePartner/>
+    }
+    else if(!IsPartnerTool())
+    {
+        <HomePageDefault/>
+    }
+}

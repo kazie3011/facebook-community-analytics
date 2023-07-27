@@ -1,0 +1,33 @@
+﻿<div>
+    @GetDisplayText()
+
+    @if (CanBeExpanded)
+    {
+        @if (IsExpanded)
+        {
+            <a @onclick="@(() => { IsExpanded = false; })" style="font-style: initial; font-size: 0.7em; color: dimgray; cursor: pointer;">Show less</a>
+        }
+        else
+        {
+            <a @onclick="@(() => { IsExpanded = true; })" style="font-style: initial; font-size: 0.7em; color: dimgray; cursor: pointer;">Show more</a>
+        }
+    }
+</div>
+
+@code {
+
+    [Parameter] public string Text { get; set; }
+    [Parameter] public int MaxCharacters { get; set; } = 200;
+    private bool IsExpanded { get; set; }
+    private bool CanBeExpanded => Text.Length > MaxCharacters;
+
+    private string GetDisplayText()
+    {
+        return IsExpanded ? Text : Truncate(Text, MaxCharacters);
+    }
+
+    private string Truncate(string value, int maxChars)
+    {
+        return value.Length <= maxChars ? value : value.Substring(0, maxChars) + "...";
+    }
+}

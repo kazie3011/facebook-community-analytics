@@ -1,0 +1,176 @@
+﻿@page "/contents"
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using Volo.Abp.AspNetCore.Components.Messages
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Medias
+@using Humanizer
+@using Faso.Blazor.SpinKit
+@using FacebookCommunityAnalytics.Api.Core.Enums;
+@using Radzen
+@attribute [Authorize(ApiPermissions.Content.Default)]
+
+@inherits BlazorComponentBase
+
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+@inject IMediaAppService _mediaAppService
+@inject NavigationManager NavigationManager
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Menu:ContentMedia"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="ContentSearchForm" class="mb-3">
+            <Row>
+                <Column ColumnSize="ColumnSize.IsHalf.OnWidescreen.IsFull.OnMobile">
+                    <Field>
+                        <Select class="form-control form-control-md" TValue="int" SelectedValue="@_selectedMediaCategoryFilter" SelectedValueChanged="@OnSelectedCategoryChanged">
+                            <SelectItem Value="-1">@L["SelectItem.DefaultText", L["ContentMedia.Category"]]</SelectItem>
+                            @foreach (var itemValue in Enum.GetValues(typeof(MediaCategory)))
+                            {
+                                <SelectItem @key="itemValue" Value="@((int) itemValue)">
+                                    @L[$"Enum:MediaCategory:{Convert.ToInt32(itemValue)}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.IsHalf.OnWidescreen.IsFull.OnMobile">
+                    <Addons>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit @bind-Text="@Filter.FilterText"
+                                      Autofocus="true"
+                                      Placeholder="@L["Search"]">
+                            </TextEdit>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <SubmitButton Form="ContentSearchForm" Clicked="GetContentsAsync">
+                                <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                            </SubmitButton>
+                        </Addon>
+                    </Addons>
+                </Column>
+            </Row>
+
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="CreateForm">
+            <ModalHeader>
+                <ModalTitle>@L["Content.ContentMedia.NewContent.Modal"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Row>
+                    @if (_showLoading)
+                    {
+                        <SpinKitChasingDots/>
+                    }
+                </Row>
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsHalf.OnWidescreen.IsFull.OnMobile">
+                        <Field>
+                            <FieldLabel>@L["Content.ContentMedia.NewContent.Category"]</FieldLabel>
+                            <Select class="form-control form-control-md" TValue="MediaCategory" @bind-SelectedValue="_selectedMediaCategory">
+                                @foreach (var itemValue in Enum.GetValues(typeof(MediaCategory)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="MediaCategory" Value="@((MediaCategory) itemValue)">
+                                        @L[$"Enum:MediaCategory:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                    </Column>
+                </Row>
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsHalf.OnWidescreen.IsFull.OnMobile">
+                        <Field>
+                            <FieldLabel>@L["Content.ContentMedia.NewContent.Tags"]</FieldLabel>
+                            <TagsInputControl @ref="_tagsInputControl"></TagsInputControl>
+                        </Field>
+
+                        <Field>
+                            <RadzenUpload Accept="image/*"
+                                          @ref="_createContentUpload"
+                                          Auto="false" Multiple="true" Url="Upload/UploadContentFiles" Style="margin-bottom: 20px;"
+                                          Change=@(args => OnChange(args, "Manual Upload"))
+                                          Progress=@(args => OnProgress(args, "Manual Upload"))
+                                          Error="@(OnError)"
+                                          Complete="@(OnComplete)"
+                                          ChooseText="@L["Content.ContentMedia.ChooseFiles.Button"]">
+                            </RadzenUpload>
+                        </Field>
+                    </Column>
+                </Row>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton @ref="_buttonSubmitForm" Form="CreateForm" Clicked="CreateUploadAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Card>
+    <CardBody>
+        @if (MediaDtos.IsNotNullOrEmpty())
+        {
+            <Row>
+                @foreach (var mediaDto in MediaDtos)
+                {
+                    <Field @key="mediaDto">
+                        <Card Style="margin: 0 5px 0 5px; max-width: 250px">
+                            <CardImage Class="content-item-img" Source="@mediaDto.ImagePath" Alt="@mediaDto.FileName"></CardImage>
+                            <CardBody Class="content-card-body">
+                                <div class="content-item-tags">
+                                    @if (mediaDto.Tags.Any())
+                                    {
+                                        foreach (var tag in mediaDto.Tags.OrderBy(x => x.Length).Take(2))
+                                        {
+                                            <Badge @key="tag" Color="Color.Secondary">#@tag</Badge>
+                                        }
+                                        if (mediaDto.Tags.Count > 2)
+                                        {
+                                            var tags = mediaDto.Tags.Select(x => $"#{x}").JoinAsString(" ");
+                                            <Tooltip Text="@tags" Style="display: inline-table">
+                                                <Badge Color="Color.Secondary">...</Badge>
+                                            </Tooltip>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <br/>
+                                    }
+                                </div>
+                                <Row Class="content-item-content">
+                                    <Column ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+                                        <CardText Class="content-item-date">
+                                            @mediaDto.CreationTime.ToLocalTime().Humanize()
+                                        </CardText>
+                                        <Button Size="Size.Medium" TextColor="TextColor.White" Color="Color.Primary" Clicked="async () => await DownloadImage(mediaDto.Url)">
+                                            <Icon Name="IconName.Download"></Icon>
+                                        </Button>
+                                        <Button Size="Size.Medium" TextColor="TextColor.White" Color="Color.Primary" Clicked="async () => await RemoveImage(mediaDto.Id)">
+                                            <Icon Name="IconName.Delete"></Icon>
+                                        </Button>
+                                    </Column>
+                                </Row>
+                            </CardBody>
+                        </Card>
+                    </Field>
+                }
+            </Row>
+        }
+    </CardBody>
+</Card>

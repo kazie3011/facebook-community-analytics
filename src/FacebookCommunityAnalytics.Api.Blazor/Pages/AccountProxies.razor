@@ -1,0 +1,237 @@
+@page "/account-proxies"
+@attribute [Authorize(ApiPermissions.AccountProxies.Default)]
+@using FacebookCommunityAnalytics.Api.AccountProxies
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@inject IAccountProxiesAppService AccountProxiesAppService
+@inject IAccountProxiesExtendAppService AccountProxiesExtendAppService
+@inject IStringLocalizer<ApiResource> L
+@inject IAuthorizationService AuthorizationService
+@inject IUiMessageService UiMessageService
+@inject IObjectMapper ObjectMapper
+@inject IJSRuntime JSRuntime
+@inherits BlazorComponentBase
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["AccountProxies"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="AccountProxySearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="AccountProxySearchForm" Clicked="GetAccountProxiesAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="AccountProxyWithNavigationPropertiesDto"
+                  Data="AccountProxyList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  ShowPageSizes="true"
+                  Class="text-nowrap"
+                  Narrow="true"
+                  Striped="true">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="AccountProxyWithNavigationPropertiesDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="AccountProxyWithNavigationPropertiesDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="AccountProxyWithNavigationPropertiesDto"
+                                          Visible="@CanEditAccountProxy"
+                                          Clicked="() => OpenEditAccountProxyModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="AccountProxyWithNavigationPropertiesDto"
+                                          Visible="@CanDeleteAccountProxy"
+                                          Clicked="() => DeleteAccountProxyAsync(context)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="AccountProxyWithNavigationPropertiesDto"
+                                Field="AccountProxy.Description"
+                                Caption="@L["Description"]"
+                                Sortable="false">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountProxyWithNavigationPropertiesDto"
+                                Field="Account.Username"
+                                Caption="@L["Account"]"
+                                Sortable="false">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AccountProxyWithNavigationPropertiesDto"
+                                Field="Proxy.Ip"
+                                Caption="@L["Proxy"]"
+                                Sortable="false">
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateAccountProxyModal">
+    <ModalContent Centered="true">
+        <Form id="CreateAccountProxyForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewAccountProxy"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateAccountProxyModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewAccountProxyValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@NewAccountProxy"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewAccountProxy.Description">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Field>
+                        <FieldLabel>@L["Account"] </FieldLabel>
+                        <Autocomplete Data="@AccountsNullable"
+                                      TItem="LookupDto<Guid?>"
+                                      TValue="Guid?"
+                                      TextField="@((item) => item.DisplayName)"
+                                      ValueField="@((item) => item.Id)"
+                                      SearchChanged="@GetNullableAccountLookupAsync"
+                                      @bind-SelectedValue="@NewAccountProxy.AccountId"
+                                      Placeholder="@L["Autocomplete"]" Filter="AutocompleteFilter.Contains"/>
+                    </Field>
+
+
+                    <Field>
+                        <FieldLabel>@L["Proxy"] </FieldLabel>
+                        <Autocomplete Data="@ProxiesNullable"
+                                      TItem="LookupDto<Guid?>"
+                                      TValue="Guid?"
+                                      TextField="@((item) => item.DisplayName)"
+                                      ValueField="@((item) => item.Id)"
+                                      SearchChanged="@GetNullableProxyLookupAsync"
+                                      @bind-SelectedValue="@NewAccountProxy.ProxyId"
+                                      Placeholder="@L["Autocomplete"]" Filter="AutocompleteFilter.Contains"/>
+                    </Field>
+
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateAccountProxyModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateAccountProxyForm" Clicked="CreateAccountProxyAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditAccountProxyModal">
+    <ModalContent Centered="true">
+        <Form id="EditAccountProxyForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditAccountProxyModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditingAccountProxyValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@EditingAccountProxy"
+                             ValidateOnLoad="false">
+
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAccountProxy.Description">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+
+
+                    <Field>
+                        <FieldLabel>@L["Account"] </FieldLabel>
+                        <Autocomplete Data="@AccountsNullable"
+                                      TItem="LookupDto<Guid?>"
+                                      TValue="Guid?"
+                                      TextField="@((item) => item.DisplayName)"
+                                      ValueField="@((item) => item.Id)"
+                                      SearchChanged="@GetNullableAccountLookupAsync"
+                                      @bind-SelectedValue="@EditingAccountProxy.AccountId"
+                                      ChangeTextOnKeyPress=true
+                                      Placeholder="@L["Autocomplete"]" Filter="AutocompleteFilter.Contains"/>
+                    </Field>
+
+
+                    <Field>
+                        <FieldLabel>@L["Proxy"] </FieldLabel>
+                        <Autocomplete Data="@ProxiesNullable"
+                                      TItem="LookupDto<Guid?>"
+                                      TValue="Guid?"
+                                      TextField="@((item) => item.DisplayName)"
+                                      ValueField="@((item) => item.Id)"
+                                      SearchChanged="@GetNullableProxyLookupAsync"
+                                      @bind-SelectedValue="@EditingAccountProxy.ProxyId"
+                                      Placeholder="@L["Autocomplete"]" Filter="AutocompleteFilter.Contains"/>
+                    </Field>
+
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditAccountProxyModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditAccountProxyForm" Clicked="UpdateAccountProxyAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

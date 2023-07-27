@@ -1,0 +1,1146 @@
+@page "/campaigns"
+@attribute [Authorize(ApiPermissions.Campaigns.Default)]
+
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Campaigns
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Posts
+
+@inherits BlazorComponentBase
+
+@inject IPostsExtendAppService PostsExtendAppService
+@inject ICampaignsAppService CampaignsAppService
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+
+@inject NavigationManager NavigationManager
+@inject IUiMessageService _uiMessageService;
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Menu:Campaigns"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+<Tabs SelectedTab="@campaignTabName" SelectedTabChanged="@OnSelectedTabChanged">
+<Items>
+    <Tab Name="CampaignSearching">@L["Campaign.ListOfCampaigns"]</Tab>
+    <Tab Name="CampaignDashboard">@L["Campaign.CampaignDashboard"]</Tab>
+</Items>
+<Content>
+<TabPanel Name="CampaignSearching">
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="CampaignSearchForm" class="mb-3">
+            <Row>
+                <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is7.OnTablet">
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <Select TValue="CampaignStatusFilter" SelectedValue="@campaignStatusFilter" SelectedValueChanged="@OnCampaignStatus_Changed">
+                                @foreach (var itemValue in Enum.GetValues(typeof(CampaignStatusFilter)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="CampaignStatusFilter" Value="@((CampaignStatusFilter) itemValue)">
+                                        @L[$"Enum:CampaignStatus:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.Start" Style="margin-left: 5px">
+                            <Select TValue="CampaignTypeFilter" SelectedValue="@campaignTypeFilter" SelectedValueChanged="@OnCampaignType_Changed">
+                                @foreach (var itemValue in Enum.GetValues(typeof(CampaignTypeFilter)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="CampaignTypeFilter" Value="@((CampaignTypeFilter) itemValue)">
+                                        @L[$"Enum:CampaignType:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit @bind-Text="@Filter.FilterText"
+                                      Style="margin-left: 5px;min-width:100px;max-width: 400px"
+                                      Autofocus="true"
+                                      Placeholder="@L["Campaigns.Search"]">
+                            </TextEdit>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <SubmitButton Form="CampaignSearchForm" Clicked="DoSearch">
+                                <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                            </SubmitButton>
+                        </Addon>
+                    </Addons>
+                </Field>
+                <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is5.OnTablet">
+
+                    <Addons>
+                        <Addon AddonType="AddonType.Body">
+                            <AddonLabel Class="bg-primary text-white">@L["Icon.Date"]</AddonLabel>
+                            <DatePicker TValue="DateTime?" Date="@startDateTimeMin" DateChanged="OnStartDateTimeMin_Changed" DisplayFormat="@GlobalConsts.DateFormat" Placeholder="@L["Campaign.StartDateTimeMinInput"]"/>
+                            <DatePicker TValue="DateTime?" Date="@startDateTimeMax" DateChanged="OnStartDateTimeMax_Changed" DisplayFormat="@GlobalConsts.DateFormat" Placeholder="@L["Campaign.StartDateTimeMaxInput"]"/>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <AddonLabel Class="bg-primary text-white" style="margin-left: 5px">@L["Icon.Date"]</AddonLabel>
+                            <DatePicker TValue="DateTime?" Date="@endDateTimeMin" DateChanged="OnEndDateTimeMin_Changed" DisplayFormat="@GlobalConsts.DateFormat" Placeholder="@L["Campaign.EndDateTimeMinInput"]"/>
+                            <DatePicker TValue="DateTime?" Date="@endDateTimeMax" DateChanged="OnEndDateTimeMax_Changed" DisplayFormat="@GlobalConsts.DateFormat" Placeholder="@L["Campaign.EndDateTimeMaxInput"]"/>
+                        </Addon>
+                    </Addons>
+                </Field>
+            </Row>
+        </Form>
+    </CardBody>
+</Card>
+
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="CampaignWithNavigationPropertiesDto"
+                  Data="CampaignList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  ShowPageSizes="true"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  Narrow="true"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Partner.Name"
+                                Caption="@L["Partner"]"
+                                Sortable="false">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.Name"
+                                Caption="@L["Campaign.Name"]"
+                                Sortable="false" Width="200px">
+                    <DisplayTemplate>
+                        <a href="@($"/campaigndetail/{context.Campaign.Code}")"> @($"{context.Campaign.Name}")</a>
+                        <p class="font-italic" style="font-size: 12px;">@context.Campaign.Code</p>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.CampaignType"
+                                Caption="@L["CampaignType"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @L[$"Enum:CampaignType:{Convert.ToInt32(context.Campaign.CampaignType)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                @* <DataGridColumn TextAlignment="TextAlignment.Right" TItem="CampaignWithNavigationPropertiesDto" *@
+                @*                 Field="TotalPostFacebook" *@
+                @*                 Caption="@L["Campaign.TotalPostFacebook"]" *@
+                @*                 Sortable="false"> *@
+                @*     <DisplayTemplate> *@
+                @*         @context.TotalPostFacebook.ToCommaStyle() *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridColumn> *@
+                @* *@
+                @* <DataGridColumn TextAlignment="TextAlignment.Right" TItem="CampaignWithNavigationPropertiesDto" *@
+                @*                 Field="TotalPostTiktok" *@
+                @*                 Caption="@L["Campaign.TotalPostTiktok"]" *@
+                @*                 Sortable="false"> *@
+                @*     <DisplayTemplate> *@
+                @*         @context.TotalPostTiktok.ToCommaStyle() *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridColumn> *@
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.FacebookCount"
+                                Caption="@L["Campaign.PostCount"]">
+                    <DisplayTemplate>
+                        <div style="min-width: 75px">@context.Campaign.FacebookCount.ToCommaStyle("0") post</div>
+                        <div style="min-width: 75px">@context.Campaign.TikTokCount.ToCommaStyle("0") video</div>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.TotalReaction"
+                                Width="150px"
+                                Caption="@L["Campaign.TotalReaction"]">
+                    <DisplayTemplate>
+                        @context.Campaign.TotalReaction.ToCommaStyle()
+                        <br/>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.Hashtags"
+                                Caption="@L["Campaign.Hashtags&Keywords"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @if (context.Campaign.Hashtags.IsNotNullOrEmpty())
+                        {
+                            @foreach (var item in context.Campaign.Hashtags.SplitHashtags())
+                            {
+                                <Badge Color="Color.Success" Style="@CampaignConsts.HashTagFontSize">@item</Badge>
+                            }
+                        }
+                        @if (context.Campaign.Keywords.IsNotNullOrEmpty())
+                        {
+                            @foreach (var item in context.Campaign.Keywords.SplitKeywords())
+                            {
+                                <Badge Style="@CampaignConsts.HashTagFontSize" Color="Color.Info">@item</Badge>
+                            }
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.Status"
+                                Caption="@L["Status"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @if (context.Campaign.Status == CampaignStatus.Started)
+                        {
+                            <strong class="text-success">@L[$"{context.Campaign.Status}"]</strong>
+                        }
+                        else if (context.Campaign.Status == CampaignStatus.Ended)
+                        {
+                            <strong class="text-warning">@L[$"{context.Campaign.Status}"]</strong>
+                        }
+                        else
+                        {
+                            <strong>@L[$"{context.Campaign.Status}"]</strong>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.StartDateTime"
+                                Caption="@L["StartDateTime"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @if (!firstLoad && context is {Campaign: {StartDateTime: { } } })
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Campaign.StartDateTime.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.EndDateTime"
+                                Caption="@L["EndDateTime"]"
+                                Sortable="true"
+                                SortDirection="SortDirection.Descending">
+                    <DisplayTemplate>
+                        @if (context is {Campaign: {EndDateTime: { } } })
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Campaign.EndDateTime.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                @if (CanEditCampaign || CanExport || CanDeleteCampaign || IsManagerRole())
+                {
+                    <DataGridColumn TItem="CampaignWithNavigationPropertiesDto" Field="Campaign.IsActive" Caption="@L["Action"]" Sortable="false">
+                        <DisplayTemplate>
+                            <Buttons>
+                                @if (CanEditCampaign)
+                                {
+                                    <Button Outline Color="Color.Primary" Clicked="() => OpenEditCampaignModal(context)">
+                                        <Icon Name="IconName.Edit"/>
+                                    </Button>
+                                }
+                                @if (CanExport)
+                                {
+                                    <Button Outline Color="Color.Primary" Clicked="() => ExportPostsAsync(context.Campaign.Id)">
+                                        <Icon Name="IconName.FileDownload"/>
+                                    </Button>
+                                }
+                                @if (IsManagerRole())
+                                {
+                                    <Button Outline Color="Color.Primary" Clicked="() => DeleteCampaignAsync(context)">
+                                        <Icon Name="IconName.Delete"/>
+                                    </Button>
+                                }
+                            </Buttons>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                }
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+</TabPanel>
+<TabPanel Name="CampaignDashboard">
+    @* *************************Statistics************************* *@
+    <Card>
+        <CardBody>
+            <Row>
+                <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnTablet.IsFull.OnMobile" class="chart-js-custom">
+                    <ChartJs.Blazor.Chart Height="500" @ref="_postGroupChart" Config="_configPostGroupChart"></ChartJs.Blazor.Chart>
+                    <div id="contract-legend-container"></div>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnTablet.IsFull.OnMobile" class="chart-js-custom">
+                    <ChartJs.Blazor.Chart Height="500" @ref="_reactionGroupChart" Config="_configReactionGroupChart"></ChartJs.Blazor.Chart>
+                </Column>
+            </Row>
+        </CardBody>
+    </Card>
+    @* ************************Author Statistics************************* *@
+    <Card>
+        <CardBody>
+            <h2 class="bg-white text-primary text-center">@L["Campaign.TopAuthor"].ToString()</h2>
+            <DataGrid TItem="AuthorStatistic"
+                      Data="AuthorStatistics"
+                      TotalItems="AuthorStatistics.Count"
+                      PageSize="AuthorPageSize"
+                      Class="text-nowrap"
+                      ShowPager="true"
+                      ShowPageSizes="true"
+                      Responsive="true"
+                      PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                      Narrow="true"
+                      Striped="true"
+                      SortMode="DataGridSortMode.Single">
+                <DataGridColumns>
+                    <DataGridColumn TItem="AuthorStatistic"
+                                    Field="Author"
+                                    Caption="@L["Author"]">
+                        <DisplayTemplate>
+                            <Text TextColor="TextColor.Success">
+                                @context.Author
+                            </Text>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="AuthorStatistic"
+                                    Field="PostCount"
+                                    Caption="@L["Campaign.PostCount"]">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="AuthorStatistic"
+                                    Field="TotalReaction"
+                                    Caption="@L["Campaign.TotalReaction"]">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="AuthorStatistic"
+                                    Field="CampaignCount"
+                                    Caption="@L["Campaign.CampaignCount"]">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="AuthorStatistic"
+                                    Field="EvaluationRate"
+                                    Caption="@L["Campaign.EvaluationRate"]">
+                        <DisplayTemplate>
+                            @(Math.Round(context.EvaluationRate * 100, 2))%
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </CardBody>
+    </Card>
+
+    @* ************************* Campaign KPI************************* *@
+    <Card>
+        <CardBody>
+            <DataGrid TItem="CampaignDto"
+                      Data="campKpiList"
+                      ReadData="OnCampsByCurrentMonthGridAsync"
+                      Narrow="true"
+                      Striped="true"
+                      SortMode="DataGridSortMode.Single">
+                <DataGridColumns>
+                    <DataGridColumn TItem="CampaignDto"
+                                    Field="Name"
+                                    Caption="@L["Campaign.Dashboard.Name"]"
+                                    Sortable="false"
+                                    VerticalAlignment="VerticalAlignment.Top">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CampaignDto"
+                                    Field="CampaignType"
+                                    Caption="@L["Campaign.Type"]"
+                                    Sortable="false"
+                                    VerticalAlignment="VerticalAlignment.Top">
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CampaignDto"
+                                    Field="QuantityKPIDescription"
+                                    Caption="@L["Campaign.QuantityKPI"]"
+                                    Sortable="false">
+                        <DisplayTemplate>
+                            <div style="width: 300px">
+                                <Progress Striped="true" Animated="false" Color="@(context.QuantityKPI >= 100 ? Color.Primary : Color.Warning)" Value="@((int) context.QuantityKPI)" Max=100>
+                                    @GetPercentage(context.QuantityKPI)
+                                </Progress>
+                                <div style="color:grey">
+                                    @foreach (var item in context.QuantityKPIDescription.Split('|', StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <p>@item</p>
+                                    }
+                                </div>
+                            </div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CampaignDto"
+                                    Field="QualityKPIDescription"
+                                    Caption="@L["Campaign.QualityKPI"]"
+                                    Sortable="false">
+                        <DisplayTemplate>
+                            <div style="width: 300px">
+                                <Progress Striped="true" Animated="false" Color="@(context.QualityKPI >= 100 ? Color.Primary : Color.Warning)" Value="@((int) context.QualityKPI)"Max=100>
+                                    @GetPercentage(context.QualityKPI)
+                                </Progress>
+                                <div style="color:grey">
+                                    @foreach (var item in context.QualityKPIDescription.Split('|', StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <p>@item</p>
+                                    }
+                                </div>
+                            </div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </CardBody>
+    </Card>
+</TabPanel>
+</Content>
+</Tabs>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateCampaignModal">
+<ModalContent Centered="true" Size="ModalSize.Large">
+<Form id="CreateCampaignForm">
+<ModalHeader>
+    <ModalTitle>@L["NewCampaign"]</ModalTitle>
+    <CloseButton Clicked="CloseCreateCampaignModal"/>
+</ModalHeader>
+<ModalBody>
+<Tabs SelectedTab="@_selectedCreateInfoTab" SelectedTabChanged="@OnSelectedCreateInfoTabChanged">
+<Items>
+    <Tab Name="InfoCampaignTab">@L["InfoCampaignTab"]</Tab>
+    <Tab Name="SeedingTargetTab">@L["SeedingTargetTab"]</Tab>
+    <Tab Name="AffiliateTargetTab">@L["AffiliateTargetTab"]</Tab>
+    <Tab Name="ContestTargetTab">@L["ContestTargetTab"]</Tab>
+    <Tab Name="TikTokTargetTab">@L["TikTokTargetTab"]</Tab>
+    <Tab Name="PRTargetTab">@L["PRTargetTab"]</Tab>
+</Items>
+<Content>
+<TabPanel Name="InfoCampaignTab">
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Campaign.Name"] </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit Text="@NewCampaign.Name" TextChanged="OnNewNameChanged">
+            </TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <FieldLabel>@L["Code"]: @NewCampaign.Code</FieldLabel>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["CampaignType"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="CampaignType" @bind-SelectedValue="@NewCampaign.CampaignType">
+                @foreach (var itemValue in Enum.GetValues(typeof(CampaignType)))
+                {
+                    <SelectItem @key="itemValue" TValue="CampaignType" Value="@((CampaignType) itemValue)">
+                        @L[$"Enum:CampaignType:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Partner"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="Guid?" @bind-SelectedValue="@NewCampaign.PartnerId">
+                <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                @foreach (var partner in PartnersNullable)
+                {
+                    <SelectItem @key="partner" TValue="Guid?" Value="@partner.Id">
+                        @partner.DisplayName
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Description"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@NewCampaign.Description">
+            </TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Hashtags"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@NewCampaign.Hashtags" Placeholder="@L["Hashtags.Placeholder"]">
+            </TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field >
+    <div>
+        @if (NewCampaign.Hashtags.IsNotNullOrEmpty())
+        {
+            @foreach (var item in NewCampaign.Hashtags.SplitHashtags())
+            {
+                <Badge Color="Color.Primary" Style="@CampaignConsts.HashTagFontSize">
+                    @item
+                </Badge>
+            }
+        }
+    </div>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Keywords"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@NewCampaign.Keywords" Placeholder="@L["Keywords.Placeholder"]">
+            </TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <div>
+        @if (NewCampaign.Keywords.IsNotNullOrEmpty())
+        {
+            @foreach (var item in NewCampaign.Keywords.SplitKeywords())
+            {
+                <Badge Color="Color.Info" Style="@CampaignConsts.HashTagFontSize">
+                    @item
+                </Badge>
+            }
+        }
+    </div>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Status"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="CampaignStatus" @bind-SelectedValue="@NewCampaign.Status">
+                @foreach (var itemValue in Enum.GetValues(typeof(CampaignStatus)))
+                {
+                    <SelectItem @key="itemValue" TValue="CampaignStatus" Value="@((CampaignStatus) itemValue)">
+                        @L[$"Enum:CampaignStatus:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["StartDateTime"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker TValue="DateTime?" Date="@createStartDateTime" DateChanged="CreateStartDateTimeChange" DisplayFormat="@GlobalConsts.DateFormat">
+            </DatePicker>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["EndDateTime"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker TValue="DateTime?" Date="@createEndDateTime" DateChanged="CreateEndDateTimeChange" DisplayFormat="@GlobalConsts.DateFormat">
+            </DatePicker>
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <Button Color="Color.Primary" Clicked="@ClearNewCampaignEndDateTime">
+                <Tooltip Text="@L["Clear"]" Style="display: inline-table">
+                    <Icon Name="IconName.Delete" Class="mr-1"></Icon>
+                </Tooltip>
+            </Button>
+        </Addon>
+    </Addons>
+</Field>
+
+@code {
+
+    private void ClearNewCampaignEndDateTime()
+    {
+        createEndDateTime = null;
+        NewCampaign.EndDateTime = null;
+    }
+
+}
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["Campaign.Emails"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@NewCampaign.Emails" Placeholder="@L["Campaign.Emails.Placeholder"]">
+            </TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+<Field >
+    <div>
+        @if (NewCampaign.Emails.IsNotNullOrEmpty())
+        {
+            @foreach (var item in NewCampaign.Emails.SplitEmails())
+            {
+                <Badge Color="Color.Warning" Style="@CampaignConsts.HashTagFontSize">
+                    @item
+                </Badge>
+            }
+        }
+    </div>
+</Field>
+
+<Field>
+    @if (NewCampaign.Emails.IsNotNullOrEmpty())
+    {
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["CampaignReportType"]</AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="CampaignReportType" @bind-SelectedValue="@NewCampaign.CampaignReportType">
+                    @foreach (var itemValue in Enum.GetValues(typeof(CampaignReportType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="CampaignReportType" Value="@((CampaignReportType) itemValue)">
+                            @L[$"Enum:CampaignReportType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    }
+</Field>
+
+</TabPanel>
+
+<TabPanel Name="SeedingTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Seeding_TotalPost"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Seeding_TotalPost">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Seeding_TotalReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Seeding_TotalReaction">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Seeding_AvgReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Seeding_AvgReaction">
+        </NumericEdit>
+    </Field>
+
+</TabPanel>
+
+<TabPanel Name="AffiliateTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_TotalPost"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Affiliate_TotalPost">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_TotalClick"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Affiliate_TotalClick">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_TotalConversion"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Affiliate_TotalConversion">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_TotalConversionAmount"]</FieldLabel>
+        <NumericEdit TValue="decimal" @bind-Value="@NewCampaign.Target.Affiliate_TotalConversionAmount">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_AvgClick"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Affiliate_AvgClick">
+        </NumericEdit>
+    </Field>
+</TabPanel>
+
+<TabPanel Name="ContestTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Contest_TotalPost"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Contest_TotalPost">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Contest_TotalReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Contest_TotalReaction">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Contest_AvgReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.Contest_AvgReaction">
+        </NumericEdit>
+    </Field>
+</TabPanel>
+
+<TabPanel Name="TikTokTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.TikTok_TotalVideo"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.TikTok_TotalVideo">
+        </NumericEdit>
+    </Field>
+    <Field>
+        <FieldLabel>@L["CampaignTarget.TikTok_TotalView"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.TikTok_TotalView">
+        </NumericEdit>
+    </Field>
+</TabPanel>
+
+<TabPanel Name="PRTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.PR_TotalPost"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.PR_TotalPost">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.PR_TotalReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.PR_TotalReaction">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.PR_AvgReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@NewCampaign.Target.PR_AvgReaction">
+        </NumericEdit>
+    </Field>
+</TabPanel>
+
+</Content>
+</Tabs>
+</ModalBody>
+<ModalFooter>
+    <Button Color="Color.Dark"
+            Clicked="CloseCreateCampaignModal">
+        @L["Cancel"]
+    </Button>
+    <Button Clicked="CreateCampaignAsync" Color="Color.Primary">@L["Save"]</Button>
+    <h1/>
+</ModalFooter>
+</Form>
+</ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditCampaignModal">
+<ModalContent Centered="true" Size="ModalSize.Large">
+<Form id="EditCampaignForm">
+<ModalHeader>
+    <ModalTitle>@L["Campaign.EditCampaign"]</ModalTitle>
+    <CloseButton Clicked="CloseEditCampaignModal"/>
+</ModalHeader>
+<ModalBody>
+<Tabs SelectedTab="@_selectedEditInfoTab" SelectedTabChanged="@OnSelectedEditInfoTabChanged">
+<Items>
+    <Tab Name="InfoCampaignTab">@L["InfoCampaignTab"]</Tab>
+    <Tab Name="SeedingTargetTab">@L["SeedingTargetTab"]</Tab>
+    <Tab Name="AffiliateTargetTab">@L["AffiliateTargetTab"]</Tab>
+    <Tab Name="ContestTargetTab">@L["ContestTargetTab"]</Tab>
+    <Tab Name="TikTokTargetTab">@L["TikTokTargetTab"]</Tab>
+    <Tab Name="PRTargetTab">@L["PRTargetTab"]</Tab>
+</Items>
+<Content>
+<TabPanel Name="InfoCampaignTab">
+<Field >
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Campaign.Name"] </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@EditingCampaign.Name">
+            </TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <FieldLabel>@L["Code"]: @EditingCampaign.Code</FieldLabel>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["CampaignType"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="CampaignType" @bind-SelectedValue="@EditingCampaign.CampaignType">
+                @foreach (var itemValue in Enum.GetValues(typeof(CampaignType)))
+                {
+                    <SelectItem @key="itemValue" TValue="CampaignType" Value="@((CampaignType) itemValue)">
+                        @L[$"Enum:CampaignType:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Partner"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="Guid?" @bind-SelectedValue="@EditingCampaign.PartnerId">
+                <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                @foreach (var partner in PartnersNullable)
+                {
+                    <SelectItem @key="partner" TValue="Guid?" Value="@partner.Id">
+                        @partner.DisplayName
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Hashtags"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="EditingCampaign.Hashtags">
+
+            </TextEdit>
+        </Addon>
+    </Addons>
+
+</Field>
+<Field >
+    <div>
+        @if (EditingCampaign.Hashtags.IsNotNullOrEmpty())
+        {
+            @foreach (var item in EditingCampaign.Hashtags.SplitHashtags())
+            {
+                <Badge Color="Color.Success" Style="@CampaignConsts.HashTagFontSize">
+                    @item
+                </Badge>
+            }
+        }
+    </div>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Keywords"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@EditingCampaign.Keywords">
+            </TextEdit>
+        </Addon>
+    </Addons>
+
+</Field>
+
+<Field >
+    <div>
+        @if (EditingCampaign.Keywords.IsNotNullOrEmpty())
+        {
+            @foreach (var item in EditingCampaign.Keywords.SplitKeywords())
+            {
+                <Badge Color="Color.Info" Style="@CampaignConsts.HashTagFontSize">
+                    @item
+                </Badge>
+            }
+        }
+    </div>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Description"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@EditingCampaign.Description">
+            </TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Status"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="CampaignStatus" @bind-SelectedValue="@EditingCampaign.Status">
+                @foreach (var itemValue in Enum.GetValues(typeof(CampaignStatus)))
+                {
+                    <SelectItem @key="itemValue" TValue="CampaignStatus" Value="@((CampaignStatus) itemValue)">
+                        @L[$"Enum:CampaignStatus:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["StartDateTime"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker TValue="DateTime?" Date="@editStartDateTime" DateChanged="EditStartDateTimeChange" DisplayFormat="@GlobalConsts.DateFormat">
+            </DatePicker>
+        </Addon>
+    </Addons>
+</Field>
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["EndDateTime"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker TValue="DateTime?" Date="@editEndDateTime" DateChanged="EditEndDateTimeChange" DisplayFormat="@GlobalConsts.DateFormat">
+            </DatePicker>
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <Button Color="Color.Primary" Clicked="@ClearEditingCampaignEndDateTime">
+                <Tooltip Text="@L["Clear"]" Style="display: inline-table">
+                    <Icon Name="IconName.Delete" Class="mr-1"></Icon>
+                </Tooltip>
+            </Button>
+        </Addon>
+    </Addons>
+</Field>
+
+@code {
+
+    private void ClearEditingCampaignEndDateTime()
+    {
+        editEndDateTime = null;
+        EditingCampaign.EndDateTime = null;
+    }
+
+}
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Campaign.Emails"]</AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="EditingCampaign.Emails">
+            </TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <div>
+        @if (EditingCampaign.Emails.IsNotNullOrEmpty())
+        {
+            @foreach (var item in EditingCampaign.Emails.SplitEmails())
+            {
+                <Badge Color="Color.Warning" Style="@CampaignConsts.HashTagFontSize">
+                    @item
+                </Badge>
+            }
+        }
+    </div>
+</Field>
+<Field>
+    @if (EditingCampaign.Emails.IsNotNullOrEmpty())
+    {
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 145px">@L["CampaignReportType"]</AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="CampaignReportType" @bind-SelectedValue="@EditingCampaign.CampaignReportType">
+                    @foreach (var itemValue in Enum.GetValues(typeof(CampaignReportType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="CampaignReportType" Value="@((CampaignReportType) itemValue)">
+                            @L[$"Enum:CampaignReportType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    }
+</Field>
+@* <Field> *@
+@*     <Check TValue="bool" @bind-Checked="@EditingCampaign.IsActive">@L["IsActive"]</Check> *@
+@* </Field> *@
+
+</TabPanel>
+<TabPanel Name="SeedingTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Seeding_TotalPost"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Seeding_TotalPost">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Seeding_TotalReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Seeding_TotalReaction">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Seeding_AvgReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Seeding_AvgReaction">
+        </NumericEdit>
+    </Field>
+</TabPanel>
+
+<TabPanel Name="AffiliateTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_TotalPost"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Affiliate_TotalPost">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_TotalClick"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Affiliate_TotalClick">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_TotalConversion"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Affiliate_TotalConversion">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_TotalConversionAmount"]</FieldLabel>
+        <NumericEdit TValue="decimal" @bind-Value="@EditingCampaign.Target.Affiliate_TotalConversionAmount">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Affiliate_AvgClick"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Affiliate_AvgClick">
+        </NumericEdit>
+    </Field>
+</TabPanel>
+
+<TabPanel Name="ContestTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Contest_TotalPost"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Contest_TotalPost">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Contest_TotalReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Contest_TotalReaction">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.Contest_AvgReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.Contest_AvgReaction">
+        </NumericEdit>
+    </Field>
+
+</TabPanel>
+
+<TabPanel Name="TikTokTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.TikTok_TotalVideo"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.TikTok_TotalVideo">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.TikTok_TotalView"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.TikTok_TotalView">
+        </NumericEdit>
+    </Field>
+</TabPanel>
+
+<TabPanel Name="PRTargetTab">
+    <Field>
+        <FieldLabel>@L["CampaignTarget.PR_TotalPost"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.PR_TotalPost">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.PR_TotalReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.PR_TotalReaction">
+        </NumericEdit>
+    </Field>
+
+    <Field>
+        <FieldLabel>@L["CampaignTarget.PR_AvgReaction"]</FieldLabel>
+        <NumericEdit TValue="int" @bind-Value="@EditingCampaign.Target.PR_AvgReaction">
+        </NumericEdit>
+    </Field>
+</TabPanel>
+</Content>
+</Tabs>
+</ModalBody>
+<ModalFooter>
+    <Button Color="Color.Dark"
+            Clicked="CloseEditCampaignModal">
+        @L["Cancel"]
+    </Button>
+    <Button Clicked="UpdateCampaignAsync" Color="Color.Primary">@L["Save"]</Button>
+    <h1/>
+</ModalFooter>
+</Form>
+</ModalContent>
+</Modal>

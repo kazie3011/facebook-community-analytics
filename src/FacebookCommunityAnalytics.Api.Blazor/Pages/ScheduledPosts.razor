@@ -1,0 +1,539 @@
+@page "/scheduled-posts"
+@attribute [Authorize(ApiPermissions.ScheduledPosts.Default)]
+@using FacebookCommunityAnalytics.Api.ScheduledPosts
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Groups
+@using Volo.Abp.BlazoriseUI.Components
+@using Radzen
+@using Radzen.Blazor
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Posts
+@using Volo.Abp.Users
+
+@inherits BlazorComponentBase
+@inject IGroupsAppService GroupsAppService
+@inject IScheduledPostAppService ScheduledPostsAppService
+@inject IUiMessageService UiMessageService
+@inject IPostsExtendAppService PostsExtendAppService
+@inject IJSRuntime JSRuntime
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Menu:ScheduledPosts"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="ScheduledPostSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="ScheduledPostSearchForm" Clicked="GetScheduledPostsAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="SchedulePostWithNavigationPropertiesDto"
+                  Data="SchedulePostWithNavigationPropertiesDtos"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="SchedulePostWithNavigationPropertiesDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="SchedulePostWithNavigationPropertiesDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="SchedulePostWithNavigationPropertiesDto"
+                                          Visible="@CanEditScheduledPost"
+                                          Clicked="() => OpenEditScheduledPostModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="SchedulePostWithNavigationPropertiesDto"
+                                          Visible="@CanDeleteScheduledPost"
+                                          Clicked="() => DeleteScheduledPostAsync(context)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="ScheduledPost.Content"
+                                Caption="@L["ScheduledPost.Content"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="AppUser.UserName"
+                                Caption="@L["ScheduledPost.UserName"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="AppUserInfo.Code"
+                                Caption="@L["ScheduledPost.UserCode"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="ScheduledPost.IsAutoPost"
+                                Caption="@L["ScheduledPost.IsAutoPost"]">
+                </DataGridColumn>
+
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="ScheduledPost.ScheduledPostDateTime"
+                                Caption="@L["ScheduledPost.ScheduledPostDateTime"]">
+                    <DisplayTemplate>
+                        @if (context is {ScheduledPost: {ScheduledPostDateTime: { }}})
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.ScheduledPost.ScheduledPostDateTime.Value, GlobalConsts.DateTimeFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="Category.Name"
+                                Caption="@L["ScheduledPost.Category"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="ScheduledPost.Note"
+                                Caption="@L["ScheduledPost.Note"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="ScheduledPost.PostContentType"
+                                Caption="@L["ScheduledPost.PostContentType"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="ScheduledPost.PostCopyrightType"
+                                Caption="@L["ScheduledPost.PostCopyrightType"]">
+                </DataGridColumn>
+
+                @*<DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                    Field="ScheduledPost.IsPosted"
+                                    Caption="@L["IsPosted"]">
+                    </DataGridColumn>*@
+
+                <DataGridColumn TItem="SchedulePostWithNavigationPropertiesDto"
+                                Field="ScheduledPost.PostedAt"
+                                Caption="@L["ScheduledPost.PostedAt"]">
+                    <DisplayTemplate>
+                        @if (context.ScheduledPost.PostedAt != null)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.ScheduledPost.PostedAt.Value, GlobalConsts.DateTimeFormat)
+                        }
+
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateScheduledPostModal">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <Form id="CreateScheduledPostForm">
+            <ModalHeader>
+                <ModalTitle>@L["ScheduledPost.NewScheduledPost"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateScheduledPostModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+                    <Items>
+                        <Tab Name="@L["ScheduledPostCreateInfo"]">@L["ScheduledPostCreateInfo"]</Tab>
+                        <Tab Name="@L["ScheduledPostCreateTypeInfo"]">@L["ScheduledPostCreateTypeInfo"]</Tab>
+                        <Tab Name="@L["ScheduledPostCreateGroup"]">@L["ScheduledPostCreateGroup"]</Tab>
+                        <Tab Name="@L["ScheduledPostCreateImages"]">@L["ScheduledPostCreateImages"]</Tab>
+                    </Items>
+                    <Content>
+                        <TabPanel Name="@L["ScheduledPostCreateInfo"]">
+                            <Validations @ref="@NewScheduledPostValidations"
+                                         Mode="ValidationMode.Auto"
+                                         Model="@NewScheduledPost"
+                                         ValidateOnLoad="false">
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["ScheduledPost.Content"] *</FieldLabel>
+                                        <RichTextEdit @ref="@richTextCreateRef"
+                                                      ContentChanged="@OnCreateContentChanged"
+                                                      PlaceHolder="@L["ScheduledPost.InputYourContent"]"
+                                                      ToolbarPosition="Placement.Bottom">
+                                            <Editor></Editor>
+                                            <Toolbar>
+                                                <RichTextEditToolbarGroup>
+                                                    <RichTextEditToolbarButton Action="RichTextEditAction.Bold"/>
+                                                    <RichTextEditToolbarButton Action="RichTextEditAction.Italic"/>
+                                                    <RichTextEditToolbarSelect Action="RichTextEditAction.Size">
+                                                        <RichTextEditToolbarSelectItem Value="small"/>
+                                                        <RichTextEditToolbarSelectItem Selected="true"/>
+                                                        <RichTextEditToolbarSelectItem Value="large"/>
+                                                        <RichTextEditToolbarSelectItem Value="huge">Very Big</RichTextEditToolbarSelectItem>
+                                                    </RichTextEditToolbarSelect>
+                                                    <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered"/>
+                                                    <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet"/>
+                                                </RichTextEditToolbarGroup>
+                                            </Toolbar>
+                                        </RichTextEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["ScheduledPost.ScheduledPostDateTime"]</FieldLabel>
+                                        <DateEdit TValue="DateTime?" InputMode="DateInputMode.DateTime" @bind-Date="@NewScheduledPost.ScheduledPostDateTime">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </DateEdit>
+                                    </Field>
+                                </Validation>
+
+
+                                @*<Field>
+                                        <Check TValue="bool" @bind-Checked="@NewScheduledPost.IsAutoPost">@L["IsAutoPost"]</Check>
+                                    </Field>*@
+
+                            </Validations>
+                        </TabPanel>
+                        <TabPanel Name="@L["ScheduledPostCreateTypeInfo"]">
+                            <Validations @ref="@NewScheduledPostValidations"
+                                         Mode="ValidationMode.Auto"
+                                         Model="@NewScheduledPost"
+                                         ValidateOnLoad="false">
+                                <Row>
+                                    <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnTablet">
+                                        <Field>
+                                            <FieldLabel>@L["ScheduledPost.PostContentType"]</FieldLabel>
+                                            <Select TValue="PostContentType" SelectedValue="@NewScheduledPost.PostContentType" SelectedValueChanged="@OnPostContentTypeChanged">
+                                                <SelectItem TValue="PostContentType" Value="@(PostContentType.Affiliate)">
+                                                    @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Affiliate)}"]
+                                                </SelectItem>
+                                                <SelectItem TValue="PostContentType" Value="@(PostContentType.Seeding)">
+                                                    @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Seeding)}"]
+                                                </SelectItem>
+                                            </Select>
+                                        </Field>
+                                        @if (NewScheduledPost.PostContentType == PostContentType.Affiliate)
+                                        {
+                                            <Field>
+                                                <FieldLabel>@L["ScheduledPost.Category"] </FieldLabel>
+                                                <Autocomplete Data="@CategoriesNullable"
+                                                              TItem="LookupDto<Guid?>"
+                                                              TValue="Guid?"
+                                                              TextField="@((item) => item.DisplayName)"
+                                                              ValueField="@((item) => item.Id)"
+                                                              SearchChanged="@GetNullableCategoryLookupAsync"
+                                                              @bind-SelectedValue="@NewScheduledPost.CategoryId"
+                                                              Placeholder="@L["Autocomplete.DefaultText", L["Category"]]" Filter="AutocompleteFilter.Contains"/>
+                                            </Field>
+                                        }
+
+                                        <Field>
+                                            <FieldLabel>@L["ScheduledPost.PostCopyrightType"]</FieldLabel>
+                                            <Select TValue="PostCopyrightType" @bind-SelectedValue="@NewScheduledPost.PostCopyrightType">
+                                                @foreach (var itemValue in Enum.GetValues(typeof(PostCopyrightType)))
+                                                {
+                                                    <SelectItem @key="itemValue" TValue="PostCopyrightType" Value="@((PostCopyrightType) itemValue)">
+                                                        @L[$"Enum:PostCopyrightType:{Convert.ToInt32(itemValue)}"]
+                                                    </SelectItem>
+                                                }
+                                            </Select>
+                                        </Field>
+
+                                        <Field>
+                                            <FieldLabel>@L["Note"]</FieldLabel>
+                                            <TextEdit @bind-Text="@NewScheduledPost.Note">
+                                                <Feedback>
+                                                    <ValidationError/>
+                                                </Feedback>
+                                            </TextEdit>
+
+                                        </Field>
+
+                                    </Column>
+                                </Row>
+                            </Validations>
+                        </TabPanel>
+                        <TabPanel Name="@L["ScheduledPostCreateGroup"]">
+                            <RadzenDataGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="100"
+                                            AllowSorting="false" Data="@groupDtos" TItem="GroupDto" ColumnWidth="200px"
+                                            SelectionMode="Radzen.DataGridSelectionMode.Multiple" @bind-Value=@createPostGroupSelecteds>
+                                <Columns>
+                                    <RadzenDataGridColumn TItem="GroupDto" Width="40px" Sortable="false" Filterable="false">
+                                        <HeaderTemplate>
+                                            <RadzenCheckBox TriState="false" TValue="bool" Value="@(groupDtos.Any(i => createPostGroupSelecteds != null && createPostGroupSelecteds.Contains(i)))"
+                                                            Change="@(args => createPostGroupSelecteds = args ? groupDtos.ToList() : null)"/>
+                                        </HeaderTemplate>
+                                        <Template Context="data">
+                                            <RadzenCheckBox TriState="false" Value="@(createPostGroupSelecteds != null && createPostGroupSelecteds.Contains(data))"/>
+                                        </Template>
+                                    </RadzenDataGridColumn>
+                                    <RadzenDataGridColumn TItem="GroupDto" Property="Fid" Title="@L["Fid"]"/>
+                                    <RadzenDataGridColumn TItem="GroupDto" Property="Name" Title="@L["GroupName"]"/>
+                                    <RadzenDataGridColumn TItem="GroupDto" Property="Title" Title="@L["GroupTitle"]"/>
+                                </Columns>
+                            </RadzenDataGrid>
+                        </TabPanel>
+                        <TabPanel Name="@L["ScheduledPostCreateImages"]">
+                            <Row>
+                                <Column ColumnSize="ColumnSize.IsHalf.OnWidescreen.IsFull.OnMobile">
+                                    <h3>@L["ScheduledPost.UploadPostImages"]</h3>
+                                    <RadzenUpload Accept="image/*"
+                                                  @ref="createPostUpload"
+                                                  Auto="false" Multiple="true" Url="Upload/UploadFiles" Style="margin-bottom: 20px;"
+                                                  Change=@(args => OnChange(args, "Manual Upload"))
+                                                  Progress=@(args => OnProgress(args, "Manual Upload"))
+                                                  Error="@(OnError)"
+                                                  Complete="@(OnComplete)"
+                                                  ChooseText="@L["ScheduledPost.ChoosePostImages"]">
+                                        @* <RadzenUploadHeader Name="RequestVerificationToken" Value=""></RadzenUploadHeader> *@
+                                    </RadzenUpload>
+                                    <RadzenButton Size="ButtonSize.Small" Text="@L["ScheduledPost.UploadPostImages"]"
+                                                  Click=@(CreateUploadAsync)
+                                                  Style="margin-bottom: 20px;"/>
+                                </Column>
+
+                            </Row>
+
+                        </TabPanel>
+                    </Content>
+                </Tabs>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateScheduledPostModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Disabled="@string.IsNullOrWhiteSpace(NewScheduledPost.Content)" Form="CreateScheduledPostForm" Clicked="CreateScheduledPostAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditScheduledPostModal">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <Form id="EditScheduledPostForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditScheduledPostModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+                    <Items>
+                        <Tab Name="@L["ScheduledPostEditInfo"]">@L["ScheduledPostEditInfo"]</Tab>
+                        <Tab Name="@L["ScheduledPostEditTypeInfo"]">@L["ScheduledPostEditTypeInfo"]</Tab>
+                        <Tab Name="@L["ScheduledPostEditGroup"]">@L["ScheduledPostEditGroup"]</Tab>
+                        <Tab Name="@L["ScheduledPostEditImages"]">@L["ScheduledPostEditImages"]</Tab>
+                    </Items>
+                    <Content>
+                        <TabPanel Name="@L["ScheduledPostEditInfo"]">
+                            <Validations @ref="@EditingScheduledPostValidations"
+                                         Mode="ValidationMode.Auto"
+                                         Model="@EditingScheduledPost"
+                                         ValidateOnLoad="false">
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["ScheduledPost.Content"] *</FieldLabel>
+                                        <RichTextEdit @ref="@richTextEditRef"
+                                                      ContentChanged="@OnEditContentChanged"
+                                                      PlaceHolder="@L["ScheduledPost.InputYourContent"]"
+                                                      ToolbarPosition="Placement.Bottom">
+                                            <Editor>@((MarkupString) EditingScheduledPost.Content)</Editor>
+                                            <Toolbar>
+                                                <RichTextEditToolbarGroup>
+                                                    <RichTextEditToolbarButton Action="RichTextEditAction.Bold"/>
+                                                    <RichTextEditToolbarButton Action="RichTextEditAction.Italic"/>
+                                                    <RichTextEditToolbarSelect Action="RichTextEditAction.Size">
+                                                        <RichTextEditToolbarSelectItem Value="small"/>
+                                                        <RichTextEditToolbarSelectItem Selected="true"/>
+                                                        <RichTextEditToolbarSelectItem Value="large"/>
+                                                        <RichTextEditToolbarSelectItem Value="huge">Very Big</RichTextEditToolbarSelectItem>
+                                                    </RichTextEditToolbarSelect>
+                                                    <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered"/>
+                                                    <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet"/>
+                                                </RichTextEditToolbarGroup>
+                                            </Toolbar>
+                                        </RichTextEdit>
+                                    </Field>
+                                </Validation>
+
+                                <Validation>
+                                    <Field>
+                                        <FieldLabel>@L["ScheduledPost.ScheduledPostDateTime"]</FieldLabel>
+                                        <DateEdit TValue="DateTime?" InputMode="DateInputMode.DateTime" @bind-Date="@EditingScheduledPost.ScheduledPostDateTime">
+                                            <Feedback>
+                                                <ValidationError/>
+                                            </Feedback>
+                                        </DateEdit>
+                                    </Field>
+                                </Validation>
+
+
+                                <Field>
+                                    <Check TValue="bool" @bind-Checked="@EditingScheduledPost.IsAutoPost">@L["ScheduledPost.IsAutoPost"]</Check>
+                                </Field>
+
+                            </Validations>
+                        </TabPanel>
+                        <TabPanel Name="@L["ScheduledPostEditTypeInfo"]">
+                            <Validations @ref="@EditingScheduledPostValidations"
+                                         Mode="ValidationMode.Auto"
+                                         Model="@EditingScheduledPost"
+                                         ValidateOnLoad="false">
+                                <Row>
+                                    <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnTablet">
+                                        <Field>
+                                            <FieldLabel>@L["ScheduledPost.PostContentType"]</FieldLabel>
+                                            <Select TValue="PostContentType" SelectedValue="@EditingScheduledPost.PostContentType" SelectedValueChanged="@OnEditingPostContentTypeChanged">
+                                                <SelectItem TValue="PostContentType" Value="@(PostContentType.Affiliate)">
+                                                    @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Affiliate)}"]
+                                                </SelectItem>
+                                                <SelectItem TValue="PostContentType" Value="@(PostContentType.Seeding)">
+                                                    @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Seeding)}"]
+                                                </SelectItem>
+                                            </Select>
+                                        </Field>
+                                        @if (EditingScheduledPost.PostContentType == PostContentType.Affiliate)
+                                        {
+                                            <Field>
+                                                <FieldLabel>@L["ScheduledPost.Category"] </FieldLabel>
+                                                <Autocomplete Data="@CategoriesNullable"
+                                                              TItem="LookupDto<Guid?>"
+                                                              TValue="Guid?"
+                                                              TextField="@((item) => item.DisplayName)"
+                                                              ValueField="@((item) => item.Id)"
+                                                              SearchChanged="@GetNullableCategoryLookupAsync"
+                                                              @bind-SelectedValue="@EditingScheduledPost.CategoryId"
+                                                              Placeholder="@L["Autocomplete.DefaultText", L["Account"]]" Filter="AutocompleteFilter.Contains"/>
+                                            </Field>
+                                        }
+
+                                        <Field>
+                                            <FieldLabel>@L["ScheduledPost.PostCopyrightType"]</FieldLabel>
+                                            <Select TValue="PostCopyrightType" @bind-SelectedValue="@EditingScheduledPost.PostCopyrightType">
+                                                @foreach (var itemValue in Enum.GetValues(typeof(PostCopyrightType)))
+                                                {
+                                                    <SelectItem @key="itemValue" TValue="PostCopyrightType" Value="@((PostCopyrightType) itemValue)">
+                                                        @L[$"Enum:PostCopyrightType:{Convert.ToInt32(itemValue)}"]
+                                                    </SelectItem>
+                                                }
+                                            </Select>
+                                        </Field>
+
+                                        <Field>
+                                            <FieldLabel>@L["Note"]</FieldLabel>
+                                            <TextEdit @bind-Text="@EditingScheduledPost.Note">
+                                                <Feedback>
+                                                    <ValidationError/>
+                                                </Feedback>
+                                            </TextEdit>
+
+                                        </Field>
+
+                                    </Column>
+                                </Row>
+                            </Validations>
+                        </TabPanel>
+                        <TabPanel Name="@L["ScheduledPostEditGroup"]">
+                            <RadzenDataGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="100"
+                                            AllowSorting="false" Data="@groupDtos" TItem="GroupDto" ColumnWidth="200px"
+                                            SelectionMode="Radzen.DataGridSelectionMode.Multiple" @bind-Value=@editPostGroupSelecteds>
+                                <Columns>
+                                    <RadzenDataGridColumn TItem="GroupDto" Width="40px" Sortable="false" Filterable="false">
+                                        <HeaderTemplate>
+                                            <RadzenCheckBox TriState="false" TValue="bool" Value="@(groupDtos.Any(i => createPostGroupSelecteds != null && editPostGroupSelecteds.Contains(i)))"
+                                                            Change="@(args => editPostGroupSelecteds = args ? groupDtos.ToList() : null)"/>
+                                        </HeaderTemplate>
+                                        <Template Context="data">
+                                            <RadzenCheckBox TriState="false" Value="@(editPostGroupSelecteds != null && editPostGroupSelecteds.Contains(data))"/>
+                                        </Template>
+                                    </RadzenDataGridColumn>
+                                    <RadzenDataGridColumn TItem="GroupDto" Property="Fid" Title="@L["Fid"]"/>
+                                    <RadzenDataGridColumn TItem="GroupDto" Property="Name" Title="@L["GroupName"]"/>
+                                    <RadzenDataGridColumn TItem="GroupDto" Property="Title" Title="@L["GroupTitle"]"/>
+                                </Columns>
+                            </RadzenDataGrid>
+                        </TabPanel>
+                        <TabPanel Name="@L["ScheduledPostEditImages"]">
+
+                            @if (EditingScheduledPost?.Images != null)
+                            {
+                                <Row>
+                                    <Column ColumnSize="ColumnSize.IsFull.OnWidescreen.IsFull.OnMobile">
+                                        <h3>@L["ScheduledPost.PostImages"]</h3>
+                                        <ul class="post-images">
+                                            @foreach (var image in EditingScheduledPost.Images)
+                                            {
+                                                <li @key="image">
+                                                    <img src="@image" alt=""/>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </Column>
+                                </Row>
+                            }
+                            <Row>
+                                <Column ColumnSize="ColumnSize.IsHalf.OnWidescreen.IsFull.OnMobile">
+                                    <h3>@L["ScheduledPost.UploadPostImages"]</h3>
+                                    <RadzenUpload Accept="image/*"
+                                                  @ref="editPostUpload"
+                                                  Auto="false" Multiple="true" Url="Upload/UploadFiles" Style="margin-bottom: 20px;"
+                                                  Change=@(args => OnChange(args, "Manual Upload"))
+                                                  Progress=@(args => OnProgress(args, "Manual Upload"))
+                                                  Error="@(OnError)"
+                                                  Complete="@(OnComplete)"
+                                                  ChooseText="@L["ScheduledPost.ChoosePostImages"]">
+                                        @* <RadzenUploadHeader Name="RequestVerificationToken" Value=""></RadzenUploadHeader> *@
+                                    </RadzenUpload>
+                                    <RadzenButton Size="ButtonSize.Small" Text="@L["ScheduledPost.UploadPostImages"]"
+                                                  Click=@(EditUploadAsync)
+                                                  Style="margin-bottom: 20px;"/>
+                                </Column>
+
+                            </Row>
+
+                        </TabPanel>
+                    </Content>
+                </Tabs>
+
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditScheduledPostModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Disabled="@string.IsNullOrWhiteSpace(EditingScheduledPost.Content)" Form="EditScheduledPostForm" Clicked="UpdateScheduledPostAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

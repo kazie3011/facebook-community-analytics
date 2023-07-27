@@ -1,0 +1,429 @@
+﻿@page "/partnercontracts"
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using Volo.Abp.AspNetCore.Components.Messages
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Contracts
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using FacebookCommunityAnalytics.Api.PartnerModule
+@using Microsoft.Extensions.Localization
+
+@attribute [Authorize(ApiPermissions.PartnerModule.Default)]
+
+@inherits BlazorComponentBase
+
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+@inject IPartnerModuleAppService _partnerModuleAppService
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<ApiDomainResource> Lv
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Contracts.Title"]" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="ContractSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <DateRangePicker TimePicker="true"
+                                     TimePicker24Hour="true"
+                                     Ranges="_dateRanges"
+                                     DateFormat="@GlobalConsts.DateFormat"
+                                     @bind-StartDate="StartDate"
+                                     @bind-EndDate="EndDate"
+                                     class="form-control form-control-md"
+                                     Style="width: 280px; margin-right: 10px;"
+                                     placeholder="@L["SelectDates"]"/>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="ContractSearchForm" Clicked="GetContracts">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+            <br/>
+        </Form>
+        <Row>
+
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnTablet">
+                <Select TValue="ContractStatus?" SelectedValue="@Filter.ContractStatus" SelectedValueChanged="OnContractStatusSelectedValueChanged">
+                    @foreach (var itemValue in Enum.GetValues(typeof(ContractStatus)))
+                    {
+                        <SelectItem @key="itemValue" TValue="ContractStatus?" Value="@((ContractStatus) itemValue)">
+                            @L[$"Enum:ContractStatus:{(int) itemValue}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnTablet">
+                <Select TValue="ContractPaymentStatus?" SelectedValue="@Filter.ContractPaymentStatus" SelectedValueChanged="OnContractPaymentStatusSelectedValueChanged">
+                    @foreach (var itemValue in Enum.GetValues(typeof(ContractPaymentStatus)))
+                    {
+                        <SelectItem @key="itemValue" TValue="ContractPaymentStatus?" Value="@((ContractPaymentStatus) itemValue)">
+                            @L[$"Enum:ContractPaymentStatus:{(int) itemValue}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+        </Row>
+    </CardBody>
+</Card>
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="ContractWithNavigationPropertiesDto"
+                  Data="ContractDtos"
+                  TotalItems="TotalCount"
+                  Responsive="true"
+                  Narrow="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="ContractDtos.Count"
+                  Class="text-nowrap"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="ContractWithNavigationPropertiesDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="ContractWithNavigationPropertiesDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="ContractWithNavigationPropertiesDto"
+                                          Visible="@CanEditContract"
+                                          Clicked="() => OpenEditContractModal(context.Contract)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="ContractWithNavigationPropertiesDto"
+                                          Visible="@CanDeleteContract"
+                                          Clicked="() => DeleteContract(context.Contract)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="SalePerson.UserName"
+                                Caption="@L["Contract.SalePerson"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.ContractCode"
+                                Caption="@L["Contract.ContractCode"]">
+                    <DisplayTemplate>
+                        <Link Clicked="() => ViewDetailsAsync(context.Contract)">@context.Contract.ContractCode </Link>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Campaign.Name"
+                                Caption="@L["Contract.CampaignName"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Partner.Name"
+                                Caption="@L["Contract.PartnerName"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.SignedAt"
+                                Sortable="true"
+                                Caption="@L["Contract.SignedAt"]">
+                    <DisplayTemplate>
+                        @if (context.Contract?.SignedAt != null)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Contract.SignedAt.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.Content"
+                                Caption="@L["Contract.Content"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.ContractStatus"
+                                Caption="@L["Contract.ContractStatus"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:ContractStatus:{Convert.ToInt32(context.Contract.ContractStatus)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.PartialPaymentValue"
+                                Caption="@L["Contract.PartialPaymentValue"]">
+                    <DisplayTemplate>
+                        @context.Contract.PartialPaymentValue.ToVND()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.TotalValue"
+                                Caption="@L["Contract.TotalValue"]">
+                    <DisplayTemplate>
+                        @context.Contract.TotalValue.ToVND()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.RemainingPaymentValue"
+                                Caption="@L["Contract.RemainingPaymentValue"]">
+                    <DisplayTemplate>
+                        @context.Contract.RemainingPaymentValue.ToVND()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.PaymentDueDate"
+                                Caption="@L["Contract.PaymentDueDate"]">
+                    <DisplayTemplate>
+                        @if (context.Contract?.PaymentDueDate != null)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Contract.PaymentDueDate.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.CreatedAt"
+                                Caption="@L["Contract.CreatedAt"]">
+                    <DisplayTemplate>
+                        @if (context.Contract?.CreatedAt != null)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Contract.CreatedAt.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                Field="Contract.ContractPaymentStatus"
+                                Caption="@L["Contract.ContractPaymentStatus"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(context.Contract.ContractPaymentStatus)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateContractModal">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <Form id="CreateContractForm">
+            <ModalHeader>
+                <ModalTitle>@L["Contract.NewContract"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateContractModal"></CloseButton>
+            </ModalHeader>
+            <ModalBody>
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+                        <Field>
+                            <FieldLabel>@L["Contract.ContractCode"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewContract.ContractCode"></TextEdit>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.CampaignName"]</FieldLabel>
+                            <Select TValue="Guid?" SelectedValue="@NewContract.CampaignId" SelectedValueChanged="OnSelectCampaignNewModal">
+                                <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                                @foreach (var campaign in Campaigns)
+                                {
+                                    <SelectItem @key="campaign" TValue="Guid?" Value="@campaign.Id">
+                                        @campaign.Name
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.PartnerName"]</FieldLabel>
+                            <Select Disabled="@DisablePartnerNewModal" TValue="Guid?" @bind-SelectedValue="@NewContract.PartnerId">
+                                <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                                @foreach (var partner in PartnersNullable)
+                                {
+                                    <SelectItem @key="partner" TValue="Guid?" Value="@partner.Id">
+                                        @partner.DisplayName
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.Content"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewContract.Content"></TextEdit>
+                        </Field>
+
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+                        <Field>
+                            <FieldLabel>@L["Contract.TotalValue"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@NewContract.TotalValue"></NumericEdit>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["Contract.PartialPaymentValue"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@NewContract.PartialPaymentValue"></NumericEdit>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["Contract.ContractStatus"]</FieldLabel>
+                            <Select TValue="ContractStatus" @bind-SelectedValue="@NewContract.ContractStatus">
+                                @foreach (var itemValue in Enum.GetValues(typeof(ContractStatus)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="ContractStatus" Value="@((ContractStatus) itemValue)">
+                                        @L[$"Enum:ContractStatus:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.ContractPaymentStatus"]</FieldLabel>
+                            <Select TValue="ContractPaymentStatus" @bind-SelectedValue="@NewContract.ContractPaymentStatus">
+                                @foreach (var itemValue in Enum.GetValues(typeof(ContractPaymentStatus)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="ContractPaymentStatus" Value="@((ContractPaymentStatus) itemValue)">
+                                        @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["Contract.SignedAt"]</FieldLabel>
+                            <DatePicker TValue="DateTime?" @bind-Date="@NewContract.SignedAt" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["Contract.DueDate"]</FieldLabel>
+                            <DatePicker TValue="DateTime?" @bind-Date="@NewContract.PaymentDueDate" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+                        </Field>
+
+                    </Column>
+                </Row>
+
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateContractModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateContractForm" Clicked="CreateContract"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditContractModal">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <Form id="EditContractForm">
+            <ModalHeader>
+                <ModalTitle>@L["Contract.EditContractTitle"]</ModalTitle>
+                <CloseButton Clicked="CloseEditContractModal"></CloseButton>
+            </ModalHeader>
+            <ModalBody>
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+                        <Field>
+                            <FieldLabel>@L["Contract.ContractCode"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingContract.ContractCode"></TextEdit>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.CampaignName"]</FieldLabel>
+                            <Select TValue="Guid?" SelectedValue="@EditingContract.CampaignId" SelectedValueChanged="OnSelectCampaignEditingModal">
+                                <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                                @foreach (var campaign in Campaigns)
+                                {
+                                    <SelectItem @key="campaign" TValue="Guid?" Value="@campaign.Id">
+                                        @campaign.Name
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.PartnerName"]</FieldLabel>
+                            <Select Disabled="@DisablePartnerEditingModal" TValue="Guid?" @bind-SelectedValue="@EditingContract.PartnerId">
+                                <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                                @foreach (var partner in PartnersNullable)
+                                {
+                                    <SelectItem @key="partner" TValue="Guid?" Value="@partner.Id">
+                                        @partner.DisplayName
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["Contract.Content"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingContract.Content"></TextEdit>
+                        </Field>
+
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+                        <Field>
+                            <FieldLabel>@L["Contract.TotalValue"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@EditingContract.TotalValue"></NumericEdit>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.PartialPaymentValue"]</FieldLabel>
+                            <NumericEdit TValue="decimal" @bind-Value="@EditingContract.PartialPaymentValue"></NumericEdit>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.ContractStatus"]</FieldLabel>
+                            <Select TValue="ContractStatus" @bind-SelectedValue="@EditingContract.ContractStatus">
+                                @foreach (var itemValue in Enum.GetValues(typeof(ContractStatus)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="ContractStatus" Value="@((ContractStatus) itemValue)">
+                                        @L[$"Enum:ContractStatus:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["Contract.ContractPaymentStatus"]</FieldLabel>
+                            <Select TValue="ContractPaymentStatus" @bind-SelectedValue="@EditingContract.ContractPaymentStatus">
+                                @foreach (var itemValue in Enum.GetValues(typeof(ContractPaymentStatus)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="ContractPaymentStatus" Value="@((ContractPaymentStatus) itemValue)">
+                                        @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["Contract.SignedAt"]</FieldLabel>
+                            <DatePicker TValue="DateTime?" @bind-Date="@EditingContract.SignedAt" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["Contract.DueDate"]</FieldLabel>
+                            <DatePicker TValue="DateTime?" @bind-Date="@EditingContract.PaymentDueDate" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+                        </Field>
+                    </Column>
+                </Row>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditContractModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditContractForm" Clicked="UpdateContract"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

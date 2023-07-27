@@ -1,0 +1,177 @@
+﻿@inherits BlazorComponentBase
+
+@using Faso.Blazor.SpinKit
+@using FacebookCommunityAnalytics.Api.PartnerModule
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+
+@inject IPartnerModuleAppService _partnerModuleAppService
+<Card>
+    <CardBody>
+        <h3>@L["Partner.Dashboard.AvgPosts"]</h3>
+        <Row>
+            <Column>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white">@L["Statistics.DateFromToLabel"] </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <DateRangePicker TimePicker="true"
+                                         TimePicker24Hour="true"
+                                         Ranges="_dateRanges"
+                                         DateFormat="@GlobalConsts.DateFormat"
+                                         @bind-StartDate="StartDate"
+                                         @bind-EndDate="EndDate"
+                                         class="form-control form-control-md"
+                                         placeholder="@L["SelectDates"]" OnClosed="ReloadDataAsync"/>
+                    </Addon>
+                </Addons>
+            </Column>
+        </Row>
+    </CardBody>
+</Card>
+
+
+<Row>
+    <Column ColumnSize="ColumnSize.Is8.OnDesktop.IsFull.OnTablet.IsFull.OnMobile">
+        <Tabs SelectedTab="TabAvgPostStats">
+            <Items>
+                <Tab Name="TabAvgPostStats">@L["Statistics"]</Tab>
+                <Tab Name="TabTopReactionPosts">@L["TopReactionTable"]</Tab>
+            </Items>
+            <Content>
+                <TabPanel Name="TabAvgPostStats">
+                    @if (_showLoading)
+                    {
+                        <SpinKitChasingDots/>
+                    }
+                    else
+                    {
+                        @if (_statistics != null)
+                        {
+                            <table class="table table-responsive" Responsive="true">
+                                <thead>
+                                <tr>
+                                    <th>@L["PartnerStats.Group"]</th>
+                                    <th>@L["PartnerStats.Post"]</th>
+                                    <th>@L["PartnerStats.AvgReactionPerUser"]</th>
+                                    <th>@L["PartnerStats.AvgReactionPerPost"]</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                @foreach (var stat in _statistics.Stats.OrderByDescending(x => x.TotalReactions).Take(10).ToList())
+                                {
+                                    <tr @key="stat">
+                                        <td>@stat.Group</td>
+                                        <td>@stat.TotalPost.ToCommaStyle()</td>
+                                        <td>@stat.TotalReactions.ToCommaStyle()</td>
+                                        <td>@stat.AvgReactionPerPost.ToCommaStyle()</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        }
+                    }
+                </TabPanel>
+                <TabPanel Name="TabTopReactionPosts">
+                    <!--Chart - Top Reaction-->
+                    @if (_showLoading)
+                    {
+                        <SpinKitChasingDots/>
+                    }
+                    else
+                    {
+                        <table class="table table-responsive">
+                            <TableHeader FixedHeader="true" FixedHeaderTableHeight="300px">
+                                <tr>
+                                    <th>@L["AuthorName"]</th>
+                                    <th>@L["Group"]</th>
+                                    <th>@L["Url"]</th>
+                                    <th>@L["TotalCount"]</th>
+                                    <th>@L["LikeCount"]</th>
+                                    <th>@L["ShareCount"]</th>
+                                    <th>@L["CommentCount"]</th>
+                                </tr>
+                            </TableHeader>
+                            <tbody>
+                            @if (!_unRendered && !_statistics.TopReactionPosts.Any())
+                            {
+                                <div style="text-align: center; font-size: 100%;width: 100%;font-weight: bold;">@L["No Record"]</div>
+                            }
+                            @foreach (var postDto in _statistics.TopReactionPosts)
+                            {
+                                <tr @key="postDto">
+                                    <td class="card-title">@postDto.AuthorName</td>
+                                    <td class="card-title">@postDto.GroupName</td>
+                                    <td>
+                                        <a class="card-title" href="@postDto.Url" target="_blank">
+                                            @postDto.Fid.ToPostUrl()
+                                        </a>
+                                    </td>
+                                    <td>@postDto.TotalCount.ToCommaStyle()</td>
+                                    <td>@postDto.LikeCount.ToCommaStyle()</td>
+                                    <td>@postDto.ShareCount.ToCommaStyle()</td>
+                                    <td>@postDto.CommentCount.ToCommaStyle()</td>
+                                </tr>
+                            }
+                            </tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="text-danger">@L["TotalCount"]</td>
+                                <td>@_statistics.GetTotalReactionPosts().ToCommaStyle()</td>
+                                <td>@_statistics.GetTotalLikePosts().ToCommaStyle()</td>
+                                <td>@_statistics.GetTotalSharePosts().ToCommaStyle()</td>
+                                <td>@_statistics.GetTotalCommentPosts().ToCommaStyle()</td>
+                            </tr>
+                        </table>
+                    }
+                </TabPanel>
+            </Content>
+        </Tabs>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnTablet.IsFull.OnMobile">
+        <Table>
+            <TableBody>
+                <TableRow>
+                    <TableRowCell>
+                        <b>@L["Partner.TotalPartner"]</b>
+                    </TableRowCell>
+                    <TableRowCell>
+                        @_statistics.TotalPartner.ToCommaStyle()
+                    </TableRowCell>
+                </TableRow>
+
+                <TableRow>
+                    <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                        <b>@L["Partner.TotalCampaign"]</b>
+                    </TableRowCell>
+                    <TableRowCell>
+                        @_statistics.TotalCampaign.ToCommaStyle()
+                    </TableRowCell>
+                </TableRow>
+
+                <TableRow>
+                    <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                        <b>@L["Partner.TotalPostFb"]</b>
+                    </TableRowCell>
+                    <TableRowCell>
+                        @_statistics.TotalPostFb
+                    </TableRowCell>
+                </TableRow>
+                <TableRow>
+                    <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                        <b>@L["Partner.TotalPostTiktok"]</b>
+                    </TableRowCell>
+                    <TableRowCell>
+                        @_statistics.TotalPostTiktok
+                    </TableRowCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+    </Column>
+</Row>

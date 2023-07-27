@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  httpapihost:
+    image: ${DOCKER_REGISTRY-}facebookcommunityanalyticsapihttpapihost
+    build:
+      context: .
+      dockerfile: src/FacebookCommunityAnalytics.Api.HttpApi.Host/Dockerfile
+    container_name: "httpapihost"
+
+  identityserver:
+    image: ${DOCKER_REGISTRY-}facebookcommunityanalyticsapiidentityserver
+    build:
+      context: .
+      dockerfile: src/FacebookCommunityAnalytics.Api.IdentityServer/Dockerfile
+    container_name: "identityserver"
+
+
+  webblazor:
+    image: ${DOCKER_REGISTRY-}facebookcommunityanalyticsapiblazor
+    build:
+      context: .
+      dockerfile: src/FacebookCommunityAnalytics.Api.Blazor/Dockerfile
+    container_name: "webblazor"
+
+  webpublic:
+    image: ${DOCKER_REGISTRY-}facebookcommunityanalyticsapiwebpublic
+    build:
+      context: .
+      dockerfile: src/FacebookCommunityAnalytics.Api.Web.Public/Dockerfile
+    container_name: "webpublic"
+

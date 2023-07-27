@@ -1,0 +1,847 @@
+﻿@page "/user-profile"
+@attribute [Authorize(ApiPermissions.UserInfos.Default)]
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Contracts
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Medias
+@using FacebookCommunityAnalytics.Api.Posts
+@using FacebookCommunityAnalytics.Api.StaffEvaluations
+@using FacebookCommunityAnalytics.Api.Statistics
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using FacebookCommunityAnalytics.Api.UserAffiliates
+@using FacebookCommunityAnalytics.Api.UserCompensations
+@using FacebookCommunityAnalytics.Api.UserProfiles
+@using Faso.Blazor.SpinKit
+@using Radzen
+@using Volo.Abp.Account
+@inherits BlazorComponentBase
+
+@inject IUserInfosAppService UserInfosAppService
+@inject ITeamMemberAppService TeamMemberAppService
+@inject IAccountAppService AccountAppService
+@inject IUserProfileAppService UserProfileAppService
+@inject IMediaAppService MediaAppService
+@inject IUiMessageService UiMessageService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["UserProfile.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+<Card>
+    <CardBody>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is8.OnDesktop.IsFull.OnMobile">
+         
+                <Addons>
+                  
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white">
+                            <Icon Name="IconName.UserTie"></Icon>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <Select TValue="Guid?" SelectedValue="TeamIdSelected" Disabled="@IsNotManagerRole()" SelectedValueChanged="@OnSelectedTeamIdChanged">
+                            <SelectItem TValue="Guid" Value="@Guid.Empty">
+                                @L["TeamMembers.ChooseTeam"]
+                            </SelectItem>
+                            @foreach (var org in OrganizationUnits)
+                            {
+                                <SelectItem @key="org" TValue="Guid" Value="@org.Id">
+                                    @org.DisplayName
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <Select TValue="Guid?" SelectedValue="@UserIdSelected" Disabled="@IsNotLeaderRole()" SelectedValueChanged="@OnSelectedUserIdChanged">
+                            <SelectItem TValue="Guid" Value="@Guid.Empty">
+                                @L["UserProfile.SelectUser"]
+                            </SelectItem>
+                            @foreach (var userLookup in UserLookupDtos)
+                            {
+                                <SelectItem TValue="Guid?" Value="@userLookup.Id">
+                                    @userLookup.DisplayName
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Addon>
+
+                </Addons>
+            </Column>
+
+            @if (_showLoading)
+            {
+                <Column ColumnSize="ColumnSize.Is12.OnDesktop.IsFull.OnMobile">
+                    <SpinKitChasingDots/>
+                </Column>
+            }
+
+        </Row>
+    </CardBody>
+</Card>
+<br/>
+<Card>
+    <CardBody>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is4.OnDesktop.IsFull.OnMobile" class="text-center">
+                        @if (ProfilePicture != null && ProfilePicture.Url.IsNotNullOrEmpty())
+                        {
+                            <Image Source="@ProfilePicture?.Url" Style="width: 100%"></Image>
+                        }
+                        else
+                        {
+                            <Image Source="@(NavigationManager.BaseUri + GlobalConsts.DefaultAvatar)"></Image>
+                        }
+                        @if (CurrentUser.Id == UserIdSelected)
+                        {
+                            <RadzenUpload Accept="image/*"
+                                          @ref="_createContentUpload"
+                                          Auto="false" Multiple="false" Url="Upload/UploadAvatarUser" Style="margin-bottom: 20px;"
+                                          Complete="@(OnAvatarUploadComplete)"
+                                          ChooseText="@L["UserProfile.UploadAvatar.ChooseFileButton"]">
+                            </RadzenUpload>
+                            <RadzenButton @ref="_buttonUploadAvatar" Size="ButtonSize.Small" Text="@L["UserProfile.UploadAvatar.Submit"]"
+                                          Click=@(SubmitUploadAvatarAsync) Style="   margin-bottom: 20px;"/>
+                        }
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is8.OnDesktop.IsFull.OnMobile">
+                        <Table class="table table-striped">
+                            <TableBody>
+                                <TableRow>
+                                    <TableRowCell>
+                                        @L["UserProfile.FullName"]
+                                    </TableRowCell>
+                                    <TableRowCell>
+                                        <b>@UserProfileDto.AppUser?.GetFullName() - @UserProfileDto.UserInfo?.Code</b>
+                                    </TableRowCell>
+                                </TableRow>
+
+
+                                <TableRow>
+                                    <TableRowCell>
+                                        @L["UserProfile.UserName"]
+                                    </TableRowCell>
+                                    <TableRowCell>
+                                        @UserProfileDto.AppUser?.UserName
+                                    </TableRowCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableRowCell>
+                                        @L["UserProfile.Phone"]
+                                    </TableRowCell>
+                                    <TableRowCell>
+                                        @UserProfileDto.AppUser?.PhoneNumber
+                                    </TableRowCell>
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableRowCell>
+                                        @L["UserProfile.Email"]
+                                    </TableRowCell>
+                                    <TableRowCell>
+                                        @UserProfileDto.AppUser?.Email
+                                    </TableRowCell>
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableRowCell>
+                                        @L["UserProfile.DateOfBirth"]
+                                    </TableRowCell>
+                                    <TableRowCell>
+                                        @UserProfileDto.UserInfo?.GetDateOfBirth()
+                                    </TableRowCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </Column>
+                </Row>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+                <Table FixedHeader>
+                    <TableBody>
+                        <TableRow>
+                            <TableRowCell>
+                                <b>@L["UserProfile.Team"]</b>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <b>@UserProfileDto.Team?.DisplayName</b>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                @L["UserProfile.Position"]
+                            </TableRowCell>
+                            <TableRowCell>
+                                @L[$"Enum:UserPosition:{Convert.ToInt32(UserProfileDto.UserInfo?.UserPosition)}"]
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowCell>
+                                @L["UserProfile.JoinedDateTime"]
+                            </TableRowCell>
+                            <TableRowCell>
+                                @if (UserProfileDto.UserInfo is {JoinedDateTime: { } })
+                                {
+                                    <b>@BrowserDateTime.ConvertToBrowserTime(UserProfileDto.UserInfo.JoinedDateTime.Value, GlobalConsts.DateFormat)</b>
+                                }
+                            </TableRowCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </Column>
+        </Row>
+    </CardBody>
+</Card>
+<br/>
+@if ((GlobalConfiguration.TeamTypeMapping.Content.Contains(OrganizationUnits.FirstOrDefault(_ => _.Id == TeamIdSelected)?.DisplayName)
+    || GlobalConfiguration.TeamTypeMapping.Seeding.Contains(OrganizationUnits.FirstOrDefault(_ => _.Id == TeamIdSelected)?.DisplayName)
+    || GlobalConfiguration.TeamTypeMapping.Affiliate.Contains(OrganizationUnits.FirstOrDefault(_ => _.Id == TeamIdSelected)?.DisplayName)) && UserIdSelected != null)
+{
+    <Card>
+        <CardBody>
+            <Row>
+                <ChartJs.Blazor.Chart Config="_config_PostChart" @ref="_chart_PostStats"></ChartJs.Blazor.Chart>
+            </Row>
+        </CardBody>
+    </Card>
+}
+
+@if (GlobalConfiguration.TeamTypeMapping.Sale.Contains(OrganizationUnits.FirstOrDefault(_ => _.Id == TeamIdSelected)?.DisplayName) && UserIdSelected != null)
+{
+    <Card>
+        <CardBody>
+            <Row>
+                <ChartJs.Blazor.Chart Config="_config_SaleChart" @ref="_chart_SaleStats"></ChartJs.Blazor.Chart>
+            </Row>
+        </CardBody>
+    </Card>
+}
+
+@if (GlobalConfiguration.TeamTypeMapping.Tiktok.Contains(OrganizationUnits.FirstOrDefault(_ => _.Id == TeamIdSelected)?.DisplayName) && UserIdSelected != null)
+{
+    <Card>
+        <CardBody>
+            <Row>
+                <ChartJs.Blazor.Chart Config="_config_TikTokChart" @ref="_chart_TikTokStats"></ChartJs.Blazor.Chart>
+            </Row>
+        </CardBody>
+    </Card>
+}
+<br/>
+<Row>
+<Column ColumnSize="ColumnSize.IsFull">
+<Tabs SelectedTab="@SelectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+<Items>
+    <Tab Name="kpi">@L["UserProfile.KPI"]</Tab>
+    <Tab Name="payroll">@L["UserProfile.Payroll"]</Tab>
+</Items>
+<Content>
+<TabPanel Name="kpi">
+<Row>
+    <Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnMobile">
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <DateRangePicker Ranges="_dateRanges"
+                                 DateFormat="@GlobalConsts.DateFormat"
+                                 StartDate="StartDate"
+                                 EndDate="EndDate"
+                                 EndDateChanged="EndDateChanged"
+                                 StartDateChanged="StartDateChanged"
+                                 class="form-control form-control-md"
+                                 Style="width: 280px;"
+                                 placeholder="@L["SelectDates"]" OnClosed="LoadDataUserProfileKpi"/>
+            </Addon>
+        </Addons>
+    </Column>
+    @if (_showGridLoading)
+    {
+        <Column ColumnSize="ColumnSize.Is12.OnDesktop.IsFull.OnMobile">
+            <SpinKitChasingDots/>
+        </Column>
+    }
+</Row>
+<br/>
+<br/>
+<Row>
+<Column ColumnSize="ColumnSize.IsFull">
+@if (StaffEvaluationWithNavigationProperties.IsNotNullOrEmpty())
+{
+    <Heading Size="HeadingSize.Is3">@L["UserProfile.KPI.StaffEvaluation"]</Heading>
+    <DataGrid TItem="StaffEvaluationWithNavigationPropertiesDto"
+              Data="StaffEvaluationWithNavigationProperties"
+              Narrow="true"
+              Striped="true"
+              Responsive="true"
+              SortMode="DataGridSortMode.Single"
+              Style="table-layout: fixed;width: 1500px">
+        
+        <DataGridColumns>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="OrganizationUnit.DisplayName"
+                            Caption="@L["StaffEvaluations.Team"]"
+                            Sortable="true"
+                            Width="120px">
+                <DisplayTemplate>
+                    @context.OrganizationUnit?.DisplayName
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="AppUser.UserName"
+                            Caption="@L["StaffEvaluations.User"]"
+                            Sortable="true"
+                            Width="130px">
+                <DisplayTemplate>
+                    @context.AppUser.GetFullName()
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="StaffEvaluation.Month"
+                            Caption="@L["StaffEvaluations.Month"]"
+                            Sortable="false">
+                <DisplayTemplate>
+                    @($"{context.StaffEvaluation.Month}/{context.StaffEvaluation.Year}")
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="StaffEvaluation.TotalPoint"
+                            Caption="@L["StaffEvaluations.TotalPoint"]"
+                            Sortable="true"
+                            VerticalAlignment="VerticalAlignment.Top">
+                <DisplayTemplate>
+                    <Progress
+                        Striped="true"
+                        Animated="true"
+                        Color="@(context.StaffEvaluation.TotalPoint >= 100 ? Color.Primary : Color.Warning)"
+                        Value="@((int) context.StaffEvaluation.TotalPoint)"
+                        style="height: 10px">
+                    </Progress>
+                    <strong class="text-danger">@context.StaffEvaluation.TotalPoint/100</strong>
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="StaffEvaluation.QuantityKPI"
+                            Caption="@L["StaffEvaluations.QuantityKPI"]"
+                            Sortable="true"
+                            Width="100px"
+                            VerticalAlignment="VerticalAlignment.Top">
+                <DisplayTemplate>
+
+                    <Progress
+                        Striped="true"
+                        Animated="true"
+                        Color="@(context.StaffEvaluation.QuantityKPI >= 50 ? Color.Primary : Color.Warning)"
+                        Value="@((int) context.StaffEvaluation.QuantityKPI)"
+                        Max="50"
+                        style="height: 10px">
+
+                    </Progress>
+                    <strong class="text-success">@context.StaffEvaluation.QuantityKPI/50</strong>
+                    <p style="color: grey">@context.StaffEvaluation.QuantityKPIDescription</p>
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="StaffEvaluation.QualityKPI"
+                            Caption="@L["StaffEvaluations.QualityKPI"]"
+                            Sortable="true"
+                            Width="120px"
+                            VerticalAlignment="VerticalAlignment.Top">
+                <DisplayTemplate >
+                    <Progress
+                        Striped="true"
+                        Animated="true"
+                        Color="@(context.StaffEvaluation.QualityKPI >= 30 ? Color.Primary : Color.Warning)"
+                        Value="@((int) context.StaffEvaluation.QualityKPI)"
+                        Max="30"
+                        style="height: 10px">
+                    </Progress>
+                    <strong class="text-primary">@context.StaffEvaluation.QualityKPI/30</strong>
+                    <p style="color: grey">@context.StaffEvaluation.QualityKPIDescription</p>
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="StaffEvaluation.ReviewPoint"
+                            Caption="@L["StaffEvaluations.ReviewPoint"]"
+                            Sortable="true"
+                            VerticalAlignment="VerticalAlignment.Top">
+                <DisplayTemplate>
+                    <Progress
+                        Striped="true"
+                        Animated="true"
+                        Color="@(context.StaffEvaluation.ReviewPoint >= 20 ? Color.Primary : Color.Warning)"
+                        Value="@((int) context.StaffEvaluation.ReviewPoint)"
+                        Max="20"
+                        style="height: 10px">
+                    </Progress>
+                    <strong class="text-info">@context.StaffEvaluation.ReviewPoint/20</strong>
+
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="StaffEvaluation.DirectorReview"
+                            Caption="@L["StaffEvaluations.DirectorReview"]"
+                            Width="450px"
+                            Sortable="false">
+                <DisplayTemplate>
+                    @context.StaffEvaluation.DirectorReview
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                            Field="StaffEvaluation.StaffEvaluationStatus"
+                            Caption="@L["StaffEvaluations.StaffEvaluationStatus"]"
+                            Sortable="false">
+                <DisplayTemplate>
+                    @L[$"Enum:StaffEvaluationStatus:{Convert.ToInt32(context.StaffEvaluation.StaffEvaluationStatus)}"]
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto" 
+                            Field="AppUser.Id"
+                             Caption="@L["Action"]"
+                            Sortable="false">
+                <DisplayTemplate>
+                    <Buttons>
+                        <Button Outline Color="Color.Primary" Clicked="() => ExportUserStaffEvaluation(context)">
+                            <Icon Name="IconName.Download"></Icon>
+                        </Button>
+                    </Buttons>
+                </DisplayTemplate>
+            </DataGridColumn>
+        </DataGridColumns>
+    </DataGrid>
+    <Divider class="mb-5"></Divider>
+}
+@if (FacebookPosts.IsNotNullOrEmpty())
+{
+    <Heading Size="HeadingSize.Is3">
+        @L["UserProfile.KPI.FacebookPost"]
+        <p style="font-size: 14px">@L["UserProfile.KPI.FacebookPostIfo", (TotalCount - _invalidPostCount), _invalidPostCount]</p>
+    </Heading>
+
+    <DataGrid TItem="PostWithNavigationPropertiesDto"
+              Data="FacebookPosts"
+              ReadData="OnDataGridReadAsync"
+              TotalItems="TotalCount"
+              ShowPager="true"
+              Responsive="true"
+              Narrow="true"
+              PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+              PageSize="PageSize"
+              ShowPageSizes="true"
+              Class="text-nowrap"
+              Striped="true"
+              SortMode="DataGridSortMode.Single">
+        <DataGridColumns>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Group.Name"
+                            Caption="@L["Group"]"
+                            Sortable="false"
+                            CellClass="@(dto => { return "td-table-word-wrap"; })">
+                <DisplayTemplate>
+                    @context.Group?.Title
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.Url"
+                            Sortable="false"
+                            Caption="@L["Url"]">
+                <DisplayTemplate>
+                    @{
+                        bool IsDeadLink = context.Post.IsNotAvailable;
+                        var className = IsDeadLink ? "dead-link" : string.Empty;
+                    }
+                    <a href="@context.Post.Url" class="@className" target="_blank">@GetPostUrl(context.Post)</a>
+
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.Shortlinks"
+                            Caption="@L["ShortUrl"]"
+                            Sortable="false">
+                <DisplayTemplate>
+                    @{
+                        foreach (var shortLink in context.Post.Shortlinks)
+                        {
+                            @shortLink<br/>
+                        }
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.TotalCount"
+                            Caption="@L["TotalCount"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @(context.Post.TotalCount > 0 ? context.Post.TotalCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.LikeCount"
+                            Caption="@L["LikeCount"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @(context.Post.LikeCount > 0 ? context.Post.LikeCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.CommentCount"
+                            Caption="@L["CommentCount"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @(context.Post.CommentCount > 0 ? context.Post.CommentCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.ShareCount"
+                            Caption="@L["ShareCount"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @(context.Post.ShareCount > 0 ? context.Post.ShareCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.Note"
+                            Sortable="false"
+                            Caption="@L["Note"]">
+                <DisplayTemplate>
+                    @(!context.Post.Note.IsNullOrEmpty() ? new MarkupString(context.Post.Note) : string.Empty)
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.LastCrawledDateTime"
+                            Caption="@L["LastCrawledDateTime"]">
+                <DisplayTemplate>
+                    @if (context?.Post?.LastCrawledDateTime != null)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Post.LastCrawledDateTime.Value, GlobalConsts.DateTimeFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.SubmissionDateTime"
+                            Caption="@L["SubmissionDateTime"]"
+                            SortDirection="SortDirection.Descending">
+                <DisplayTemplate>
+                    @if (context?.Post?.SubmissionDateTime != null)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Post.SubmissionDateTime.Value, GlobalConsts.DateTimeFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+        </DataGridColumns>
+    </DataGrid>
+    <Divider class="mb-5"></Divider>
+}
+
+@if (UserCompensationAffiliates.IsNotNullOrEmpty())
+{
+    <Heading Size="HeadingSize.Is3">
+        @L["UserProfile.KPI.Affiliate"]
+        <p style="font-size: 14px">@L["UserProfile.KPI.AffiliateInfo", UserCompensationAffiliates.Sum(_ => _.Conversions)]</p>
+    </Heading>
+    <DataGrid TItem="CompensationAffiliateDto"
+              Data="DateGridAffiliates"
+              ReadData="OnAffiliateDataGridReadAsync"
+              PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+              TotalItems="AffiliateTotalCount"
+              Responsive="true"
+              Striped="true"
+              PageSize="AffiliatePageSize"
+              ShowPageSizes="true"
+              ShowPager="true"
+              SortMode="DataGridSortMode.Single">
+        <DataGridColumns>
+
+            <DataGridColumn TItem="CompensationAffiliateDto"
+                            Field="Shortlink"
+                            Sortable="false"
+                            Caption="@L["Shortlink"]">
+            </DataGridColumn>
+
+
+            <DataGridColumn TItem="CompensationAffiliateDto"
+                            Field="Conversions"
+                            Sortable="false"
+                            Caption="@L["Conversion"]">
+            </DataGridColumn>
+
+            <DataGridColumn TItem="CompensationAffiliateDto"
+                            Field="Click"
+                            Sortable="false"
+                            Caption="@L["Click"]">
+            </DataGridColumn>
+        </DataGridColumns>
+    </DataGrid>
+    <Divider class="mb-5"></Divider>
+}
+
+@if (Contracts.IsNotNullOrEmpty())
+{
+    <Heading Size="HeadingSize.Is3">@L["UserProfile.KPI.Contract"]</Heading>
+    <DataGrid TItem="ContractWithNavigationPropertiesDto"
+              Data="Contracts"
+              PageSize="1000"
+              Responsive="true"
+              Narrow="true"
+              Class="text-nowrap"
+              Striped="true"
+              SortMode="DataGridSortMode.Single">
+        <DataGridColumns>
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="SalePerson.UserName"
+                            Caption="@L["Contract.SalePerson"]">
+            </DataGridColumn>
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.ContractCode"
+                            Caption="@L["Contract.ContractCode"]">
+                <DisplayTemplate>
+                    @context.Contract.ContractCode
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Campaign.Name"
+                            Caption="@L["Contract.CampaignName"]">
+            </DataGridColumn>
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Partner.Name"
+                            Caption="@L["Contract.PartnerName"]">
+            </DataGridColumn>
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.SignedAt"
+                            Sortable="true"
+                            Caption="@L["Contract.SignedAt"]">
+                <DisplayTemplate>
+                    @if (context.Contract?.SignedAt != null)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Contract.SignedAt.Value, GlobalConsts.DateFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.Content"
+                            Caption="@L["Contract.Content"]">
+            </DataGridColumn>
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.ContractStatus"
+                            Caption="@L["Contract.ContractStatus"]">
+
+                <DisplayTemplate>
+                    <strong class="@SetColorContractStatus(context.Contract.ContractStatus)">
+                        @L[$"Enum:ContractStatus:{Convert.ToInt32(context.Contract.ContractStatus)}"]
+                    </strong>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.TotalValue"
+                            Caption="@L["Contract.TotalValue"]">
+                <DisplayTemplate >
+                    <strong class="text-success">
+                        @context.Contract.TotalValue.ToVND()
+                    </strong>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.PartialPaymentValue"
+                            Caption="@L["Contract.PartialPaymentValue"]">
+                <DisplayTemplate>
+                    @context.Contract.PartialPaymentValue.ToVND()
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.RemainingPaymentValue"
+                            Caption="@L["Contract.RemainingPaymentValue"]">
+                <DisplayTemplate>
+                    <strong class="text-danger"> @context.Contract.RemainingPaymentValue.ToVND()</strong>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.PaymentDueDate"
+                            Caption="@L["Contract.PaymentDueDate"]">
+                <DisplayTemplate>
+                    @if (context.Contract?.PaymentDueDate != null)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Contract.PaymentDueDate.Value, GlobalConsts.DateFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.CreatedAt"
+                            Caption="@L["Contract.CreatedAt"]">
+                <DisplayTemplate>
+                    @if (context.Contract?.CreatedAt != null)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Contract.CreatedAt.Value, GlobalConsts.DateFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                            Field="Contract.ContractPaymentStatus"
+                            Caption="@L["Contract.ContractPaymentStatus"]">
+                <DisplayTemplate>
+                    <strong class=@SetColorContractPaymentStatus(context.Contract.ContractPaymentStatus)>
+                        @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(context.Contract.ContractPaymentStatus)}"]
+                    </strong>
+                </DisplayTemplate>
+            </DataGridColumn>
+        </DataGridColumns>
+    </DataGrid>
+    <Divider class="mb-5"></Divider>
+}
+</Column>
+</Row>
+</TabPanel>
+<TabPanel Name="payroll">
+    <Row>
+        <Column ColumnSize="ColumnSize.IsFull">
+            <DataGrid TItem="UserCompensationNavigationPropertiesDto"
+                      PageSize="1000"
+                      Data="UserPayrolls"
+                      Responsive="true"
+                      Class="text-nowrap"
+                      Striped="true"
+                      Narrow="true">
+
+                <DataGridColumns>
+                    <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                    Field="UserCompensation.Team"
+                                    Caption="@L["PayrollEmail.OrganizationName"]">
+                        <DisplayTemplate>
+                            @context.UserCompensation.Team
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                    Field="AppUser.Name"
+                                    Caption="@L["PayrollEmail.Name"]">
+                        <DisplayTemplate>
+                            @context.AppUser.Name (@context.AppUser.UserName)
+                            <br/>
+                            @(L[$"Enum:UserPosition:{Convert.ToInt32(context.UserInfo.UserPosition)}"])
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                    Field="UserCompensation.BonusAmount"
+                                    Caption="@L["PayrollEmail.BonusAmount"]">
+                        <DisplayTemplate>
+                            <div>
+                                @if (context.UserCompensation.BonusAmount != 0)
+                                {
+                                    <strong class="text-success">@($"{L["TotalBonusAmount"]}: {context.UserCompensation.BonusAmount.ToVND()}")</strong>
+                                    @foreach (var item in context.UserCompensation.Bonuses)
+                                    {
+                                        <p class="text-dark"> - @(L[$"Enum:BonusType:{Convert.ToInt32(item.BonusType ?? BonusType.Unknown)}"] + ": " + @item.BonusAmount.ToVND())</p>
+                                    }
+                                }
+                            </div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                    Field="UserCompensation.Description"
+                                    Caption="@L["Note"]">
+                        <DisplayTemplate>
+                            <div>
+                                @if (@context.UserCompensation.Description != null && @context.UserCompensation.Description.Contains(("|")))
+                                {
+                                    foreach (var part in context.UserCompensation.Description.Split('|'))
+                                    {
+                                        <p class="text-dark"> - @part</p>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-dark"> - @context.UserCompensation.Description</p>
+                                }
+                            </div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="UserCompensationNavigationPropertiesDto"
+                                    Field="UserCompensation.TotalAmount"
+                                    Caption="@L["PayrollEmail.TotalAmount"]">
+                        <DisplayTemplate>
+                            <strong class="text-danger">@context.UserCompensation.TotalAmount.ToVND()</strong>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </Column>
+    </Row>
+    <Row>
+        <Column ColumnSize="ColumnSize.IsFull">
+            <Table class="table table-striped" Responsive="true" Striped="true">
+
+                <TableBody>
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            @L["PayrollEmail.SalaryAmount"]
+                        </TableRowCell>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <strong class="text-info">@UserPayrolls.Sum(x => x.UserCompensation.SalaryAmount).ToVND()</strong>
+                        </TableRowCell>
+
+                    </TableRow>
+                    <TableRow>
+
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            @L["PayrollEmail.BonusAmount"]
+                        </TableRowCell>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <strong class="text-info">@UserPayrolls.Sum(x => x.UserCompensation.BonusAmount).ToVND()</strong>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            @L["PayrollEmail.TotalAmount"]
+                        </TableRowCell>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <strong class="text-info">@UserPayrolls.Sum(x => x.UserCompensation.TotalAmount).ToVND()</strong>
+                        </TableRowCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </Column>
+    </Row>
+</TabPanel>
+</Content>
+</Tabs>
+</Column>
+</Row>

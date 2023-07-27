@@ -1,0 +1,236 @@
+@attribute [Authorize(ApiPermissions.Tiktok.Reports)]
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Dev
+@using FacebookCommunityAnalytics.Api.Tiktoks
+@using FA = Blazorise.Icons.FontAwesome;
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using Faso.Blazor.SpinKit
+@using FacebookCommunityAnalytics.Api.Integrations.Tiktok
+@using FacebookCommunityAnalytics.Api.TikTokMCNs
+@inherits BlazorComponentBase
+
+@inject IDevAppService DevAppService
+@inject ITiktokStatsAppService TiktokStatsAppService
+@inject ITiktokAppService TiktokAppService
+@inject ITikTokMCNAppService TikTokMcnAppService
+@inject IUiMessageService UiMessageService
+@inject IUserInfosAppService UserInfosAppService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+@* ************************* PAGE HEADER ************************* *@
+@* <PageHeader Title="@L["TiktokVideos"]" Toolbar="Toolbar"> *@
+@* *@
+@* </PageHeader> *@
+
+@* ************************* SEARCH ************************* *@
+<Form id="PostSearchForm" class="mb-3">
+            <Row>
+                <Field ColumnSize="ColumnSize.Is9.OnDesktop.IsFull.OnMobile">
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <DateRangePicker Ranges="DateRanges"
+                                             DateFormat="@GlobalConsts.DateFormat"
+                                             StartDate="StartDate"
+                                             EndDate="EndDate"
+                                             TimePicker="true"
+                                             TimePicker24Hour="true"
+                                             EndDateChanged="EndDateChanged"
+                                             StartDateChanged="StartDateChanged"
+                                             Style="width: 210px !important;"
+                                             class="form-control form-control-md"
+                                             OnClosed="OnSelectedDateTime"
+                                             placeholder="@L["SelectDates"]"/>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit @bind-Text="@Filter.Search"
+                                      Style="margin-left: 5px;min-width: 100px;max-width: 300px"
+                                      Autofocus="true"
+                                      Placeholder="@L["Placeholder.SearchTikTok"]">
+                            </TextEdit>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <SubmitButton Color="Color.Primary" Form="PostSearchForm" Clicked="DoSearch">
+                                <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                            </SubmitButton>
+                        </Addon>
+                    </Addons>
+                </Field>
+               <Field ColumnSize="ColumnSize.Is3.OnDesktop.IsFull.OnMobile">
+                   <Button Style="float:right" Color="Color.Primary" Clicked="@OpenExportTikTokModal">
+                       <Icon Name="IconName.Download"></Icon> @L["TiktokReport.Export"]
+                   </Button>
+               </Field>
+            </Row>
+        </Form>
+
+    @* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        @if (ShowLoading && _rendered)
+        {
+            <SpinKitChasingDots/>
+        }
+
+        <DataGrid TItem="TiktokWithNavigationPropertiesDto"
+                  Data="TiktokPosts"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  Narrow="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  ShowPageSizes="true"
+                  Class="text-nowrap"
+                  Striped="true"
+                  SortMode="DataGridSortMode.Multiple">
+            <DataGridColumns>
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.Index"
+                                Sortable="false"
+                                Caption="@L["TiktokReports.Index"]"
+                                TextAlignment="TextAlignment.Center">
+                    <DisplayTemplate>
+                        @context.Tiktok.Index
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.ChannelId"
+                                Sortable="true"
+                                Caption="@L["Channel"]"
+                                SortDirection="SortDirection.Ascending">
+                    <DisplayTemplate>
+                        @context.Tiktok.ChannelId
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.Url"
+                                Sortable="false"
+                                Caption="@L["Url"]">
+                    <DisplayTemplate>
+                        <Link To="@context.Tiktok.Url" Target="Target.Blank">@GetVideoUrl(context.Tiktok)</Link>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.TotalCount"
+                                Caption="@L["TotalCount"]"
+                                Sortable="true" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.Tiktok.TotalCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.LikeCount"
+                                Caption="@L["LikeCount"]"
+                                Sortable="true" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.Tiktok.LikeCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.CommentCount"
+                                Caption="@L["CommentCount"]"
+                                Sortable="true" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.Tiktok.CommentCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.ShareCount"
+                                Caption="@L["ShareCount"]"
+                                Sortable="true" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.Tiktok.ShareCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.ViewCount"
+                                Caption="@L["ViewCount"]"
+                                Sortable="true" TextAlignment="TextAlignment.Right">
+                    <DisplayTemplate>
+                        @context.Tiktok.ViewCount.ToCommaStyle("0")
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.CreatedDateTime"
+                                Caption="@L["CreatedDateTime"]">
+                    <DisplayTemplate>
+                        @if (context.Tiktok.CreatedDateTime.HasValue)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Tiktok.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.LastCrawledDateTime"
+                                Caption="@L["LastCrawledDateTime"]">
+                    <DisplayTemplate>
+                        @if (context.Tiktok.LastCrawledDateTime.HasValue)
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Tiktok.LastCrawledDateTime.Value, GlobalConsts.DateTimeFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                                Field="Tiktok.IsNew"
+                                Sortable="false"
+                                Caption="@L["VideoStatus"]">
+                    <DisplayTemplate>
+                        @if (context.Tiktok.IsNew)
+                        {
+                            <strong class="text-danger">@L["IsNewVideo"]</strong>
+                        }
+                        else
+                        {
+                            <strong class="text-primary">@L["IsOldVideo"]</strong>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@*************************** Export Modal **************************@
+<Modal @ref="ExportTikTokModal">
+    <ModalContent Centered="true">
+        <Form id="ExportPostModal">
+            <ModalHeader>
+                <ModalTitle>@L["ExportExcel"]</ModalTitle>
+                <CloseButton Clicked="CloseExportTikTokModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["ExportPostFileName"] </FieldLabel>
+                    <TextEdit @bind-Text="@ExportTikTokFileName"></TextEdit>
+                </Field>
+                <Field>
+                    <FieldLabel>@L["ExportAllPosts"] </FieldLabel>
+                    <Check TValue="bool" Checked="@isExportAll" CheckedChanged="@OnExportAllChange">@L["IsCheckExportAllPosts"]</Check>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseExportTikTokModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="ExportPostForm" Clicked="async () => await ExportPostsAsync()"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

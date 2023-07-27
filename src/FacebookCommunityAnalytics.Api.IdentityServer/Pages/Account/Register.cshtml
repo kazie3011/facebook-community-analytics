@@ -1,0 +1,21 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@inject IHtmlLocalizer<AccountResource> L
+@model FacebookCommunityAnalytics.Api.Pages.Account.CustomRegisterModel
+
+
+<form method="post" class="mt-4">
+    @if (!Model.IsExternalLogin)
+    {
+        <abp-input asp-for="Input.UserName" auto-focus="true" />
+        <abp-input asp-for="Input.Password" />
+    }
+
+    <abp-input asp-for="Input.EmailAddress" />
+    <abp-input asp-for="InputExtra.PhoneNumber" />
+    <abp-input asp-for="InputExtra.Name" />
+    <abp-input asp-for="InputExtra.Surname" />
+
+    <abp-button button-type="Primary" type="submit" class="btn-lg btn-block mt-4">@L["Register"]</abp-button>
+</form>

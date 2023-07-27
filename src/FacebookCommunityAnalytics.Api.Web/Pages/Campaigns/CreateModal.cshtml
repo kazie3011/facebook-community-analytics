@@ -1,0 +1,66 @@
+@page
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Web.Helpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inject IHtmlLocalizer<ApiResource> L
+@model FacebookCommunityAnalytics.Api.Web.Pages.Campaigns.CreateModalModel
+@{
+    Layout = null;
+}
+
+@section content_toolbar {
+    <abp-button id="NewPostButton" text="@L["NewPostButton"].Value" icon="plus" button-type="Primary"/>
+}
+<form data-ajaxForm="true" asp-page="/Campaigns/CreateModal" autocomplete="off">
+    <abp-modal size="ExtraLarge">
+        <abp-modal-header title="@L["NewCampaign"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+
+            <abp-input asp-for="NewCampaign.Name" label="@L["Campaign.Name"].Value"/>
+            <abp-input asp-for="NewCampaign.Code" label="@L["Campaign.Code"].Value"/>
+            <abp-input asp-for="NewCampaign.Hashtags" label="@L["Hashtags"].Value"/>
+            <abp-input asp-for="NewCampaign.Keywords" label="@L["Keywords"].Value"/>
+            <abp-input asp-for="NewCampaign.Description" label="@L["Description"].Value"/>
+
+            <div class="form-group">
+                <label>@L["CampaignType"]</label>
+                <div class="block">
+                    <select class="form-control" asp-for="NewCampaign.CampaignType">
+                        <option value="@(CampaignType.Contest)">
+                            @L[$"Enum:CampaignType:{Convert.ToInt32(CampaignType.Contest)}"]
+                        </option>
+                        <option value="@(CampaignType.Seeding)">
+                            @L[$"Enum:CampaignType:{Convert.ToInt32(CampaignType.Seeding)}"]
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label>@L["Status"]</label>
+                <div class="block">
+                    <select class="form-control" asp-for="NewCampaign.Status">
+                        @foreach (var itemValue in Enum.GetValues(typeof(CampaignStatusFilter)))
+                        {
+                            <option value="@((CampaignStatusFilter)itemValue)">
+                                @L[$"Enum:CampaignStatus:{Convert.ToInt32(itemValue)}"]
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+            
+            <abp-input asp-for="NewCampaign.StartDateTime" value="" class="datepicker" type="text"/>
+            <abp-input asp-for="NewCampaign.EndDateTime" value="" class="datepicker" type="text"/>
+            <abp-input asp-for="NewCampaign.Emails" label="@L["Emails"].Value"/>
+            <abp-select asp-for="NewCampaign.PartnerId" asp-items="Model.PartnerLookupDtos.ToSelectListItems()" label="@L["Partner"].Value"/>
+            <abp-input asp-for="NewCampaign.IsActive" label="@L["IsActive"].Value"/>
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

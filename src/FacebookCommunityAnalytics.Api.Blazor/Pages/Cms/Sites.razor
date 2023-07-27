@@ -1,0 +1,260 @@
+﻿@page "/Cms/Sites"
+@using FacebookCommunityAnalytics.Api.CmsSites
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Microsoft.AspNetCore.Components
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@inherits BlazorComponentBase
+@inject ICmsSiteAppService CmsSiteAppService
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["CmsSites"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="CmsSiteDto"
+                  Data="CmsSites"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  ShowPageSizes="true"
+                  Class="text-nowrap"
+                  Narrow="true"
+                  Striped="true">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="CmsSiteDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="CmsSiteDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="CmsSiteDto"
+                                          Visible="@CanEdit"
+                                          Clicked="() => OpenEditModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="CmsSiteDto"
+                                          Visible="@CanDelete"
+                                          Clicked="() => DeleteAsync(context)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                @* <DataGridColumn TItem="CmsSiteDto" *@
+                @*                 Field="CmsSiteDto.Group.Name" *@
+                @*                 Caption="@L["Group.Name"]" *@
+                @*                 Sortable="false"> *@
+                @* </DataGridColumn> *@
+                
+                <DataGridColumn TItem="CmsSiteDto"
+                                Field="Name"
+                                Caption="@L["CmsSite.Name"]"
+                                Sortable="true">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CmsSiteDto"
+                                Field="IsActive"
+                                Caption="@L["CmsSite.IsActive"]"
+                                Sortable="false">
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateModal">
+    <ModalContent Centered="true">
+        <Form id="CreateModalForm">
+            <ModalHeader>
+                <ModalTitle>@L["New"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["CmsSite.Name"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.Name">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+                <Field>
+                    <Check TValue="bool" @bind-Checked="@CreateUpdateCmsSiteDto.IsActive">@L["IsActive"]</Check>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["CmsSite.FaviconUrl"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.FaviconUrl">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Divider/>
+
+                <Field>
+                    <FieldLabel>@L["CmsSite.SiteSeo.Description"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.SiteSeo.Description">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+                @* <Field> *@
+                @*     <FieldLabel>@L["CmsSite.SiteSeo.Keywords"]</FieldLabel> *@
+                @*     <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.SiteSeo.Keywords"> *@
+                @*         <Feedback> *@
+                @*             <ValidationError/> *@
+                @*         </Feedback> *@
+                @*     </TextEdit> *@
+                @* </Field> *@
+                <Field>
+                    <FieldLabel>@L["CmsSite.SiteSeo.ImageUrl"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.SiteSeo.ImageUrl">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Divider/>
+
+                <Field>
+                    <FieldLabel>@L["CmsSite.FooterSite.Title"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.FooterSite.Title">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+                <Field>
+                    <FieldLabel>@L["CmsSite.FooterSite.Description"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.FooterSite.Description">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+                <Field>
+                    <FieldLabel>@L["CmsSite.FooterSite.LogoUrl"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.FooterSite.LogoUrl">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateModalForm" Clicked="CreateAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditModal">
+    <ModalContent Centered="true">
+        <Form id="EditModalForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["CmsSite.Name"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.Name">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+                <Field>
+                    <Check TValue="bool" @bind-Checked="@CreateUpdateCmsSiteDto.IsActive">@L["IsActive"]</Check>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["CmsSite.FaviconUrl"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.FaviconUrl">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Divider/>
+
+                <Field>
+                    <FieldLabel>@L["CmsSite.SiteSeo.Description"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.SiteSeo.Description">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+                @* <Field> *@
+                @*     <FieldLabel>@L["CmsSite.SiteSeo.Keywords"]</FieldLabel> *@
+                @*     <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.SiteSeo.Keywords"> *@
+                @*         <Feedback> *@
+                @*             <ValidationError/> *@
+                @*         </Feedback> *@
+                @*     </TextEdit> *@
+                @* </Field> *@
+                <Field>
+                    <FieldLabel>@L["CmsSite.SiteSeo.ImageUrl"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.SiteSeo.ImageUrl">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+
+                <Divider/>
+
+                <Field>
+                    <FieldLabel>@L["CmsSite.FooterSite.Title"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.FooterSite.Title">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+                <Field>
+                    <FieldLabel>@L["CmsSite.FooterSite.Description"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.FooterSite.Description">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+                <Field>
+                    <FieldLabel>@L["CmsSite.FooterSite.LogoUrl"]</FieldLabel>
+                    <TextEdit @bind-Text="@CreateUpdateCmsSiteDto.FooterSite.LogoUrl">
+                        <Feedback>
+                            <ValidationError/>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditModalForm" Clicked="UpdateAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

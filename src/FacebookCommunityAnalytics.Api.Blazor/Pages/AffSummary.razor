@@ -1,0 +1,65 @@
+﻿@page "/affsummary"
+@attribute [Authorize(ApiPermissions.UserAffiliates.Default)]
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Statistics
+@inherits BlazorComponentBase
+@inject IAffiliateStatsAppService AffiliateStatsAppService
+@using System.Drawing
+@using FacebookCommunityAnalytics.Api.AffiliateStats
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using ChartJsColor = System.Drawing.Color
+@using Color = Blazorise.Color
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Faso.Blazor.SpinKit
+@inject IJSRuntime JSRuntime
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Aff.Summary.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+</PageHeader>
+
+<Row>
+    <Field ColumnSize="ColumnSize.Is6.OnDesktop.IsHalf.OnMobile">
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <DateRangePicker
+                    Ranges="DateRanges"
+                    DateFormat="@(GlobalConsts.DateFormat)"
+                    StartDate="StartDate"
+                    EndDate="EndDate"
+                    EndDateChanged="EndDateChanged"
+                    StartDateChanged="StartDateChanged"
+                    class="form-control form-control-md"
+                    placeholder="@L["SelectDates"]"/>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="AffiliateSummaryType" SelectedValue="AffiliateSummaryType" SelectedValueChanged="UpdateTypeChart" Style="height: 40px">
+                    @foreach (var itemValue in Enum.GetValues(typeof(AffiliateSummaryType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="AffiliateSummaryType" Value="@((AffiliateSummaryType) itemValue)">
+                            @L[$"Enum:AffiliateSummaryType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+                <Button Color="Color.Primary" Clicked="GetData">
+                    <Icon Name="IconName.Search"></Icon>
+                </Button>
+            </Addon>
+        </Addons>
+
+
+    </Field>
+</Row>
+
+@if (!_showChart)
+{
+    <SpinKitChasingDots/>
+}
+<Row>
+    <Column ColumnSize="ColumnSize.IsFull">
+        <ChartJs.Blazor.Chart Config="_config" @ref="_chart" Height="120" SetupCompletedCallback="@SetupCompletedCallback"></ChartJs.Blazor.Chart>
+    </Column>
+</Row>

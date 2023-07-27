@@ -1,0 +1,385 @@
+﻿@page "/partner-details"
+@page "/partner-details/{PartnerId?}"
+@using FacebookCommunityAnalytics.Api.Permissions
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Partners
+@using FacebookCommunityAnalytics.Api.Contracts
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Humanizer
+
+@attribute [Authorize(ApiPermissions.Partners.Default)]
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+@inject IPartnersAppService PartnersAppService
+@inject IContractAppService ContractAppService
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["PartnerDetail", Partner.Name]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+@* ************************* SEARCH ************************* *@
+@if (!GlobalConfiguration.PartnerConfiguration.IsPartnerTool)
+{
+    <Card>
+        <CardBody>
+            <Form id="PartnerSearchForm" class="mb-3">
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <Addon AddonType="AddonType.Start">
+                            <DateRangePicker TimePicker="true"
+                                             TimePicker24Hour="true"
+                                             Ranges="_dateRanges"
+                                             DateFormat="@GlobalConsts.DateFormat"
+                                             @bind-StartDate="StartDate"
+                                             @bind-EndDate="EndDate"
+                                             OnClosed="OnDate_Changed"
+                                             class="form-control form-control-md"
+                                             Style="width: 210px; margin-right: 10px;"
+                                             placeholder="@L["SelectDates"]"/>
+
+                        </Addon>
+                        <Addon AddonType="AddonType.Start">
+                            <Select TValue="ContractStatus" SelectedValue="@SelectedContractStatus" SelectedValueChanged="@OnSelectedPartnerContract">
+                                @foreach (var itemValue in Enum.GetValues(typeof(ContractStatus)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="ContractStatus" Value="@((ContractStatus) itemValue)">
+                                        @L[$"Enum:ContractStatus:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                    </Addon>
+                </Addons>
+            </Form>
+        </CardBody>
+    </Card>
+}
+@* ************************* VIEW DETAIL ************************* *@
+
+<Row>
+@if (Partner.Contracts.IsNotNullOrEmpty())
+{
+    <Card ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnMobile">
+        <CardBody>
+            <div>
+                <div style="display:inline-block;">
+                    <h3>@L["Contract.Info"]</h3>
+                </div>
+            </div>
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <b>@L["Contract.TotalValue"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div>@Partner.Contracts.Sum(x => x.Contract.TotalValue).ToVND()</div>
+                        </TableRowCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableRowCell>
+                            <b class="text-primary">@L["Contract.PartialPaymentValue"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div class="text-primary">@Partner.Contracts.Sum(x => x.Contract.PartialPaymentValue).ToVND()</div>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+                            <b class="text-danger">@L["Contract.RemainingPaymentValue"]</b>
+                        </TableRowCell>
+                        <TableRowCell>
+                            <div class="text-danger">@Partner.Contracts.Sum(x => x.Contract.RemainingPaymentValue).ToVND()</div>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowCell VerticalAlignment="VerticalAlignment.Top">
+
+                        </TableRowCell>
+                        <TableRowCell>
+                            <Button Color="Color.Primary" Clicked="ShowHideContractListAsync">
+                                <Icon Name="@(ShowContractList ? IconName.EyeSlash : IconName.Eye)"></Icon>
+                                <Span>@(ShowContractList ? L["Contracts.HideList"] : L["Contracts.ViewList"])</Span>
+                            </Button>
+                        </TableRowCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </CardBody>
+    </Card>
+
+    if (ShowContractList)
+    {
+        <Card>
+            <CardBody>
+                <DataGrid TItem="ContractWithNavigationPropertiesDto"
+                          Data="Partner.Contracts"
+                          Responsive="true"
+                          Narrow="true"
+                          PageSize="Partner.Contracts.Count"
+                          Class="text-nowrap"
+                          Striped="true"
+                          Sortable="false">
+                    <DataGridColumns>
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="SalePerson.UserName"
+                                        Caption="@L["Contract.SalePerson"]">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.ContractCode"
+                                        Caption="@L["Contract.ContractCode"]">
+                            <DisplayTemplate>
+                                @context.Contract.ContractCode
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Campaign.Name"
+                                        Caption="@L["Contract.CampaignName"]">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Partner.Name"
+                                        Caption="@L["Contract.PartnerName"]">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.SignedAt"
+                                        Sortable="true"
+                                        Caption="@L["Contract.SignedAt"]">
+                            <DisplayTemplate>
+                                @if (context.Contract?.SignedAt != null)
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.Contract.SignedAt.Value, GlobalConsts.DateFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.Content"
+                                        Caption="@L["Contract.Content"]">
+                        </DataGridColumn>
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.ContractStatus"
+                                        Caption="@L["Contract.ContractStatus"]">
+                            <DisplayTemplate>
+                                @L[$"Enum:ContractStatus:{Convert.ToInt32(context.Contract.ContractStatus)}"]
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.PartialPaymentValue"
+                                        Caption="@L["Contract.PartialPaymentValue"]">
+                            <DisplayTemplate>
+                                @context.Contract.PartialPaymentValue.ToVND()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.TotalValue"
+                                        Caption="@L["Contract.TotalValue"]">
+                            <DisplayTemplate>
+                                @context.Contract.TotalValue.ToVND()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.RemainingPaymentValue"
+                                        Caption="@L["Contract.RemainingPaymentValue"]">
+                            <DisplayTemplate>
+                                @context.Contract.RemainingPaymentValue.ToVND()
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.PaymentDueDate"
+                                        Caption="@L["Contract.PaymentDueDate"]">
+                            <DisplayTemplate>
+                                @if (context is {Contract: {PaymentDueDate: { } } })
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.Contract.PaymentDueDate.Value, GlobalConsts.DateFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.CreatedAt"
+                                        Caption="@L["Contract.CreatedAt"]">
+                            <DisplayTemplate>
+                                @if (context is {Contract: {CreatedAt: { } } })
+                                {
+                                    @BrowserDateTime.ConvertToBrowserTime(context.Contract.CreatedAt.Value, GlobalConsts.DateFormat)
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+                        <DataGridColumn TItem="ContractWithNavigationPropertiesDto"
+                                        Field="Contract.ContractPaymentStatus"
+                                        Caption="@L["Contract.ContractPaymentStatus"]">
+                            <DisplayTemplate>
+                                @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(context.Contract.ContractPaymentStatus)}"]
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGridColumns>
+                </DataGrid>
+            </CardBody>
+        </Card>
+    }
+}
+@if (Partner.PartnerType == PartnerType.Company)
+{
+    <Card ColumnSize="ColumnSize.IsHalf.OnDesktop.IsFull.OnMobile">
+        <CardHeader>
+            <h3>@L["Partner.CompanyInfo"]</h3>
+        </CardHeader>
+        <CardBody>
+            <Field>
+                <Label>@L["Partner.CompanyInfo.CompanyName"]</Label>
+                <TextEdit @bind-Text="@Partner.CompanyInfo.CompanyName"></TextEdit>
+            </Field>
+            <Field>
+                <Label>@L["Partner.CompanyInfo.Address"]</Label>
+                <TextEdit @bind-Text="@Partner.CompanyInfo.Address"></TextEdit>
+            </Field>
+            <Field>
+                <Label>@L["Partner.CompanyInfo.Email"]</Label>
+                <TextEdit Role="@TextRole.Email" @bind-Text="@Partner.CompanyInfo.Email"></TextEdit>
+            </Field>
+            <Field>
+                <Label>@L["Partner.CompanyInfo.PhoneNumber"]</Label>
+                <TextEdit @bind-Text="@Partner.CompanyInfo.PhoneNumber"></TextEdit>
+            </Field>
+            <Field>
+                <Label>@L["Partner.CompanyInfo.TaxNumber"]</Label>
+                <TextEdit @bind-Text="@Partner.CompanyInfo.TaxNumber"></TextEdit>
+            </Field>
+            <Field>
+                <Label>@L["Partner.CompanyInfo.Note"]</Label>
+                <TextEdit @bind-Text="@Partner.CompanyInfo.Note"></TextEdit>
+            </Field>
+        </CardBody>
+    </Card>
+}
+<Card ColumnSize="ColumnSize.IsHalf.OnDesktop.IsFull.OnMobile">
+    <CardHeader>
+        <h3>@L["Partner.PersonalInfo"]</h3>
+    </CardHeader>
+    <CardBody>
+        <Field>
+            <Label>@L["Partner.PersonalInfo.FullName"]</Label>
+            <TextEdit @bind-Text="@Partner.PersonalInfo.FullName"></TextEdit>
+        </Field>
+        <Field>
+            <Label>@L["Partner.PersonalInfo.Email"]</Label>
+            <TextEdit Role="@TextRole.Email" @bind-Text="@Partner.PersonalInfo.Email"></TextEdit>
+        </Field>
+        <Field>
+            <Label>@L["Partner.PersonalInfo.PhoneNumber"]</Label>
+            <TextEdit @bind-Text="@Partner.PersonalInfo.PhoneNumber"></TextEdit>
+        </Field>
+        <Field>
+            <Label>@L["Partner.PersonalInfo.Note"]</Label>
+            <TextEdit @bind-Text="@Partner.PersonalInfo.Note"></TextEdit>
+        </Field>
+    </CardBody>
+</Card>
+<Card ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnMobile">
+    <CardHeader>
+        <h3>@L["Partner.PaymentInfo"]</h3>
+    </CardHeader>
+    <CardBody>
+        <Field>
+            <Label>@L["Partner.PaymentInfo.FullName"]</Label>
+            <TextEdit @bind-Text="@Partner.PaymentInfo.FullName"></TextEdit>
+        </Field>
+        <Field>
+            <Label>@L["Partner.PaymentInfo.PaymentMethod"]</Label>
+            <Select TValue="PaymentMethod" @bind-SelectedValue="@Partner.PaymentInfo.PaymentMethod">
+                @foreach (var itemValue in Enum.GetValues(typeof(PaymentMethod)))
+                {
+                    <SelectItem @key="itemValue" TValue="PaymentMethod" Value="@((PaymentMethod) itemValue)">
+                        @L[$"Enum:PaymentMethod:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Field>
+        <Field>
+            <Label>@L["Partner.PaymentInfo.BankBranchName"]</Label>
+            <TextEdit @bind-Text="@Partner.PaymentInfo.BankBranchName"></TextEdit>
+        </Field>
+        <Field>
+            <Label>@L["Partner.PaymentInfo.AccountNumber"]</Label>
+            <TextEdit @bind-Text="@Partner.PaymentInfo.AccountNumber"></TextEdit>
+        </Field>
+        <Field>
+            <Label>@L["Partner.PaymentInfo.Note"]</Label>
+            <TextEdit @bind-Text="@Partner.PaymentInfo.Note"></TextEdit>
+        </Field>
+    </CardBody>
+</Card>
+
+<Card ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnMobile">
+    <CardHeader>
+        <h3>@L["Partner.Comment"]</h3>
+    </CardHeader>
+
+    <CardBody>
+        <Field>
+            <Field ColumnSize="ColumnSize.IsFull.OnTablet.IsFull.OnMobile">
+                <Form id="AddCommentForm" class="mb-3">
+                    <Addons>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit Placeholder="@L["Partner.Comment.Placeholder"]" @bind-Text="@NewComment.Note"></TextEdit>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <SubmitButton Color="Color.Primary" Form="AddCommentForm" Clicked="AddComment">
+                                <Icon Name="IconName.Comment"></Icon>
+                            </SubmitButton>
+                        </Addon>
+                    </Addons>
+                </Form>
+            </Field>
+        </Field>
+    </CardBody>
+
+    @foreach (var comment in Partner.Comments.OrderByDescending(_ => _.CreatedAt))
+    {
+        <Column ColumnSize="ColumnSize.IsFull">
+            <Heading TextAlignment="TextAlignment.Justified" Size="HeadingSize.Is6">
+                @comment.Note
+            </Heading>
+        </Column>
+        <Column TextAlignment="TextAlignment.Right" ColumnSize="ColumnSize.IsFull">
+            <Badge Color="Color.Primary">
+                <Icon Name="IconName.User"></Icon> @comment.UserName
+            </Badge>
+            <Badge Color="Color.Light">
+                <Icon Name="IconName.Clock"></Icon> @(ConvertToBrowserDateString(comment.CreatedAt).Result.Humanize())
+            </Badge>
+            @if (!comment.IsConfirmed && CurrentUser.UserName == comment.UserName || IsManagerRole())
+            {
+                @if (!comment.IsConfirmed)
+                {
+                    <Span style="margin-right: 10px">
+                        <Icon Name="IconName.Check" @onclick="@(async () => await ConfirmComment(comment))"></Icon>
+                    </Span>
+                }
+
+                <Span>
+                    <Icon Name="IconName.Delete" @onclick="@(async () => await DeleteComment(comment))"></Icon>
+                </Span>
+            }
+
+        </Column>
+        <Divider></Divider>
+    }
+</Card>
+</Row>

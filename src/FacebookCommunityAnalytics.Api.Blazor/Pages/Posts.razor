@@ -1,0 +1,699 @@
+@page "/posts"
+@attribute [Authorize(ApiPermissions.Posts.Default)]
+@using FacebookCommunityAnalytics.Api.Posts
+@using FacebookCommunityAnalytics.Api.Shared
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Groups
+@using FA = Blazorise.Icons.FontAwesome;
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using Faso.Blazor.SpinKit
+@inherits BlazorComponentBase
+
+@inject IPostsExtendAppService PostsExtendAppService
+@inject IGroupExtendAppService GroupExtendAppService
+@inject IUiMessageService UiMessageService
+@inject IUserInfosAppService UserInfosAppService
+@inject NavigationManager NavigationManager
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["FacebookPosts"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="PostSearchForm" class="mb-3">
+            <Row>
+                <Field ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnMobile">
+                    <Addons>
+                        <Addon AddonType="AddonType.Start">
+                            <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                        </Addon>
+                        <Addon AddonType="AddonType.Start">
+                            <DateRangePicker Ranges="_dateRanges"
+                                             DateFormat="@GlobalConsts.DateFormat"
+                                             StartDate="StartDate"
+                                             EndDate="EndDate"
+                                             EndDateChanged="EndDateChanged"
+                                             StartDateChanged="StartDateChanged"
+                                             class="form-control form-control-md"
+                                             placeholder="@L["SelectDates"]" OnClosed="DoSearch"/>
+
+                        </Addon>
+                        <Addon AddonType="AddonType.Start">
+                            <Select style="width: 150px" class="form-control form-control-md" TValue="PostContentTypeFilter" SelectedValue="PostContentTypeFilterInput" SelectedValueChanged="OnPostContentType_Changed">
+                                @foreach (var itemValue in Enum.GetValues(typeof(PostContentTypeFilter)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="PostContentTypeFilter" Value="@((PostContentTypeFilter) itemValue)">
+                                        @L[$"Enum:PostContentTypeFilter:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit @bind-Text="@Filter.FilterText"
+                                      Autofocus="true"
+                                      Placeholder="@L["Search"]">
+                            </TextEdit>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <SubmitButton Color="Color.Primary" Form="PostSearchForm" Clicked="DoSearch">
+                                <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                            </SubmitButton>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <Button Color="Color.Warning" Clicked="@(() => _showAdvancedFilter = !_showAdvancedFilter)"><Icon Name="IconName.ArrowDown" Class="mr-1"></Icon></Button>
+                        </Addon>
+                    </Addons>
+                </Field>
+            </Row>
+
+            <Row>
+                <Accordion>
+                    <Collapse Visible="_showAdvancedFilter">
+                        <CollapseBody>
+                            <Row>
+                                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                    <Select TValue="PostSourceTypeFilter" SelectedValue="PostSourceTypeFilterInput" SelectedValueChanged="OnPostSourceTypeFilter_Changed">
+                                        @foreach (var itemValue in Enum.GetValues(typeof(PostSourceTypeFilter)))
+                                        {
+                                            <SelectItem @key="itemValue" TValue="PostSourceTypeFilter" Value="@((PostSourceTypeFilter)itemValue)">
+                                                @L[$"Enum:PostSourceTypeFilter:{(int)itemValue}"]
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Field>
+
+                                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                    <Autocomplete
+                                        ElementId="GroupIdInputFilter"
+                                        Data="@GroupsNullable"
+                                        TItem="LookupDto<Guid?>"
+                                        TValue="Guid?"
+                                        TextField="@((item) => item.DisplayName)"
+                                        ValueField="@((item) => item.Id)"
+                                        SearchChanged="@OnSelectGroup_Changed"
+                                        @bind-SelectedValue="@Filter.GroupId"
+                                        Placeholder="@L["Autocomplete.DefaultText", L["Group"]]"
+                                        Filter="AutocompleteFilter.Contains"
+                                        CustomFilter="@((item, searchValue) => item.DisplayName.RemoveDiacritics().IndexOf(searchValue.RemoveDiacritics(), 0, StringComparison.CurrentCultureIgnoreCase) >= 0)"/>
+                                </Field>
+
+                                @if (!IsPartnerRole())
+                                {
+                                    <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                        <Autocomplete
+                                            ElementId="AppUserIdInputFilter"
+                                            Data="@UsersNullable"
+                                            TItem="LookupDto<Guid?>"
+                                            TValue="Guid?"
+                                            TextField="@((item) => item.DisplayName)"
+                                            ValueField="@((item) => item.Id)"
+                                            SearchChanged="@OnSelectUser_Changed"
+                                            @bind-SelectedValue="@Filter.AppUserId"
+                                            Placeholder="@L["Autocomplete.DefaultText", L["User"]]" Filter="AutocompleteFilter.Contains"
+                                            CustomFilter="@((item, searchValue) => item.DisplayName.RemoveDiacritics().IndexOf(searchValue.RemoveDiacritics(), 0, StringComparison.CurrentCultureIgnoreCase) >= 0)"/>
+                                    </Field>
+                                }
+
+                                @* <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet"> *@
+                                @*     <Select TValue="PostCopyrightTypeFilter" @bind-SelectedValue="PostCopyrightTypeFilterInput"> *@
+                                @*         @foreach (var itemValue in Enum.GetValues(typeof(PostCopyrightTypeFilter))) *@
+                                @*         { *@
+                                @*             <SelectItem @key="itemValue" TValue="PostCopyrightTypeFilter" Value="@((PostCopyrightTypeFilter) itemValue)"> *@
+                                @*                 @L[$"Enum:PostCopyrightTypeFilter:{(int) itemValue}"] *@
+                                @*             </SelectItem> *@
+                                @*         } *@
+                                @*     </Select> *@
+                                @* </Field> *@
+
+                                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                    <Select TValue="Guid?" SelectedValue="SelectedCampaignIdFilter" SelectedValueChanged="OnCampaignFilter_Changed">
+                                        <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.AllCampaign"]</SelectItem>
+                                        @foreach (var item in CampaignsNullable)
+                                        {
+                                            <SelectItem @key="item" TValue="Guid?" Value="@item.Id">
+                                                @item.DisplayName
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Field>
+
+                                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                    <Select TValue="PostIsNotAvailableFilter" SelectedValue="PostIsNotAvailableFilterInput" SelectedValueChanged="OnIsNotAvailableFilter_Changed">
+                                        @foreach (var itemValue in Enum.GetValues(typeof(PostIsNotAvailableFilter)))
+                                        {
+                                            <SelectItem @key="itemValue" TValue="PostIsNotAvailableFilter" Value="@((PostIsNotAvailableFilter)itemValue)">
+                                                @L[$"PostIsNotAvailableFilter:{(int)itemValue}"]
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Field>
+
+                                <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                    <Select TValue="Guid?" SelectedValue="@SelectedPartnerIdFilter" SelectedValueChanged="OnPartnerFilter_Changed">
+                                        <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.AllPartner"]</SelectItem>
+                                        @foreach (var item in PartnersNullable)
+                                        {
+                                            <SelectItem @key="item" TValue="Guid?" Value="@item.Id">
+                                                @item.DisplayName
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Field>
+
+                            </Row>
+                            <Row>
+                                <Column ColumnSize="ColumnSize.IsFull">
+                                    <Button class="float-right" Size="Size.Medium" Color="Color.Primary" Clicked="ClearFilter">@L[$"ClearFilter"]</Button>
+                                </Column>
+                            </Row>
+                        </CollapseBody>
+                    </Collapse>
+                </Accordion>
+            </Row>
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+<CardBody>
+
+    @if (_showLoading)
+    {
+        <SpinKitChasingDots/>
+    }
+    <DataGrid TItem="PostWithNavigationPropertiesDto"
+              Data="PostList"
+              ReadData="OnDataGridReadAsync"
+              TotalItems="TotalCount"
+              ShowPager="true"
+              Responsive="true"
+              Narrow="true"
+              PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+              PageSize="PageSize"
+              ShowPageSizes="true"
+              Class="text-nowrap"
+              Striped="true"
+              SortMode="DataGridSortMode.Single">
+        <DataGridColumns>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Group.Name"
+                            Caption="@L["Group"]"
+                            Sortable="false"
+                            CellClass="@(dto => { return "td-table-word-wrap"; })">
+                <DisplayTemplate>
+                    <Link Clicked="() => OnGroupCellSelected(context)">
+                        @($"{context.Group?.Title ?? context.Group?.Fid}")
+                    </Link>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="AppUser.UserName"
+                            Sortable="false"
+                            Caption="@L["AuthorName"]">
+                <DisplayTemplate>
+                    @{
+                        var userName = context.AppUser != null ? context.AppUser.UserName : string.Empty;
+                        if (userName.IsNullOrWhiteSpace()) userName = context.AppUser != null ? context.AppUser.Email : context.Post.CreatedBy;
+                    }
+                    <Link Clicked="() => OnAuthorCellSelected(context)">
+                        @($"{userName}")
+                    </Link>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.PostContentType"
+                            Sortable="false"
+                            Caption="@L["PostContentType"]">
+                <DisplayTemplate>
+                    <Link Clicked="() => OnPostContentTypeCellSelected(context)">@L[$"Enum:PostContentType:{Convert.ToInt32(context.Post.PostContentType)}"]</Link>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            @* <DataGridColumn TItem="PostWithNavigationPropertiesDto" *@
+            @*                 Field="Post.PostCopyrightType" *@
+            @*                 Sortable="false" *@
+            @*                 Caption="@L["PostGrid.PostCopyrightType"]"> *@
+            @*     <DisplayTemplate> *@
+            @*         @L[$"Enum:PostCopyrightType:{Convert.ToInt32(context.Post.PostCopyrightType)}"] *@
+            @*     </DisplayTemplate> *@
+            @* </DataGridColumn> *@
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.Url"
+                            Sortable="false"
+                            Caption="@L["Url"]">
+                <DisplayTemplate>
+                    @{
+                        bool IsDeadLink = context.Post.IsNotAvailable;
+                        var className = IsDeadLink ? "dead-link" : string.Empty;
+                    }
+                    <Link To="@context.Post.Url" Class="@className" Target="Target.Blank">@GetPostUrl(context.Post)</Link>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.Shortlinks"
+                            Caption="@L["ShortUrl"]"
+                            Sortable="false">
+                <DisplayTemplate>
+                    @{
+                        foreach (var shortLink in context.Post.Shortlinks)
+                        {
+                            @shortLink<br/>
+                        }
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.TotalCount"
+                            Caption="@L["TotalCount"]"
+                            Sortable="true" TextAlignment="TextAlignment.Right">
+                <DisplayTemplate>
+                    @(context.Post.TotalCount > 0 ? context.Post.TotalCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.LikeCount"
+                            Caption="@L["LikeCount"]"
+                            Sortable="true" TextAlignment="TextAlignment.Right">
+                <DisplayTemplate>
+                    @(context.Post.LikeCount > 0 ? context.Post.LikeCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.CommentCount"
+                            Caption="@L["CommentCount"]"
+                            Sortable="true" TextAlignment="TextAlignment.Right">
+                <DisplayTemplate>
+                    @(context.Post.CommentCount > 0 ? context.Post.CommentCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.ShareCount"
+                            Caption="@L["ShareCount"]"
+                            Sortable="true" TextAlignment="TextAlignment.Right">
+                <DisplayTemplate>
+                    @(context.Post.ShareCount > 0 ? context.Post.ShareCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.Note"
+                            Sortable="false"
+                            Caption="@L["Note"]">
+                <DisplayTemplate>
+                    @(!context.Post.Note.IsNullOrEmpty() ? new MarkupString(context.Post.Note) : string.Empty)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.CreatedDateTime"
+                            Caption="@L["CreatedDateTime"]">
+                <DisplayTemplate>
+                    @if (context?.Post?.CreatedDateTime != null)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Post.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.LastCrawledDateTime"
+                            Caption="@L["LastCrawledDateTime"]"
+                            SortDirection="SortDirection.Descending">
+                <DisplayTemplate>
+                    @if (context?.Post?.LastCrawledDateTime != null)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Post.LastCrawledDateTime.Value, GlobalConsts.DateTimeFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.SubmissionDateTime"
+                            Caption="@L["SubmissionDateTime"]">
+                <DisplayTemplate>
+                    @if (context?.Post?.SubmissionDateTime != null)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Post.SubmissionDateTime.Value, GlobalConsts.DateTimeFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.SubmissionDateTime"
+                            Caption="@L["Action"]">
+                <DisplayTemplate>
+                    <Buttons>
+                        @if (CanEditPost)
+                        {
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditPostModal(context)">
+                                <Icon Name="IconName.Edit"/>
+                            </Button>
+                        }
+                        @if (CanEditNote)
+                        {
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditNoteModal(context)">
+                                <Icon Name="IconName.FileAlt"/>
+                            </Button>
+                        }
+                        @if (CanDeletePost)
+                        {
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeletePost(context)">
+                                <Icon Name="IconName.Delete"/>
+                            </Button>
+                        }
+                    </Buttons>
+                </DisplayTemplate>
+            </DataGridColumn>
+        </DataGridColumns>
+    </DataGrid>
+</CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreatePostModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="CreatePostForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewPost"]</ModalTitle>
+                <CloseButton Clicked="CloseCreatePostModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@NewPostValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@NewPost"
+                             ValidateOnLoad="false">
+                    <Row>
+                        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnTablet">
+                            <Field>
+                                <FieldLabel>@L["PostContentType"]</FieldLabel>
+                                <Select TValue="PostContentType" SelectedValue="@NewPost.PostContentType" SelectedValueChanged="@OnNewPostContentTypeChanged">
+                                    <SelectItem TValue="PostContentType" Value="@(PostContentType.Affiliate)">
+                                        @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Affiliate)}"]
+                                    </SelectItem>
+                                    <SelectItem TValue="PostContentType" Value="@(PostContentType.Seeding)">
+                                        @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Seeding)}"]
+                                    </SelectItem>
+                                    <SelectItem TValue="PostContentType" Value="@(PostContentType.Contest)">
+                                        @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Contest)}"]
+                                    </SelectItem>
+
+                                </Select>
+                            </Field>
+
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>@L["Url"] * (fid: @NewPost.Fid) </FieldLabel>
+                                    <MemoEdit Placeholder="@L["PlaceHolder:PostUrl"]" Rows="6" DelayTextOnKeyPress="true"
+                                              TextChanged="@OnUrlMemoChanged">
+                                        <Feedback>
+                                            <ValidationError/>
+                                        </Feedback>
+                                    </MemoEdit>
+                                </Field>
+                            </Validation>
+
+                            @if (_showGroupSelect)
+                            {
+                                <Field>
+                                    <FieldLabel>@L["Group"]</FieldLabel>
+                                    <Select TValue="Guid?" @bind-SelectedValue="@NewPost.GroupId">
+                                        <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Group"]]</SelectItem>
+                                        @foreach (var group in GroupsNullable)
+                                        {
+                                            <SelectItem @key="group" TValue="Guid?" Value="@group.Id">
+                                                @GetGroupDisplayName(group.Id)
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Field>
+                            }
+
+                            <Field>
+                                @if (NewPost.PostContentType != PostContentType.Affiliate)
+                                {
+                                    <FieldLabel>@L["PostCopyrightType"]</FieldLabel>
+                                    <Select TValue="PostCopyrightType" @bind-SelectedValue="@NewPost.PostCopyrightType">
+                                        @foreach (var itemValue in Enum.GetValues(typeof(PostCopyrightType)))
+                                        {
+                                            <SelectItem @key="itemValue" TValue="PostCopyrightType" Value="@((PostCopyrightType)itemValue)">
+                                                @L[$"Enum:PostCopyrightType:{Convert.ToInt32(itemValue)}"]
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                }
+                            </Field>
+
+                            <Field>
+                                <FieldLabel>@L["Campaign"]</FieldLabel>
+                                <Select TValue="Guid?" @bind-SelectedValue="@NewPost.CampaignId">
+                                    <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Campaign"]]</SelectItem>
+                                    @foreach (var item in RunningCampaignsLookup)
+                                    {
+                                        <SelectItem @key="item" TValue="Guid?" Value="@item.Id">
+                                            @item.DisplayName
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Field>
+
+                        </Column>
+                        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnTablet">
+                            @if (NewPost.PostContentType == PostContentType.Affiliate)
+                            {
+                                <Field>
+                                    <FieldLabel>@L["Category"] </FieldLabel>
+                                    <Autocomplete Data="@CategoriesNullable"
+                                                  TItem="LookupDto<Guid?>"
+                                                  TValue="Guid?"
+                                                  TextField="@((item) => item.DisplayName)"
+                                                  ValueField="@((item) => item.Id)"
+                                                  SearchChanged="@GetNullableCategoryLookupAsync"
+                                                  @bind-SelectedValue="@NewPost.CategoryId"
+                                                  Placeholder="@L["Autocomplete.DefaultText", L["Category"]]" Filter="AutocompleteFilter.Contains"/>
+                                </Field>
+                            }
+
+                            <Field>
+                                <FieldLabel>@L["Note"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewPost.Note">
+                                    <Feedback>
+                                        <ValidationError/>
+                                    </Feedback>
+                                </TextEdit>
+
+                            </Field>
+
+                        </Column>
+                    </Row>
+
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreatePostModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Disabled="@string.IsNullOrEmpty(NewPost.Url)" Form="CreatePostForm" Clicked="CreatePost"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditPostModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditPostForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseEditPostModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditingPostValidations"
+                             Mode="ValidationMode.Auto"
+                             Model="@EditingPost"
+                             ValidateOnLoad="false">
+
+                    <Row>
+                        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                            <Field>
+                                <FieldLabel>@L["Group"]</FieldLabel>
+                                <Select TValue="Guid?" @bind-SelectedValue="@EditingPost.GroupId">
+                                    <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                                    @foreach (var group in GroupsNullable)
+                                    {
+                                        <SelectItem @key="group" TValue="Guid?" Value="@group.Id">
+                                            @group.DisplayName
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Field>
+
+                            <Field>
+                                <FieldLabel>@L["PostContentType"]</FieldLabel>
+                                <Select TValue="PostContentType" SelectedValue="@EditingPost.PostContentType" SelectedValueChanged="@OnEditPostContentTypeChanged">
+                                    <SelectItem TValue="PostContentType" Value="@(PostContentType.Affiliate)">
+                                        @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Affiliate)}"]
+                                    </SelectItem>
+                                    <SelectItem TValue="PostContentType" Value="@(PostContentType.Seeding)">
+                                        @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Seeding)}"]
+                                    </SelectItem>
+                                    <SelectItem TValue="PostContentType" Value="@(PostContentType.Contest)">
+                                        @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Contest)}"]
+                                    </SelectItem>
+
+                                </Select>
+                            </Field>
+
+                            <Field>
+                                <FieldLabel>@L["Category"] </FieldLabel>
+                                <Autocomplete Data="@CategoriesNullable"
+                                              TItem="LookupDto<Guid?>"
+                                              TValue="Guid?"
+                                              TextField="@((item) => item.DisplayName)"
+                                              ValueField="@((item) => item.Id)"
+                                              SearchChanged="@GetNullableCategoryLookupAsync"
+                                              @bind-SelectedValue="@EditingPost.CategoryId"
+                                              Placeholder="@L["Autocomplete.DefaultText", L["Category"]]" Filter="AutocompleteFilter.Contains"/>
+                            </Field>
+
+                            <Field>
+                                <Check TValue="bool" @bind-Checked="@EditingPost.IsNotAvailable">@L["Post.IsNotAvailable"]</Check>
+                            </Field>
+                        </Column>
+
+                        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>@L["Url"] *</FieldLabel>
+                                    <TextEdit @bind-Text="@EditingPost.Url" Disabled="true">
+                                        <Feedback>
+                                            <ValidationError/>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                            </Validation>
+
+                            <Field>
+                                <FieldLabel>@L["Creator"] </FieldLabel>
+                                <Autocomplete Data="@UsersNullable" Disabled="true"
+                                              TItem="LookupDto<Guid?>"
+                                              TValue="Guid?"
+                                              TextField="@((item) => item.DisplayName)"
+                                              ValueField="@((item) => item.Id)"
+                                              SearchChanged="@GetNullableAppUserLookupAsync"
+                                              @bind-SelectedValue="@EditingPost.AppUserId"
+                                              Placeholder="@L["Autocomplete.DefaultText", L["User"]]" Filter="AutocompleteFilter.Contains"
+                                              CustomFilter="@((item, searchValue) => item.DisplayName.RemoveDiacritics().IndexOf(searchValue.RemoveDiacritics(), 0, StringComparison.CurrentCultureIgnoreCase) >= 0)"/>
+                            </Field>
+
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>@L["CreatedDateTime"]</FieldLabel>
+                                    <DateEdit TValue="DateTime?" @bind-Date="@EditingPost.CreatedDateTime" Disabled="true">
+                                        <Feedback>
+                                            <ValidationError/>
+                                        </Feedback>
+                                    </DateEdit>
+                                </Field>
+                            </Validation>
+
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>@L["Note"]</FieldLabel>
+                                    <TextEdit @bind-Text="@EditingPost.Note">
+                                        <Feedback>
+                                            <ValidationError/>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Field>
+                            </Validation>
+
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>@L["Campaign"]</FieldLabel>
+                                    <Select TValue="Guid?" @bind-SelectedValue="@EditingPost.CampaignId">
+                                        <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.DefaultText", L["Campaign"]]</SelectItem>
+                                        @foreach (var item in RunningCampaignsLookup)
+                                        {
+                                            <SelectItem @key="item" TValue="Guid?" Value="@item.Id">
+                                                @item.DisplayName
+                                            </SelectItem>
+                                        }
+                                    </Select>
+                                </Field>
+                            </Validation>
+
+                        </Column>
+                    </Row>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditPostModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditPostModal" Clicked="UpdatePost"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+
+@* ************************* UPDATE NOTE POST MODAL ************************* *@
+<Modal @ref="UpdateNotePostModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="UpdateNotePostForm">
+            <ModalHeader>
+                <ModalTitle>@L["Update"]</ModalTitle>
+                <CloseButton Clicked="CloseUpdateNotePostModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnTablet">
+                        <Field>
+                            <FieldLabel>@L["Note"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewPost.Note">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+
+                        </Field>
+
+                    </Column>
+
+                </Row>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseUpdateNotePostModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="UpdateNotePostModal" Clicked="UpdateNotePostAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<PostsModals Filter="@Filter" CurrentSorting="@CurrentSorting" ContainerBlazorPage="@this"/>

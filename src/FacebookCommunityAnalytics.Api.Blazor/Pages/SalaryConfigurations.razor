@@ -1,0 +1,196 @@
+﻿@page "/salary-configs"
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using Volo.Abp.Authorization.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.StaffEvaluations
+@using FacebookCommunityAnalytics.Api.UserSalaryConfigurations
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@inherits BlazorComponentBase
+@inject IPermissionChecker PermissionChecker;
+@inject IJSRuntime JS
+@inject IStaffEvaluationAppService StaffEvaluationAppService
+@inject ITeamMemberAppService TeamMemberAppService
+@inject IUserSalaryConfigurationAppService _userSalaryConfigurationAppService
+
+<PageHeader Title="@L["Menu:UserSalaryConfigs"]" BreadcrumbItems="BreadcrumbItems">
+</PageHeader>
+
+<Card>
+    <CardBody>
+        <Row>
+            <Column ColumnSize="ColumnSize.IsFull.OnDesktop.Is6.OnWidescreen">
+                <Field>
+                    <Addons>
+                    </Addons>
+                </Field>
+            </Column>
+
+            <Column ColumnSize="ColumnSize.IsFull">
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 70px">@L["UserSalary.Config"]</AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Start">
+                        <Select Style="width: fit-content" TValue="Guid?" SelectedValueChanged="@OnSelectedValueTeam">
+                            <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                @L["StaffEvaluations.Select.Team"]
+                            </SelectItem>
+                            @foreach (var team in Teams)
+                            {
+                                <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                    @team.DisplayName
+                                </SelectItem>
+                            }
+                        </Select>
+                        <Select Style="width: fit-content" TValue="UserPosition" SelectedValue="_selectedUserPosition" SelectedValueChanged="OnSelectUserPositionChanged">
+                            <SelectItem TValue="UserPosition" Value="UserPosition.Unknown">
+                                @L["UserSalaryConfig.Select.UserPosition"]
+                            </SelectItem>
+                            @foreach (var itemValue in ListPosition)
+                            {
+                                <SelectItem @key="itemValue" TValue="UserPosition" Value="@((UserPosition) itemValue)">
+                                    @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Addon>
+                    <Addon AddonType="AddonType.Start">
+                        <Select Style="width: fit-content" TValue="Guid?" @bind-SelectedValue="_selectedUserId">
+                            <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                @L["UserProfile.SelectUser"]
+                            </SelectItem>
+                            @if (UserLookupDtos.IsNotNullOrEmpty())
+                            {
+                                @foreach (var userLookup in UserLookupDtos)
+                                {
+                                    <SelectItem TValue="Guid?" Value="@userLookup.Id">
+                                        @userLookup.DisplayName
+                                    </SelectItem>
+                                }
+                            }
+                        </Select>
+                    </Addon>
+                    <Addon AddonType="AddonType.Start">
+                        <TextEdit Text="@(_createUpdateDto.Salary.ToString("N0"))" DefaultValue="0" TextChanged="OnSalaryChange" Style="width:150px"/>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <Button Color="Color.Primary" Clicked="@CreateUserSalaryConfig">
+                            <Icon Name="IconName.Add"></Icon> @L["Submit"]
+                        </Button>
+                    </Addon>
+                </Addons>
+            </Column>
+            <br/>
+        </Row>
+    </CardBody>
+
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="UserSalaryConfigWithNavPropertiesDto"
+                  Data="UserSalaryConfigList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSize="PageSize">
+
+            <DataGridColumns>
+               <DataGridEntityActionsColumn TItem="UserSalaryConfigWithNavPropertiesDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                     <EntityActions TItem="UserSalaryConfigWithNavPropertiesDto" EntityActionsColumn="@EntityActionsColumn">
+                        <EntityAction TItem="UserSalaryConfigWithNavPropertiesDto"
+                                       Visible="@CanEditUserSalaryConfig"
+                                       Clicked="() => OpenEditUserSalaryConfig(context.UserSalaryConfiguration)"
+                                       Text="@L["Edit"]">
+                         </EntityAction>
+
+                         <EntityAction TItem="UserSalaryConfigWithNavPropertiesDto"
+                                       Clicked="() => DeleteSalaryConfig(context.UserSalaryConfiguration)"
+                                       Visible="@CanDeleteUserSalaryConfig"
+                                       ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                       Text="@L["Delete"]">
+                         </EntityAction>
+                     </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+    
+                <DataGridColumn TItem="UserSalaryConfigWithNavPropertiesDto"
+                                Field="Team"
+                                Caption="@L["SalaryConfig.TeamName"]">
+                    <DisplayTemplate>
+                        @context.Team?.DisplayName
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserSalaryConfigWithNavPropertiesDto"
+                                Field="UserSalaryConfiguration"
+                                Caption="@L["SalaryConfig.UserPosition"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:UserPosition:{Convert.ToInt32(context.UserSalaryConfiguration.UserPosition)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserSalaryConfigWithNavPropertiesDto"
+                                Field="AppUser"
+                                Caption="@L["SalaryConfig.Username"]">
+                    <DisplayTemplate>
+                        @context.AppUser?.Name @context.AppUser?.Surname
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserSalaryConfigWithNavPropertiesDto"
+                                Field="UserSalaryConfiguration"
+                                Caption="@L["SalaryConfig.Salary"]">
+                    <DisplayTemplate>
+                        <strong class="text-info">@context.UserSalaryConfiguration.Salary.ToString("N0")</strong>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                
+                <DataGridColumn TItem="UserSalaryConfigWithNavPropertiesDto"
+                                Field="UserSalaryConfiguration"
+                                Caption="@L["SalaryConfig.Description"]">
+                    <DisplayTemplate>
+                        @context.UserSalaryConfiguration.Description
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditConfigModal">
+    <ModalContent Centered="true">
+        <Form id="EditConfigForm">
+            <ModalHeader>
+                <ModalTitle>@L["SalaryConfig.UpdateTitle"]</ModalTitle>
+                <CloseButton Clicked="CloseEditConfigModal"/>
+            </ModalHeader>
+            <ModalBody>
+                          <Field>
+                            <FieldLabel>@L["SalaryConfig.Salary"]</FieldLabel>
+
+                          <TextEdit Text="@(EditConfig.Salary.ToString("N0"))" DefaultValue="0" TextChanged="OnSalaryChange"/>
+                        </Field>
+                     <Field>
+                            <FieldLabel>@L["SalaryConfig.Description"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditConfig.Description">
+                            </TextEdit>
+                        </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditConfigModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditConfigForm" Clicked="UpdateUserSalaryConfig"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

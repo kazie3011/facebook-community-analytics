@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>FacebookCommunityAnalytics.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Domain\FacebookCommunityAnalytics.Api.Domain.csproj" />
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Application.Contracts\FacebookCommunityAnalytics.Api.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="15.0.5" />
+    <PackageReference Include="Flurl" Version="3.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.HangFire" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.BlobStoring.Azure" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.FluentValidation" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Saas.Host.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Public.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Admin.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LeptonTheme.Management.Application" Version="4.3.2" />
+    <PackageReference Include="Volo.CmsKit.Pro.Application" Version="4.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Cms\Blogs" />
+    <Folder Include="Medias" />
+    <Folder Include="Transactions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Transactions\TransactionsAppService.cs" />
+  </ItemGroup>
+
+</Project>

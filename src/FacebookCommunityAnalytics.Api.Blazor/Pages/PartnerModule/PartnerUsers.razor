@@ -1,0 +1,108 @@
+﻿@page "/partner-users"
+@attribute [Authorize(ApiPermissions.PartnerModule.Default)]
+@using FacebookCommunityAnalytics.Api.Partners
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Crawl
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.PartnerModule
+@using FacebookCommunityAnalytics.Api.Users
+
+@inject IPartnerModuleAppService _partnerModuleAppService
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Partner.User.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="PartnerCreateUserForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <TextEdit @bind-Text="@SurName" Placeholder="@L["Partner.User.SurName"]"/>
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    <TextEdit @bind-Text="@Name" Placeholder="@L["Partner.User.Name"]"/>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Email" Autofocus="true" Placeholder="@L["Partner.User.Email"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="PartnerCreateUserForm" Clicked="DoCreateUserAsync">
+                        <Icon Name="IconName.UserPlus" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="AppUserDto" Data="AppUserDtos"
+                  SelectionMode="DataGridSelectionMode.Single"
+                  TotalItems="AppUserDtos.Count"
+                  ShowPager="false"
+                  Responsive="true"
+                  Narrow="true"
+                  PageSize="1000"
+                  ShowPageSizes="false"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns >
+
+                <DataGridColumn TItem="AppUserDto"
+                                Field="Email"
+                                Caption="@L["Partner.User.Email"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        <span>@context.Email</span>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AppUserDto"
+                                Field="UserName"
+                                Caption="@L["Partner.User.UserName"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @context.UserName
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AppUserDto"
+                                Field="Name"
+                                Caption="@L["Partner.User.Name"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @context.GetFullName()
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="AppUserDto" Field="Name" Caption="@L["Action"]" Sortable="false">
+                    <DisplayTemplate>
+                        <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeletePartnerUserAsync(context)">
+                            <Icon Name="IconName.Delete"/>
+                        </Button>
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>

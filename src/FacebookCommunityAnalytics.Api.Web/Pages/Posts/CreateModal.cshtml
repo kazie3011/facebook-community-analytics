@@ -1,0 +1,40 @@
+@page
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inject IHtmlLocalizer<ApiResource> L
+@model FacebookCommunityAnalytics.Api.Web.Pages.Posts.CreateModalModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/Posts/CreateModal" autocomplete="off">
+    <abp-modal size="Large">
+        <abp-modal-header title="@L["NewPost"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+
+            <div class="form-group">
+                <label>@L["PostContentType"]</label>
+                <div class="block">
+                    <select class="form-control" asp-for="NewPost.PostContentType">
+                        <option value="@(PostContentType.Seeding)">
+                            @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Seeding)}"]
+                        </option>
+                        <option value="@(PostContentType.Contest)">
+                            @L[$"Enum:PostContentType:{Convert.ToInt32(PostContentType.Contest)}"]
+                        </option>
+                    </select>
+                </div>
+            </div>
+            
+            <abp-input asp-for="PostUrls" label="@L["Url"].Value" required-symbol="true"  placeholder="@L["PlaceHolder:PostUrl"].Value"/>
+
+            <abp-select asp-for="NewPost.CampaignId" asp-items="Model.CampaignsSelectListItems" label="@L["PartnerType"].Value"/>
+
+            <abp-input asp-for="NewPost.Note" label="@L["Description"].Value"/>
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

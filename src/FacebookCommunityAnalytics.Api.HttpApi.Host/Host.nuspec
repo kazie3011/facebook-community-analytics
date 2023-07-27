@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>FacebookCommunityAnalytics.Api.HttpApi.Host</id>
+        <version>1.0.0</version>
+        <title>FacebookCommunityAnalytics Api HttpApi Host</title>
+        <authors>GDL</authors>
+        <owners>GDL</owners>
+        <licenseUrl>https://gdll.vn</licenseUrl>
+        <projectUrl>https://gdll.vn</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>FacebookCommunityAnalytics Api HttpApi Host</description>
+        <summary>FacebookCommunityAnalytics Api HttpApi Host</summary>
+        <releaseNotes>Releases Using Agile</releaseNotes>
+        <copyright>2021. GDL</copyright>
+        <language>en-US</language>
+    </metadata>
+    <files>
+        <file src="bin\Release\net5.0\**" target="" />
+    </files>
+</package>

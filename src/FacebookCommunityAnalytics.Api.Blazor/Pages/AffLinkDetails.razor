@@ -1,0 +1,415 @@
+﻿@page "/linkdetails"
+@attribute [Authorize(ApiPermissions.UserAffiliates.Default)]
+@using FacebookCommunityAnalytics.Api.UserAffiliates
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Groups
+@using FacebookCommunityAnalytics.Api.Posts
+@using FacebookCommunityAnalytics.Api.Organizations
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using FacebookCommunityAnalytics.Api.Core.Helpers;
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using Services
+@using Faso.Blazor.SpinKit
+@inherits BlazorComponentBase
+
+@inject IUserAffiliateAppService UserAffiliateAppService
+@inject IUiMessageService UiMessageService
+@inject NavigationManager NavigationManager
+@inject IUserInfosAppService UserInfosAppService
+@inject IGroupExtendAppService GroupExtendAppService
+@inject ITeamMemberAppService TeamMemberAppService
+@inject IPostsExtendAppService PostsExtendAppService
+@inject IJSRuntime JSRuntime
+@inject ClipboardService ClipboardService
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Aff.LinkDetails.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Form id="UserAffiliateSearchForm" class="mb-3">
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Start">
+            <DateRangePicker
+                Ranges="_dateRanges"
+                DateFormat="@GlobalConsts.DateFormat"
+                StartDate="StartDate"
+                EndDate="EndDate"
+                EndDateChanged="EndDateChanged"
+                StartDateChanged="StartDateChanged"
+                class="form-control form-control-md"
+                placeholder="@L["SelectDates"]"/>
+
+        </Addon>
+        <Addon AddonType="AddonType.Start" Style="display:flex;align-items: center;padding:0 5px; border: solid lightgray 1px;">
+            <Check TValue="bool" CheckedChanged="OnConversionOwnFilterCheckedChanged">@L["Aff.MyOwnConversion"]</Check>
+        </Addon>
+        <Addon AddonType="AddonType.Start">
+            <Select TValue="AffiliateProviderType" SelectedValueChanged="@OnSelectedAffiliateProviderType" SelectedValue="SelectedAffiliateProviderTypeFilter" Style="height: 40px">
+                @foreach (var itemValue in Enum.GetValues(typeof(AffiliateProviderType)))
+                {
+                    <SelectItem @key="itemValue" TValue="AffiliateProviderType" Value="@((AffiliateProviderType) itemValue)">
+                        @L[$"Enum:AffiliateProviderType:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+        @* <Addon AddonType="AddonType.Start"> *@
+        @*     <Check TValue="bool" CheckedChanged="OnConversionOwnFilterCheckedChanged">@L["Aff.MyOwnConversion"]</Check> *@
+        @* </Addon> *@
+        @* *@
+        @* <Addon AddonType="AddonType.Start"> *@
+        @*     <Select class="form-control form-control-md" TValue="UserAffiliateHasConversionFilter" @bind-SelectedValue="@UserAffiliateHasConversionFilter"> *@
+        @*         @foreach (var itemValue in Enum.GetValues(typeof(UserAffiliateHasConversionFilter))) *@
+        @*         { *@
+        @*             <SelectItem @key="itemValue" TValue="UserAffiliateHasConversionFilter" Value="@((UserAffiliateHasConversionFilter) itemValue)"> *@
+        @*                 @L[$"Enum:UserAffiliateHasConversionFilter:{Convert.ToInt32(itemValue)}"] *@
+        @*             </SelectItem> *@
+        @*         } *@
+        @*     </Select> *@
+        @* </Addon> *@
+
+        @* <Addon AddonType="AddonType.Start"> *@
+        @*     <Select TValue="ConversionOwnerFilter" @bind-SelectedValue="@Filter.ConversionOwnerFilter"> *@
+        @*         @foreach (var itemValue in Enum.GetValues(typeof(ConversionOwnerFilter))) *@
+        @*         { *@
+        @*             <SelectItem @key="itemValue" TValue="ConversionOwnerFilter" Value="@((ConversionOwnerFilter) itemValue)"> *@
+        @*                 @L[$"Enum:ConversionOwnerFilter:{Convert.ToInt32(itemValue)}"] *@
+        @*             </SelectItem> *@
+        @*         } *@
+        @*     </Select> *@
+        @* </Addon> *@
+
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@Filter.FilterText"
+                      Autofocus="true"
+                      Placeholder="@L["Search"]">
+            </TextEdit>
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <SubmitButton Form="UserAffiliateSearchForm" Clicked="DoSearch">
+                <Icon Name="IconName.Search" Class="mr-1"></Icon>
+            </SubmitButton>
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <SubmitButton Clicked="async () => await ExportPostsAsync()">
+                <Icon Name="IconName.Download" Class="mr-1"></Icon>
+            </SubmitButton>
+        </Addon>
+    </Addons>
+
+    <br/>
+    <Row>
+        @* <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+        @*     <Select TValue="ConversionOwnerFilter" @bind-SelectedValue="@Filter.ConversionOwnerFilter"> *@
+        @*         @foreach (var itemValue in Enum.GetValues(typeof(ConversionOwnerFilter))) *@
+        @*         { *@
+        @*             <SelectItem @key="itemValue" TValue="ConversionOwnerFilter" Value="@((ConversionOwnerFilter) itemValue)"> *@
+        @*                 @L[$"Enum:ConversionOwnerFilter:{Convert.ToInt32(itemValue)}"] *@
+        @*             </SelectItem> *@
+        @*         } *@
+        @*     </Select> *@
+        @* </Field> *@
+
+
+        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop">
+            <Select TValue="AffiliateProviderType" SelectedValue="SelectedAffiliateProviderTypeFilter" SelectedValueChanged="OnSelectedAffiliateProviderType">
+                @foreach (var itemValue in Enum.GetValues(typeof(AffiliateProviderType)))
+                {
+                    <SelectItem @key="itemValue" TValue="AffiliateProviderType" Value="@((AffiliateProviderType) itemValue)">
+                        @L[$"Enum:AffiliateProviderType:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Field>
+
+
+
+        @* <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop"> *@
+        @*     <Select class="form-control form-control-md" TValue="UserAffiliateHasConversionFilter" @bind-SelectedValue="@UserAffiliateHasConversionFilter"> *@
+        @*         @foreach (var itemValue in Enum.GetValues(typeof(UserAffiliateHasConversionFilter))) *@
+        @*         { *@
+        @*             <SelectItem @key="itemValue" TValue="UserAffiliateHasConversionFilter" Value="@((UserAffiliateHasConversionFilter) itemValue)"> *@
+        @*                 @L[$"Enum:UserAffiliateHasConversionFilter:{Convert.ToInt32(itemValue)}"] *@
+        @*             </SelectItem> *@
+        @*         } *@
+        @*     </Select> *@
+        @* </Field> *@
+
+        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop">
+            <Select TValue="Guid?" SelectedValue="SelectedTeamIdFilter" SelectedValueChanged="@OnTeamSelectedValueChanged">
+                <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.AllTeam"]</SelectItem>
+                @foreach (var orgUnit in _organizationUnitDtos)
+                {
+                    <SelectItem @key="orgUnit" TValue="Guid?" Value="@orgUnit.Id">
+                        @orgUnit.DisplayName
+                    </SelectItem>
+                }
+            </Select>
+        </Field>
+
+        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop">
+            <Autocomplete Data="@GroupsNullable"
+                          ElementId="GroupIdInputFilter"
+                          TItem="LookupDto<Guid?>"
+                          TValue="Guid?"
+                          TextField="@((item) => item.DisplayName)"
+                          ValueField="@((item) => item.Id)"
+                          SearchChanged="@GetNullableGroupLookupAsync"
+                          @bind-SelectedValue="@Filter.GroupId"
+                          Placeholder="@L["Autocomplete.DefaultText", L["Group"]]"
+                          Filter="AutocompleteFilter.Contains"
+                          CustomFilter="@((item, searchValue) => item.DisplayName.RemoveDiacritics().IndexOf(searchValue.RemoveDiacritics(), 0, StringComparison.CurrentCultureIgnoreCase) >= 0)"/>
+        </Field>
+
+        @if (IsSaleAndAboveRole())
+        {
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop">
+                @* <FieldLabel>@L["Partner"]</FieldLabel> *@
+                <Select TValue="Guid?" SelectedValue="SelectedPartnerIdFilter" SelectedValueChanged="@OnSelectedValuePartner">
+                    <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.AllPartner"]</SelectItem>
+                    @foreach (var item in PartnersNullable)
+                    {
+                        <SelectItem @key="item" TValue="Guid?" Value="@item.Id">
+                            @item.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnDesktop">
+                @* <FieldLabel>@L["Campaign"]</FieldLabel> *@
+                <Select TValue="Guid?" SelectedValue="SelectedCampaignIdFilter" SelectedValueChanged="@OnSelectedValueCampaign">
+                    <SelectItem TValue="Guid?" Value="Guid.Empty">@L["SelectItem.AllCampaign"]</SelectItem>
+                    @foreach (var item in CampaignsNullable)
+                    {
+                        <SelectItem @key="item" TValue="Guid?" Value="@item.Id">
+                            @item.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+        }
+    </Row>
+</Form>
+
+@* ************************* DATA GRID ************************* *@
+@if (!_showLoading)
+{
+    <SpinKitChasingDots/>
+}
+<Card>
+    <CardBody>
+        <DataGrid TItem="UserAffiliateWithNavigationPropertiesDto"
+                  Data="UserAffiliateList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  ShowPageSizes="true"
+                  ShowPager="true"
+                  Striped="true"
+                  Narrow="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="AppUser.UserName"
+                                Caption="@L["UserAffiliate.User"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @(context.AppUser != null ? $"{context.AppUser.UserName}({context.UserInfo.Code})" : string.Empty)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                @* <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+                @*                 Field="UserAffiliate.MarketplaceType" *@
+                @*                 Caption="@L["UserAffiliate.MarketplaceType"]"> *@
+                @* </DataGridColumn> *@
+
+                @* <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" *@
+                @*                 Field="UserAffiliate.Url" *@
+                @*                 Caption="@L["UserAffiliate.Url"]"> *@
+                @* </DataGridColumn> *@
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="UserAffiliate.AffiliateUrl"
+                                Sortable="false"
+                                Caption="@L["UserAffiliate.AffiliateUrl"]">
+                    <DisplayTemplate>
+                        <a href="@context.UserAffiliate.AffiliateUrl" target="_blank">@context.UserAffiliate.AffiliateUrl</a>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="UserAffiliate.Url"
+                                Caption="@L["UserAffiliate.Url"]">
+                    <DisplayTemplate>
+                        <a href="@context.UserAffiliate.Url" target="_blank">@context.UserAffiliate.Url.ToHyperLinkText(context.UserAffiliate.AffiliateProviderType.ToString())</a>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="Category.Name"
+                                Sortable="false"
+                                Caption="@L["Category"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="Partner.Name"
+                                Sortable="false"
+                                Caption="@L["Partner"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="Campaign.Name"
+                                Sortable="false"
+                                Caption="@L["Campaign"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="UserAffiliate.AffConversionModel.ClickCount"
+                                Caption="@L["UserAffiliate.ClickCount"]"
+                                Sortable="true">
+                </DataGridColumn>
+
+                @if (IsManagerRole())
+                {
+                    <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                    Field="UserAffiliate.AffConversionModel.ConversionCount"
+                                    Sortable="false"
+                                    Caption="@L["UserAffiliate.ConversionDetail"]">
+                        <DisplayTemplate>
+                            @{
+                                var conversion = context.UserAffiliate.AffConversionModel;
+                                string affiliateDetail = (conversion != null) ? $"{conversion.ConversionCount} /{conversion.ConversionAmount.ToCommaStyle()}" : "---";
+                            }
+
+                            @(context.UserAffiliate.UpdatedAt.HasValue ? affiliateDetail : string.Empty)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                }
+
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="UserAffiliate.CreatedAt"
+                                Caption="@L["UserAffiliate.CreatedAt"]"
+                                Sortable="true"
+                                SortDirection="SortDirection.Descending">
+                    <DisplayTemplate>
+                        @(context.UserAffiliate.CreatedAt.HasValue ? context.UserAffiliate.CreatedAt.Value.ToShortDateString() : string.Empty)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto"
+                                Field="UserAffiliate.UpdatedAt"
+                                Sortable="false"
+                                Caption="@L["UserAffiliate.UpdatedAt"]">
+                    <DisplayTemplate>
+                        @(context.UserAffiliate.UpdatedAt.HasValue ? context.UserAffiliate.UpdatedAt.Value.ToShortDateString() : string.Empty)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                @* <DataGridEntityActionsColumn TItem="UserAffiliateWithNavigationPropertiesDto" @ref="@EntityActionsColumn"> *@
+                @*     <DisplayTemplate> *@
+                @*         <EntityActions TItem="UserAffiliateWithNavigationPropertiesDto" EntityActionsColumn="@EntityActionsColumn"> *@
+                @* *@
+                @*             $1$ -------------------Lock Edit User Affiliate---------------------- #1# *@
+                @*             $1$ <EntityAction TItem="UserAffiliateWithNavigationPropertiesDto" #1# *@
+                @*             $1$               Visible="@CanEditUserAffiliate" #1# *@
+                @*             $1$               Clicked="() => OpenEditUserAffiliateModal(context.UserAffiliate)" #1# *@
+                @*             $1$               Text="@L["Edit"]"> #1# *@
+                @*             $1$ </EntityAction> #1# *@
+                @* *@
+                @*             <EntityAction TItem="UserAffiliateWithNavigationPropertiesDto" *@
+                @*                           Visible="@CanDeleteUserAffiliate" *@
+                @*                           Clicked="() => DeleteUserAffiliateAsync(context.UserAffiliate)" *@
+                @*                           ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])" *@
+                @*                           Text="@L["Delete"]"> *@
+                @*             </EntityAction> *@
+                @*         </EntityActions> *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridEntityActionsColumn> *@
+
+
+                <DataGridColumn TItem="UserAffiliateWithNavigationPropertiesDto" Field="UserAffiliate.Id" Caption="@L["Action"]" Sortable="false">
+                    <DisplayTemplate>
+                        <Buttons>
+
+                            @if (CanDeleteUserAffiliate)
+                            {
+                                <Button Outline Color="Color.Primary" Clicked="() => DeleteUserAffiliateAsync(context.UserAffiliate)">
+                                    <Icon Name="IconName.Delete"/>
+                                </Button>
+                            }
+                        </Buttons>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditUserAffiliateModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="EditUserAffiliateForm">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateUserAffiliate"]</ModalTitle>
+                <CloseButton Clicked="CloseEditUserAffiliateModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                        <Field>
+                            <FieldLabel>@L["UserAffiliate.MarketplaceType"]</FieldLabel>
+                            <Select TValue="MarketplaceType" @bind-SelectedValue="@EditingUserAffiliate.MarketplaceType">
+                                @foreach (var itemValue in Enum.GetValues(typeof(MarketplaceType)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="MarketplaceType" Value="@((MarketplaceType) itemValue)">
+                                        @L[$"Enum:MarketplaceType:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["UserAffiliate.Url"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingUserAffiliate.Url">
+                            </TextEdit>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>@L["UserAffiliate.AffiliateUrl"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingUserAffiliate.AffiliateUrl" ReadOnly="true">
+                            </TextEdit>
+                        </Field>
+                    </Column>
+                </Row>
+
+            </ModalBody>
+
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditUserAffiliateModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditUserAffiliateForm" Clicked="UpdateUserAffiliateAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

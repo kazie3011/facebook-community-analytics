@@ -1,0 +1,64 @@
+﻿{
+  "Culture": "vi",
+  "Texts": {
+    "ApiDomain:SampleError": "Đây là mẫu tin nhắn lỗi",
+    "ApiDomain:InvalidUrl": "Định dạng url không hợp lệ - {0}",
+    "ApiDomain:DuplicatedUrl": "Link đã tồn tại- {0}",
+    "ApiDomain:InvalidOrExistingUrl": "Link bài post chưa đúng định dạng đã tồn tại {0}",
+    "ApiDomain:PostSourceTypeMustSame": "Report bài đăng phải cùng loại",
+    "ApiDomain:MaxUrlReached": "Số lượng link nhập đã quá giới hạn cho phép",
+    "ApiDomain:InvalidGroupUrl": "Link Group không đúng format",
+    "ApiDomain:GroupNotExist": "Cộng đồng chưa tồn tại trong hệ thống",
+    "ApiDomain:InsMustHaveGroup": "Report bài Instagram thì phải chọn cộng đồng",
+    "ApiDomain:DuplicateGroup": "Cộng đồng này có rồi {0}",
+    "ApiDomain:CategoryNotExist": "Chưa có ngành hàng {0}",
+    "ApiDomain:InvalidContent": "Chưa có nội dung",
+    "ApiDomain:InvalidGroup": "Chưa chọn cộng đồng",
+    "ApiDomain:InValidDateTime": "Ngày giờ không hợp lệ",
+    "ApiDomain:UserAffiliate.ShortlinkCreationFailure": "Chưa tạo được shortlink, liên hệ admin để thử lại",
+    "ApiDomain:UserAffiliate.InvalidUrl": "Link sản phẩm sai (phải là shopee, lazada, tiki ...)",
+    "ApiDomain:UserAffiliate.InvalidUrl.Tiki": "Bắt buộc nhập link TIKI ",
+    "ApiDomain:InvalidShortlink": "Chưa có short link",
+    "ApiDomain:InvalidLazadaUrl": "Lazada url sai",
+    
+    "ApiDomain:UserInfo:InvalidFacebookId": "Chỉ được nhập số (Facebook Id)",
+    "ApiDomain:UserInfo:DuplicatedSeedingAccountFid": "Seeding account đã được sử dụng",
+    
+    "ApiDomain:InvalidName": "Tên chiến dịch chưa có hoặc chưa đúng định dạng",
+    "ApiDomain:InvalidEmails": "Sai định dạng email",
+    "ApiDomain:Campaign:PermissionNotGranted": "Bạn không có quyền truy cập campaign này",
+    "ApiDomain:Campaign:NameExisted": "Đã có campaign trùng tên",
+    "ApiDomain:Campaign:PrizeExisted": "Giải thưởng bị trùng tên",
+
+    "ApiDomain:TiktokCrawl.NoChannelFound": "Không tìm thấy kênh",
+    "ApiDomain:TiktokCrawl.EmptyData": "Dữ liệu trống",
+
+    "ApiDomain:InvalidUser": "Người dùng không hợp lệ",
+    "ApiDomain:DuplicateCriteria": "Hình thức này đã có rồi",
+    "ApiDomain:InvalidCriteria": "Hình thức không hợp lệ",
+    "ApiDomain:WrongCriteriaPoint": "Điểm vượt quá mức cho phép",
+    
+    "ApiDomain:Contract.InvalidTransaction": "Giao dịch không hợp lệ",
+    "ApiDomain:Contract.InvalidValue": "Giá trị hợp đồng không hợp lệ",
+    "ApiDomain:Contract.InvalidContractCode": "Số hợp đồng không hợp lệ",
+    "ApiDomain:PartnerIsRequired" : "Vui lòng chọn đối tác",
+    "ApiDomain:ContractTypeIsRequired" : "Vui lòng chọn loại hợp đồng",
+    "ApiDomain:ContractRequiresTnxAmount" : "Chưa nhập giá trị giao dịch cho hợp đồng",
+    "ApiDomain:ContractAmountRequired" : "Vui lòng nhập giá trị hợp đồng",
+    "ApiDomain:TransactionAmountInvalid" : "Tổng giá trị giao dịch không được lớn hơn giá trị hợp đồng",
+    "ApiDomain:ContractNotFound" : "Hợp đồng không tồn tại",
+    "ApiDomain:Cotract.DoNotGroupNameSync": "Dữ liệu hiện tại chưa được đồng bộ . Vui lòng reload lại trang",
+    "ApiDomain:TransactionNotFound" : "Giao dịch không tồn tại",
+    "ApiDomain:PartnerExist" : "Đối tác đã tồn tại",
+    "ApiDomain:PostNullData" : "Dữ liệu bài post không hợp lệ",
+    "TriggerCrawler:PartnerIsRequired" : "Vui lòng chọn đối tác",
+    "TriggerCrawler:CampaignIsRequired" : "Vui lòng chọn chiến dịch",
+    "Partner.EmailExisted" : "Email đã tồn tại",
+
+    "ApiDomain:Transaction.InvalidTransaction": "Giao dich không hợp lệ",
+    "ApiDomain:Transaction.AmountRequired" : "Vui lòng nhập giá trị giao dịch",
+    "ApiDomain:UserRoleNotRemoveOrg" : "Không thể gỡ quyền manager trở lên",
+    
+    "ApiDomain.GroupCost.ExistedName" : "Tên nhóm đã tồn tại"
+  }
+}

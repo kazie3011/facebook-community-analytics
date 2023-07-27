@@ -1,0 +1,28 @@
+@page "/Campaigns/ReportPostModal/{CampaignId}"
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inject IHtmlLocalizer<ApiResource> L
+@model FacebookCommunityAnalytics.Api.Web.Pages.Campaigns.ReportPostModel
+@{
+    Layout = null;
+}
+<form data-ajaxForm="true" asp-page="/Campaigns/ReportPostModal" autocomplete="off">
+    <abp-modal size="Large">
+        <abp-modal-header title="@L["NewPost"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+            <abp-input type="hidden" asp-for="NewPost.CampaignId" />
+            <abp-input type="hidden" asp-for="NewPost.PartnerId" />
+            <abp-input type="hidden" asp-for="NewPost.PostContentType" />
+            <abp-input type="hidden" asp-for="NewPost.PostCopyrightType" />
+            <abp-input type="hidden" asp-for="NewPost.SubmissionDateTime" />
+            <abp-input asp-for="PostUrls" label="@L["Url"].Value" required-symbol="true" placeholder="@L["PlaceHolder:PostUrl"].Value"/>
+
+            <abp-input asp-for="NewPost.Note" label="@L["Description"].Value"/>
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

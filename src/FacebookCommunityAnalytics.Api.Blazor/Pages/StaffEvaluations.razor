@@ -1,0 +1,768 @@
+﻿@page "/staffevaluation"
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.StaffEvaluations
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout;
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Core.Helpers
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using Microsoft.Extensions.Localization
+
+@attribute [Authorize(ApiPermissions.StaffEvaluations.Default)]
+@inject IStringLocalizer<ApiDomainResource> Lv
+@inject IStaffEvaluationAppService StaffEvaluationAppService
+@inject IUserInfosAppService userInfosAppService
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["StaffEvaluations"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="StaffEvaluationSearchForm" class="mb-3">
+            <Row>
+                <Field ColumnSize="ColumnSize.Is9.OnDesktop">
+                    <Addons>
+                        <Addon AddonType="AddonType.Start" Style="margin-right: 5px">
+                            <Select TValue="int" SelectedValue="@Filter.Year" SelectedValueChanged="OnSelectedYearChanged">
+                                @foreach (var year in Years)
+                                {
+                                    <SelectItem TValue="int" Value="@year">@year</SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.Start" Style="margin-right: 5px">
+                            <Select TValue="int" SelectedValue="@Filter.Month" SelectedValueChanged="OnSelectedMonthChanged">
+                                @foreach (var month in Months)
+                                {
+                                    <SelectItem TValue="int" Value="@month">
+                                        @string.Format(L["Month"], month)
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+                        <Addon AddonType="AddonType.Start" Style="margin-right: 5px">
+                            @if (Teams.Count >= 1)
+                            {
+                                <Select TValue="Guid?" SelectedValue="@_selectedTeamId" SelectedValueChanged="OnSelectedTeamChanged">
+                                    <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                                        @L["StaffEvaluations.AllTeam"]
+                                    </SelectItem>
+                                    @foreach (var team in Teams)
+                                    {
+                                        <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                            @team.DisplayName
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            }
+                            else
+                            {
+                                <TextEdit Text="@Teams.FirstOrDefault()?.DisplayName" ReadOnly="true"></TextEdit>
+                            }
+                        </Addon>
+                        <Addon AddonType="AddonType.Start" Style="margin-right: 5px">
+                            <Select TValue="StaffEvaluationStatus?" SelectedValue="@Filter.StaffEvaluationStatus" SelectedValueChanged="@OnSelectedStaffEvaluationStatus">
+                                @foreach (var itemValue in Enum.GetValues(typeof(StaffEvaluationStatus)))
+                                {
+                                    <SelectItem @key="itemValue" TValue="StaffEvaluationStatus?" Value="@((StaffEvaluationStatus?) itemValue)">
+                                        @L[$"Enum:StaffEvaluationStatus:{Convert.ToInt32(itemValue)}"]
+                                    </SelectItem>
+                                }
+                            </Select>
+                        </Addon>
+
+                        <Addon AddonType="AddonType.Start">
+                            <TextEdit @bind-Text="@Filter.FilterText"
+                                      Autofocus="true"
+                                      Placeholder="@L["StaffEvaluations.SearchByFilter"]">
+                            </TextEdit>
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <SubmitButton Form="StaffEvaluationSearchForm" Clicked="GetStaffEvaluationsAsync">
+                                <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                            </SubmitButton>
+                        </Addon>
+                    </Addons>
+                </Field>
+                <Field ColumnSize="ColumnSize.Is3.OnDesktop">
+                    @if (CanExportExcel)
+                    {
+                        <Button Form="StaffEvaluationSearchForm" Clicked="ExportExcelAsync" Color="Color.Primary" Style="float:right">
+                            <Icon Name="IconName.Download" Class="mr-1"></Icon>
+                        </Button>
+                    }
+
+                </Field>
+            </Row>
+        </Form>
+
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+<CardBody>
+<DataGrid TItem="StaffEvaluationWithNavigationPropertiesDto"
+          Data="StaffEvalWithNavs"
+          ReadData="OnDataGridReadAsync"
+          TotalItems="TotalCount"
+          ShowPager="true"
+          Narrow="true"
+          PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+          ShowPageSizes="true"
+          Responsive="true"
+          PageSize="PageSize"
+          SortMode="DataGridSortMode.Single"
+          Striped="true">
+
+<DataGridColumns>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="OrganizationUnit.DisplayName"
+                Caption="@L["StaffEvaluations.Team"]"
+                Sortable="true"
+                VerticalAlignment="VerticalAlignment.Top"
+                Width="100px">
+    <DisplayTemplate>
+        @context.OrganizationUnit?.DisplayName
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="AppUser.UserName"
+                Caption="@L["StaffEvaluations.User"]"
+                Sortable="true"
+                VerticalAlignment="VerticalAlignment.Top"
+                Width="150px">
+    <DisplayTemplate>
+        <Link disabled="@IsAdminRole()" Clicked="() => OpenEditStaffEvaluationModal(context.StaffEvaluation)">
+            @($"{context.AppUser?.Surname} {context.AppUser?.Name}")
+            <br/>
+            (@context.AppUser?.UserName)
+            <br/>
+            @L[$"Enum:UserPosition:{Convert.ToInt32(context.Info?.UserPosition)}"]
+        </Link>
+        @if (context.Group != null)
+        {
+            <br/>
+            @L["StaffEvaluations.Channel"]
+            @($"{context.Group.Name}")
+        }
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.Month"
+                Caption="@L["StaffEvaluations.Month"]"
+                VerticalAlignment="VerticalAlignment.Top"
+                Sortable="false">
+    <DisplayTemplate>
+        @($"{context.StaffEvaluation.Month}/{context.StaffEvaluation.Year}")
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.TotalPoint"
+                Caption="@L["StaffEvaluations.TotalPoint"]"
+                Sortable="true"
+                VerticalAlignment="VerticalAlignment.Top"
+                Width="115px">
+    <DisplayTemplate>
+        <div style="max-width: 115px">
+            <Progress
+                Striped="true"
+                Animated="true"
+                Color="@(context.StaffEvaluation.TotalPoint >= 100 ? Color.Primary : Color.Warning)"
+                Value="@((int) context.StaffEvaluation.TotalPoint)"
+                style="height: 10px">
+            </Progress>
+            <strong class="text-danger">@context.StaffEvaluation.TotalPoint/100</strong>
+        </div>
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.QuantityKPI"
+                Caption="@L["StaffEvaluations.QuantityKPI"]"
+                Sortable="true"
+                Width="115px"
+                VerticalAlignment="VerticalAlignment.Top">
+    <DisplayTemplate>
+        <div style="max-width: 115px">
+            <Progress
+                Striped="true"
+                Animated="true"
+                Color="@(context.StaffEvaluation.QuantityKPI >= 50 ? Color.Primary : Color.Warning)"
+                Value="@((int) context.StaffEvaluation.QuantityKPI)"
+                Max="50"
+                style="height: 10px">
+
+            </Progress>
+            <strong class="text-success">@context.StaffEvaluation.QuantityKPI/50</strong>
+            <p style="color: grey">@context.StaffEvaluation.QuantityKPIDescription</p>
+        </div>
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.QualityKPI"
+                Caption="@L["StaffEvaluations.QualityKPI"]"
+                Sortable="true"
+                VerticalAlignment="VerticalAlignment.Top"
+                Width="115px">
+    <DisplayTemplate >
+        <div style="max-width: 115px">
+            <Progress
+                Striped="true"
+                Animated="true"
+                Color="@(context.StaffEvaluation.QualityKPI >= 30 ? Color.Primary : Color.Warning)"
+                Value="@((int) context.StaffEvaluation.QualityKPI)"
+                Max="30"
+                style="height: 10px">
+            </Progress>
+            <strong class="text-primary">@context.StaffEvaluation.QualityKPI/30</strong>
+            @if (context.OrganizationUnit?.Id != Teams.FirstOrDefault(_ => _.DisplayName == TeamMemberConsts.Sale)?.Id)
+            {
+                <p style="color: grey;">@context.StaffEvaluation.QualityKPIDescription</p>
+            }
+        </div>
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.ReviewPoint"
+                Caption="@L["StaffEvaluations.ReviewPoint"]"
+                Sortable="true"
+                VerticalAlignment="VerticalAlignment.Top"
+                Width="115px">
+    <DisplayTemplate>
+        <div style="max-width: 115px">
+            <Progress
+                Striped="true"
+                Animated="true"
+                Color="@(context.StaffEvaluation.ReviewPoint >= 20 ? Color.Primary : Color.Warning)"
+                Value="@((int) context.StaffEvaluation.ReviewPoint)"
+                Max="20"
+                style="height: 10px">
+            </Progress>
+            <strong class="text-info">@context.StaffEvaluation.ReviewPoint/20</strong>
+        </div>
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.BonusAmount"
+                Caption="@L["StaffEvaluations.BonusAmount"]"
+                VerticalAlignment="VerticalAlignment.Top">
+    <DisplayTemplate>
+        @if (context.StaffEvaluation.BonusDescription.IsNotNullOrEmpty())
+        {
+            <Tooltip Text="@context.StaffEvaluation.BonusDescription.ToHtmlBreak()">
+                <p style="color: grey;">@context.StaffEvaluation.BonusAmount.ToVND()</p>
+            </Tooltip>
+        }
+        else
+        {
+            <p style="color: grey;">@context.StaffEvaluation.BonusAmount.ToVND()</p>
+        }
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.FinesAmount"
+                Caption="@L["StaffEvaluations.FinesAmount"]"
+                VerticalAlignment="VerticalAlignment.Top">
+    <DisplayTemplate>
+        @if (context.StaffEvaluation.FinesDescription.IsNotNullOrEmpty())
+        {
+            <Tooltip Text="@context.StaffEvaluation.FinesDescription.ToHtmlBreak()">
+                <p style="color: grey;">@context.StaffEvaluation.FinesAmount.ToVND()</p>
+            </Tooltip>
+        }
+        else
+        {
+            <p style="color: grey;">@context.StaffEvaluation.FinesAmount.ToVND()</p>
+        }
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.DirectorReview"
+                Caption="@L["StaffEvaluations.DirectorReview"]"
+                VerticalAlignment="VerticalAlignment.Top"
+                Sortable="false">
+    <DisplayTemplate>
+        <div style="width: 300px">@((MarkupString) context.StaffEvaluation.DirectorReview.ToHtmlBreak())</div>
+    </DisplayTemplate>
+</DataGridColumn>
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Field="StaffEvaluation.AssignedTasks"
+                Caption="@L["StaffEvaluations.AssignedTasks"]"
+                VerticalAlignment="VerticalAlignment.Top"
+                Sortable="false">
+    <DisplayTemplate>
+        <div style="width: 200px">@((MarkupString) context.StaffEvaluation.AssignedTasks.ToHtmlBreak()) </div>
+    </DisplayTemplate>
+</DataGridColumn>
+@* <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto" *@
+@*                 Field="StaffEvaluation.StaffEvaluationStatus" *@
+@*                 Caption="@L["StaffEvaluations.StaffEvaluationStatus"]" *@
+@*                 Sortable="false"> *@
+@*     <DisplayTemplate> *@
+@*         @L[$"Enum:StaffEvaluationStatus:{Convert.ToInt32(context.StaffEvaluation.StaffEvaluationStatus)}"] *@
+@*     </DisplayTemplate> *@
+@* </DataGridColumn> *@
+
+<DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                Caption=@L["Action"]
+                Field="OrganizationUnit.DisplayName"
+                Sortable="false">
+    <DisplayTemplate>
+        <Buttons>
+            @if (IsDirectorRole() || IsTikTokRole())
+            {
+                @if (context.OrganizationUnit?.DisplayName == TeamMemberConsts.TikTok)
+                {
+                    <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await OpenChannelEvaluation(context.StaffEvaluation.AppUserId.GetValueOrDefault())">
+                        <Icon Name="IconName.Search"/>
+                    </Button>
+                }
+            }
+
+            @if (GlobalConfiguration.TeamTypeMapping.Tiktok.Contains(context.OrganizationUnit?.DisplayName))
+            {
+                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => ExportTiktokUserStaffEvaluation(context)">
+                    <Icon Name="IconName.FileDownload"/>
+                </Button>
+            }
+            @if (GlobalConfiguration.TeamTypeMapping.Sale.Contains(context.OrganizationUnit?.DisplayName))
+            {
+                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => ExportContractUserStaffEvaluation(context)">
+                    <Icon Name="IconName.FileDownload"/>
+                </Button>
+            }
+            @if (GlobalConfiguration.TeamTypeMapping.Affiliate.Contains(context.OrganizationUnit?.DisplayName) || context.OrganizationUnit?.DisplayName == TeamMemberConsts.ST1)
+            {
+                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => ExportAffiliateUserStaffEvaluation(context)">
+                    <Icon Name="IconName.FileDownload"/>
+                </Button>
+            }
+            @if ((GlobalConfiguration.TeamTypeMapping.Seeding.Contains(context.OrganizationUnit?.DisplayName) || GlobalConfiguration.TeamTypeMapping.Content.Contains(context.OrganizationUnit?.DisplayName)) && context.OrganizationUnit?.DisplayName != TeamMemberConsts.ST1)
+            {
+                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => ExportSeedingUserStaffEvaluation(context)">
+                    <Icon Name="IconName.FileDownload"/>
+                </Button>
+            }
+
+            @if (CanDeleteStaffEvaluation)
+            {
+                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await OpenDeleteStaffEvaluation(context.StaffEvaluation.Id)">
+                    <Icon Name="IconName.Delete"/>
+                </Button>
+            }
+        </Buttons>
+    </DisplayTemplate>
+</DataGridColumn>
+</DataGridColumns>
+</DataGrid>
+</CardBody>
+</Card>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditStaffEvaluationModal" Style="z-index: 99999">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <Form id="EditStaffEvaluationForm">
+            <ModalHeader>
+                <ModalTitle>@L["StaffEvaluations.Header"]</ModalTitle>
+                <CloseButton Clicked="CloseEditStaffEvaluationModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsFull">
+                        @if (userName.IsNullOrEmpty())
+                        {
+                            <Field>
+                                <FieldLabel>@L["StaffEvaluations.User"]</FieldLabel>
+                                <Select Disabled="@true" TValue="Guid" @bind-SelectedValue="@EditingStaffEvaluation.AppUserId">
+                                    @foreach (var user in Users)
+                                    {
+                                        <SelectItem @key="user" TValue="Guid" Value="@user.Id">
+                                            @user.UserName
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Field>
+                        }
+                        else
+                        {
+                            <h3>@userName</h3>
+                        }
+                    </Column>
+
+                    <Column ColumnSize="ColumnSize.IsFull.OnDesktop.Is6.OnWidescreen">
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.QuantityKPI"]*</AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <NumericEdit ReadOnly="@(EditingStaffEvaluation.SaleKPIAmount > 0 || IsNotLeaderRole())" TValue="decimal" Max="50" Min="0" Step="5" @bind-Value="@EditingStaffEvaluation.QuantityKPI">
+                                    </NumericEdit>
+                                </Addon>
+                            </Addons>
+                        </Field>
+
+
+                        @if (EditingStaffEvaluation.TeamId == Teams.FirstOrDefault(_ => _.DisplayName == TeamMemberConsts.Sale)?.Id)
+                        {
+                            <Field>
+                                <Addons>
+                                    <Addon AddonType="AddonType.Start">
+                                        <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.KPIAmount"]*</AddonLabel>
+                                    </Addon>
+                                    <Addon AddonType="AddonType.Body">
+                                        <TextEdit
+                                            ReadOnly="IsNotLeaderRole()"
+                                            Text="@EditingStaffEvaluation.SaleKPIAmount.ToString("N0")"
+                                            TextChanged="OnSaleKPIAmountChange"
+                                            DefaultValue="0">
+                                        </TextEdit>
+                                    </Addon>
+                                </Addons>
+                            </Field>
+                        }
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.QualityKPI"]*</AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <NumericEdit ReadOnly="IsNotLeaderRole()" TValue="decimal" Max="30" Min="0" Step="5" @bind-Value="@EditingStaffEvaluation.QualityKPI">
+                                    </NumericEdit>
+                                </Addon>
+                            </Addons>
+                        </Field>
+
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.ReviewPoint"]*</AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <NumericEdit ReadOnly="IsNotLeaderRole()" TValue="decimal" Max="20" Min="0" Step="5" @bind-Value="@EditingStaffEvaluation.ReviewPoint">
+                                    </NumericEdit>
+                                </Addon>
+                            </Addons>
+                        </Field>
+                    </Column>
+
+                    <Column ColumnSize="ColumnSize.IsFull.OnDesktop.Is6.OnWidescreen">
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.BonusAmount"]</AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit ReadOnly="IsNotManagerRole()" Text="@EditingStaffEvaluation.BonusAmount.ToString("N0")" TextChanged="OnBonusAmountChange"/>
+                                </Addon>
+                            </Addons>
+                        </Field>
+
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.BonusDescription"]</AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit ReadOnly="IsNotManagerRole()" @bind-text="EditingStaffEvaluation.BonusDescription"/>
+                                </Addon>
+                            </Addons>
+                        </Field>
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.FinesAmount"]</AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit ReadOnly="IsNotManagerRole()" Text="@EditingStaffEvaluation.FinesAmount.ToString("N0")" TextChanged="OnFinesAmountChange"/>
+                                </Addon>
+                            </Addons>
+                        </Field>
+
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel Class="bg-primary text-white" Style="width: 180px">@L["StaffEvaluations.Edit.FinesDescription"]</AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit ReadOnly="IsNotManagerRole()" @bind-text="EditingStaffEvaluation.FinesDescription "/>
+                                </Addon>
+                            </Addons>
+                        </Field>
+                    </Column>
+
+                    <Column ColumnSize="ColumnSize.IsFull.OnDesktop.Is6.OnWidescreen">
+                        <Field>
+                            <FieldLabel>@L["StaffEvaluations.DirectorReview"] *</FieldLabel>
+                            <RichTextEdit @ref="@richTextEditRef"
+                                          ReadOnly="IsNotLeaderRole()"
+                                          ContentChanged="OnDirectorReviewContentChanged"
+                                          PlaceHolder="@L["ScheduledPost.InputYourContent"]"
+                                          ToolbarPosition="Placement.Bottom">
+
+                                <Editor>@((MarkupString) EditingStaffEvaluation.DirectorReview.ToHtmlBreak())</Editor>
+                                <Toolbar>
+                                    <RichTextEditToolbarGroup>
+                                        <RichTextEditToolbarButton Action="RichTextEditAction.Bold"/>
+                                        <RichTextEditToolbarButton Action="RichTextEditAction.Italic"/>
+                                        <RichTextEditToolbarSelect Action="RichTextEditAction.Size">
+                                            <RichTextEditToolbarSelectItem Value="small"/>
+                                            <RichTextEditToolbarSelectItem Selected="true"/>
+                                            <RichTextEditToolbarSelectItem Value="large"/>
+                                            <RichTextEditToolbarSelectItem Value="huge">Very Big</RichTextEditToolbarSelectItem>
+                                        </RichTextEditToolbarSelect>
+                                        <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered"/>
+                                        <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet"/>
+                                    </RichTextEditToolbarGroup>
+                                </Toolbar>
+                            </RichTextEdit>
+                        </Field>
+                    </Column>
+
+                    <Column ColumnSize="ColumnSize.IsFull.OnDesktop.Is6.OnWidescreen">
+                        <Field>
+                            <FieldLabel>@L["StaffEvaluations.AssignedTasks"] *</FieldLabel>
+                            <RichTextEdit @ref="@richTextTaskEditRef"
+                                          ContentChanged="OnAssignedTasksContentChanged"
+                                          PlaceHolder="@L["ScheduledPost.InputYourContent"]"
+                                          ToolbarPosition="Placement.Bottom">
+
+                                <Editor>@((MarkupString) EditingStaffEvaluation.AssignedTasks.ToHtmlBreak())</Editor>
+                                <Toolbar>
+                                    <RichTextEditToolbarGroup>
+                                        <RichTextEditToolbarButton Action="RichTextEditAction.Bold"/>
+                                        <RichTextEditToolbarButton Action="RichTextEditAction.Italic"/>
+                                        <RichTextEditToolbarSelect Action="RichTextEditAction.Size">
+                                            <RichTextEditToolbarSelectItem Value="small"/>
+                                            <RichTextEditToolbarSelectItem Selected="true"/>
+                                            <RichTextEditToolbarSelectItem Value="large"/>
+                                            <RichTextEditToolbarSelectItem Value="huge">Very Big</RichTextEditToolbarSelectItem>
+                                        </RichTextEditToolbarSelect>
+                                        <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered"/>
+                                        <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet"/>
+                                    </RichTextEditToolbarGroup>
+                                </Toolbar>
+                            </RichTextEdit>
+                        </Field>
+                    </Column>
+                </Row>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditStaffEvaluationModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="EditStaffEvaluationForm" Clicked="UpdateStaffEvaluationAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="DeleteEvaluationModal" Style="z-index: 999999">
+    <ModalContent Centered="true" Size="ModalSize.Default">
+        <ModalBody>
+            @L[$"StaffEvaluation.ConfirmDialog"]
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" Clicked="DeleteStaffEvaluation">@L[$"StaffEvaluation.Ok"]</Button>
+            <Button Color="Color.Dark"
+                    Clicked="CloseDeleteEvaluationModal">
+                @L["Cancel"]
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@* ************************* LIST CHANNEL ************************* *@
+<Modal @ref="ChannelEvaluationModal" Style="z-index: 9999">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <ModalHeader>
+            <ModalTitle>@L["StaffEvaluations.List.Channel.Header", modName]</ModalTitle>
+            <CloseButton Clicked="CloseChannelEvaluationModal"/>
+        </ModalHeader>
+        <ModalBody>
+            <Card>
+                <CardBody>
+                    <DataGrid TItem="StaffEvaluationWithNavigationPropertiesDto"
+                              Data="TikTokChannelEvalWithNavs"
+                              ReadData="OnDataGridReadAsync"
+                              TotalItems="TotalChannelCount"
+                              ShowPager="true"
+                              Narrow="true"
+                              PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                              ShowPageSizes="true"
+                              Responsive="true"
+                              PageSize="PageChannelSize"
+                              SortMode="DataGridSortMode.Single"
+                              Striped="true">
+                        <DataGridColumns>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="AppUser.UserName"
+                                            Caption="@L["StaffEvaluations.Channel"]"
+                                            Sortable="true"
+                                            Width="150px">
+                                <DisplayTemplate>
+                                    @($"{context.Group?.Name}")
+                                </DisplayTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="StaffEvaluation.TotalPoint"
+                                            Caption="@L["StaffEvaluations.TotalPoint"]"
+                                            Sortable="true"
+                                            VerticalAlignment="VerticalAlignment.Top"
+                                            Width="115px">
+                                <DisplayTemplate>
+                                    <div style="max-width: 115px">
+                                        <Progress
+                                            Striped="true"
+                                            Animated="true"
+                                            Color="@(context.StaffEvaluation.TotalPoint >= 100 ? Color.Primary : Color.Warning)"
+                                            Value="@((int) context.StaffEvaluation.TotalPoint)"
+                                            style="height: 10px">
+                                        </Progress>
+                                        <strong class="text-danger">@context.StaffEvaluation.TotalPoint/100</strong>
+                                    </div>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="StaffEvaluation.QuantityKPI"
+                                            Caption="@L["StaffEvaluations.QuantityKPI"]"
+                                            Sortable="true"
+                                            Width="115px"
+                                            VerticalAlignment="VerticalAlignment.Top">
+                                <DisplayTemplate>
+                                    <div style="max-width: 115px">
+                                        <Progress
+                                            Striped="true"
+                                            Animated="true"
+                                            Color="@(context.StaffEvaluation.QuantityKPI >= 50 ? Color.Primary : Color.Warning)"
+                                            Value="@((int) context.StaffEvaluation.QuantityKPI)"
+                                            Max="50"
+                                            style="height: 10px">
+
+                                        </Progress>
+                                        <strong class="text-success">@context.StaffEvaluation.QuantityKPI/50</strong>
+                                        <p style="color: grey">@context.StaffEvaluation.QuantityKPIDescription</p>
+                                    </div>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="StaffEvaluation.QualityKPI"
+                                            Caption="@L["StaffEvaluations.QualityKPI"]"
+                                            Sortable="true"
+                                            VerticalAlignment="VerticalAlignment.Top"
+                                            Width="115px">
+                                <DisplayTemplate >
+                                    <div style="max-width: 115px">
+                                        <Progress
+                                            Striped="true"
+                                            Animated="true"
+                                            Color="@(context.StaffEvaluation.QualityKPI >= 30 ? Color.Primary : Color.Warning)"
+                                            Value="@((int) context.StaffEvaluation.QualityKPI)"
+                                            Max="30"
+                                            style="height: 10px">
+                                        </Progress>
+                                        <strong class="text-primary">@context.StaffEvaluation.QualityKPI/30</strong>
+                                        @if (context.OrganizationUnit?.Id != Teams.FirstOrDefault(_ => _.DisplayName == TeamMemberConsts.Sale)?.Id)
+                                        {
+                                            <p style="color: grey;">@context.StaffEvaluation.QualityKPIDescription</p>
+                                        }
+                                    </div>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="StaffEvaluation.ReviewPoint"
+                                            Caption="@L["StaffEvaluations.ReviewPoint"]"
+                                            Sortable="true"
+                                            VerticalAlignment="VerticalAlignment.Top"
+                                            Width="115px">
+                                <DisplayTemplate>
+                                    <div style="max-width: 115px">
+                                        <Progress
+                                            Striped="true"
+                                            Animated="true"
+                                            Color="@(context.StaffEvaluation.ReviewPoint >= 20 ? Color.Primary : Color.Warning)"
+                                            Value="@((int) context.StaffEvaluation.ReviewPoint)"
+                                            Max="20"
+                                            style="height: 10px">
+                                        </Progress>
+                                        <strong class="text-info">@context.StaffEvaluation.ReviewPoint/20</strong>
+                                    </div>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="StaffEvaluation.BonusAmount"
+                                            Caption="@L["StaffEvaluations.BonusAmount"]">
+                                <DisplayTemplate>
+                                    <Tooltip Text="@context.StaffEvaluation.BonusDescription.ToHtmlBreak()">
+                                        <p style="color: grey;">@context.StaffEvaluation.BonusAmount</p>
+                                    </Tooltip>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="StaffEvaluation.DirectorReview"
+                                            Caption="@L["StaffEvaluations.DirectorReview"]"
+                                            Sortable="false">
+                                <DisplayTemplate>
+                                    @if (context.StaffEvaluation.DirectorReview.IsNotNullOrEmpty())
+                                    {
+                                        @((MarkupString) context.StaffEvaluation.DirectorReview.ToHtmlBreak())
+                                    }
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="StaffEvaluation.AssignedTasks"
+                                            Caption="@L["StaffEvaluations.AssignedTasks"]"
+                                            Sortable="false">
+                                <DisplayTemplate>
+                                    @if (context.StaffEvaluation.AssignedTasks.IsNotNullOrEmpty())
+                                    {
+                                        @((MarkupString) context.StaffEvaluation.AssignedTasks.ToHtmlBreak())
+                                    }
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Field="StaffEvaluation.StaffEvaluationStatus"
+                                            Caption="@L["StaffEvaluations.StaffEvaluationStatus"]"
+                                            Sortable="false">
+                                <DisplayTemplate>
+                                    @L[$"Enum:StaffEvaluationStatus:{Convert.ToInt32(context.StaffEvaluation.StaffEvaluationStatus)}"]
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                            <DataGridColumn TItem="StaffEvaluationWithNavigationPropertiesDto"
+                                            Caption="Action"
+                                            Field="StaffEvaluation.Id"
+                                            Sortable="false">
+                                <DisplayTemplate>
+                                    <Buttons>
+                                        <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditStaffEvaluationModal(context.StaffEvaluation, false)">
+                                            <Icon Name="IconName.Edit"></Icon>
+                                        </Button>
+                                        <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await OpenDeleteStaffEvaluation(context.StaffEvaluation.Id)">
+                                            <Icon Name="IconName.Delete"></Icon>
+                                        </Button>
+                                    </Buttons>
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        </DataGridColumns>
+                    </DataGrid>
+                </CardBody>
+            </Card>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Dark"
+                    Clicked="CloseChannelEvaluationModal">
+                @L["Cancel"]
+            </Button>
+            <h1/>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

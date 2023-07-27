@@ -1,0 +1,257 @@
+﻿@using FacebookCommunityAnalytics.Api.PartnerModule
+@using FacebookCommunityAnalytics.Api.Posts
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Tiktoks
+@inject IPartnerModuleAppService PartnerModuleAppService
+@inherits BlazorComponentBase
+
+<Column>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DateRangePicker TimePicker="true"
+                             TimePicker24Hour="true"
+                             Ranges="_dateRanges"
+                             DateFormat="@GlobalConsts.DateFormat"
+                             @bind-StartDate="StartDate"
+                             @bind-EndDate="EndDate"
+                             class="form-control form-control-md"
+                             placeholder="@L["SelectDates"]" OnClosed="ReloadDataAsync"/>
+        </Addon>
+    </Addons>
+</Column>
+<Row>
+<Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnTablet.IsFull.OnMobile">
+<Tabs SelectedTab="TabPostStatsFb">
+<Items>
+    <Tab Name="TabPostStatsFb">@L["Statistics.Facebook.Posts"] (@TotalCountFb)</Tab>
+    <Tab Name="TabPostStatsTikTok">@L["Statistics.TikTok.Videos"] (@TotalCountTikTok)</Tab>
+</Items>
+<Content>
+<TabPanel Name="TabPostStatsFb">
+    <DataGrid TItem="PostWithNavigationPropertiesDto"
+              Data="PostListFb"
+              ReadData="OnDataGridFbReadAsync"
+              TotalItems="TotalCountFb"
+              ShowPager="true"
+              Responsive="true"
+              Narrow="true"
+              PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+              PageSize="PageSizeFb"
+              ShowPageSizes="true"
+              Class="text-nowrap"
+              Striped="true"
+              SortMode="DataGridSortMode.Single">
+        <DataGridColumns>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="AppUser.UserName"
+                            Sortable="false"
+                            Caption="@L["AuthorName"]">
+                <DisplayTemplate>
+                    @{
+                        var userName = context.AppUser != null ? context.AppUser.UserName : String.Empty;
+                        if (userName.IsNullOrWhiteSpace()) userName = context.AppUser != null ? context.AppUser.Email : context.Post.CreatedBy;
+                    }
+                    @($"{userName}")
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Group.Name"
+                            Caption="@L["Group"]"
+                            Sortable="false"
+                            CellClass="@(dto => { return "td-table-word-wrap"; })">
+            </DataGridColumn>
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Campaign.Name"
+                            Caption="@L["Campaign"]"
+                            Sortable="false"
+                            CellClass="@(dto => { return "td-table-word-wrap"; })">
+                <DisplayTemplate>
+                    @if (context.Campaign != null)
+                    {
+                        <a href="@($"/partner-campaign-details/{context.Campaign.Id.ToString()}")"> @context.Campaign.Name</a>
+                        <p class="font-italic" style="font-size: 12px;">@context.Campaign.Code</p>
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.Url"
+                            Sortable="false"
+                            Caption="@L["Url"]">
+                <DisplayTemplate>
+                    @{
+                        bool IsDeadLink = context.Post.IsNotAvailable;
+                        var className = IsDeadLink ? "dead-link" : string.Empty;
+                    }
+                    <a href="@context.Post.Url"  class="@className" target="_blank"> @GetPostUrl(context.Post)</a>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.TotalCount"
+                            Caption="@L["TotalCount"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @(context.Post.TotalCount > 0 ? context.Post.TotalCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.LikeCount"
+                            Caption="@L["LikeCount"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @(context.Post.LikeCount > 0 ? context.Post.LikeCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.CommentCount"
+                            Caption="@L["CommentCount"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @(context.Post.CommentCount > 0 ? context.Post.CommentCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="PostWithNavigationPropertiesDto"
+                            Field="Post.ShareCount"
+                            Caption="@L["ShareCount"]"
+                            Sortable="true">
+                <DisplayTemplate>
+                    @(context.Post.ShareCount > 0 ? context.Post.ShareCount.ToCommaStyle() : 0)
+                </DisplayTemplate>
+            </DataGridColumn>
+        </DataGridColumns>
+    </DataGrid>
+</TabPanel>
+<TabPanel Name="TabPostStatsTikTok">
+    <DataGrid TItem="TiktokWithNavigationPropertiesDto"
+              Data="PostListTikTok"
+              ReadData="OnDataGridTikTokReadAsync"
+              TotalItems="TotalCountTikTok"
+              ShowPager="true"
+              Responsive="true"
+              Narrow="true"
+              PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+              PageSize="PageSizeTikTok"
+              ShowPageSizes="true"
+              Class="text-nowrap"
+              Striped="true"
+              SortMode="DataGridSortMode.Single">
+        <DataGridColumns>
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.ChannelId"
+                            Sortable="false"
+                            Caption="@L["Channel"]">
+                <DisplayTemplate>
+                    @context.Tiktok.ChannelId
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.Url"
+                            Sortable="false"
+                            Caption="@L["Url"]">
+                <DisplayTemplate>
+                    <Link To="@context.Tiktok.Url" Target="Target.Blank"/>@GetVideoUrl(context.Tiktok)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.TotalCount"
+                            Sortable="false"
+                            Caption="@L["TotalCount"]">
+                <DisplayTemplate>
+                    @context.Tiktok.TotalCount.ToCommaStyle("0")
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.LikeCount"
+                            Sortable="false"
+                            Caption="@L["LikeCount"]">
+                <DisplayTemplate>
+                    @context.Tiktok.LikeCount.ToCommaStyle("0")
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.CommentCount"
+                            Sortable="false"
+                            Caption="@L["CommentCount"]">
+                <DisplayTemplate>
+                    @context.Tiktok.CommentCount.ToCommaStyle("0")
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.ShareCount"
+                            Sortable="false"
+                            Caption="@L["ShareCount"]">
+                <DisplayTemplate>
+                    @context.Tiktok.ShareCount.ToCommaStyle("0")
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.ViewCount"
+                            Sortable="false"
+                            Caption="@L["ViewCount"]">
+                <DisplayTemplate>
+                    @context.Tiktok.ViewCount.ToCommaStyle("0")
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.CreatedDateTime"
+                            Sortable="false"
+                            Caption="@L["CreatedDateTime"]">
+                <DisplayTemplate>
+                    @if (context.Tiktok.CreatedDateTime.HasValue)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Tiktok.CreatedDateTime.Value, GlobalConsts.DateTimeFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.LastCrawledDateTime"
+                            Sortable="false"
+                            Caption="@L["LastCrawledDateTime"]">
+                <DisplayTemplate>
+                    @if (context.Tiktok.LastCrawledDateTime.HasValue)
+                    {
+                        @BrowserDateTime.ConvertToBrowserTime(context.Tiktok.LastCrawledDateTime.Value, GlobalConsts.DateTimeFormat)
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="TiktokWithNavigationPropertiesDto"
+                            Field="Tiktok.IsNew"
+                            Sortable="false"
+                            Caption="@L["VideoStatus"]">
+                <DisplayTemplate>
+                    @if (context.Tiktok.IsNew)
+                    {
+                        <span class="btn btn-sm btn-">@L["IsNewVideo"]</span>
+                    }
+                    else
+                    {
+                        <span class="btn btn-sm btn-dark">@L["IsOldVideo"]</span>
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+
+        </DataGridColumns>
+    </DataGrid>
+</TabPanel>
+</Content>
+</Tabs>
+</Column>
+</Row>

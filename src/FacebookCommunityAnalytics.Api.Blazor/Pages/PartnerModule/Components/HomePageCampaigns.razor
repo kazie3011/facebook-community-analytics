@@ -1,0 +1,118 @@
+﻿@attribute [Authorize(ApiPermissions.PartnerModule.Default)]
+@using FacebookCommunityAnalytics.Api.Campaigns
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using Volo.Abp.AspNetCore.Components.Messages
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.Crawl
+@using FacebookCommunityAnalytics.Api.PartnerModule
+
+@inherits BlazorComponentBase
+@inject ICrawlAppService CrawlAppService
+@inject IPartnerModuleAppService _partnerModuleAppService
+@inject IUiMessageService UiMessageService
+@inject IJSRuntime JSRuntime
+
+@inject NavigationManager NavigationManager
+
+@* ************************* DATA GRID ************************* *@
+<Row>
+    <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull.OnTablet.Is4.OnDesktop" class="mb-1">
+        <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white" Style="width: 145px;">@L["Partner"]</AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <Select TValue="Guid?" SelectedValue="@CurrentPartnerId" SelectedValueChanged="OnPartnerSelectChanged">
+                        <SelectItem TValue="Guid?" Value="Guid.Empty">@L["Select.AllPartners"]</SelectItem>
+                        @foreach (var partner in PartnersNullable)
+                        {
+                            <SelectItem @key="partner" TValue="Guid?" Value="@partner.Id">
+                                @partner.DisplayName
+                            </SelectItem>
+                        }
+                    </Select>
+                </Addon>
+            </Addons>
+    </Column>
+    <Column ColumnSize="ColumnSize.IsFull">
+
+        <DataGrid TItem="CampaignWithNavigationPropertiesDto"
+                  Data="CampaignList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  ShowPageSizes="true"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  Striped="true"
+                  Narrow="true"
+                  SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Partner.Name"
+                                Caption="@L["Partner"]"
+                                Sortable="false">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.Name"
+                                Caption="@L["Campaign.Name"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        <a href="@($"/partner-campaign-details/{context.Campaign.Id.ToString()}")"> @context.Campaign.Name</a>
+                        <p class="font-italic" style="font-size: 12px;margin-bottom:0 !important;">@context.Campaign.Code</p>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.Status"
+                                Caption="@L["Status"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @if (context.Campaign.Status == CampaignStatus.Started)
+                        {
+                            <strong class="text-success">@L[$"{context.Campaign.Status}"]</strong>
+                        }
+                        else if (context.Campaign.Status == CampaignStatus.Ended)
+                        {
+                            <strong class="text-warning">@L[$"{context.Campaign.Status}"]</strong>
+                        }
+                        else
+                        {
+                            <strong>@L[$"{context.Campaign.Status}"]</strong>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+                
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.StartDateTime"
+                                Caption="@L["StartDateTime"]"
+                                Sortable="false">
+                    <DisplayTemplate>
+                        @if (context is {Campaign: {StartDateTime: { } } })
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Campaign.StartDateTime.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="CampaignWithNavigationPropertiesDto"
+                                Field="Campaign.EndDateTime"
+                                Caption="@L["EndDateTime"]"
+                                Sortable="false"
+                                SortDirection="SortDirection.Descending">
+                    <DisplayTemplate>
+                        @if (context is {Campaign: {EndDateTime: { } } })
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Campaign.EndDateTime.Value, GlobalConsts.DateFormat)
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+            </DataGridColumns>
+        </DataGrid>
+    </Column>
+</Row>

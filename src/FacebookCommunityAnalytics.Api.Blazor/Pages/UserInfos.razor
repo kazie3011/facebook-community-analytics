@@ -1,0 +1,759 @@
+@page "/user-infos"
+@attribute [Authorize(ApiPermissions.UserInfos.Default)]
+@using FacebookCommunityAnalytics.Api.UserInfos
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Blazorise.Components
+@using FacebookCommunityAnalytics.Api.Accounts
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.ObjectMapping
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using FacebookCommunityAnalytics.Api.StaffEvaluations
+@using FacebookCommunityAnalytics.Api.TeamMembers
+@using Faso.Blazor.SpinKit
+@inherits BlazorComponentBase
+
+@inject ITeamMemberAppService TeamMemberAppService
+@inject IUserInfosAppService UserInfosAppService
+@inject IUiMessageService UiMessageService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["UserInfos"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="UserInfoSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="UserInfoSearchForm" Clicked="GetUserInfosAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+        <Row>
+            <Column>
+                <RadioGroup TValue="bool?" @bind-Value="@IsSystemUsers">
+                    <Label Style="width: 130px">@L["UserInfo.SystemUser"]</Label>
+                    <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                    <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                </RadioGroup>
+                <RadioGroup TValue="bool?" @bind-Value="@IsGDLUser">
+                    <Label Style="width: 130px">@L["UserInfo.GDLUser"]</Label>
+                    <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                    <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                </RadioGroup>
+                <RadioGroup TValue="bool?" @bind-Value="@IsCalculatePayrollUsers">
+                    <Label Style="width: 130px">@L["UserInfo.CalculatePayrollUser"]</Label>
+                    <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                    <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                </RadioGroup>
+            </Column>
+            <Column>
+                <RadioGroup TValue="bool?" @bind-Value="@IsActiveUsers">
+                    <Label Style="width: 130px">@L["UserInfo.ActiveUser"]</Label>
+                    <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                    <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                </RadioGroup>
+                <RadioGroup TValue="bool?" @bind-Value="@HasMainTeam">
+                    <Label Style="width: 130px">@L["UserInfo.HasMainTeam"]</Label>
+                    <Radio Style="margin-left: 20px" TValue="bool?" Value="true">@L["On"]</Radio>
+                    <Radio TValue="bool?" Value="false">@L["Off"]</Radio>
+                </RadioGroup>
+                <Field Style="width: 265px">
+                    <Select TValue="UserPosition?" SelectedValue="@_userPosition" SelectedValueChanged="@OnSelectedUserPosition">
+                        @foreach (var itemValue in Enum.GetValues(typeof(UserPosition)))
+                        {
+                            <SelectItem @key="itemValue" TValue="UserPosition?" Value="@((UserPosition)itemValue)">
+                                @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+            </Column>
+        </Row>
+
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+@if (!_showLoading)
+{
+    <SpinKitChasingDots/>
+}
+<Card>
+    <CardBody>
+        <DataGrid TItem="UserInfoWithNavigationPropertiesDto"
+                  Data="UserInfoList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  Responsive="true"
+                  PageSizes="GlobalConsts.PAGE_SIZES_CONST"
+                  PageSize="PageSize"
+                  ShowPageSizes="true"
+                  ShowPager="true"
+                  Striped="true"
+                  Narrow="true"
+                  Sortable="false">
+            <DataGridColumns>
+                @* <DataGridEntityActionsColumn TItem="UserInfoWithNavigationPropertiesDto" @ref="@EntityActionsColumn"> *@
+                @*     <DisplayTemplate> *@
+                @*         <EntityActions TItem="UserInfoWithNavigationPropertiesDto" EntityActionsColumn="@EntityActionsColumn"> *@
+                @*             <EntityAction TItem="UserInfoWithNavigationPropertiesDto" *@
+                @*                           Visible="@CanEditUserInfo" *@
+                @*                           Clicked="() => OpenEditUserInfoModal(context, context.OrgUnits)" *@
+                @*                           Text="@L["Edit"]"> *@
+                @*             </EntityAction> *@
+                @*             <EntityAction TItem="UserInfoWithNavigationPropertiesDto" *@
+                @*                           Clicked="() => OpenUserInfoAccountsModal(context)" *@
+                @*                           Text="@L["OpenUserInfoAccountsModal"]"> *@
+                @*             </EntityAction> *@
+                @*             <EntityAction TItem="UserInfoWithNavigationPropertiesDto" *@
+                @*                           Visible="@CanDeleteUserInfo" *@
+                @*                           Clicked="() => DeleteUserInfoAsync(context)" *@
+                @*                           ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])" *@
+                @*                           Text="@L["Delete"]"> *@
+                @*             </EntityAction> *@
+                @*             $1$ <EntityAction TItem="UserInfoWithNavigationPropertiesDto" #1# *@
+                @*             $1$               Clicked="() => ViewPayslip(context)" #1# *@
+                @*             $1$               Text="@L["ViewPayslip"]"> #1# *@
+                @*             $1$ </EntityAction> #1# *@
+                @* *@
+                @*         </EntityActions> *@
+                @*     </DisplayTemplate> *@
+                @* </DataGridEntityActionsColumn> *@
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="UserInfo.Code"
+                                Caption="@L["UserCode"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="AppUser.UserName"
+                                Caption="@L["Username"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="AppUser.Email"
+                                Caption="@L["Email"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="AppUser.Surname"
+                                Caption="@L["UserInfos.Surname"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="AppUser.Name"
+                                Caption="@L["UserInfos.Name"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="AppUser.PhoneNumber"
+                                Caption="@L["UserInfos.PhoneNumber"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="UserInfo.IdentityNumber"
+                                Caption="@L["IdentityNumber"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="UserInfo.Facebook"
+                                Caption="@L["Facebook"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="UserInfo.DateOfBirth"
+                                Caption="@L["DateOfBirth"]">
+                    <DisplayTemplate>
+                        @(context.UserInfo.DateOfBirth.HasValue ? context.UserInfo.DateOfBirth.Value.ToShortDateString() : string.Empty)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="UserInfo.IsGDLStaff"
+                                Caption="@L["IsGDLStaff"]">
+                    <DisplayTemplate>
+                        @(context.UserInfo.IsGDLStaff ? L["IsGDLStaff: True"] : L["IsGDLStaff: False"])
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="UserInfo.UserPosition"
+                                Caption="@L["UserPosition"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:UserPosition:{Convert.ToInt32(context.UserInfo.UserPosition)}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                Field="UserInfo.JoinedDateTime"
+                                Caption="@L["JoinedDateTime"]">
+                    <DisplayTemplate>
+                        @(context.UserInfo.JoinedDateTime.HasValue ? context.UserInfo.JoinedDateTime.Value.ToShortDateString() : string.Empty)
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                @if (IsSupervisorRole())
+                {
+                    <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                    Field="UserInfo.PromotedDateTime"
+                                    Caption="@L["PromotedDateTime"]">
+                        <DisplayTemplate>
+                            @(context.UserInfo.PromotedDateTime.HasValue ? context.UserInfo.PromotedDateTime.Value.ToShortDateString() : string.Empty)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                    Field="UserInfo.AffiliateMultiplier"
+                                    Caption="@L["AffiliateMultiplier"]">
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                    Field="UserInfo.SeedingMultiplier"
+                                    Caption="@L["SeedingMultiplier"]">
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                    Field="UserInfo.ContentRoleType"
+                                    Caption="@L["ContentRoleType"]">
+                        <DisplayTemplate>
+                            @L[$"Enum:ContentRoleType:{Convert.ToInt32(context.UserInfo.ContentRoleType)}"]
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                    Field="UserInfo.IsActive"
+                                    Caption="@L["ActiveFilter"]">
+                        <DisplayTemplate>
+                            @if (context.UserInfo.IsActive)
+                            {
+                                <Icon Name="IconName.Check" TextColor="TextColor.Success"/>
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Ban" TextColor="TextColor.Danger"/>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                    Field="UserInfo.IsSystemUser"
+                                    Caption="@L["IsSystemUser"]">
+                        <DisplayTemplate>
+                            @if (context.UserInfo.IsSystemUser)
+                            {
+                                <Icon Name="IconName.Check" TextColor="TextColor.Success"/>
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Ban" TextColor="TextColor.Danger"/>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                    Field="UserInfo.EnablePayrollCalculation"
+                                    Caption="@L["EnablePayrollCalculation"]">
+                        <DisplayTemplate>
+                            @if (context.UserInfo.EnablePayrollCalculation)
+                            {
+                                <Icon Name="IconName.Check" TextColor="TextColor.Success"/>
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Ban" TextColor="TextColor.Danger"/>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+
+                    <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto"
+                                    Field="UserInfo.MainTeamId"
+                                    Caption="@L["UserInfos.MainTeam"]">
+                        <DisplayTemplate>
+                            @OrganizationUnits.FirstOrDefault(_ => _.Id == context.UserInfo.MainTeamId)?.DisplayName
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                }
+                <DataGridColumn TItem="UserInfoWithNavigationPropertiesDto" Field="UserInfo.IsActive" Caption="@L["Action"]" Sortable="false">
+                    <DisplayTemplate>
+                        <Buttons>
+                            @if (CanEditUserInfo)
+                            {
+                                <Button Outline Color="Color.Primary" Clicked="() => OpenEditUserInfoModal(context, context.OrgUnits)">
+                                    <Icon Name="IconName.Edit"/>
+                                </Button>
+                            }
+                            <Button Outline Color="Color.Primary" Clicked="() => OpenUserInfoAccountsModal(context)">
+                                <Icon Name="IconName.UserPlus"/>
+                            </Button>
+                            @if (CanDeleteUserInfo)
+                            {
+                                <Button Outline Color="Color.Primary" Clicked="() => DeleteUserInfoAsync(context)">
+                                    <Icon Name="IconName.Delete"/>
+                                </Button>
+                            }
+                        </Buttons>
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateUserInfoModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="CreateUserInfoForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewUserInfo"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateUserInfoModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["FullName"]</FieldLabel>
+                    <Autocomplete Data="@UsersNullable"
+                                  TItem="LookupDto<Guid?>"
+                                  TValue="Guid?"
+                                  TextField="@(item => item.DisplayName)"
+                                  ValueField="@(item => item.Id)"
+                                  SearchChanged="@GetNullableAppUserLookupAsync"
+                                  @bind-SelectedValue="@NewUserInfo.AppUserId"
+                                  Placeholder="@L["Autocomplete.DefaultText", L["User"]]" Filter="AutocompleteFilter.Contains"/>
+                </Field>
+                <Divider DividerType="DividerType.Dashed"/>
+            </ModalBody>
+
+            <ModalBody>
+                <Row>
+                    <Column>
+                        <Field>
+                                <FieldLabel>@L["UserCode"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewUserInfo.Code">
+
+                                </TextEdit>
+                            </Field>
+                            
+                            <Field>
+                                    <FieldLabel>@L["IdentityNumber"]</FieldLabel>
+                                    <TextEdit @bind-Text="@NewUserInfo.IdentityNumber">
+                                    </TextEdit>
+                                </Field>
+
+                                <Field>
+                                    <FieldLabel>@L["Facebook"]</FieldLabel>
+                                    <TextEdit @bind-Text="@NewUserInfo.Facebook">
+                                    </TextEdit>
+                                </Field>
+
+                            <Field>
+                                <FieldLabel>@L["UserPosition"]</FieldLabel>
+                                <Select TValue="UserPosition" @bind-SelectedValue="@NewUserInfo.UserPosition" ReadOnly="@(!IsManagerRole())">
+                                    @foreach (var itemValue in Enum.GetValues(typeof(UserPosition)))
+                                    {
+                                        <SelectItem @key="itemValue" TValue="UserPosition" Value="@((UserPosition) itemValue)">
+                                            @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Field>
+                    </Column>
+
+                    <Column>
+                        <Field>
+                                <FieldLabel>@L["DateOfBirth"]</FieldLabel>
+                                <DatePicker TValue="DateTime?" Date="@createUserDateOfBirth" DateChanged="CreateUserDateOfBirthChange" DisplayFormat="@GlobalConsts.DateFormat">
+
+                                </DatePicker>
+                            </Field>
+                            
+                            <Field>
+                                    <FieldLabel>@L["JoinedDateTime"]</FieldLabel>
+                                    <DatePicker TValue="DateTime?" Date="@createUserJoinedDateTime" DateChanged="CreateUserJoinedDateTimeChange" DisplayFormat="@GlobalConsts.DateFormat">
+                                    </DatePicker>
+                                </Field>
+
+                                <Field>
+                                    <FieldLabel>@L["PromotedDateTime"]</FieldLabel>
+                                    <DatePicker TValue="DateTime?" Date="@createUserPromotedDateTime" DateChanged="CreateUserPromotedDateTimeChange"  DisplayFormat="@GlobalConsts.DateFormat">
+                                    </DatePicker>
+                                </Field>
+
+                            <Field>
+                                <FieldLabel>@L["AffiliateMultiplier"]</FieldLabel>
+                                <NumericEdit TValue="double" @bind-Value="@NewUserInfo.AffiliateMultiplier">
+                                </NumericEdit>
+                            </Field>
+                            
+                            
+                            <Field>
+                                    <FieldLabel>@L["SeedingMultiplier"]</FieldLabel>
+                                    <NumericEdit TValue="double" @bind-Value="@NewUserInfo.SeedingMultiplier">
+                                    </NumericEdit>
+                                </Field>
+
+                            <Field>
+                                <FieldLabel>@L["ContentRoleType"]</FieldLabel>
+                                <Select TValue="ContentRoleType" @bind-SelectedValue="@NewUserInfo.ContentRoleType">
+                                    @foreach (var itemValue in Enum.GetValues(typeof(ContentRoleType)))
+                                    {
+                                        <SelectItem @key="itemValue" TValue="ContentRoleType" Value="@((ContentRoleType) itemValue)">
+                                            @L[$"Enum:ContentRoleType:{Convert.ToInt32(itemValue)}"]
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Field>
+
+                            <Field>
+                                <Check TValue="bool" @bind-Checked="@NewUserInfo.IsGDLStaff">@L["IsGDLStaff"]</Check>
+                            </Field>
+
+                            <Field>
+                                <Check TValue="bool" @bind-Checked="@NewUserInfo.IsActive">@L["IsActive"]</Check>
+                            </Field>
+
+                            <Field>
+                                <Check TValue="bool" @bind-Checked="@NewUserInfo.IsSystemUser">@L["IsSystemUser"]</Check>
+                            </Field>
+
+                            <Field>
+                                <Check TValue="bool" @bind-Checked="@NewUserInfo.EnablePayrollCalculation">@L["EnablePayrollCalculation"]</Check>
+                            </Field>
+                    </Column>
+                </Row>
+
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateUserInfoModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Form="CreateUserInfoForm" Clicked="CreateUserInfoAsync"/>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditUserInfoModal">
+<ModalContent Centered="true" Size="ModalSize.Large">
+<Form id="EditUserInfoForm">
+<ModalHeader>
+    <ModalTitle>@L["UpdateUserInfo"]</ModalTitle>
+    <CloseButton Clicked="CloseEditUserInfoModal"/>
+</ModalHeader>
+    <ModalBody>
+    <Row>
+        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+            <Field>
+                    <FieldLabel>@L["Name"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.AppUser.Name" ReadOnly="true">
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Surname"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.AppUser.Surname" ReadOnly="true">
+                    </TextEdit>
+                </Field>
+            <Divider DividerType="DividerType.Dashed"/>
+        </Column>
+
+        <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+            <Field>
+                    <FieldLabel>@L["Email"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.AppUser.Email" ReadOnly="true">
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["PhoneNumber"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.AppUser.PhoneNumber" ReadOnly="true">
+                    </TextEdit>
+                </Field>
+            <Divider DividerType="DividerType.Dashed"/>
+        </Column>
+    </Row>
+</ModalBody>
+
+<ModalBody>
+    <Row>
+        <Column>
+            <Field>
+                    <FieldLabel>@L["UserCode"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.Code" ReadOnly="true">
+
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["IdentityNumber"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.IdentityNumber">
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Facebook"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingUserInfo.Facebook">
+                    </TextEdit>
+                </Field>
+
+            <Field>
+                <FieldLabel>@L["AppUser"]</FieldLabel>
+                <Select TValue="Guid?" @bind-SelectedValue="@EditingUserInfo.AppUserId" Disabled="true">
+                    <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                    @foreach (var appUser in UsersNullable)
+                    {
+                        <SelectItem @key="appUser" TValue="Guid?" Value="@appUser.Id">
+                            @appUser.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field>
+                <FieldLabel>@L["UserPosition"]</FieldLabel>
+                <Select TValue="UserPosition" @bind-SelectedValue="@EditingUserInfo.UserPosition" ReadOnly="@(!IsManagerRole())">
+                    @foreach (var itemValue in Enum.GetValues(typeof(UserPosition)))
+                    {
+                        <SelectItem @key="itemValue" TValue="UserPosition" Value="@((UserPosition) itemValue)">
+                            @L[$"Enum:UserPosition:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field>
+                <FieldLabel>@L["UserInfos.MainTeam"]</FieldLabel>
+                <Select TValue="Guid?" @bind-SelectedValue="@EditingUserInfo.MainTeamId">
+                    <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                        @L["UserInfos.ChooseMainTeam"]
+                    </SelectItem>
+                    @foreach (var org in _teams)
+                    {
+                        <SelectItem @key="org" TValue="Guid?" Value="@org.Id">
+                            @org.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+        </Column>
+
+        <Column>
+            <Field>
+                <FieldLabel>@L["DateOfBirth"]</FieldLabel>
+                <DatePicker TValue="DateTime?" Date="@editUserDateOfBirth" DateChanged="EditUserDateOfBirthChange" DisplayFormat="@GlobalConsts.DateFormat">
+                </DatePicker>
+            </Field>
+            
+            <Field>
+                    <FieldLabel>@L["JoinedDateTime"]</FieldLabel>
+                    <DatePicker TValue="DateTime?" Date="@editUserJoinedDateTime" DateChanged="EditUserJoinedDateTimeChange" DisplayFormat="@GlobalConsts.DateFormat">
+                    </DatePicker>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["PromotedDateTime"]</FieldLabel>
+                    <DatePicker TValue="DateTime?" Date="@editUserPromotedDateTime" DateChanged="EditUserPromotedDateTimeChange" DisplayFormat="@GlobalConsts.DateFormat" ReadOnly="true">
+                    </DatePicker>
+                </Field>
+
+                @* <Field> *@
+                @*     <FieldLabel>@L["AffiliateMultiplier"]</FieldLabel> *@
+                @*     <NumericEdit TValue="double" @bind-Value="@EditingUserInfo.AffiliateMultiplier" ReadOnly="true"> *@
+                @* *@
+                @*     </NumericEdit> *@
+                @* </Field> *@
+                @* *@
+                @* <Field> *@
+                @*     <FieldLabel>@L["SeedingMultiplier"]</FieldLabel> *@
+                @*     <NumericEdit TValue="double" @bind-Value="@EditingUserInfo.SeedingMultiplier" ReadOnly="true"> *@
+                @*     </NumericEdit> *@
+                @* </Field> *@
+
+            <Field>
+                <FieldLabel>@L["ContentRoleType"]</FieldLabel>
+                <Select TValue="ContentRoleType" @bind-SelectedValue="@EditingUserInfo.ContentRoleType">
+                    @foreach (var itemValue in Enum.GetValues(typeof(ContentRoleType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="ContentRoleType" Value="@((ContentRoleType) itemValue)">
+                            @L[$"Enum:ContentRoleType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@EditingUserInfo.IsGDLStaff">@L["IsGDLStaff"]</Check>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@EditingUserInfo.IsActive">@L["ActiveFilter"]</Check>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@EditingUserInfo.IsSystemUser">@L["IsSystemUser"]</Check>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@EditingUserInfo.EnablePayrollCalculation">@L["EnablePayrollCalculation"]</Check>
+            </Field>
+
+        </Column>
+    </Row>
+</ModalBody>
+
+<ModalFooter>
+    <Button Color="Color.Dark"
+            Clicked="CloseEditUserInfoModal">
+        @L["Cancel"]
+    </Button>
+    <SubmitButton Form="EditUserInfoForm" Clicked="UpdateUserInfoAsync"/>
+    <h1/>
+</ModalFooter>
+</Form>
+</ModalContent>
+</Modal>
+@* ************************************************User Info Accounts Modal***************************************** *@
+<Modal @ref="UserInfoAccountsModal">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <Form id="UserInfoAccountsForm">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateUserInfoAccounts"]</ModalTitle>
+                <CloseButton Clicked="CloseUserInfoAccountsModal"/>
+            </ModalHeader>
+            <ModalBody>
+                    <Row>
+                        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                <FieldLabel>@L["UserInfoAccount.Fid"]</FieldLabel>
+                                <TextEdit @bind-Text="@_userInfoAccount.Fid">
+                                </TextEdit>
+                            </Field>
+
+                            <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                <FieldLabel>@L["UserInfoAccount.Name"]</FieldLabel>
+                                <TextEdit @bind-Text="@_userInfoAccount.Name">
+                                </TextEdit>
+                            </Field>
+                        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                <FieldLabel>@L["UserInfoAccount.Note"]</FieldLabel>
+                                <TextEdit @bind-Text="@_userInfoAccount.Note">
+                                </TextEdit>
+                            </Field>
+
+                            <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                                <FieldLabel>@L["UserInfoAccount.UserInfoAccountType"]</FieldLabel>
+                                <Select TValue="UserInfoAccountType" @bind-SelectedValue="@_userInfoAccount.AccountType">
+                                    @foreach (var itemValue in Enum.GetValues(typeof(UserInfoAccountType)))
+                                    {
+                                        <SelectItem @key="itemValue" TValue="UserInfoAccountType" Value="@((UserInfoAccountType) itemValue)">
+                                            @L[$"Enum:UserInfoAccountType:{Convert.ToInt32(itemValue)}"]
+                                        </SelectItem>
+                                    }
+                                </Select>
+                            </Field>
+
+                        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                            <Check TValue="bool" @bind-Checked="@_userInfoAccount.IsActive">@L["UserInfoAccount.Active"]</Check>
+                        </Field>
+
+                        <Field ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+                            <Button Color="Color.Secondary"
+                                    Clicked="CloseUserInfoAccountsModal">
+                                @L["Cancel"]
+                            </Button>
+                            <SubmitButton Disabled="@_userInfoAccount.Fid.IsNullOrWhiteSpace()" Form="UserInfoAccountsForm" Clicked="(async () => await UpdateUserInfoAccountsAsync())"/>
+                        </Field>
+                        <Divider DividerType="DividerType.Dashed"/>
+                    </Row>
+                </ModalBody>
+
+            <ModalBody>
+                <Row>
+                    <Column>
+                        <Table Striped="true" Narrow="true" Bordered="true">
+                            <TableBody>
+                                <TableRowHeader>
+                                    @L["UserInfoAccount.Fid"]
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @L["UserInfoAccount.Name"]
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @L["UserInfoAccount.Note"]
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @L["UserInfoAccount.UserInfoAccountType"]
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @L["UserInfoAccount.Active"]
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @L["CreatedAt"]
+                                </TableRowHeader>
+                                <TableRowHeader>
+                                    @L["Action"]
+                                </TableRowHeader>
+                                @{
+                                    var i = 0;
+                                    foreach (var item in EditingUserInfo.Accounts.OrderByDescending(_ => _.IsActive))
+                                    {
+                                        if (i > 9) continue;
+                                        i++;
+                                        <TableRow @key="item">
+                                            <TableRowCell>
+                                                @item.Fid
+                                            </TableRowCell>
+                                            <TableRowCell>
+                                                @item.Name
+                                            </TableRowCell>
+                                            <TableRowCell>
+                                                @item.Note
+                                            </TableRowCell>
+                                            <TableRowCell>
+                                                @L[$"{item.AccountType}"]
+                                            </TableRowCell>
+                                            <TableRowCell>
+                                                @item.IsActive
+                                            </TableRowCell>
+                                            <TableRowCell>
+                                                @if (item.CreatedAt != null && BrowserDateTime != null)
+                                                {
+                                                    @BrowserDateTime.ConvertToBrowserTime(item.CreatedAt.Value, GlobalConsts.DateTimeFormat)
+                                                }
+                                            </TableRowCell>
+                                            <TableRowCell>
+                                                <Button Color="Color.Warning"
+                                                        Clicked="(async () => await DeleteUserInfoAccountsAsync(item))">
+                                                    @L["Delete"]
+                                                </Button>
+                                            </TableRowCell>
+                                        </TableRow>
+                                    }
+                                }
+                            </TableBody>
+                        </Table>
+                    </Column>
+                </Row>
+
+            </ModalBody>
+
+        </Form>
+    </ModalContent>
+</Modal>

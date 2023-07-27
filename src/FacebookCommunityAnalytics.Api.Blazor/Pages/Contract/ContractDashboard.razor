@@ -1,0 +1,1783 @@
+﻿@page "/contracts"
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Permissions
+@using Microsoft.Extensions.Localization
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Contracts
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using Radzen
+@using FacebookCommunityAnalytics.Api.ContractTransactions;
+@using Volo.Abp.AspNetCore.Components.Messages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@inject IStringLocalizer<ApiResource> L
+@attribute [Authorize(ApiPermissions.Contracts.Default)]
+@inject IContractAppService ContractAppService
+@inject IUiMessageService _uiMessageService
+@inject NavigationManager NavigationManager
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Contracts.Title"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+<Tabs SelectedTab="@selectedTabName" SelectedTabChanged="@OnSelectedTabChanged">
+
+<Items>
+    <Tab Name="Contracts">@L["Contracts.TagName"]</Tab>
+    <Tab Name="Transactions">@L["Transactions.TagName"]</Tab>
+</Items>
+
+<Content >
+<TabPanel Name="Contracts">
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="ContractSearchForm">
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    <DateRangePicker
+                        Ranges="_dateRanges"
+                        DateFormat="@GlobalConsts.DateFormat"
+                        @bind-StartDate="StartDate"
+                        @bind-EndDate="EndDate"
+                        OnClosed="OnDate_Changed"
+                        class="form-control form-control-md"
+                        Style="max-width: 210px !important;margin-right: 5px"
+                        placeholder="@L["SelectDates"]"/>
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    @if (IsPartnerRole() || IsSaleAdminRole())
+                    {
+                        <Select class="heigh-auto" TValue="Guid?" SelectedValue="@selectedSalePerson" SelectedValueChanged="@OnSalePerson_Changed" style="margin-right: 5px">
+                            <SelectItem TValue="Guid?" Value="Guid.Empty">
+                                @L["Contract.SalePerson.FilterNoSelect"]
+                            </SelectItem>
+                            @foreach (var salePerson in SalePersonsLookupDtos)
+                            {
+                                <SelectItem @key="salePerson" TValue="Guid?" Value="@salePerson.Id">
+                                    @salePerson.DisplayName
+                                </SelectItem>
+                            }
+                        </Select>
+                    }
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    <Select class="heigh-auto" TValue="ContractStatus" SelectedValue="@selectedContractStatus" SelectedValueChanged="OnContractStatus_Changed" style="margin-right: 5px">
+                        @foreach (var itemValue in Enum.GetValues(typeof(ContractStatus)))
+                        {
+                            <SelectItem @key="itemValue" TValue="ContractStatus" Value="@((ContractStatus) itemValue)">
+                                @L[$"Enum:ContractStatus:{(int) itemValue}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    <Select class="heigh-auto" TValue="ContractPaymentStatus" SelectedValue="@selectedContractPaymentStatus" SelectedValueChanged="OnPaymentStatus_Changed" style="margin-right: 5px">
+                        @foreach (var itemValue in Enum.GetValues(typeof(ContractPaymentStatus)))
+                        {
+                            <SelectItem @key="itemValue" TValue="ContractPaymentStatus" Value="@((ContractPaymentStatus) itemValue)">
+                                @L[$"Enum:ContractPaymentStatus:{(int) itemValue}"]
+                            </SelectItem>
+                        }
+                    </Select>
+
+                </Addon>
+                <Addon AddonType="AddonType.Body" style="margin-right: 5px">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Clicked="DoSearch">
+                        <Icon Name="IconName.Search"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@******************************Total Modal**************************************@
+<Card>
+    <CardBody>
+        <Row>
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnTablet">
+                <h3>@L["Contract.Stats.Header"]</h3>
+                <Table>
+                    <TableBody>
+                        <TableRow>
+                            <TableRowHeader>@L["Contract.TotalContractVATAmount"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong TextColor="TextColor.Primary">@TotalContractsVAT.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+
+                        <TableRow>
+                            <TableRowHeader>@L["Contract.TotalContractAmount"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong TextColor="TextColor.Black50">@TotalContracts.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowHeader>@L["Contract.TotalPartialPaidContractAmount"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong style="color: grey">@PartialPaymentTotal.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowHeader>@L["Contract.TotalRemainingContractAmount"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong TextColor="TextColor.Danger">@RemainingPaymentTotal.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowHeader >@L["Contract.TotalDebtByTerm"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong TextColor="TextColor.Secondary">@TotalDebtByTerm.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowHeader >@L["Contract.TotalCount"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong TextColor="TextColor.Secondary">@TotalCount</Strong>
+                            </TableRowCell>
+                        </TableRow>
+
+                    </TableBody>
+                </Table>
+            </Field>
+
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnTablet">
+                <Table>
+                    <TableBody>
+                        <h3>@L["Contract.Stats.PNLHeader"]</h3>
+                        <TableRow>
+                            <TableRowHeader >@L["Contract.TotalContractCostAmount"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong TextColor="TextColor.Warning">@CostTotal.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowHeader >@L["Contract.TotalContractProfitAmount"]</TableRowHeader>
+                            <TableRowCell >
+                                <Strong TextColor="TextColor.Primary">@((TotalContractsVAT - CostTotal).ToVND())</Strong>
+                            </TableRowCell>
+                        </TableRow>
+
+                        <h3 style="margin-top: 10px;">@L["Contract.Stats.TransactionStatistics"]</h3>
+
+                        <TableRow>
+                            <TableRowHeader >@L["Contract.TotalVaTTransaction"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong TextColor="TextColor.Warning">@TotalVatTransaction.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowHeader >@L["Contract.TotalTransaction"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong TextColor="TextColor.Primary">@TotalTransaction.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+
+
+            </Field>
+        </Row>
+    </CardBody>
+</Card>
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" PageSize="25" AllowPaging="true" AllowSorting="true"
+                        Data="@ContractDtos" TItem="ContractWithNavigationPropertiesDto" ColumnWidth="200px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="height:700px">
+            <Columns>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Width="120px" Filterable="false" Property="SalePerson.CampaignName" Title="@L["Action"]" Frozen="true">
+                    <Template Context="context">
+                        <Buttons>
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditContractModal(context)">
+                                <Icon Name="IconName.Edit"/>
+                            </Button>
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeleteContract(context.Contract)">
+                                <Icon Name="IconName.Delete"/>
+                            </Button>
+                        </Buttons>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Width="120px" Property="SalePerson.Name" Filterable="false" Title="@L["Contract.SalePerson"]" Frozen="true">
+                    <Template Context="context">
+                        <div>
+                            @GetSaleName(context.SalePerson)
+                        </div>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.ContractCode" Filterable="false" Title="@L["Contract.ContractCode"]" Frozen="true">
+                    <Template Context="context">
+                        <a href="@($"/contracts/contract-details/{context.Contract.Id.ToString()}")">@context.Contract.ContractCode</a>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Partner.Name" Filterable="false" Title="@L["Contract.PartnerName"]"/>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.Content" Filterable="false" Title="@L["Contract.Content"]"/>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Width="130px" Property="Contract.ContractServiceType" Filterable="false" Title="@L["Contract.ContractServiceType"]">
+                    <Template Context="context">
+                        <strong>
+                            @L[$"Enum:ContractServiceType:{Convert.ToInt32(context.Contract.ContractServiceType)}"]
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.TotalValue" Filterable="false" Title="@L["Contract.TotalValue"]" TextAlign="TextAlign.Right">
+                    <Template Context="context">
+                        <div>
+                            <strong class="text-success">
+                                @context.Contract.TotalValue.ToVND()
+                            </strong>
+                        </div>
+                        <div>
+                            (@GetNonVATAmount(context))
+                        </div>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.PartialPaymentValue" Filterable="false" Title="@L["Contract.PartialPaymentValue"]" TextAlign="TextAlign.Right">
+                    <Template Context="context">
+                        @context.Contract.PartialPaymentValue.ToVND()
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.RemainingPaymentValue" Filterable="false" Title="@L["Contract.RemainingPaymentValue"]" TextAlign="TextAlign.Right">
+                    <Template Context="context">
+                        <strong class="text-danger">
+                            @context.Contract.RemainingPaymentValue.ToVND()
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.Cost" Filterable="false" Title="@L["Contract.Cost"]" TextAlign="TextAlign.Right">
+                    <Template Context="context">
+                        <strong class="text-warning">
+                            @context.Contract.Cost.ToVND()
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.TotalValue" Filterable="false" Title="@L["Contract.Profit"]" TextAlign="TextAlign.Right">
+                    <Template Context="context">
+                        <strong class="text-primary">
+                            @((context.Contract.TotalValue - context.Contract.Cost).ToVND())
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.TotalTransactionValue" Filterable="false" Title="@L["Contract.TotalTransactionAmount"]" TextAlign="TextAlign.Right">
+                    <Template Context="context">
+                        <strong class="text-primary">
+                            @(GetTotalTransactionsAmount(context.ContractTransactions).ToVND())
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.PostCount" Filterable="false" Title="@L["Contract.PostCount"]">
+                    <Template Context="context">
+                        @context.Contract.PostCount
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.VideoCount" Filterable="false" Title="@L["Contract.VideoCount"]">
+                    <Template Context="context">
+                        @context.Contract.VideoCount
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.PaymentChannel" Filterable="false" Title="@L["Contract.PaymentChannel"]">
+                    <Template Context="context">
+                        <strong>
+                            @L[$"Enum:PaymentChannel:{Convert.ToInt32(context.Contract.PaymentChannel)}"]
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.PaymentNote" Filterable="false" Title="@L["Contract.PaymentNote"]"/>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.ContractPaymentStatus" Filterable="false" Title="@L["Contract.ContractPaymentStatus"]">
+                    <Template Context="context">
+                        <strong class=@SetColorContractPaymentStatus(context.Contract.ContractPaymentStatus)>
+                            @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(context.Contract.ContractPaymentStatus)}"]
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.ContractStatus" Filterable="false" Title="@L["Contract.ContractStatus"]">
+                    <Template Context="context">
+                        <strong class="@SetColorContractStatus(context.Contract.ContractStatus)">
+                            @L[$"Enum:ContractStatus:{Convert.ToInt32(context.Contract.ContractStatus)}"]
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.PaymentDueDate" Filterable="false" Title="@L["Contract.PaymentDueDate"]">
+                    <Template Context="context">
+                        @if (context is {Contract: {PaymentDueDate: { } } })
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Contract.PaymentDueDate.Value, GlobalConsts.DateTimeFormat)
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.CreatedAt" Filterable="false" Title="@L["Contract.CreatedAt"]">
+                    <Template Context="context">
+                        @if (context is {Contract: {CreatedAt: { } } })
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Contract.CreatedAt.Value, GlobalConsts.DateTimeFormat)
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Contract.SignedAt" Filterable="false" Title="@L["Contract.SignedAt"]">
+                    <Template Context="context">
+                        @if (context is {Contract: {SignedAt: { } } })
+                        {
+                            @BrowserDateTime.ConvertToBrowserTime(context.Contract.SignedAt.Value, GlobalConsts.DateTimeFormat)
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractWithNavigationPropertiesDto" Property="Campaign.Name" Filterable="false" Title="@L["Contract.CampaignName"]"/>
+            </Columns>
+        </RadzenDataGrid>
+    </CardBody>
+</Card>
+</TabPanel>
+<TabPanel Name="Transactions">
+    @* ************************* SEARCH ************************* *@
+    <Card>
+        <CardBody>
+            <Form id="ContractTransactionSearchForm">
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Start">
+                        <DateRangePicker
+                            Ranges="TransactionDateRanges"
+                            DateFormat="@GlobalConsts.DateFormat"
+                            @bind-StartDate="TransactionStartDate"
+                            @bind-EndDate="TransactionEndDate"
+                            OnClosed="OnDate_ChangedTransaction"
+                            class="form-control form-control-md"
+                            Style="max-width: 210px !important;margin-right: 5px"
+                            placeholder="@L["SelectDates"]"/>
+                    </Addon>
+                    <Addon AddonType="AddonType.Start">
+                        @if (IsPartnerRole() || IsSaleAdminRole())
+                        {
+                            <Select class="heigh-auto" TValue="Guid?" SelectedValue="@TransactionFilter.SalePersonId" SelectedValueChanged="@OnTransactionSalePerson_Changed" style="margin-right: 50px">
+                                <SelectItem TValue="Guid?" Value="Guid.Empty">
+                                    @L["Contract.SalePerson.FilterNoSelect"]
+                                </SelectItem>
+                                @foreach (var salePerson in SalePersonsLookupDtos)
+                                {
+                                    <SelectItem @key="salePerson" TValue="Guid?" Value="@salePerson.Id">
+                                        @salePerson.DisplayName
+                                    </SelectItem>
+                                }
+                            </Select>
+                        }
+                    </Addon>
+                    <Addon AddonType="AddonType.Body" style="width:333px">
+                        <TextEdit @bind-Text="@TransactionFilter.FilterText"
+                                  Autofocus="true"
+                                  Placeholder="@L["Search"]">
+                        </TextEdit>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <SubmitButton Clicked="DoSearchTransaction">
+                            <Icon Name="IconName.Search"></Icon>
+                        </SubmitButton>
+                    </Addon>
+
+                    <Addon AddonType="AddonType.End" Style="margin-left: 20px;">
+                        <Button Style="float:right" Color="Color.Primary" Clicked="@ExportTransactionAsync">
+                            <Icon Name="IconName.Download"></Icon> @L["Contract.Transaction.Export"]
+                        </Button>
+                    </Addon>
+
+
+                </Addons>
+            </Form>
+        </CardBody>
+    </Card>
+
+    @******************************Total Modal**************************************@
+    <Card>
+        <CardBody>
+            <Row>
+                <h3>@L["Contract.Transaction.Stats.Header"]</h3>
+                <Table>
+                    <TableBody>
+                        <TableRow>
+                            <TableRowHeader>@L["Contract.TotalVaTTransaction"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong>@TotalTransactionVATAmount.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+
+                        <TableRow>
+                            <TableRowHeader>@L["Contract.TotalTransaction"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong >@TotalTransactionAmount.ToVND()</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableRowHeader>@L["Contract.TransactionCount"]</TableRowHeader>
+                            <TableRowCell>
+                                <Strong >@TransactionCount</Strong>
+                            </TableRowCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </Row>
+        </CardBody>
+    </Card>
+
+    @* ************************* DATA GRID ************************* *@
+    <Card>
+        <CardBody>
+            <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" PageSize="@PAGE_DEFAULT_SIZE" AllowPaging="true" AllowSorting="true"
+                            Data="@TransactionItemsWithNav" TItem="ContractTransactionWithNavigationPropertiesDto" ColumnWidth="200px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="height:700px">
+                <Columns>
+
+                    <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Width="120px" Filterable="false" Property="SalePerson.CampaignName" Title="@L["Action"]" Frozen="true">
+                        <Template Context="context">
+                            <Buttons>
+                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await OpenEditTransactionModal(context.ContractTransaction)">
+                                    <Icon Name="IconName.Edit"/>
+                                </Button>
+                                <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="async () => await DeleteTransaction(context.ContractTransaction.Id)">
+                                    <Icon Name="IconName.Delete"/>
+                                </Button>
+                            </Buttons>
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Property="Contract.ContractCode" Filterable="false" Title="@L["Contract.ContractCode"]">
+                        <Template Context="context">
+                            <Buttons Style="width: 100%">
+                                <Button Size="Size.Medium" Outline Clicked="async () => await OpenContractNavModal(context.Contract.Id)" Color="Color.None" Style="border:none;color: blue">
+                                    @context.Contract?.ContractCode
+                                </Button>
+                            </Buttons>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Width="120px" Property="SalePerson.Name" Filterable="false" Title="@L["SalePerson"]" Frozen="true">
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Property="ContractTransaction.Description" Filterable="false" Title="@L["Description"]"/>
+                    <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Property="ContractTransaction.PartialPaymentValue" Filterable="false" Title="@L["ContractDetails.NewTransaction.PartialPaymentValue"]">
+                        <Template Context="context">
+                            <strong>
+                                @context.ContractTransaction.PartialPaymentValue.ToVND()
+                            </strong>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Property="ContractTransaction.Cost" Filterable="false" Title="@L["ContractDetails.NewTransaction.Cost"]">
+                        <Template Context="context">
+                            <strong>
+                                @context.ContractTransaction.Cost.ToVND()
+                            </strong>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Width="130px" Property="ContractTransaction.PaymentDueDate" Filterable="false" Title="@L["ContractDetails.NewTransaction.PaymentDueDate"]">
+                        <Template Context="context">
+                            <strong>
+                                @BrowserDateTime.ConvertToBrowserTime(context.ContractTransaction.PaymentDueDate.GetValueOrDefault(), GlobalConsts.DateTimeFormat)
+                            </strong>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Width="130px" Property="ContractTransaction.CreatedAt" Filterable="false" Title="@L["ContractDetails.NewTransaction.CreatedAt"]">
+                        <Template Context="context">
+                            <strong>
+                                @BrowserDateTime.ConvertToBrowserTime(context.ContractTransaction.CreatedAt, GlobalConsts.DateTimeFormat)
+                            </strong>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </CardBody>
+    </Card>
+</TabPanel>
+</Content>
+</Tabs>
+
+@*************************** Edit TRANSACTION MODAL************************* *@
+<Modal @ref="EditTransactionModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["ContractDetails.EditTransaction.Title"]</ModalTitle>
+            <CloseButton Clicked="CloseEditTransactionModal"/>
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit @bind-Text="@EditContractTransaction.Description">
+                        </TextEdit>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.TransactionVATAmount"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="@EditContractTransaction.PartialPaymentValue.ToString("N0")"
+                                  TextChanged="OnEditTransactionValueChanged"/>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <Select ReadOnly="@_isVATReadonly" TValue="decimal" @bind-SelectedValue="@EditContractTransaction.VATPercent">
+                            @foreach (var itemValue in Enum.GetValues(typeof(VAT)))
+                            {
+                                var i = Convert.ToDecimal(itemValue);
+
+                                <SelectItem @key="i" TValue="decimal" Value="@(i)">
+                                    @L[$"Enum:VAT:{i}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-warning text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.TransactionAmount"]</FieldLabel>
+
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit ReadOnly="true" Text="@(EditContractTransaction.PartialPaymentValue.ToNonVATAmount((decimal) EditContractTransaction.VATPercent).ToString("N0"))"></TextEdit>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.EditTransaction.PaymentDueDate"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <DatePicker TValue="DateTime?" Date="editPaymentDueDate" DateChanged="EditPaymentDueDateAtChange" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+                    </Addon>
+                </Addons>
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Dark"
+                    Clicked="CloseEditTransactionModal">
+                @L["Cancel"]
+            </Button>
+            <SubmitButton Form="EditTransactionModal" Clicked="UpdateTransaction"/>
+            <h1/>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@* ************************* Show Contract Code Detail MODAL ************************* *@
+<Modal @ref="ContractNavModal">
+<ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+<ModalHeader>
+    <ModalTitle>@L["Contract.Transaction.ContractCodeDetail"]</ModalTitle>
+    <CloseButton Clicked="CloseContractNavModal"></CloseButton>
+</ModalHeader>
+<ModalBody >
+<Row>
+<Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractType"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Text="@L[$"Enum:ContractType:{Convert.ToInt32(ContractNav.Contract.ContractType)}"]" ReadOnly="true"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.SalePerson"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Text="@ContractNav.ContractSalePerson?.Name" ReadOnly="true"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractCode"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Text="@ContractNav.Contract.ContractCode" ReadOnly="true"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.CampaignName"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Text="@ContractNav.ContractCampaign?.Name" ReadOnly="true"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.PartnerName"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit Text="@ContractNav.ContractPartner?.Name" ReadOnly="true"></TextEdit>
+                </Addon>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.Content"]</FieldLabel>
+
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Text="@ContractNav.Contract.Content" ReadOnly="true"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractServiceType"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Text="@L[$"Enum:ContractServiceType:{Convert.ToInt32(ContractNav.Contract.ContractServiceType)}"]" ReadOnly="true">
+                </TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.PostCount"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <NumericEdit TValue="int" Min="0" Value="@ContractNav.Contract.PostCount" ReadOnly="true">
+                </NumericEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.VideoCount"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <NumericEdit TValue="int" Min="0" Value="@ContractNav.Contract.VideoCount" ReadOnly="true">
+                </NumericEdit>
+            </Addon>
+        </Addons>
+    </Field>
+</Column>
+<Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+    @if (ContractNav.Contract.ContractType != ContractType.Master)
+    {
+        <Field>
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-warning text-white" Style="width: 155px">
+                        <FieldLabel>@L["Contract.ContractAmount"]</FieldLabel>
+                    </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit
+                        Text="@ContractNav.Contract.TotalNonVATAmount.ToString("N0")"
+                        DefaultValue="0"
+                        ReadOnly="true"/>
+                </Addon>
+            </Addons>
+        </Field>
+        <Field>
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                        <FieldLabel>@L["Contract.ContractVATAmount"]</FieldLabel>
+                    </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit
+                        Text="@ContractNav.Contract.TotalValue.ToString("N0")" ReadOnly="true">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <TextEdit
+                        Text="@L[$"Enum:VAT:{ContractNav.Contract.VATPercent}"]" ReadOnly="true">
+                    </TextEdit>
+                </Addon>
+            </Addons>
+        </Field>
+    }
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractStatus"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit
+                    Text="@L[$"Enum:ContractStatus:{Convert.ToInt32(ContractNav.Contract.ContractStatus)}"]"
+                    ReadOnly="true">
+                </TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractPaymentStatus"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+
+            <Addon AddonType="AddonType.Body">
+                <TextEdit
+                    Text="@L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(ContractNav.Contract.ContractPaymentStatus)}"]"
+                    ReadOnly="true">
+                </TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.PaymentChannel"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit
+                    Text="@L[$"Enum:PaymentChannel:{Convert.ToInt32(ContractNav.Contract.PaymentChannel)}"]"
+                    ReadOnly="true">
+
+                </TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.PaymentNote"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Text="@ContractNav.Contract.PaymentNote" ReadOnly="true"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.SignedAt"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                @if (ContractNav.Contract.SignedAt != null)
+                {
+                    <TextEdit Text="@BrowserDateTime.ConvertToBrowserTime(ContractNav.Contract.SignedAt.Value, GlobalConsts.DateTimeFormat)" ReadOnly="true"></TextEdit>
+                }
+            </Addon>
+            <Addon AddonType="AddonType.End">
+                <AddonLabel>
+                    <Icon Name="IconName.CalendarDay"/>
+                </AddonLabel>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.DueDate"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                @if (ContractNav.Contract.PaymentDueDate != null)
+                {
+                    <TextEdit Text="@BrowserDateTime.ConvertToBrowserTime(ContractNav.Contract.PaymentDueDate.Value, GlobalConsts.DateTimeFormat)" ReadOnly="true"></TextEdit>
+                }
+            </Addon>
+            <Addon AddonType="AddonType.End">
+                <AddonLabel>
+                    <Icon Name="IconName.CalendarDay"/>
+                </AddonLabel>
+            </Addon>
+        </Addons>
+    </Field>
+    @if (ContractNav.Contract.ContractType != ContractType.Master)
+    {
+        @if (!ContractNav.Contract.IsManualCost && ContractNav.Contract.GroupCostInfos.IsNotNullOrEmpty())
+        {
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                            <FieldLabel>@L["Contract.Groups"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <RadzenDropDown
+                            AllowFiltering="false"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            Multiple="true"
+                            Change="@OnSelectedEditingGroupCost"
+                            Placeholder="@L["Contract.SelectCostGroup"]"
+                            @bind-Value=@(ContractGroupCostIds)
+                            Data=@GroupCosts
+                            TextProperty="GroupName"
+                            ValueProperty="Id"
+                            style="width:380px;height:auto"
+                            Disabled="true">
+                        </RadzenDropDown>
+                    </Addon>
+                </Addons>
+            </Field>
+        }
+
+        <Field>
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white" Style="width:155px">
+                        <FieldLabel>@L["Contract.Cost"]</FieldLabel>
+                    </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit
+                        Text="@ContractNav.Contract.Cost.ToString("N0")"
+                        ChangeTextOnKeyPress="true"
+                        DefaultValue="0"
+                        ReadOnly="true">
+                    </TextEdit>
+                </Addon>
+            </Addons>
+        </Field>
+    }
+
+</Column>
+</Row>
+</ModalBody>
+<ModalFooter Style="margin-right: 10px">
+    <div>
+        <Button Color="Color.Dark"
+                Clicked="CloseContractNavModal">
+            @L["Cancel"]
+        </Button>
+    </div>
+</ModalFooter>
+</ModalContent>
+</Modal>
+
+@* ************************* CREATE MODAL ************************* *@
+<Modal @ref="CreateContractModal">
+<ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+<Form id="CreateContractForm">
+<ModalHeader>
+    <ModalTitle>@L["Contract.NewContract"]</ModalTitle>
+    <CloseButton Clicked="CloseCreateContractModal"></CloseButton>
+</ModalHeader>
+<ModalBody>
+<Row>
+<Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractType"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="ContractType" SelectedValue="@NewContract.ContractType" SelectedValueChanged="OnNewContractTypeChanged">
+                    @foreach (var itemValue in Enum.GetValues(typeof(ContractType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="ContractType" Value="@((ContractType) itemValue)">
+                            @L[$"Enum:ContractType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.SalePerson"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="Guid?" @bind-SelectedValue="@NewContract.SalePersonId">
+                    <SelectItem TValue="Guid?" Value="null">
+                        @L["Contract.SalePerson.FilterNoSelect"]
+                    </SelectItem>
+                    @foreach (var salePerson in SalePersonsLookupDtos)
+                    {
+                        <SelectItem @key="salePerson" TValue="Guid?" Value="@salePerson.Id">
+                            @salePerson.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractCode"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @bind-Text="@NewContract.ContractCode"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.CampaignName"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="Guid?" SelectedValue="@NewContract.CampaignId" SelectedValueChanged="OnSelectCampaignNewModal">
+                    <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                    @foreach (var campaign in Campaigns)
+                    {
+                        <SelectItem @key="campaign" TValue="Guid?" Value="@campaign.Id">
+                            @campaign.Name
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.PartnerName"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select Disabled="@DisablePartnerNewModal" TValue="Guid?" @bind-SelectedValue="@NewContract.PartnerId">
+                    <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                    @foreach (var partner in PartnersNullable)
+                    {
+                        <SelectItem @key="partner" TValue="Guid?" Value="@partner.Id">
+                            @partner.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.Content"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @bind-Text="@NewContract.Content"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractServiceType"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="ContractServiceType" @bind-SelectedValue="@NewContract.ContractServiceType">
+                    @foreach (var itemValue in Enum.GetValues(typeof(ContractServiceType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="ContractServiceType" Value="@((ContractServiceType) itemValue)">
+                            @L[$"Enum:ContractServiceType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.PostCount"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <NumericEdit TValue="int" Min="0" @bind-Value="@NewContract.PostCount">
+                </NumericEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.VideoCount"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <NumericEdit TValue="int" Min="0" @bind-Value="@NewContract.VideoCount">
+                </NumericEdit>
+            </Addon>
+        </Addons>
+    </Field>
+</Column>
+<Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+@if (NewContract.ContractType != ContractType.Master)
+{
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-warning text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractAmount"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit
+                    Text="@NewContract.TotalNonVATAmount.ToString("N0")"
+                    DefaultValue="0"
+                    ReadOnly="true"/>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractVATAmount"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @ref="@NewAmountField"
+                          Text="@NewContract.TotalValue.ToString("N0")"
+                          TextChanged="OnContractVATAmountChange"
+                          ChangeTextOnKeyPress="true"
+                          DefaultValue="0">
+                </TextEdit>
+            </Addon>
+            <Addon AddonType="AddonType.End">
+                <Select TValue="decimal" @bind-SelectedValue="@NewContract.VATPercent">
+                    @foreach (var itemValue in Enum.GetValues(typeof(VAT)))
+                    {
+                        var i = Convert.ToDecimal(itemValue);
+
+                        <SelectItem @key="i" TValue="decimal" Value="@(i)">
+                            @L[$"Enum:VAT:{i}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+
+    </Field>
+}
+
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.ContractStatus"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="ContractStatus" @bind-SelectedValue="@NewContract.ContractStatus">
+                @foreach (var itemValue in Enum.GetValues(typeof(ContractStatus)))
+                {
+                    <SelectItem @key="itemValue" TValue="ContractStatus" Value="@((ContractStatus) itemValue)">
+                        @L[$"Enum:ContractStatus:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.ContractPaymentStatus"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="ContractPaymentStatus" @bind-SelectedValue="@NewContract.ContractPaymentStatus">
+                @foreach (var itemValue in Enum.GetValues(typeof(ContractPaymentStatus)))
+                {
+                    <SelectItem @key="itemValue" TValue="ContractPaymentStatus" Value="@((ContractPaymentStatus) itemValue)">
+                        @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.PaymentChannel"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="PaymentChannel" @bind-SelectedValue="@NewContract.PaymentChannel">
+                @foreach (var itemValue in Enum.GetValues(typeof(PaymentChannel)))
+                {
+                    <SelectItem @key="itemValue" TValue="PaymentChannel" Value="@((PaymentChannel) itemValue)">
+                        @L[$"Enum:PaymentChannel:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.PaymentNote"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@NewContract.PaymentNote"></TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.SignedAt"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker TValue="DateTime?" Date="createSignAt" DateChanged="CreateContractSignAtChange" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <AddonLabel>
+                <Icon Name="IconName.CalendarDay"/>
+            </AddonLabel>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.DueDate"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker TValue="DateTime?" Date="createDueDate" DateChanged="CreateContractDueDateChange" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <AddonLabel>
+                <Icon Name="IconName.CalendarDay"/>
+            </AddonLabel>
+        </Addon>
+    </Addons>
+</Field>
+@if (NewContract.ContractType is not ContractType.Master)
+{
+    @if (!NewContract.IsManualCost && ActiveGroupCosts.IsNotNullOrEmpty())
+    {
+        <Field>
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                        <FieldLabel>@L["Contract.Groups"]</FieldLabel>
+                    </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <RadzenDropDown AllowClear="true"
+                                    AllowFiltering="false"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Change="@OnSelectedNewGroupCost"
+                                    Multiple="true"
+                                    Placeholder="@L["Contract.SelectCostGroup"]"
+                                    @bind-Value=@NewContractGroupCostIds
+                                    Data=@ActiveGroupCosts
+                                    TextProperty="GroupName"
+                                    ValueProperty="Id"
+                                    style="width:380px;height:auto">
+                    </RadzenDropDown>
+                </Addon>
+            </Addons>
+        </Field>
+    }
+
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.Cost"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @ref="@NewCostField"
+                          Text="@NewContract.Cost.ToString("N0")"
+                          TextChanged="OnNewContractCostAmountChange"
+                          ChangeTextOnKeyPress="true"
+                          DefaultValue="0"
+                          ReadOnly="@(!NewContract.IsManualCost && NewContract.ContractType is not ContractType.Master)">
+                </TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+}
+@if (NewContract.ContractType is not ContractType.Master)
+{
+    <Field>
+        <Check class="text-center" TValue="bool" Checked="@NewContract.IsManualCost" CheckedChanged="@OnChangedNewManualCost">@L["Contract.IsManualCost"]</Check>
+    </Field>
+}
+</Column>
+</Row>
+</ModalBody>
+<ModalFooter style="margin-right:10px">
+    <div>
+        <Button Color="Color.Dark"
+                Clicked="CloseCreateContractModal">
+            @L["Cancel"]
+        </Button>
+        <SubmitButton Form="CreateContractForm" Clicked="CreateContract"/>
+        <h1/>
+    </div>
+</ModalFooter>
+</Form>
+</ModalContent>
+</Modal>
+
+
+@* ************************* GROUP COST ************************ *@
+<Modal @ref="CreateGroupCostsModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="GroupCostDto">
+            <ModalHeader>
+                <ModalTitle>@L["Contract.GroupCost.Title.NewGroupCost"]</ModalTitle>
+                <CloseButton Clicked="CloseGroupCostConfigModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Table Borderless>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHeaderCell TextColor="TextColor.Primary" VerticalAlignment="VerticalAlignment.Middle">
+                                @L["Contract.GroupCost.Name"]
+                            </TableHeaderCell>
+                            <TableHeaderCell TextColor="TextColor.Primary" VerticalAlignment="VerticalAlignment.Middle">
+                                @L["Contract.Cost"]
+                            </TableHeaderCell>
+                            <TableHeaderCell TextColor="TextColor.Primary" TextAlignment="TextAlignment.Right">
+                                <Buttons>
+                                    <Tooltip Text="@L["Contract.GroupCost.NewGroupCost"]" Placement="TooltipPlacement.Bottom">
+                                        <Button Outline Color="Color.Primary" Clicked="() => CreateGroupCost()">
+                                            <Icon Name="IconName.Add" Class="mr-1"></Icon>
+                                        </Button>
+                                    </Tooltip>
+                                </Buttons>
+                            </TableHeaderCell>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        @foreach (var item in ActiveGroupCosts)
+                        {
+                            <TableRow>
+                                <TableRowCell>
+                                    <RadzenTextBox @bind-Value=@item.GroupName Placeholder="@L["Contract.GroupCost.Name"]" Class="w-100"/>
+                                </TableRowCell>
+                                <TableRowCell>
+                                    <RadzenNumeric TValue="decimal" Max="@MAX_COST_AMOUNT" ShowUpDown="false" Format="@(item.Cost != 0 ? "0,0" : "0")" @bind-Value=@item.Cost Placeholder="@L["Contract.GroupCost.Input"]" Class="mr-1"/>
+                                </TableRowCell>
+                                <TableRowCell TextAlignment="TextAlignment.Right">
+                                    @if (ActiveGroupCosts.Count > 1)
+                                    {
+                                        <Buttons>
+                                            <Tooltip Text="@L["Delete"]" Placement="TooltipPlacement.Bottom">
+                                                <Button Outline Color="Color.Primary" Clicked="() => RemoveGroupCost(item)">
+                                                    <Icon Name="IconName.Delete" Class="mr-1"></Icon>
+                                                </Button>
+                                            </Tooltip>
+                                        </Buttons>
+                                    }
+                                </TableRowCell>
+                            </TableRow>
+                        }
+                    </TableBody>
+                </Table>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseGroupCostConfigModal">
+                    @L["Cancel"]
+                </Button>
+                <Button Style="margin-right: 16px"
+                        Color="Color.Primary"
+                        Clicked="SaveGroupCostItems">
+                    @L["Save"]
+                </Button>
+                <h1/>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditContractModal">
+<ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+<Form id="EditContractForm">
+<ModalHeader>
+    <ModalTitle>@L["Contract.EditContractTitle"]</ModalTitle>
+    <CloseButton Clicked="CloseEditContractModal"></CloseButton>
+</ModalHeader>
+<ModalBody>
+<Row>
+<Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractType"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="ContractType" @bind-SelectedValue="@EditingContract.ContractType">
+                    @foreach (var itemValue in Enum.GetValues(typeof(ContractType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="ContractType" Value="@((ContractType) itemValue)">
+                            @L[$"Enum:ContractType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.SalePerson"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="Guid?" @bind-SelectedValue="@EditingContract.SalePersonId">
+                    <SelectItem TValue="Guid?" Value="null">
+                        @L["Contract.SalePerson.ChooseSalePerson"]
+                    </SelectItem>
+                    @foreach (var salePerson in salePersonEditing)
+                    {
+                        <SelectItem Hidden="@salePerson.IsHidden" @key="salePerson" TValue="Guid?" Value="@salePerson.Id">
+                            @salePerson.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractCode"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @bind-Text="@EditingContract.ContractCode"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.CampaignName"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="Guid?" SelectedValue="@EditingContract.CampaignId" SelectedValueChanged="OnSelectCampaignEditingModal">
+                    <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                    @foreach (var campaign in Campaigns)
+                    {
+                        <SelectItem @key="campaign" TValue="Guid?" Value="@campaign.Id">
+                            @campaign.Name
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.PartnerName"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select Disabled="@DisablePartnerEditingModal" TValue="Guid?" @bind-SelectedValue="@EditingContract.PartnerId">
+                    <SelectItem TValue="Guid?" Value="null"></SelectItem>
+                    @foreach (var partner in PartnersNullable)
+                    {
+                        <SelectItem @key="partner" TValue="Guid?" Value="@partner.Id">
+                            @partner.DisplayName
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.Content"]</FieldLabel>
+
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @bind-Text="@EditingContract.Content"></TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractServiceType"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="ContractServiceType" @bind-SelectedValue="@EditingContract.ContractServiceType">
+                    @foreach (var itemValue in Enum.GetValues(typeof(ContractServiceType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="ContractServiceType" Value="@((ContractServiceType) itemValue)">
+                            @L[$"Enum:ContractServiceType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.PostCount"]</FieldLabel>
+
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <NumericEdit TValue="int" Min="0" @bind-Value="@EditingContract.PostCount">
+                </NumericEdit>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.VideoCount"]</FieldLabel>
+
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <NumericEdit TValue="int" Min="0" @bind-Value="@EditingContract.VideoCount">
+                </NumericEdit>
+            </Addon>
+        </Addons>
+    </Field>
+</Column>
+<Column ColumnSize="ColumnSize.Is6.OnDesktop.IsFull.OnMobile">
+@if (EditingContract.ContractType != ContractType.Master)
+{
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-warning text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractAmount"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit
+                    Text="@EditingContract.TotalNonVATAmount.ToString("N0")"
+                    DefaultValue="0"
+                    ReadOnly="true"/>
+            </Addon>
+        </Addons>
+    </Field>
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                    <FieldLabel>@L["Contract.ContractVATAmount"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @ref="@EditAmountField"
+                          Text="@EditingContract.TotalValue.ToString("N0")"
+                          TextChanged="OnEditContractVATAmountChange"
+                          ChangeTextOnKeyPress="true"
+                          DefaultValue="0">
+                </TextEdit>
+            </Addon>
+            <Addon AddonType="AddonType.End">
+                <Select TValue="decimal" @bind-SelectedValue="@EditingContract.VATPercent">
+                    @foreach (var itemValue in Enum.GetValues(typeof(VAT)))
+                    {
+                        var i = Convert.ToDecimal(itemValue);
+
+                        <SelectItem @key="i" TValue="decimal" Value="@(i)">
+                            @L[$"Enum:VAT:{i}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </Field>
+}
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.ContractStatus"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="ContractStatus" @bind-SelectedValue="@EditingContract.ContractStatus">
+                @foreach (var itemValue in Enum.GetValues(typeof(ContractStatus)))
+                {
+                    <SelectItem @key="itemValue" TValue="ContractStatus" Value="@((ContractStatus) itemValue)">
+                        @L[$"Enum:ContractStatus:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.ContractPaymentStatus"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="ContractPaymentStatus" @bind-SelectedValue="@EditingContract.ContractPaymentStatus">
+                @foreach (var itemValue in Enum.GetValues(typeof(ContractPaymentStatus)))
+                {
+                    <SelectItem @key="itemValue" TValue="ContractPaymentStatus" Value="@((ContractPaymentStatus) itemValue)">
+                        @L[$"Enum:ContractPaymentStatus:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.PaymentChannel"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <Select TValue="PaymentChannel" @bind-SelectedValue="@EditingContract.PaymentChannel">
+                @foreach (var itemValue in Enum.GetValues(typeof(PaymentChannel)))
+                {
+                    <SelectItem @key="itemValue" TValue="PaymentChannel" Value="@((PaymentChannel) itemValue)">
+                        @L[$"Enum:PaymentChannel:{Convert.ToInt32(itemValue)}"]
+                    </SelectItem>
+                }
+            </Select>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.PaymentNote"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <TextEdit @bind-Text="@EditingContract.PaymentNote"></TextEdit>
+        </Addon>
+    </Addons>
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.SignedAt"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker TValue="DateTime?" Date="editSignAt" DateChanged="EditContractSignAtChange" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <AddonLabel>
+                <Icon Name="IconName.CalendarDay"/>
+            </AddonLabel>
+        </Addon>
+    </Addons>
+
+</Field>
+<Field>
+    <Addons>
+        <Addon AddonType="AddonType.Start">
+            <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                <FieldLabel>@L["Contract.DueDate"]</FieldLabel>
+            </AddonLabel>
+        </Addon>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker TValue="DateTime?" Date="editDueDate" DateChanged="EditContractDueDateChange" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <AddonLabel>
+                <Icon Name="IconName.CalendarDay"/>
+            </AddonLabel>
+        </Addon>
+    </Addons>
+</Field>
+@if (EditingContract.ContractType != ContractType.Master)
+{
+    @if (!EditingContract.IsManualCost && EditGroupCosts.IsNotNullOrEmpty())
+    {
+        <Field>
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white" Style="width: 155px">
+                        <FieldLabel>@L["Contract.Groups"]</FieldLabel>
+                    </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Body">
+                    <RadzenDropDown AllowClear="true"
+                                    AllowFiltering="false"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Change="@OnSelectedEditingGroupCost"
+                                    Multiple="true"
+                                    Placeholder="@L["Contract.SelectCostGroup"]"
+                                    @bind-Value=@EditContractGroupCostIds
+                                    Data=@EditGroupCosts
+                                    TextProperty="GroupName"
+                                    ValueProperty="Id"
+                                    style="width:380px;height:auto">
+                    </RadzenDropDown>
+                </Addon>
+            </Addons>
+        </Field>
+    }
+
+    <Field>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel Class="bg-primary text-white" Style="width:155px">
+                    <FieldLabel>@L["Contract.Cost"]</FieldLabel>
+                </AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @ref="@EditCostField"
+                          Text="@EditingContract.Cost.ToString("N0")"
+                          TextChanged="OnEditContractCostAmountChange"
+                          ChangeTextOnKeyPress="true"
+                          DefaultValue="0"
+                          ReadOnly="@(!EditingContract.IsManualCost && EditingContract.ContractType is not ContractType.Master)">
+                </TextEdit>
+            </Addon>
+        </Addons>
+    </Field>
+}
+
+@if (EditingContract.ContractType is not ContractType.Master)
+{
+    <Field>
+        <Check class="text-center" TValue="bool" Checked="@EditingContract.IsManualCost" CheckedChanged="@OnChangedEditingManualCost">@L["Contract.IsManualCost"]</Check>
+    </Field>
+}
+</Column>
+</Row>
+</ModalBody>
+<ModalFooter Style="margin-right: 10px">
+    <div>
+        <Button Color="Color.Dark"
+                Clicked="CloseEditContractModal">
+            @L["Cancel"]
+        </Button>
+        <SubmitButton Form="EditContractForm" Clicked="UpdateContract"/>
+        <h1/>
+    </div>
+</ModalFooter>
+</Form>
+</ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="ConfirmationModal">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <Form id="ConfirmationForm">
+            <ModalHeader>
+                <ModalTitle>@ConfirmModalTitle</ModalTitle>
+                <CloseButton Clicked="CloseConfirmationModal"></CloseButton>
+            </ModalHeader>
+            <ModalBody>
+                <div style="text-align: center; font-size: large">@L["DeleteConfirmationMessage"]</div>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Success" Form="ConfirmationForm" Clicked="() => DeleteContract(DeletedContract.Contract)">
+                    @L["Confirm"]
+                </Button>
+                <Button Color="Color.Danger"
+                        Clicked="CloseConfirmationModal">
+                    @L["Cancel"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

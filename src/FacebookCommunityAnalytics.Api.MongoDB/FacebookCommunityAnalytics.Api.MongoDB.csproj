@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>FacebookCommunityAnalytics.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FacebookCommunityAnalytics.Api.Domain\FacebookCommunityAnalytics.Api.Domain.csproj" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.SettingManagement.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.IdentityServer.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.AuditLogging.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.BlobStoring.Database.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Saas.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.MongoDB" Version="4.3.2" />
+    <PackageReference Include="Volo.CmsKit.Pro.MongoDB" Version="4.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Medias" />
+  </ItemGroup>
+
+</Project>

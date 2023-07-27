@@ -1,0 +1,237 @@
+﻿@attribute [Authorize(ApiPermissions.Contracts.Default)]
+@using Microsoft.Extensions.Localization
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using Blazored.Localisation.Services
+@using FacebookCommunityAnalytics.Api.Contracts
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.ContractTransactions;
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Permissions
+@using Radzen
+@using Volo.Abp.AspNetCore.Components.Messages
+@inject IStringLocalizer<ApiResource> L
+@inject IContractAppService ContractAppService
+@inherits BlazorComponentBase
+@inject IUiMessageService _uiMessageService;
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="ContractTransactionSearchForm">
+            
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    <DateRangePicker
+                        Ranges="_dateRanges"
+                        DateFormat="@GlobalConsts.DateFormat"
+                        @bind-StartDate="StartDate"
+                        @bind-EndDate="EndDate"
+                        OnClosed="OnDate_Changed"
+                        class="form-control form-control-md"
+                        Style="max-width: 210px !important;margin-right: 5px"
+                        placeholder="@L["SelectDates"]"/>
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    @if (IsPartnerRole() || IsSaleAdminRole())
+                    {
+                        <Select class="heigh-auto" TValue="Guid?" SelectedValue="@Filter.SalePersonId" SelectedValueChanged="@OnSalePerson_Changed" style="margin-right: 50px">
+                            <SelectItem TValue="Guid?" Value="Guid.Empty">
+                                @L["Contract.SalePerson.FilterNoSelect"]
+                            </SelectItem>
+                            @foreach (var salePerson in SalePersonsLookupDtos)
+                            {
+                                <SelectItem @key="salePerson" TValue="Guid?" Value="@salePerson.Id">
+                                    @salePerson.DisplayName
+                                </SelectItem>
+                            }
+                        </Select>
+                    }
+                </Addon>
+                <Addon AddonType="AddonType.Body" style="width:333px">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End" >
+                    <SubmitButton Clicked="DoSearch">
+                        <Icon Name="IconName.Search"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+    </CardBody>
+</Card>
+
+@******************************Total Modal**************************************@
+<Card>
+    <CardBody>
+        <Row>
+            <h3>@L["Contract.Transaction.Stats.Header"]</h3>
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableRowHeader>@L["Contract.TotalVaTTransaction"]</TableRowHeader>
+                        <TableRowCell>
+                            <Strong>@TotalTransactionVATAmount.ToVND()</Strong>
+                        </TableRowCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableRowHeader>@L["Contract.TotalTransaction"]</TableRowHeader>
+                        <TableRowCell>
+                            <Strong >@TotalTransactionAmount.ToVND()</Strong>
+                        </TableRowCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableRowHeader>@L["Contract.TransactionCount"]</TableRowHeader>
+                        <TableRowCell>
+                            <Strong >@TransactionCount</Strong>
+                        </TableRowCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </Row>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+
+<Card>
+    <CardBody>
+        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" PageSize="@PAGE_DEFAULT_SIZE" AllowPaging="true" AllowSorting="true"
+                        Data="@TransactionItemsWithNav" TItem="ContractTransactionWithNavigationPropertiesDto" ColumnWidth="200px" LogicalFilterOperator="LogicalFilterOperator.Or" Style="height:700px">
+            <Columns>
+
+                <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Width="120px" Filterable="false" Property="SalePerson.CampaignName" Title="@L["Action"]" Frozen="true">
+                    <Template Context="context">
+                        <Buttons>
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => OpenEditTransactionModal(context.ContractTransaction)">
+                                <Icon Name="IconName.Edit"/>
+                            </Button>
+                            <Button Size="Size.Medium" Outline Color="Color.Primary" Clicked="() => DeleteTransaction(context.ContractTransaction.Id)">
+                                <Icon Name="IconName.Delete"/>
+                            </Button>
+                        </Buttons>
+                    </Template>
+                </RadzenDataGridColumn>
+                
+                <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Property="Contract.ContractCode" Filterable="false" Title="@L["Contract.ContractCode"]"/>
+                <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Width="120px" Property="SalePerson.Name" Filterable="false" Title="@L["SalePerson"]" Frozen="true">
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Property="ContractTransaction.Description" Filterable="false" Title="@L["Description"]"/>
+                <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Property="ContractTransaction.PartialPaymentValue" Filterable="false" Title="@L["ContractDetails.NewTransaction.PartialPaymentValue"]">
+                <Template Context="context">
+                    <strong>
+                        @context.ContractTransaction.PartialPaymentValue.ToVND()
+                    </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Width="130px" Property="ContractTransaction.PaymentDueDate" Filterable="false" Title="@L["ContractDetails.NewTransaction.PaymentDueDate"]">
+                    <Template Context="context">
+                        <strong>
+                            @BrowserDateTime.ConvertToBrowserTime(context.ContractTransaction.PaymentDueDate.GetValueOrDefault(), GlobalConsts.DateTimeFormat)
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ContractTransactionWithNavigationPropertiesDto" Width="130px" Property="ContractTransaction.CreatedAt" Filterable="false" Title="@L["ContractDetails.NewTransaction.CreatedAt"]">
+                    <Template Context="context">
+                        <strong>
+                            @BrowserDateTime.ConvertToBrowserTime(context.ContractTransaction.CreatedAt, GlobalConsts.DateTimeFormat)
+                        </strong>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </CardBody>
+</Card>
+
+
+
+@*************************** Edit TRANSACTION MODAL************************* *@
+<Modal @ref="EditTransactionModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["ContractDetails.EditTransaction.Title"]</ModalTitle>
+            <CloseButton Clicked="CloseEditTransactionModal"/>
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit @bind-Text="@EditContractTransaction.Description">
+                        </TextEdit>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.TransactionVATAmount"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="@EditContractTransaction.PartialPaymentValue.ToString("N0")"
+                                  TextChanged="OnEditTransactionValueChanged"/>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <Select ReadOnly="@_isVATReadonly" TValue="decimal" @bind-SelectedValue="@EditContractTransaction.VATPercent">
+                            @foreach (var itemValue in Enum.GetValues(typeof(VAT)))
+                            {
+                                var i = Convert.ToDecimal(itemValue);
+
+                                <SelectItem @key="i" TValue="decimal" Value="@(i)">
+                                    @L[$"Enum:VAT:{i}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-warning text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.TransactionAmount"]</FieldLabel>
+
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit ReadOnly="true" Text="@(EditContractTransaction.PartialPaymentValue.ToNonVATAmount((decimal) EditContractTransaction.VATPercent).ToString("N0"))"></TextEdit>
+                    </Addon>
+                </Addons>
+            </Field>
+            <Field>
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel Class="bg-primary text-white" Style="width: 170px">
+                            <FieldLabel>@L["ContractDetails.EditTransaction.PaymentDueDate"]</FieldLabel>
+                        </AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <DatePicker TValue="DateTime?" Date="editPaymentDueDate" DateChanged="EditPaymentDueDateAtChange" DisplayFormat="@GlobalConsts.DateFormat"></DatePicker>
+                    </Addon>
+                </Addons>
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Dark"
+                    Clicked="CloseEditTransactionModal">
+                @L["Cancel"]
+            </Button>
+            <SubmitButton Form="EditTransactionModal" Clicked="UpdateTransaction"/>
+            <h1/>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

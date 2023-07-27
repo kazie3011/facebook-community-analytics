@@ -1,0 +1,269 @@
+﻿@page "/staff-evaluation-criteria"
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.StaffEvaluations
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout;
+@using FacebookCommunityAnalytics.Api.Core.Const
+@attribute [Authorize(ApiPermissions.StaffEvaluations.Default)]
+@inject IJSRuntime JSRuntime
+@inject IStaffEvaluationCriteriaAppService StaffEvaluationCriteriaAppService
+@inherits BlazorComponentBase
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["StaffEvaluationCriteria"]" BreadcrumbItems="BreadcrumbItems" Toolbar="Toolbar">
+
+</PageHeader>
+
+@* ************************* SEARCH ************************* *@
+<Card>
+    <CardBody>
+        <Form id="StaffEvaluationCriteriaSearchForm" class="mb-3">
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <TextEdit @bind-Text="@Filter.FilterText"
+                              Autofocus="true"
+                              Placeholder="@L["Search"]">
+                    </TextEdit>
+                </Addon>
+                <Addon AddonType="AddonType.End">
+                    <SubmitButton Form="StaffEvaluationCriteriaSearchForm" Clicked="GetStaffEvaluationCriteriaAsync">
+                        <Icon Name="IconName.Search" Class="mr-1"></Icon>
+                    </SubmitButton>
+                </Addon>
+            </Addons>
+        </Form>
+
+        <Row>
+            @if (IsManagerRole())
+            {
+                <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnDesktop">
+                    <Select TValue="Guid?" @bind-SelectedValue="@Filter.TeamId">
+                        <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                            @L["StaffEvaluationCriteria.Team"]
+                        </SelectItem>
+                        @foreach (var team in Teams)
+                        {
+                            <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                @team.DisplayName
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+            }
+
+            <Field ColumnSize="ColumnSize.IsFull.OnMobile.Is6.OnDesktop">
+                <Select TValue="EvaluationType?" SelectedValue="@Filter.EvaluationType" SelectedValueChanged="@OnSelectedEvaluationType">
+                    @foreach (var itemValue in Enum.GetValues(typeof(EvaluationType)))
+                    {
+                        <SelectItem @key="itemValue" TValue="EvaluationType?" Value="@((EvaluationType?) itemValue)">
+                            @L[$"Enum:EvaluationType:{Convert.ToInt32(itemValue)}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+        </Row>
+    </CardBody>
+</Card>
+
+@* ************************* DATA GRID ************************* *@
+<Card>
+    <CardBody>
+        <DataGrid TItem="StaffEvaluationCriteriaDto"
+                  Data="StaffEvaluationCriteriaDtos"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  Responsive="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="StaffEvaluationCriteriaDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="StaffEvaluationCriteriaDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="StaffEvaluationCriteriaDto"
+                                          Visible="@CanEditStaffEvaluationCriteria"
+                                          Clicked="() => OpenEditStaffEvaluationModal(context)"
+                                          Text="@L["Edit"]">
+                            </EntityAction>
+                            <EntityAction TItem="StaffEvaluationCriteriaDto"
+                                          Visible="@CanDeleteStaffEvaluationCriteria"
+                                          Clicked="() => DeleteStaffEvaluation(context)"
+                                          ConfirmationMessage="@(() => L["DeleteConfirmationMessage"])"
+                                          Text="@L["Delete"]">
+                            </EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="StaffEvaluationCriteriaDto"
+                                Field="TeamId"
+                                Caption="@L["StaffEvaluationCriteria.Team"]">
+                    <DisplayTemplate>
+                        @Teams.FirstOrDefault(_ => _.Id == context.TeamId)?.DisplayName
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="StaffEvaluationCriteriaDto"
+                                Field="CriteriaName"
+                                Caption="@L["StaffEvaluationCriteria.CriteriaName"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="StaffEvaluationCriteriaDto"
+                                Field="MaxPoint"
+                                Caption="@L["StaffEvaluationCriteria.MaxPoint"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="StaffEvaluationCriteriaDto"
+                                Field="EvaluationType"
+                                Caption="@L["StaffEvaluationCriteria.EvaluationType"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="StaffEvaluationCriteriaDto"
+                                Field="Description"
+                                Caption="@L["Description"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="StaffEvaluationCriteriaDto"
+                                Field="Note"
+                                Caption="@L["StaffEvaluationCriteria.Note"]">
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+@* $1$ ************************* CREATE MODAL ************************* #1# *@
+<Modal @ref="CreateStaffEvaluationCriteriaModal">
+    <ModalContent Centered="true">
+        <Form id="CreateStaffEvaluationCriteriaForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewStaffEvaluationCriteria"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateStaffEvaluationCriteriaModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.Team"]</FieldLabel>
+                    <Select TValue="Guid?" @bind-SelectedValue="@NewStaffEvaluationCriteria.TeamId">
+                        <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                            @L["StaffEvaluationCriteria.SearchByTeam"]
+                        </SelectItem>
+                        @foreach (var team in Teams)
+                        {
+                            <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                @team.DisplayName
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.CriteriaName"]</FieldLabel>
+                    <TextEdit @bind-Text="@NewStaffEvaluationCriteria.CriteriaName">
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.MaxPoint"]</FieldLabel>
+                    <NumericEdit TValue="int" @bind-Value="@NewStaffEvaluationCriteria.MaxPoint">
+                    </NumericEdit >
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.EvaluationType"]</FieldLabel>
+                    <Select TValue="EvaluationType" @bind-SelectedValue="@NewStaffEvaluationCriteria.EvaluationType">
+                        @foreach (var itemValue in Enum.GetValues(typeof(EvaluationType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="EvaluationType" Value="@((EvaluationType) itemValue)">
+                                @L[$"Enum:EvaluationType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Description"]</FieldLabel>
+                    <MemoEdit Rows="5" @bind-Text="@NewStaffEvaluationCriteria.Description">
+                    </MemoEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.Note"]</FieldLabel>
+                    <MemoEdit Rows="5" @bind-Text="@NewStaffEvaluationCriteria.Note">
+                    </MemoEdit>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseCreateStaffEvaluationCriteriaModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Disabled="@NewStaffEvaluationCriteria.CriteriaName.IsNullOrWhiteSpace()" Form="CreateStaffEvaluationCriteriaForm" Clicked="CreateStaffEvaluationCriteriaAsync"/>
+                <h1/>
+                </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="EditStaffEvaluationCriteriaModal">
+    <ModalContent Centered="true">
+        <Form id="EditStaffEvaluationCriteriaForm">
+            <ModalHeader>
+                <ModalTitle>@L["UpdateStaffEvaluationCriteria"]</ModalTitle>
+                <CloseButton Clicked="CloseEditStaffEvaluationCriteriaModal"/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.Team"]</FieldLabel>
+                    <Select TValue="Guid?" @bind-SelectedValue="@EditingStaffEvaluationCriteria.TeamId">
+                        <SelectItem TValue="Guid?" Value="@Guid.Empty">
+                            @L["StaffEvaluationCriteria.SearchByTeam"]
+                        </SelectItem>
+                        @foreach (var team in Teams)
+                        {
+                            <SelectItem @key="team" TValue="Guid?" Value="@team.Id">
+                                @team.DisplayName
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.CriteriaName"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingStaffEvaluationCriteria.CriteriaName">
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.MaxPoint"]</FieldLabel>
+                    <NumericEdit TValue="int" @bind-Value="@EditingStaffEvaluationCriteria.MaxPoint">
+                    </NumericEdit >
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.EvaluationType"]</FieldLabel>
+                    <Select TValue="EvaluationType" @bind-SelectedValue="@EditingStaffEvaluationCriteria.EvaluationType">
+                        @foreach (var itemValue in Enum.GetValues(typeof(EvaluationType)))
+                        {
+                            <SelectItem @key="itemValue" TValue="EvaluationType" Value="@((EvaluationType) itemValue)">
+                                @L[$"Enum:EvaluationType:{Convert.ToInt32(itemValue)}"]
+                            </SelectItem>
+                        }
+                    </Select>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["Description"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingStaffEvaluationCriteria.Description">
+                    </TextEdit>
+                </Field>
+
+                <Field>
+                    <FieldLabel>@L["StaffEvaluationCriteria.Note"]</FieldLabel>
+                    <TextEdit @bind-Text="@EditingStaffEvaluationCriteria.Note">
+                    </TextEdit>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Dark"
+                        Clicked="CloseEditStaffEvaluationCriteriaModal">
+                    @L["Cancel"]
+                </Button>
+                <SubmitButton Disabled="@EditingStaffEvaluationCriteria.CriteriaName.IsNullOrWhiteSpace()" Form="EditStaffEvaluationCriteriaForm" Clicked="UpdateStaffEvaluationCriteriaAsync"/>
+                <h1/>
+                </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

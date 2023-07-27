@@ -1,0 +1,56 @@
+@page
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FacebookCommunityAnalytics.Api.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using FacebookCommunityAnalytics.Api.Localization
+@using FacebookCommunityAnalytics.Api.Web.Helpers
+@inject IHtmlLocalizer<ApiResource> L
+@model FacebookCommunityAnalytics.Api.Web.Pages.Partners.EditModalModel
+@{
+    Layout = null;
+}
+
+<script>
+      $(document).ready(function(){
+        $("#NewPartner_PartnerUserIds").kendoMultiSelect();
+      });
+</script>
+<form data-ajaxForm="true" asp-page="/Partners/EditModal" autocomplete="off">
+    <abp-modal size="Large">
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+
+        <abp-modal-body>
+            <abp-input asp-for="Id"/>
+
+            <abp-input asp-for="EditPartner.Name" label="@L["Partner.Name"].Value"/>
+
+            <abp-input asp-for="EditPartner.Description" label="@L["Description"].Value"/>
+
+            <abp-input asp-for="EditPartner.Url" label="@L["Url"].Value"/>
+
+            <abp-input asp-for="EditPartner.Code" label="@L["Code"].Value"/>
+
+            <div class="form-group">
+                <label for="EditPartner.PartnerType">@L["PartnerType"]</label>
+                <select class="form-control" id="EditPartner.PartnerType" name="EditPartner.PartnerType">
+                    <option value="@(Model.EditPartner.PartnerType)">@L[$"Enum:PartnerType:{Convert.ToInt32(Model.EditPartner.PartnerType)}"]</option>
+
+                    @foreach (var itemValue in Enum.GetValues(typeof(PartnerType)))
+                    {
+                        if ((PartnerType)itemValue != PartnerType.FilterNoSelect)
+                        {
+                            <option value="@((PartnerType)itemValue)">@L[$"Enum:PartnerType:{Convert.ToInt32(itemValue)}"]</option>
+                        }
+                    }
+                </select>
+            </div>
+            <abp-input asp-for="EditPartner.IsActive" label="@L["IsActive"].Value"/>
+            <div class="display-none">
+                <abp-select multiple asp-for="EditPartner.PartnerUserIds" asp-items="Model.PartnerUsersDtos.ToSelectListItems()"/>
+            </div>
+        </abp-modal-body>
+
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

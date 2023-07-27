@@ -1,0 +1,68 @@
+{
+  "Id": "4a155b81-6ca5-4b0b-90aa-74561736b1d0",
+  "Name": "AccountProxy",
+  "OriginalName": "AccountProxy",
+  "NamePlural": "AccountProxies",
+  "DatabaseTableName": "AccountProxies",
+  "Namespace": "AccountProxies",
+  "BaseClass": "FullAuditedAggregateRoot",
+  "PrimaryKeyType": "Guid",
+  "IsMultiTenant": false,
+  "ShouldCreateUserInterface": true,
+  "ShouldCreateBackend": true,
+  "ShouldAddMigration": true,
+  "ShouldUpdateDatabase": true,
+  "CreateTests": false,
+  "Properties": [
+    {
+      "Id": "7cfe7925-4bf7-4a77-9f06-f0abce8e508f",
+      "Name": "Description",
+      "Type": "string",
+      "EnumType": "",
+      "EnumNamespace": "",
+      "EnumAngularImport": "shared/enums",
+      "IsNullable": false,
+      "IsRequired": false,
+      "MinLength": null,
+      "MaxLength": null,
+      "SortOrder": 0,
+      "SortType": 0,
+      "Regex": "",
+      "EmailValidation": false,
+      "EnumValues": null
+    }
+  ],
+  "NavigationProperties": [
+    {
+      "Namespace": "FacebookCommunityAnalytics.Api.Accounts",
+      "EntityName": "Account",
+      "EntityNameWithDuplicationNumber": "Account",
+      "EntitySetNameWithDuplicationNumber": "Accounts",
+      "EntitySetName": "Accounts",
+      "DtoNamespace": "FacebookCommunityAnalytics.Api.Accounts",
+      "DtoEntityName": "AccountDto",
+      "Type": "Guid",
+      "Name": "AccountId",
+      "ReferencePropertyName": "Account",
+      "DisplayProperty": "Username",
+      "UiPickType": "Typeahead",
+      "IsRequired": false
+    },
+    {
+      "Namespace": "FacebookCommunityAnalytics.Api.Proxies",
+      "EntityName": "Proxy",
+      "EntityNameWithDuplicationNumber": "Proxy",
+      "EntitySetNameWithDuplicationNumber": "Proxies",
+      "EntitySetName": "Proxies",
+      "DtoNamespace": "FacebookCommunityAnalytics.Api.Proxies",
+      "DtoEntityName": "ProxyDto",
+      "Type": "Guid",
+      "Name": "ProxyId",
+      "ReferencePropertyName": "Proxy",
+      "DisplayProperty": "Ip",
+      "UiPickType": "Typeahead",
+      "IsRequired": false
+    }
+  ],
+  "PhysicalFileName": "AccountProxy.json"
+}

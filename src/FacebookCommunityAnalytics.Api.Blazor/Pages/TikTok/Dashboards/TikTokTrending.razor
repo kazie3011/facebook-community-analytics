@@ -1,0 +1,91 @@
+@attribute [Authorize(ApiPermissions.Tiktok.Dashboard)]
+@using FacebookCommunityAnalytics.Api.Permissions
+@using FacebookCommunityAnalytics.Api.Tiktoks
+@using FA = Blazorise.Icons.FontAwesome;
+@inherits BlazorComponentBase
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject ITiktokStatsAppService _tiktokStatsAppService
+@inject IMessageService MessageService
+@using FacebookCommunityAnalytics.Api.TrendingDetails
+@using Radzen
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using FacebookCommunityAnalytics.Api.Core.Const
+@using FacebookCommunityAnalytics.Api.Core.Enums
+@using FacebookCommunityAnalytics.Api.Core.Extensions
+@using Volo.Abp.AspNetCore.Components.Web.LeptonTheme.Components
+
+@* ************************* TOP TRENDING ************************* *@
+<row>
+    <Field>
+        <Form id="ContractSearchForm">
+            <Addons>
+                <Addon AddonType="AddonType.Start">
+                    <AddonLabel Class="bg-primary text-white">@L["Icon.Date"] </AddonLabel>
+                </Addon>
+                <Addon AddonType="AddonType.Start">
+                    <DatePicker TValue="DateTimeOffset?" Date="@DateFilter" DateChanged="OnDate_Changed" DisplayFormat="@GlobalConsts.DateFormat" placeholder="@L["SelectDates"]"/>
+                </Addon>
+            </Addons>
+        </Form>
+    </Field>
+</row>
+<row>
+    @if (TopTrendingDetails.IsNotNullOrEmpty())
+    {
+        <table class="b-table table-striped table-sm" style="width:100%">
+            <TableHeader>
+                <TableRow TextAlignment="TextAlignment.Center">
+                    <TableHeaderCell Style="background-color: whitesmoke;vertical-align:middle;width: 100px;font-size: 14px" TextAlignment="TextAlignment.Center" Clicked="() =>{TiktokOrderType(TiktokTrendingProperty.Rank);}">
+                        @L["TikTokTrending.Rank"]
+                        <Icon TextColor="TextColor.Dark" Name="@(VisibleRankProperty ? Icon : null)"></Icon>
+                    </TableHeaderCell>
+                    <TableHeaderCell Style="background-color: whitesmoke;vertical-align:middle;font-size: 14px" TextAlignment="TextAlignment.Left" >
+                        @L["TikTokTrending.TrendingContent"]
+                    </TableHeaderCell>
+                    <TableHeaderCell Style="background-color: whitesmoke;vertical-align:middle;font-size: 14px" TextAlignment="TextAlignment.Center" Clicked="() =>{TiktokOrderType(TiktokTrendingProperty.View);}">
+                        @L["TikTokTrending.View"]
+                        <Icon TextColor="TextColor.Dark" Name="@(VisibleViewProperty ? Icon : null)"></Icon>
+                    </TableHeaderCell>
+                    <TableHeaderCell Style="background-color: whitesmoke;vertical-align:middle;font-size: 14px;" TextAlignment="TextAlignment.Left" Clicked="() =>{TiktokOrderType(TiktokTrendingProperty.Increase);}">
+                        <div class="rank-tooltip">
+                            @L["TikTokTrending.RankChange"]
+                            <Icon TextColor="TextColor.Dark" Name="@(VisibleInCreaseProperty ? Icon : null)"></Icon>
+                            <span class="text-tooltip">@((MarkupString)L["TiktokTrending.Tooltip.Increase"].ToString())</span>
+                        </div>
+                    </TableHeaderCell>
+                </TableRow>
+            </TableHeader>
+
+            <TableBody>
+                @foreach (var item in TopTrendingDetails)
+                {
+                    <TableRow>
+                        <TableRowCell Style="font-size: 14px;font-weight: 500;" TextAlignment="TextAlignment.Center">@item.Rank</TableRowCell>
+                        <TableRowCell Style="font-size: 14px;font-weight: 500;">@item.Description</TableRowCell>
+                        <TableRowCell Style="font-size: 14px;font-weight: 500;" TextAlignment="TextAlignment.Center">
+                              @(item.View.ToCommaStyle("0"))
+                        </TableRowCell>
+                        <TableRowCell Style="font-size: 16px;font-weight: 500;" >
+                            @switch (item.Increase)
+                            {
+                                case >= 0:
+                                    <div class="text-success">
+                                        <Icon Name="IconName.ArrowUp" TextColor="TextColor.Success"></Icon> @(item.Increase == 0 ? string.Empty : Math.Abs(item.Increase))
+                                    </div>
+                                    break;
+                                case < 0:
+                                    <div class="text-danger">
+                                        <Icon Name="IconName.ArrowDown" TextColor="TextColor.Danger"></Icon> @Math.Abs(item.Increase)
+                                    </div>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </TableRowCell>
+                    </TableRow>
+                }
+            </TableBody>
+        </table>
+    }
+</row>
