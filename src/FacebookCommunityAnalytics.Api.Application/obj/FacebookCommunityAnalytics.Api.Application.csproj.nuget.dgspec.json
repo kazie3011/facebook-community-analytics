@@ -1,0 +1,714 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application\\FacebookCommunityAnalytics.Api.Application.csproj": {}
+  },
+  "projects": {
+    "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application.Contracts\\FacebookCommunityAnalytics.Api.Application.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application.Contracts\\FacebookCommunityAnalytics.Api.Application.Contracts.csproj",
+        "projectName": "FacebookCommunityAnalytics.Api.Application.Contracts",
+        "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application.Contracts\\FacebookCommunityAnalytics.Api.Application.Contracts.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application.Contracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.abp.io/da94ac12-8eeb-4fae-ba3b-5ac570f7dc51/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.7, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Volo.Abp.Account.Pro.Admin.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Account.Pro.Public.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.AuditLogging.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.FeatureManagement.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.FluentValidation": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Identity.Pro.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.IdentityServer.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.LanguageManagement.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.LeptonTheme.Management.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.PermissionManagement.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.SettingManagement.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.TextTemplateManagement.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.CmsKit.Pro.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Saas.Host.Application.Contracts": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.313\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application\\FacebookCommunityAnalytics.Api.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application\\FacebookCommunityAnalytics.Api.Application.csproj",
+        "projectName": "FacebookCommunityAnalytics.Api.Application",
+        "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application\\FacebookCommunityAnalytics.Api.Application.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.abp.io/da94ac12-8eeb-4fae-ba3b-5ac570f7dc51/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application.Contracts\\FacebookCommunityAnalytics.Api.Application.Contracts.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application.Contracts\\FacebookCommunityAnalytics.Api.Application.Contracts.csproj"
+              },
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain\\FacebookCommunityAnalytics.Api.Domain.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain\\FacebookCommunityAnalytics.Api.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[15.0.5, )"
+            },
+            "Flurl": {
+              "target": "Package",
+              "version": "[3.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.6, )"
+            },
+            "Volo.Abp.Account.Pro.Admin.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Account.Pro.Public.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.AuditLogging.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.BackgroundJobs.HangFire": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.BlobStoring.Azure": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.FeatureManagement.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.FluentValidation": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Identity.Pro.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.IdentityServer.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.LanguageManagement.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.LeptonTheme.Management.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.PermissionManagement.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.SettingManagement.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.TextTemplateManagement.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.CmsKit.Pro.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Saas.Host.Application": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.313\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Core\\FacebookCommunityAnalytics.Api.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Core\\FacebookCommunityAnalytics.Api.Core.csproj",
+        "projectName": "FacebookCommunityAnalytics.Api.Core",
+        "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Core\\FacebookCommunityAnalytics.Api.Core.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.abp.io/da94ac12-8eeb-4fae-ba3b-5ac570f7dc51/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "EPPlus": {
+              "target": "Package",
+              "version": "[4.5.3.3, )"
+            },
+            "FluentDateTime": {
+              "target": "Package",
+              "version": "[2.0.0, )"
+            },
+            "Flurl": {
+              "target": "Package",
+              "version": "[3.0.2, )"
+            },
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.11.39, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.313\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj",
+        "projectName": "FacebookCommunityAnalytics.Api.Domain.Shared",
+        "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.abp.io/da94ac12-8eeb-4fae-ba3b-5ac570f7dc51/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Core\\FacebookCommunityAnalytics.Api.Core.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Core\\FacebookCommunityAnalytics.Api.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "Microsoft.Extensions.FileProviders.Embedded": {
+              "target": "Package",
+              "version": "[5.0.*, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Volo.Abp.AuditLogging.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.BackgroundJobs.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.BlobStoring.Database.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Commercial.SuiteTemplates": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.FeatureManagement.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Identity.Pro.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.IdentityServer.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.LanguageManagement.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.LeptonTheme.Management.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.PermissionManagement.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.SettingManagement.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.TextTemplateManagement.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.CmsKit.Pro.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Saas.Domain.Shared": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.313\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain\\FacebookCommunityAnalytics.Api.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain\\FacebookCommunityAnalytics.Api.Domain.csproj",
+        "projectName": "FacebookCommunityAnalytics.Api.Domain",
+        "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain\\FacebookCommunityAnalytics.Api.Domain.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.abp.io/da94ac12-8eeb-4fae-ba3b-5ac570f7dc51/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application.Contracts\\FacebookCommunityAnalytics.Api.Application.Contracts.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Application.Contracts\\FacebookCommunityAnalytics.Api.Application.Contracts.csproj"
+              },
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj"
+              },
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Integrations\\FacebookCommunityAnalytics.Api.Integrations.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Integrations\\FacebookCommunityAnalytics.Api.Integrations.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AspNetCore.MailKitMailer": {
+              "target": "Package",
+              "version": "[1.1.3, )"
+            },
+            "AsyncEnumerator": {
+              "target": "Package",
+              "version": "[4.0.2, )"
+            },
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[15.0.5, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.7.22, )"
+            },
+            "Humanizer.Core": {
+              "target": "Package",
+              "version": "[2.11.10, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.12.1, )"
+            },
+            "Volo.Abp.AuditLogging.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.BackgroundJobs.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.BlobStoring.Database.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Emailing": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.FeatureManagement.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Identity.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.Identity.Pro.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.IdentityServer.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.LanguageManagement.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.LeptonTheme.Management.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.PermissionManagement.Domain.Identity": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.PermissionManagement.Domain.IdentityServer": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.SettingManagement.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Abp.TextTemplateManagement.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.CmsKit.Pro.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "Volo.Saas.Domain": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.313\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Integrations\\FacebookCommunityAnalytics.Api.Integrations.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Integrations\\FacebookCommunityAnalytics.Api.Integrations.csproj",
+        "projectName": "FacebookCommunityAnalytics.Api.Integrations",
+        "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Integrations\\FacebookCommunityAnalytics.Api.Integrations.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Integrations\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.abp.io/da94ac12-8eeb-4fae-ba3b-5ac570f7dc51/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Core\\FacebookCommunityAnalytics.Api.Core.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Core\\FacebookCommunityAnalytics.Api.Core.csproj"
+              },
+              "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj": {
+                "projectPath": "D:\\Workspace\\facebook-community-analytics\\FacebookCommunityAnalytics.Api\\src\\FacebookCommunityAnalytics.Api.Domain.Shared\\FacebookCommunityAnalytics.Api.Domain.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.WebUtilities": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "RestSharp": {
+              "target": "Package",
+              "version": "[106.11.7, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.313\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

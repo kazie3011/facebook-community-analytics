@@ -1,0 +1,590 @@
+2022-06-10 10:41:16.905 +07:00 [INF] Starting web host.
+2022-06-10 10:41:22.809 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-06-10 10:41:22.848 +07:00 [INF] Loaded ABP modules:
+2022-06-10 10:41:22.848 +07:00 [INF] - FacebookCommunityAnalytics.Api.Blazor.ApiBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.Caching.StackExchangeRedis.AbpCachingStackExchangeRedisModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Caching.AbpCachingModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.Serialization.AbpSerializationModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.Uow.AbpUnitOfWorkModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Security.AbpSecurityModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.Swashbuckle.AbpSwashbuckleModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Auditing.AbpAuditingModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Http.AbpHttpModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.Http.AbpHttpAbstractionsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.Minify.AbpMinifyModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Validation.AbpValidationModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Application.AbpDddApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.UI.AbpUiModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.Application.AbpDddApplicationModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Domain.AbpDddDomainModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.EventBus.AbpEventBusModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.Guids.AbpGuidsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.Specifications.AbpSpecificationsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Features.AbpFeaturesModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.Client.AbpAspNetCoreMvcClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.Client.AbpAspNetCoreMvcClientCommonModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.Http.Client.AbpHttpClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.AspNetCore.Authentication.OpenIdConnect.AbpAspNetCoreAuthenticationOpenIdConnectModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AspNetCore.Authentication.OAuth.AbpAspNetCoreAuthenticationOAuthModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.Http.Client.IdentityModel.Web.AbpHttpClientIdentityModelWebModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Http.Client.IdentityModel.AbpHttpClientIdentityModelModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.IdentityModel.AbpIdentityModelModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.AbpAspNetCoreMvcUiLeptonThemeModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.Theme.Commercial.AbpAspNetCoreMvcUiThemeCommercialModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.AspNetCore.Components.Server.LeptonTheme.AbpAspNetCoreComponentsServerLeptonThemeModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AspNetCore.Components.Web.LeptonTheme.AbpAspNetCoreComponentsWebLeptonThemeModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.AspNetCore.Components.Web.Theming.AbpAspNetCoreComponentsWebThemingModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.BlazoriseUI.AbpBlazoriseUIModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.AspNetCore.Components.Web.AbpAspNetCoreComponentsWebModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.Abp.AspNetCore.Components.AbpAspNetCoreComponentsModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AspNetCore.Components.Server.Theming.AbpAspNetCoreComponentsServerThemingModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.AspNetCore.Components.Server.AbpAspNetCoreComponentsServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.AspNetCore.SignalR.AbpAspNetCoreSignalRModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.Account.Pro.Admin.Blazor.Server.AbpAccountAdminBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Account.Pro.Admin.Blazor.AbpAccountAdminBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.Account.AbpAccountAdminApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]               - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]                 - Volo.Abp.Users.AbpUsersDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.Abp.Users.AbpUsersAbstractionModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]               - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.Ldap.AbpLdapModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.SettingManagement.Blazor.AbpSettingManagementBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.SettingManagement.Blazor.Server.AbpSettingManagementBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.AuditLogging.Blazor.Server.AbpAuditLoggingBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AuditLogging.Blazor.AbpAuditLoggingBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.Identity.Pro.Blazor.Server.AbpIdentityProBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Identity.Pro.Blazor.AbpIdentityProBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.PermissionManagement.Blazor.AbpPermissionManagementBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.PermissionManagement.Blazor.Server.AbpPermissionManagementBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.LeptonTheme.Management.Blazor.Server.LeptonThemeManagementBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.Blazor.LeptonThemeManagementBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.IdentityServer.Blazor.Server.AbpIdentityServerBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.IdentityServer.Blazor.AbpIdentityServerBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.LanguageManagement.Blazor.Server.LanguageManagementBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.LanguageManagement.Blazor.LanguageManagementBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Saas.Host.Blazor.Server.SaasHostBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Saas.Host.Blazor.SaasHostBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Saas.Host.SaasHostApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.FeatureManagement.Blazor.AbpFeatureManagementBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.FeatureManagement.Blazor.Server.AbpFeatureManagementBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.TextTemplateManagement.Blazor.Server.TextTemplateManagementBlazorServerModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.Blazor.TextTemplateManagementBlazorModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.Abp.Emailing.AbpEmailingModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.CmsKit.CmsKitProApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.CmsKit.CmsKitApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.CmsKit.Public.CmsKitPublicApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]             - Volo.CmsKit.CmsKitCommonApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.CmsKit.Admin.CmsKitAdminApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.CmsKit.CmsKitProPublicApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.CmsKit.CmsKitProAdminApplicationContractsModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.Abp.FluentValidation.AbpFluentValidationModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.PermissionManagement.HttpApi.AbpPermissionManagementHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.LeptonTheme.LeptonThemeManagementHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.PermissionManagement.AbpPermissionManagementHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiClientModule
+2022-06-10 10:41:22.848 +07:00 [INF]   - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2022-06-10 10:41:22.848 +07:00 [INF]     - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2022-06-10 10:41:22.923 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.923 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.926 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.932 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.938 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.946 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.951 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.956 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.961 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.967 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.973 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.979 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.985 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:22.992 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:41:25.059 +07:00 [INF] Initialized all ABP modules.
+2022-06-10 10:41:25.111 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-06-10 10:41:25.111 +07:00 [INF] Hosting environment: Development
+2022-06-10 10:41:25.111 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Blazor
+2022-06-10 10:41:25.141 +07:00 [INF] Request starting HTTP/1.1 DEBUG https://localhost:44314/ - 0
+2022-06-10 10:41:25.562 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:41:25.565 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:41:50.536 +07:00 [INF] Received HTTP response headers after 24969.9274ms - 500
+2022-06-10 10:41:50.538 +07:00 [INF] End processing HTTP request after 24982.2008ms - 500
+2022-06-10 10:41:50.568 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Volo.Abp.AbpException: Remote service returns error! StatusCode = InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionFromServerAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionCache.GetAsync(String baseUrl, Func`1 factory)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.FindActionAsync(HttpClient client, String baseUrl, Type serviceType, MethodInfo method)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAndGetResultAsync[T](IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.GetResultAsync(Task task, Type resultType)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Validation.ValidationInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.<GetAsync>b__14_0()
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.GetAsync()
+   at Volo.Abp.AspNetCore.Mvc.Client.RemoteLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-06-10 10:41:50.712 +07:00 [INF] Request finished HTTP/1.1 DEBUG https://localhost:44314/ - 0 - 500 - text/plain 25570.4087ms
+2022-06-10 10:43:17.981 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/ - -
+2022-06-10 10:43:17.990 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:43:17.990 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:43:18.020 +07:00 [INF] Received HTTP response headers after 29.9894ms - 500
+2022-06-10 10:43:18.020 +07:00 [INF] End processing HTTP request after 30.4221ms - 500
+2022-06-10 10:43:18.025 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Volo.Abp.AbpException: Remote service returns error! StatusCode = InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionFromServerAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionCache.GetAsync(String baseUrl, Func`1 factory)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.FindActionAsync(HttpClient client, String baseUrl, Type serviceType, MethodInfo method)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAndGetResultAsync[T](IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.GetResultAsync(Task task, Type resultType)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Validation.ValidationInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.<GetAsync>b__14_0()
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.GetAsync()
+   at Volo.Abp.AspNetCore.Mvc.Client.RemoteLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-06-10 10:43:18.067 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/ - - - 500 - text/html;+charset=utf-8 85.1672ms
+2022-06-10 10:43:18.170 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/favicon.ico - -
+2022-06-10 10:43:18.181 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:43:18.181 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:43:18.202 +07:00 [INF] Received HTTP response headers after 20.0728ms - 500
+2022-06-10 10:43:18.202 +07:00 [INF] End processing HTTP request after 20.4239ms - 500
+2022-06-10 10:43:18.206 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Volo.Abp.AbpException: Remote service returns error! StatusCode = InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionFromServerAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionCache.GetAsync(String baseUrl, Func`1 factory)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.FindActionAsync(HttpClient client, String baseUrl, Type serviceType, MethodInfo method)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAndGetResultAsync[T](IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.GetResultAsync(Task task, Type resultType)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Validation.ValidationInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.<GetAsync>b__14_0()
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.GetAsync()
+   at Volo.Abp.AspNetCore.Mvc.Client.RemoteLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-06-10 10:43:18.208 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/favicon.ico - - - 500 - text/plain 37.6417ms
+2022-06-10 10:43:50.135 +07:00 [DBG] Disposed channel pool with no channels in the pool.
+2022-06-10 10:43:50.159 +07:00 [INF] Application is shutting down...
+2022-06-10 10:44:02.354 +07:00 [INF] Starting web host.
+2022-06-10 10:44:07.188 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-06-10 10:44:07.253 +07:00 [INF] Loaded ABP modules:
+2022-06-10 10:44:07.253 +07:00 [INF] - FacebookCommunityAnalytics.Api.Blazor.ApiBlazorModule
+2022-06-10 10:44:07.253 +07:00 [INF]   - Volo.Abp.Caching.StackExchangeRedis.AbpCachingStackExchangeRedisModule
+2022-06-10 10:44:07.253 +07:00 [INF]     - Volo.Abp.Caching.AbpCachingModule
+2022-06-10 10:44:07.253 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2022-06-10 10:44:07.253 +07:00 [INF]       - Volo.Abp.Serialization.AbpSerializationModule
+2022-06-10 10:44:07.253 +07:00 [INF]       - Volo.Abp.Uow.AbpUnitOfWorkModule
+2022-06-10 10:44:07.253 +07:00 [INF]       - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2022-06-10 10:44:07.253 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2022-06-10 10:44:07.253 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2022-06-10 10:44:07.253 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2022-06-10 10:44:07.253 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2022-06-10 10:44:07.253 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2022-06-10 10:44:07.253 +07:00 [INF]         - Volo.Abp.Security.AbpSecurityModule
+2022-06-10 10:44:07.253 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2022-06-10 10:44:07.253 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2022-06-10 10:44:07.253 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2022-06-10 10:44:07.253 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2022-06-10 10:44:07.253 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2022-06-10 10:44:07.253 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2022-06-10 10:44:07.253 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2022-06-10 10:44:07.253 +07:00 [INF]   - Volo.Abp.Swashbuckle.AbpSwashbuckleModule
+2022-06-10 10:44:07.253 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2022-06-10 10:44:07.253 +07:00 [INF]       - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2022-06-10 10:44:07.253 +07:00 [INF]         - Volo.Abp.Auditing.AbpAuditingModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.Http.AbpHttpModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.Http.AbpHttpAbstractionsModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.Minify.AbpMinifyModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.Validation.AbpValidationModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.Application.AbpDddApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.UI.AbpUiModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.Application.AbpDddApplicationModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.Domain.AbpDddDomainModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.EventBus.AbpEventBusModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.Guids.AbpGuidsModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.Specifications.AbpSpecificationsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.Features.AbpFeaturesModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.Client.AbpAspNetCoreMvcClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.Client.AbpAspNetCoreMvcClientCommonModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.Http.Client.AbpHttpClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.AspNetCore.Authentication.OpenIdConnect.AbpAspNetCoreAuthenticationOpenIdConnectModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AspNetCore.Authentication.OAuth.AbpAspNetCoreAuthenticationOAuthModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.Http.Client.IdentityModel.Web.AbpHttpClientIdentityModelWebModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Http.Client.IdentityModel.AbpHttpClientIdentityModelModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.IdentityModel.AbpIdentityModelModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.AbpAspNetCoreMvcUiLeptonThemeModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.Theme.Commercial.AbpAspNetCoreMvcUiThemeCommercialModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.AspNetCore.Components.Server.LeptonTheme.AbpAspNetCoreComponentsServerLeptonThemeModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AspNetCore.Components.Web.LeptonTheme.AbpAspNetCoreComponentsWebLeptonThemeModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.AspNetCore.Components.Web.Theming.AbpAspNetCoreComponentsWebThemingModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.BlazoriseUI.AbpBlazoriseUIModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.AspNetCore.Components.Web.AbpAspNetCoreComponentsWebModule
+2022-06-10 10:44:07.254 +07:00 [INF]             - Volo.Abp.AspNetCore.Components.AbpAspNetCoreComponentsModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AspNetCore.Components.Server.Theming.AbpAspNetCoreComponentsServerThemingModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.AspNetCore.Components.Server.AbpAspNetCoreComponentsServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.AspNetCore.SignalR.AbpAspNetCoreSignalRModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.Account.Pro.Admin.Blazor.Server.AbpAccountAdminBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Account.Pro.Admin.Blazor.AbpAccountAdminBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.Account.AbpAccountAdminApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]             - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]               - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]                 - Volo.Abp.Users.AbpUsersDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]             - Volo.Abp.Users.AbpUsersAbstractionModule
+2022-06-10 10:44:07.254 +07:00 [INF]             - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]               - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.Ldap.AbpLdapModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.SettingManagement.Blazor.AbpSettingManagementBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.SettingManagement.Blazor.Server.AbpSettingManagementBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.AuditLogging.Blazor.Server.AbpAuditLoggingBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AuditLogging.Blazor.AbpAuditLoggingBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.Identity.Pro.Blazor.Server.AbpIdentityProBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Identity.Pro.Blazor.AbpIdentityProBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.PermissionManagement.Blazor.AbpPermissionManagementBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.PermissionManagement.Blazor.Server.AbpPermissionManagementBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.LeptonTheme.Management.Blazor.Server.LeptonThemeManagementBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.Blazor.LeptonThemeManagementBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.IdentityServer.Blazor.Server.AbpIdentityServerBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.IdentityServer.Blazor.AbpIdentityServerBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.LanguageManagement.Blazor.Server.LanguageManagementBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.LanguageManagement.Blazor.LanguageManagementBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Saas.Host.Blazor.Server.SaasHostBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Saas.Host.Blazor.SaasHostBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Saas.Host.SaasHostApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.FeatureManagement.Blazor.AbpFeatureManagementBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.FeatureManagement.Blazor.Server.AbpFeatureManagementBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.TextTemplateManagement.Blazor.Server.TextTemplateManagementBlazorServerModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.Blazor.TextTemplateManagementBlazorModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.Abp.Emailing.AbpEmailingModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.CmsKit.CmsKitProApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.CmsKit.CmsKitApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.CmsKit.Public.CmsKitPublicApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]             - Volo.CmsKit.CmsKitCommonApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.CmsKit.Admin.CmsKitAdminApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.CmsKit.CmsKitProPublicApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.CmsKit.CmsKitProAdminApplicationContractsModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.Abp.FluentValidation.AbpFluentValidationModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.PermissionManagement.HttpApi.AbpPermissionManagementHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.LeptonTheme.LeptonThemeManagementHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.PermissionManagement.AbpPermissionManagementHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiClientModule
+2022-06-10 10:44:07.254 +07:00 [INF]   - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2022-06-10 10:44:07.254 +07:00 [INF]     - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2022-06-10 10:44:07.380 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.382 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.395 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.405 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.416 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.427 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.437 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.447 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.455 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.465 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.473 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.481 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.491 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:07.498 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:09.262 +07:00 [INF] Initialized all ABP modules.
+2022-06-10 10:44:09.303 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-06-10 10:44:09.303 +07:00 [INF] Hosting environment: Development
+2022-06-10 10:44:09.303 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Blazor
+2022-06-10 10:44:09.333 +07:00 [INF] Request starting HTTP/1.1 DEBUG https://localhost:44314/ - 0
+2022-06-10 10:44:09.732 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:44:09.734 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:44:22.990 +07:00 [INF] Received HTTP response headers after 13253.2679ms - 500
+2022-06-10 10:44:22.991 +07:00 [INF] End processing HTTP request after 13264.2626ms - 500
+2022-06-10 10:44:23.013 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Volo.Abp.AbpException: Remote service returns error! StatusCode = InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionFromServerAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionCache.GetAsync(String baseUrl, Func`1 factory)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.FindActionAsync(HttpClient client, String baseUrl, Type serviceType, MethodInfo method)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAndGetResultAsync[T](IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.GetResultAsync(Task task, Type resultType)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Validation.ValidationInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.<GetAsync>b__14_0()
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.GetAsync()
+   at Volo.Abp.AspNetCore.Mvc.Client.RemoteLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-06-10 10:44:23.102 +07:00 [INF] Request finished HTTP/1.1 DEBUG https://localhost:44314/ - 0 - 500 - text/plain 13770.9299ms
+2022-06-10 10:46:15.909 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/ - -
+2022-06-10 10:46:15.918 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:46:15.918 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:46:15.943 +07:00 [INF] Received HTTP response headers after 24.3082ms - 500
+2022-06-10 10:46:15.943 +07:00 [INF] End processing HTTP request after 24.5778ms - 500
+2022-06-10 10:46:15.947 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Volo.Abp.AbpException: Remote service returns error! StatusCode = InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionFromServerAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionCache.GetAsync(String baseUrl, Func`1 factory)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.FindActionAsync(HttpClient client, String baseUrl, Type serviceType, MethodInfo method)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAndGetResultAsync[T](IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.GetResultAsync(Task task, Type resultType)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Validation.ValidationInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.<GetAsync>b__14_0()
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.GetAsync()
+   at Volo.Abp.AspNetCore.Mvc.Client.RemoteLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-06-10 10:46:15.975 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/ - - - 500 - text/html;+charset=utf-8 65.2978ms
+2022-06-10 10:46:16.010 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/favicon.ico - -
+2022-06-10 10:46:16.018 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:46:16.018 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-06-10 10:46:16.171 +07:00 [INF] Received HTTP response headers after 152.6522ms - 500
+2022-06-10 10:46:16.171 +07:00 [INF] End processing HTTP request after 153.0354ms - 500
+2022-06-10 10:46:16.175 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Volo.Abp.AbpException: Remote service returns error! StatusCode = InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionFromServerAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionCache.GetAsync(String baseUrl, Func`1 factory)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.GetApiDescriptionAsync(HttpClient client, String baseUrl)
+   at Volo.Abp.Http.Client.DynamicProxying.ApiDescriptionFinder.FindActionAsync(HttpClient client, String baseUrl, Type serviceType, MethodInfo method)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAndGetResultAsync[T](IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.GetResultAsync(Task task, Type resultType)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Validation.ValidationInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.<GetAsync>b__14_0()
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.AspNetCore.Mvc.Client.MvcCachedApplicationConfigurationClient.GetAsync()
+   at Volo.Abp.AspNetCore.Mvc.Client.RemoteLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-06-10 10:46:16.177 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/favicon.ico - - - 500 - text/plain 167.3946ms

@@ -1,0 +1,17 @@
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.deps.json
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.dll
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.pdb
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Application.Contracts.dll
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.dll
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Domain.Shared.dll
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Application.Contracts.pdb
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.pdb
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Domain.Shared.pdb
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.csproj.AssemblyReference.cache
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.GeneratedMSBuildEditorConfig.editorconfig
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.AssemblyInfoInputs.cache
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.AssemblyInfo.cs
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.csproj.CoreCompileInputs.cache
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.csproj.CopyComplete
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.dll
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Client\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.HttpApi.Client.pdb

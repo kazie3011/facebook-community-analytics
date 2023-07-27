@@ -1,0 +1,356 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = FacebookCommunityAnalytics.Api.Blazor
+build_property.RootNamespace = FacebookCommunityAnalytics.Api.Blazor
+build_property.ProjectDir = D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Blazor\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Blazor
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Components/Layout/MainFooterComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkZvb3RlckNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/AccountProxies.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFByb3hpZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Accounts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/AffiliateStats.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWZmaWxpYXRlU3RhdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/AffLinkDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWZmTGlua0RldGFpbHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/AffLinks.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWZmTGlua3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/AffLinksTiki.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWZmTGlua3NUaWtpLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/AffReports.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWZmUmVwb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/AffSummary.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWZmU3VtbWFyeS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/CampaignDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FtcGFpZ25EZXRhaWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Campaigns.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FtcGFpZ25zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Categories.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcmllcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Cms/CmsPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ21zXENtc1BhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Cms/Sites.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ21zXFNpdGVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/ContentMedia.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGVudE1lZGlhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Contract/ContractDashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udHJhY3RcQ29udHJhY3REYXNoYm9hcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Contract/ContractDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udHJhY3RcQ29udHJhY3REZXRhaWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Contract/Transactions.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udHJhY3RcVHJhbnNhY3Rpb25zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Dev.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGV2LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/EvaluationConfigurations.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXZhbHVhdGlvbkNvbmZpZ3VyYXRpb25zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Groups.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR3JvdXBzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lckRldGFpbHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/Components/HomePageAvgPosts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxDb21wb25lbnRzXEhvbWVQYWdlQXZnUG9zdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/Components/HomePageCampaigns.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxDb21wb25lbnRzXEhvbWVQYWdlQ2FtcGFpZ25zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/Components/HomePagePartner.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxDb21wb25lbnRzXEhvbWVQYWdlUGFydG5lci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/Components/HomePagePosts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxDb21wb25lbnRzXEhvbWVQYWdlUG9zdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/Contracts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxDb250cmFjdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/PartnerCampaignDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxQYXJ0bmVyQ2FtcGFpZ25EZXRhaWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/PartnerCampaigns.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxQYXJ0bmVyQ2FtcGFpZ25zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/PartnerGroups.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxQYXJ0bmVyR3JvdXBzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/PartnerPosts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxQYXJ0bmVyUG9zdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/Partners.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxQYXJ0bmVycy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PartnerModule/PartnerUsers.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lck1vZHVsZVxQYXJ0bmVyVXNlcnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Partners.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFydG5lcnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PayrollDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5cm9sbERldGFpbHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Payrolls.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5cm9sbHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/PayrollsConfiguration.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5cm9sbHNDb25maWd1cmF0aW9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Payslip.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5c2xpcC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Posts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUG9zdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Proxies.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJveGllcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/SalaryConfigurations.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2FsYXJ5Q29uZmlndXJhdGlvbnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/ScheduledPosts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2NoZWR1bGVkUG9zdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/StaffEvaluationCriteria.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZFdmFsdWF0aW9uQ3JpdGVyaWEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/StaffEvaluations.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZFdmFsdWF0aW9ucy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TeamMembers.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVhbU1lbWJlcnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTokMCNs.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rTUNOcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Channels/GDLMCNExternalChannel.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXENoYW5uZWxzXEdETE1DTkV4dGVybmFsQ2hhbm5lbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Channels/GDLMCNInternalChannel.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXENoYW5uZWxzXEdETE1DTkludGVybmFsQ2hhbm5lbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Channels/TiktokChannels.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXENoYW5uZWxzXFRpa3Rva0NoYW5uZWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Dashboards/MCNGDLTiktokDashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXERhc2hib2FyZHNcTUNOR0RMVGlrdG9rRGFzaGJvYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Dashboards/MCNInternalKPIDashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXERhc2hib2FyZHNcTUNOSW50ZXJuYWxLUElEYXNoYm9hcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Dashboards/MCNVietNamTiktokDashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXERhc2hib2FyZHNcTUNOVmlldE5hbVRpa3Rva0Rhc2hib2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Dashboards/TikTokDashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXERhc2hib2FyZHNcVGlrVG9rRGFzaGJvYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Reports/TiktokDailyReports.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXFJlcG9ydHNcVGlrdG9rRGFpbHlSZXBvcnRzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Reports/TiktokMonthlyReports.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXFJlcG9ydHNcVGlrdG9rTW9udGhseVJlcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Reports/TikTokReports.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXFJlcG9ydHNcVGlrVG9rUmVwb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/TikTok/Reports/TiktokWeeklyReports.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlrVG9rXFJlcG9ydHNcVGlrdG9rV2Vla2x5UmVwb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/UncrawledPosts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5jcmF3bGVkUG9zdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/UserAffiliates.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlckFmZmlsaWF0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/UserCompensations/CompensationDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlckNvbXBlbnNhdGlvbnNcQ29tcGVuc2F0aW9uRGV0YWlscy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/UserCompensations/Compensations.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlckNvbXBlbnNhdGlvbnNcQ29tcGVuc2F0aW9ucy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/UserCompensations/UserBonusConfigs.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlckNvbXBlbnNhdGlvbnNcVXNlckJvbnVzQ29uZmlncy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/UserCompensations/UserCompensations.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlckNvbXBlbnNhdGlvbnNcVXNlckNvbXBlbnNhdGlvbnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/UserCompensations/UserProfile.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlckNvbXBlbnNhdGlvbnNcVXNlclByb2ZpbGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/UserInfos.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlckluZm9zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/ClientScript.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENsaWVudFNjcmlwdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/Components/Dashboards/TeamAffiliate.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcRGFzaGJvYXJkc1xUZWFtQWZmaWxpYXRlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/Components/Dashboards/TeamContent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcRGFzaGJvYXJkc1xUZWFtQ29udGVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/Components/Dashboards/TeamSale.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcRGFzaGJvYXJkc1xUZWFtU2FsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/Components/Dashboards/TeamSeeding.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcRGFzaGJvYXJkc1xUZWFtU2VlZGluZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/Components/Dashboards/TeamTiktok.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcRGFzaGJvYXJkc1xUZWFtVGlrdG9rLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/Components/HomePageDefault.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcSG9tZVBhZ2VEZWZhdWx0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/ErrorBar.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEVycm9yQmFyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/EventConsole.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEV2ZW50Q29uc29sZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/LongStringComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvbmdTdHJpbmdDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/PartnerPostsModals.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFBhcnRuZXJQb3N0c01vZGFscy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/PostsModals.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFBvc3RzTW9kYWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/SignalRNotification.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFNpZ25hbFJOb3RpZmljYXRpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/TagsInputControl.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFRhZ3NJbnB1dENvbnRyb2wucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Shared/TiktokModals.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFRpa3Rva01vZGFscy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-zro621semt
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/facebook-community-analytics/FacebookCommunityAnalytics.Api/src/FacebookCommunityAnalytics.Api.Blazor/Themes/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = VGhlbWVzXF9WaWV3SW1wb3J0cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

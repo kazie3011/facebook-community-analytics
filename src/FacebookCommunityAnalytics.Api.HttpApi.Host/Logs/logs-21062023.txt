@@ -1,0 +1,321 @@
+2023-06-21 16:07:18.250 +07:00 [INF] Starting FacebookCommunityAnalytics.Api.HttpApi.Host.
+2023-06-21 16:07:34.097 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-06-21 16:07:34.177 +07:00 [INF] Initializing UI Database
+2023-06-21 16:07:34.894 +07:00 [INF] Saving healthchecks configuration to database
+2023-06-21 16:07:34.982 +07:00 [INF] Loaded ABP modules:
+2023-06-21 16:07:34.982 +07:00 [INF] - FacebookCommunityAnalytics.Api.ApiHttpApiHostModule
+2023-06-21 16:07:34.982 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.Validation.AbpValidationModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationModule
+2023-06-21 16:07:34.982 +07:00 [INF]               - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2023-06-21 16:07:34.982 +07:00 [INF]               - Volo.Abp.Settings.AbpSettingsModule
+2023-06-21 16:07:34.982 +07:00 [INF]                 - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2023-06-21 16:07:34.982 +07:00 [INF]                 - Volo.Abp.Security.AbpSecurityModule
+2023-06-21 16:07:34.982 +07:00 [INF]                 - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2023-06-21 16:07:34.982 +07:00 [INF]                   - Volo.Abp.Data.AbpDataModule
+2023-06-21 16:07:34.982 +07:00 [INF]                     - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2023-06-21 16:07:34.982 +07:00 [INF]                     - Volo.Abp.Uow.AbpUnitOfWorkModule
+2023-06-21 16:07:34.982 +07:00 [INF]                     - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.Users.AbpUsersDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.Features.AbpFeaturesModule
+2023-06-21 16:07:34.982 +07:00 [INF]               - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.Application.AbpDddApplicationModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.Domain.AbpDddDomainModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.Auditing.AbpAuditingModule
+2023-06-21 16:07:34.982 +07:00 [INF]               - Volo.Abp.Json.AbpJsonModule
+2023-06-21 16:07:34.982 +07:00 [INF]                 - Volo.Abp.Timing.AbpTimingModule
+2023-06-21 16:07:34.982 +07:00 [INF]               - Volo.Abp.Threading.AbpThreadingModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.EventBus.AbpEventBusModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.Guids.AbpGuidsModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.Specifications.AbpSpecificationsModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.Application.AbpDddApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.Authorization.AbpAuthorizationModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.Http.AbpHttpAbstractionsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.Users.AbpUsersAbstractionModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Saas.Host.SaasHostApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.Ldap.AbpLdapModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.Emailing.AbpEmailingModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.Account.AbpAccountAdminApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.CmsKit.CmsKitProApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.CmsKit.CmsKitApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.CmsKit.Public.CmsKitPublicApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.CmsKit.CmsKitCommonApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.CmsKit.Admin.CmsKitAdminApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.CmsKit.CmsKitProPublicApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.CmsKit.CmsKitProAdminApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.FluentValidation.AbpFluentValidationModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.Http.AbpHttpModule
+2023-06-21 16:07:34.982 +07:00 [INF]             - Volo.Abp.Minify.AbpMinifyModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.Abp.UI.AbpUiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.PermissionManagement.HttpApi.AbpPermissionManagementHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.LeptonTheme.LeptonThemeManagementHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiModule
+2023-06-21 16:07:34.982 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - Volo.Abp.Caching.StackExchangeRedis.AbpCachingStackExchangeRedisModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.Caching.AbpCachingModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.Serialization.AbpSerializationModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.Users.AbpUsersDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2023-06-21 16:07:34.983 +07:00 [INF]           - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Saas.SaasDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]           - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Saas.Host.SaasHostApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.Account.AbpAccountSharedApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.Sms.AbpSmsModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.CmsKit.CmsKitProApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.CmsKit.CmsKitApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.BlobStoring.Azure.AbpBlobStoringAzureModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.CmsMongoDbModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - Volo.Abp.Swashbuckle.AbpSwashbuckleModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2023-06-21 16:07:34.983 +07:00 [INF]   - Volo.Abp.BackgroundJobs.Hangfire.AbpBackgroundJobsHangfireModule
+2023-06-21 16:07:34.983 +07:00 [INF]     - Volo.Abp.Hangfire.AbpHangfireModule
+2023-06-21 16:07:35.148 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.148 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.148 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.148 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.149 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.149 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.149 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.149 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.149 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.149 +07:00 [ERR] ABP-LIC-0008 - License check failed for 'Volo.Saas.Host.HttpApi-v4.3.2.0'.
+
+For more information, contact to license@abp.io.
+2023-06-21 16:07:35.151 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.163 +07:00 [DBG] Disposed channel pool with no channels in the pool.
+2023-06-21 16:07:35.167 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.172 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.274 +07:00 [INF] Application is shutting down...
+2023-06-21 16:07:35.279 +07:00 [DBG] Started background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2023-06-21 16:07:35.287 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.288 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2023-06-21 16:07:35.292 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.298 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.302 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:35.400 +07:00 [INF] Start installing Hangfire SQL objects...
+2023-06-21 16:07:35.668 +07:00 [INF] Hangfire SQL objects installed.
+2023-06-21 16:07:35.677 +07:00 [INF] Starting Hangfire Server using job storage: 'SQL Server: localhost@GDL_Hangfire_db'
+2023-06-21 16:07:35.677 +07:00 [INF] Using the following options for SQL Server job storage: Queue poll interval: 00:00:00.
+2023-06-21 16:07:35.677 +07:00 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2023-06-21 16:07:35.691 +07:00 [DBG] Execution loop BackgroundServerProcess:f7819870 has started in 7.5444 ms
+2023-06-21 16:07:35.848 +07:00 [INF] Server laptop-b2vhear5:1124:51b4e842 successfully announced in 138.0712 ms
+2023-06-21 16:07:35.852 +07:00 [DBG] Execution loop ServerHeartbeatProcess:047987d2 has started in 3.7299 ms
+2023-06-21 16:07:35.852 +07:00 [INF] Server laptop-b2vhear5:1124:51b4e842 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2023-06-21 16:07:35.854 +07:00 [DBG] Execution loop ServerWatchdog:2aae9dda has started in 1.6962 ms
+2023-06-21 16:07:35.855 +07:00 [DBG] Execution loop ServerJobCancellationWatcher:190d563f has started in 2.7558 ms
+2023-06-21 16:07:35.857 +07:00 [DBG] Execution loop ExpirationManager:ac979277 has started in 2.2275 ms
+2023-06-21 16:07:35.858 +07:00 [DBG] Execution loop CountersAggregator:a810db3b has started in 2.7896 ms
+2023-06-21 16:07:35.860 +07:00 [DBG] Aggregating records in 'Counter' table...
+2023-06-21 16:07:35.860 +07:00 [DBG] Removing outdated records from the 'AggregatedCounter' table...
+2023-06-21 16:07:35.862 +07:00 [DBG] Execution loop Worker:d5938569 has started in 4.4328 ms
+2023-06-21 16:07:35.863 +07:00 [DBG] Execution loop Worker:11b6e543 has started in 5.1549 ms
+2023-06-21 16:07:35.864 +07:00 [DBG] Execution loop Worker:a2307c3c has started in 7.1937 ms
+2023-06-21 16:07:35.865 +07:00 [DBG] Execution loop Worker:2799cc99 has started in 7.8225 ms
+2023-06-21 16:07:35.866 +07:00 [INF] 1 servers were removed due to timeout
+2023-06-21 16:07:35.866 +07:00 [DBG] Execution loop Worker:2444ca11 has started in 9.2668 ms
+2023-06-21 16:07:35.868 +07:00 [DBG] Execution loop Worker:6bee0914 has started in 10.7744 ms
+2023-06-21 16:07:35.869 +07:00 [DBG] Execution loop Worker:fbc138be has started in 12.2361 ms
+2023-06-21 16:07:35.871 +07:00 [DBG] Execution loop Worker:00b00e70 has started in 13.8122 ms
+2023-06-21 16:07:35.873 +07:00 [DBG] Execution loop Worker:df956420 has started in 15.8477 ms
+2023-06-21 16:07:35.874 +07:00 [DBG] Execution loop Worker:0b0a8f26 has started in 16.5134 ms
+2023-06-21 16:07:35.876 +07:00 [DBG] Execution loop Worker:0350b653 has started in 17.9868 ms
+2023-06-21 16:07:35.877 +07:00 [DBG] Execution loop Worker:7d8ccdd3 has started in 19.8909 ms
+2023-06-21 16:07:35.878 +07:00 [DBG] Execution loop Worker:b0ae03cc has started in 20.6666 ms
+2023-06-21 16:07:35.879 +07:00 [DBG] Execution loop Worker:97eb4903 has started in 22.2909 ms
+2023-06-21 16:07:35.882 +07:00 [DBG] Execution loop Worker:0119822e has started in 24.648 ms
+2023-06-21 16:07:35.882 +07:00 [DBG] Execution loop Worker:8c07c611 has started in 25.4035 ms
+2023-06-21 16:07:35.884 +07:00 [DBG] Execution loop Worker:504fbd66 has started in 27.1625 ms
+2023-06-21 16:07:35.886 +07:00 [DBG] Execution loop Worker:4532cc87 has started in 28.9514 ms
+2023-06-21 16:07:35.888 +07:00 [DBG] Execution loop Worker:65c59e94 has started in 31.226 ms
+2023-06-21 16:07:35.889 +07:00 [DBG] Execution loop Worker:55ec5e5e has started in 32.1046 ms
+2023-06-21 16:07:35.890 +07:00 [INF] Server laptop-b2vhear5:1124:51b4e842 all the dispatchers started
+2023-06-21 16:07:35.893 +07:00 [DBG] Execution loop RecurringJobScheduler:7122498d has started in 3.7085 ms
+2023-06-21 16:07:35.893 +07:00 [DBG] Execution loop DelayedJobScheduler:6ef87da6 has started in 6.3352 ms
+2023-06-21 16:07:35.909 +07:00 [DBG] Removing outdated records from the 'Job' table...
+2023-06-21 16:07:35.935 +07:00 [DBG] Removing outdated records from the 'List' table...
+2023-06-21 16:07:35.938 +07:00 [DBG] Removing outdated records from the 'Set' table...
+2023-06-21 16:07:35.940 +07:00 [DBG] Removing outdated records from the 'Hash' table...
+2023-06-21 16:07:37.234 +07:00 [INF] Initialized all ABP modules.
+2023-06-21 16:07:37.390 +07:00 [DBG] Executing HealthCheck collector HostedService.
+2023-06-21 16:07:37.426 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/health-status"
+2023-06-21 16:07:37.429 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/health-status"
+2023-06-21 16:07:37.474 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-06-21 16:07:37.475 +07:00 [INF] Hosting environment: Development
+2023-06-21 16:07:37.475 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.HttpApi.Host
+2023-06-21 16:07:37.483 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:38.483 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:39.500 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:40.281 +07:00 [INF] Waiting for the host to be disposed. Ensure all 'IHost' instances are wrapped in 'using' blocks.
+2023-06-21 16:07:41.483 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:41.995 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:42.990 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:43.984 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:44.982 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:45.995 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:46.986 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:47.982 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:48.995 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:49.991 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:50.987 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:51.984 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:52.990 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:53.986 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:54.996 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:55.995 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:56.991 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:58.008 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44344/swagger/index.html - -
+2023-06-21 16:07:58.379 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44344/api/abp/api-definition - -
+2023-06-21 16:08:00.057 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ObjectDisposedException: Instances cannot be resolved and nested lifetimes cannot be created from this LifetimeScope as it (or one of its parent scopes) has already been disposed.
+   at Autofac.Core.Lifetime.LifetimeScope.BeginLifetimeScope(Object tag)
+   at Autofac.Core.Lifetime.LifetimeScope.BeginLifetimeScope()
+   at Autofac.Extensions.DependencyInjection.AutofacServiceScopeFactory.CreateScope()
+   at Volo.Abp.Json.AbpHybridJsonSerializer.Deserialize(Type type, String jsonString, Boolean camelCase)
+   at Volo.Abp.Caching.Utf8JsonDistributedCacheSerializer.Deserialize[T](Byte[] bytes)
+   at Volo.Abp.Caching.DistributedCache`2.GetAsync(TCacheKey key, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.LanguageManagement.DatabaseLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2023-06-21 16:08:00.137 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ObjectDisposedException: Instances cannot be resolved and nested lifetimes cannot be created from this LifetimeScope as it (or one of its parent scopes) has already been disposed.
+   at Autofac.Core.Lifetime.LifetimeScope.BeginLifetimeScope(Object tag)
+   at Autofac.Core.Lifetime.LifetimeScope.BeginLifetimeScope()
+   at Autofac.Extensions.DependencyInjection.AutofacServiceScopeFactory.CreateScope()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2023-06-21 16:08:00.150 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44344/api/abp/api-definition - - - 500 - text/plain 1770.2166ms
+2023-06-21 16:08:00.171 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44344/swagger/index.html - - - 500 - text/html;+charset=utf-8 2164.1043ms

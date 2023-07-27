@@ -1,0 +1,2 @@
+2022-07-25 09:38:35.703 +07:00 [INF] Starting console host.
+2022-07-25 09:38:42.299 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.

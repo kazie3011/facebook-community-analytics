@@ -1,0 +1,11 @@
+﻿{
+  "name": "Example",
+  "version": "0.0.0",
+  "manifest_version": 2,
+  "permissions": ["clipboardWrite"],
+  "browser_action": {"default_title": "Copy some text"},
+  "background": {
+    "scripts": ["events.js"],
+    "persistent": false
+  }
+}

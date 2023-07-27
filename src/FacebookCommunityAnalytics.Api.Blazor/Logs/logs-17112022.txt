@@ -1,0 +1,684 @@
+2022-11-17 10:02:58.227 +07:00 [INF] Starting web host.
+2022-11-17 10:03:11.756 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-11-17 10:03:11.855 +07:00 [INF] Loaded ABP modules:
+2022-11-17 10:03:11.855 +07:00 [INF] - FacebookCommunityAnalytics.Api.Blazor.ApiBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.Caching.StackExchangeRedis.AbpCachingStackExchangeRedisModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.Caching.AbpCachingModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.Serialization.AbpSerializationModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.Uow.AbpUnitOfWorkModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2022-11-17 10:03:11.855 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2022-11-17 10:03:11.855 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Security.AbpSecurityModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2022-11-17 10:03:11.855 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2022-11-17 10:03:11.855 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.Swashbuckle.AbpSwashbuckleModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Auditing.AbpAuditingModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Http.AbpHttpModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.Http.AbpHttpAbstractionsModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.Minify.AbpMinifyModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Validation.AbpValidationModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Application.AbpDddApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.UI.AbpUiModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.Application.AbpDddApplicationModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Domain.AbpDddDomainModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.EventBus.AbpEventBusModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.Guids.AbpGuidsModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.Specifications.AbpSpecificationsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Features.AbpFeaturesModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.Client.AbpAspNetCoreMvcClientModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.Client.AbpAspNetCoreMvcClientCommonModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.Http.Client.AbpHttpClientModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.AspNetCore.Authentication.OpenIdConnect.AbpAspNetCoreAuthenticationOpenIdConnectModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AspNetCore.Authentication.OAuth.AbpAspNetCoreAuthenticationOAuthModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.Http.Client.IdentityModel.Web.AbpHttpClientIdentityModelWebModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.Http.Client.IdentityModel.AbpHttpClientIdentityModelModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.IdentityModel.AbpIdentityModelModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.AbpAspNetCoreMvcUiLeptonThemeModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.Theme.Commercial.AbpAspNetCoreMvcUiThemeCommercialModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.AspNetCore.Components.Server.LeptonTheme.AbpAspNetCoreComponentsServerLeptonThemeModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AspNetCore.Components.Web.LeptonTheme.AbpAspNetCoreComponentsWebLeptonThemeModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.AspNetCore.Components.Web.Theming.AbpAspNetCoreComponentsWebThemingModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.BlazoriseUI.AbpBlazoriseUIModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.AspNetCore.Components.Web.AbpAspNetCoreComponentsWebModule
+2022-11-17 10:03:11.855 +07:00 [INF]             - Volo.Abp.AspNetCore.Components.AbpAspNetCoreComponentsModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AspNetCore.Components.Server.Theming.AbpAspNetCoreComponentsServerThemingModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.AspNetCore.Components.Server.AbpAspNetCoreComponentsServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.AspNetCore.SignalR.AbpAspNetCoreSignalRModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.Account.Pro.Admin.Blazor.Server.AbpAccountAdminBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.Account.Pro.Admin.Blazor.AbpAccountAdminBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.Account.AbpAccountAdminApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]             - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]               - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]                 - Volo.Abp.Users.AbpUsersDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]             - Volo.Abp.Users.AbpUsersAbstractionModule
+2022-11-17 10:03:11.855 +07:00 [INF]             - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]               - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.Ldap.AbpLdapModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.SettingManagement.Blazor.AbpSettingManagementBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.SettingManagement.Blazor.Server.AbpSettingManagementBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.AuditLogging.Blazor.Server.AbpAuditLoggingBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.AuditLogging.Blazor.AbpAuditLoggingBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.Identity.Pro.Blazor.Server.AbpIdentityProBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.Identity.Pro.Blazor.AbpIdentityProBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.PermissionManagement.Blazor.AbpPermissionManagementBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.PermissionManagement.Blazor.Server.AbpPermissionManagementBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.LeptonTheme.Management.Blazor.Server.LeptonThemeManagementBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.Blazor.LeptonThemeManagementBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.IdentityServer.Blazor.Server.AbpIdentityServerBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.IdentityServer.Blazor.AbpIdentityServerBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.LanguageManagement.Blazor.Server.LanguageManagementBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.LanguageManagement.Blazor.LanguageManagementBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Saas.Host.Blazor.Server.SaasHostBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Saas.Host.Blazor.SaasHostBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Saas.Host.SaasHostApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]           - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2022-11-17 10:03:11.855 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationContractsModule
+2022-11-17 10:03:11.855 +07:00 [INF]       - Volo.Abp.FeatureManagement.Blazor.AbpFeatureManagementBlazorModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.FeatureManagement.Blazor.Server.AbpFeatureManagementBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]   - Volo.Abp.TextTemplateManagement.Blazor.Server.TextTemplateManagementBlazorServerModule
+2022-11-17 10:03:11.855 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.Blazor.TextTemplateManagementBlazorModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2022-11-17 10:03:11.856 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2022-11-17 10:03:11.856 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.Abp.Emailing.AbpEmailingModule
+2022-11-17 10:03:11.856 +07:00 [INF]           - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2022-11-17 10:03:11.856 +07:00 [INF]           - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.CmsKit.CmsKitProApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.CmsKit.CmsKitApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]           - Volo.CmsKit.Public.CmsKitPublicApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]             - Volo.CmsKit.CmsKitCommonApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]           - Volo.CmsKit.Admin.CmsKitAdminApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.CmsKit.CmsKitProPublicApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.CmsKit.CmsKitProAdminApplicationContractsModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.Abp.FluentValidation.AbpFluentValidationModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.PermissionManagement.HttpApi.AbpPermissionManagementHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.LeptonTheme.LeptonThemeManagementHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiModule
+2022-11-17 10:03:11.856 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.PermissionManagement.AbpPermissionManagementHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiClientModule
+2022-11-17 10:03:11.856 +07:00 [INF]   - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2022-11-17 10:03:11.856 +07:00 [INF]     - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2022-11-17 10:03:11.937 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.937 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.943 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.948 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.953 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.957 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.964 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.971 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.977 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.982 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.988 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:11.994 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:12.000 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:12.007 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-11-17 10:03:13.819 +07:00 [INF] Initialized all ABP modules.
+2022-11-17 10:03:13.836 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-11-17 10:03:13.836 +07:00 [INF] Hosting environment: Development
+2022-11-17 10:03:13.836 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Blazor
+2022-11-17 10:03:13.866 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/ - -
+2022-11-17 10:03:14.128 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-11-17 10:03:14.129 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2022-11-17 10:03:47.040 +07:00 [INF] Received HTTP response headers after 32907.7617ms - 200
+2022-11-17 10:03:47.042 +07:00 [INF] End processing HTTP request after 32916.6131ms - 200
+2022-11-17 10:03:47.364 +07:00 [WRN] Could not find IdentityClientConfiguration for AbpMvcClient. Either define a configuration for AbpMvcClient or set a default configuration.
+2022-11-17 10:03:47.364 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/application-configuration?api-version=1.0"
+2022-11-17 10:03:47.364 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/application-configuration?api-version=1.0"
+2022-11-17 10:03:50.002 +07:00 [INF] Received HTTP response headers after 2637.4775ms - 200
+2022-11-17 10:03:50.002 +07:00 [INF] End processing HTTP request after 2637.6858ms - 200
+2022-11-17 10:03:50.636 +07:00 [INF] Executing endpoint '/_Host'
+2022-11-17 10:03:50.704 +07:00 [INF] Route matched with {page = "/_Host", action = "", controller = "", area = ""}. Executing page /_Host
+2022-11-17 10:03:50.706 +07:00 [INF] Skipping the execution of current filter as its not the most effective filter implementing the policy Microsoft.AspNetCore.Mvc.ViewFeatures.IAntiforgeryPolicy
+2022-11-17 10:03:50.743 +07:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2022-11-17 10:03:50.743 +07:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2022-11-17 10:03:50.859 +07:00 [WRN] Could not find IdentityClientConfiguration for AbpMvcClient. Either define a configuration for AbpMvcClient or set a default configuration.
+2022-11-17 10:03:50.859 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/application-configuration?api-version=1.0"
+2022-11-17 10:03:50.859 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/application-configuration?api-version=1.0"
+2022-11-17 10:03:51.326 +07:00 [INF] Received HTTP response headers after 467.33ms - 200
+2022-11-17 10:03:51.327 +07:00 [INF] End processing HTTP request after 467.5974ms - 200
+2022-11-17 10:03:51.375 +07:00 [DBG] Added bundle 'Blazor.LeptonTheme.Global' to the page in 540,93 ms.
+2022-11-17 10:03:51.683 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44314/blazor-notification-hub - -
+2022-11-17 10:03:51.691 +07:00 [INF] Executing endpoint '/blazor-notification-hub'
+2022-11-17 10:03:51.780 +07:00 [DBG] Added bundle 'Blazor.LeptonTheme.Global' to the page in 3,54 ms.
+2022-11-17 10:03:51.797 +07:00 [INF] Executed page /_Host in 1089.4164ms
+2022-11-17 10:03:51.797 +07:00 [INF] Executed endpoint '/_Host'
+2022-11-17 10:03:51.812 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/@fortawesome/fontawesome-free/css/v4-shims.css?_v=637900887544370921 - -
+2022-11-17 10:03:51.812 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/@fortawesome/fontawesome-free/css/all.css?_v=637900887544370921 - -
+2022-11-17 10:03:51.812 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/bootstrap/css/bootstrap.css?_v=637900888326551939 - -
+2022-11-17 10:03:51.813 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/ - - - 200 - text/html;+charset=utf-8 37946.3997ms
+2022-11-17 10:03:51.820 +07:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2022-11-17 10:03:51.820 +07:00 [INF] The file /libs/@fortawesome/fontawesome-free/css/v4-shims.css was not modified
+2022-11-17 10:03:51.820 +07:00 [INF] The file /libs/@fortawesome/fontawesome-free/css/all.css was not modified
+2022-11-17 10:03:51.823 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/bootstrap/css/bootstrap.css?_v=637900888326551939 - - - 304 - text/css 11.2191ms
+2022-11-17 10:03:51.823 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/@fortawesome/fontawesome-free/css/v4-shims.css?_v=637900887544370921 - - - 304 - text/css 11.2192ms
+2022-11-17 10:03:51.823 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/@fortawesome/fontawesome-free/css/all.css?_v=637900887544370921 - - - 304 - text/css 11.2193ms
+2022-11-17 10:03:51.832 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise/blazorise.css?_v=637623888540000000 - -
+2022-11-17 10:03:51.833 +07:00 [INF] The file /_content/Blazorise/blazorise.css was not modified
+2022-11-17 10:03:51.834 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise/blazorise.css?_v=637623888540000000 - - - 304 - text/css 1.0959ms
+2022-11-17 10:03:51.835 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.Bootstrap/blazorise.bootstrap.css?_v=637622729820000000 - -
+2022-11-17 10:03:51.835 +07:00 [INF] The file /_content/Blazorise.Bootstrap/blazorise.bootstrap.css was not modified
+2022-11-17 10:03:51.836 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.Bootstrap/blazorise.bootstrap.css?_v=637622729820000000 - - - 304 - text/css 0.7579ms
+2022-11-17 10:03:51.838 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.Snackbar/blazorise.snackbar.css?_v=637581228220000000 - -
+2022-11-17 10:03:51.838 +07:00 [INF] The file /_content/Blazorise.Snackbar/blazorise.snackbar.css was not modified
+2022-11-17 10:03:51.838 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.Snackbar/blazorise.snackbar.css?_v=637581228220000000 - - - 304 - text/css 0.6205ms
+2022-11-17 10:03:51.842 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/flag-icon-css/css/flag-icon.min.css?_v=637900887544879524 - -
+2022-11-17 10:03:51.842 +07:00 [INF] The file /libs/flag-icon-css/css/flag-icon.min.css was not modified
+2022-11-17 10:03:51.842 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/flag-icon-css/css/flag-icon.min.css?_v=637900887544879524 - - - 304 - text/css 0.5862ms
+2022-11-17 10:03:51.845 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/styles/lepton6.css?_v=637576915460000000 - -
+2022-11-17 10:03:51.845 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/blazor-global-styles.css?_v=637937097354743254 - -
+2022-11-17 10:03:51.845 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/styles/lepton6.css was not modified
+2022-11-17 10:03:51.846 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/styles/lepton6.css?_v=637576915460000000 - - - 304 - text/css 1.3602ms
+2022-11-17 10:03:51.846 +07:00 [INF] The file /blazor-global-styles.css was not modified
+2022-11-17 10:03:51.846 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/blazor-global-styles.css?_v=637937097354743254 - - - 304 - text/css 0.7275ms
+2022-11-17 10:03:51.849 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/styles/theme-lepton6.css?_v=638041865759003740 - -
+2022-11-17 10:03:51.850 +07:00 [INF] The file /styles/theme-lepton6.css was not modified
+2022-11-17 10:03:51.850 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/styles/theme-lepton6.css?_v=638041865759003740 - - - 304 - text/css 0.6492ms
+2022-11-17 10:03:51.852 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/FacebookCommunityAnalytics.Api.Blazor.styles.css?_v=637944878423007809 - -
+2022-11-17 10:03:51.852 +07:00 [INF] The file /FacebookCommunityAnalytics.Api.Blazor.styles.css was not modified
+2022-11-17 10:03:51.852 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/FacebookCommunityAnalytics.Api.Blazor.styles.css?_v=637944878423007809 - - - 304 - text/css 0.6060ms
+2022-11-17 10:03:51.853 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/css/default-base.css - -
+2022-11-17 10:03:51.853 +07:00 [INF] The file /_content/Radzen.Blazor/css/default-base.css was not modified
+2022-11-17 10:03:51.853 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/css/default-base.css - - - 304 - text/css 0.7432ms
+2022-11-17 10:03:51.856 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/BlazorDateRangePicker/daterangepicker.min.css - -
+2022-11-17 10:03:51.856 +07:00 [INF] The file /_content/BlazorDateRangePicker/daterangepicker.min.css was not modified
+2022-11-17 10:03:51.857 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/BlazorDateRangePicker/daterangepicker.min.css - - - 304 - text/css 1.0304ms
+2022-11-17 10:03:51.859 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/styles/jqx.base.css - -
+2022-11-17 10:03:51.860 +07:00 [INF] The file /libs/jqwidgets/styles/jqx.base.css was not modified
+2022-11-17 10:03:51.860 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/styles/jqx.base.css - - - 304 - text/css 0.5826ms
+2022-11-17 10:03:51.864 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.RichTextEdit/Blazorise.RichTextEdit.bundle.scp.css - -
+2022-11-17 10:03:51.864 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/BlazorDateRangePicker/clickAndPositionHandler.js - -
+2022-11-17 10:03:51.864 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_framework/blazor.server.js?_v=637856328560000000 - -
+2022-11-17 10:03:51.864 +07:00 [INF] The file /_framework/blazor.server.js was not modified
+2022-11-17 10:03:51.864 +07:00 [INF] The file /_content/BlazorDateRangePicker/clickAndPositionHandler.js was not modified
+2022-11-17 10:03:51.864 +07:00 [INF] The file /_content/Blazorise.RichTextEdit/Blazorise.RichTextEdit.bundle.scp.css was not modified
+2022-11-17 10:03:51.864 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/BlazorDateRangePicker/clickAndPositionHandler.js - - - 304 - application/javascript 0.6056ms
+2022-11-17 10:03:51.864 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.RichTextEdit/Blazorise.RichTextEdit.bundle.scp.css - - - 304 - text/css 0.7790ms
+2022-11-17 10:03:51.864 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_framework/blazor.server.js?_v=637856328560000000 - - - 304 - application/javascript 0.5775ms
+2022-11-17 10:03:51.869 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.Bootstrap/blazorise.bootstrap.js?_v=637622729820000000 - -
+2022-11-17 10:03:51.870 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise/blazorise.js?_v=637622729820000000 - -
+2022-11-17 10:03:51.870 +07:00 [INF] The file /_content/Blazorise.Bootstrap/blazorise.bootstrap.js was not modified
+2022-11-17 10:03:51.870 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.Bootstrap/blazorise.bootstrap.js?_v=637622729820000000 - - - 304 - application/javascript 0.6776ms
+2022-11-17 10:03:51.870 +07:00 [INF] The file /_content/Blazorise/blazorise.js was not modified
+2022-11-17 10:03:51.870 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise/blazorise.js?_v=637622729820000000 - - - 304 - application/javascript 0.4898ms
+2022-11-17 10:03:51.875 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js?_v=637576742780000000 - -
+2022-11-17 10:03:51.876 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js was not modified
+2022-11-17 10:03:51.876 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js?_v=637576742780000000 - - - 304 - application/javascript 0.9570ms
+2022-11-17 10:03:51.877 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/scripts/global.js?_v=637576915460000000 - -
+2022-11-17 10:03:51.877 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/scripts/global.js was not modified
+2022-11-17 10:03:51.877 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/scripts/global.js?_v=637576915460000000 - - - 304 - application/javascript 0.5493ms
+2022-11-17 10:03:51.889 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jquery/jquery.js - -
+2022-11-17 10:03:51.889 +07:00 [INF] Request starting HTTP/2 POST https://localhost:44314/_blazor/negotiate?negotiateVersion=1 text/plain;charset=UTF-8 0
+2022-11-17 10:03:51.890 +07:00 [INF] The file /libs/jquery/jquery.js was not modified
+2022-11-17 10:03:51.890 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jquery/jquery.js - - - 304 - application/javascript 0.7565ms
+2022-11-17 10:03:51.892 +07:00 [INF] Executing endpoint '/_blazor/negotiate'
+2022-11-17 10:03:51.900 +07:00 [INF] Executed endpoint '/_blazor/negotiate'
+2022-11-17 10:03:51.900 +07:00 [INF] Request finished HTTP/2 POST https://localhost:44314/_blazor/negotiate?negotiateVersion=1 text/plain;charset=UTF-8 0 - 200 316 application/json 11.3803ms
+2022-11-17 10:03:51.907 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.Charts/blazorise.charts.js - -
+2022-11-17 10:03:51.908 +07:00 [INF] The file /_content/Blazorise.Charts/blazorise.charts.js was not modified
+2022-11-17 10:03:51.908 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.Charts/blazorise.charts.js - - - 304 - application/javascript 0.9866ms
+2022-11-17 10:03:51.910 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44314/_blazor?id=lM8ZxpxTLyD0PItti5zogg - -
+2022-11-17 10:03:51.911 +07:00 [INF] Executing endpoint '/_blazor'
+2022-11-17 10:03:51.915 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.RichTextEdit/blazorise.richtextedit.js - -
+2022-11-17 10:03:51.915 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/Radzen.Blazor.js - -
+2022-11-17 10:03:51.916 +07:00 [INF] The file /_content/Blazorise.RichTextEdit/blazorise.richtextedit.js was not modified
+2022-11-17 10:03:51.916 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.RichTextEdit/blazorise.richtextedit.js - - - 304 - application/javascript 0.7849ms
+2022-11-17 10:03:51.916 +07:00 [INF] The file /_content/Radzen.Blazor/Radzen.Blazor.js was not modified
+2022-11-17 10:03:51.916 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/Radzen.Blazor.js - - - 304 - application/javascript 1.0049ms
+2022-11-17 10:03:51.925 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js - -
+2022-11-17 10:03:51.926 +07:00 [INF] The file /_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js was not modified
+2022-11-17 10:03:51.926 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js - - - 304 - application/javascript 0.7392ms
+2022-11-17 10:03:52.085 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/scripts/global.js - -
+2022-11-17 10:03:52.086 +07:00 [INF] The file /scripts/global.js was not modified
+2022-11-17 10:03:52.086 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/scripts/global.js - - - 304 - application/javascript 0.8341ms
+2022-11-17 10:03:52.090 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxcore.js - -
+2022-11-17 10:03:52.090 +07:00 [INF] The file /libs/jqwidgets/jqxcore.js was not modified
+2022-11-17 10:03:52.091 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxcore.js - - - 304 - application/javascript 0.5385ms
+2022-11-17 10:03:52.104 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxdata.js - -
+2022-11-17 10:03:52.104 +07:00 [INF] The file /libs/jqwidgets/jqxdata.js was not modified
+2022-11-17 10:03:52.104 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxdata.js - - - 304 - application/javascript 0.5823ms
+2022-11-17 10:03:52.117 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxbuttons.js - -
+2022-11-17 10:03:52.142 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxscrollbar.js - -
+2022-11-17 10:03:52.142 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxmenu.js - -
+2022-11-17 10:03:52.142 +07:00 [INF] The file /libs/jqwidgets/jqxbuttons.js was not modified
+2022-11-17 10:03:52.142 +07:00 [INF] The file /libs/jqwidgets/jqxmenu.js was not modified
+2022-11-17 10:03:52.142 +07:00 [INF] The file /libs/jqwidgets/jqxscrollbar.js was not modified
+2022-11-17 10:03:52.143 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxmenu.js - - - 304 - application/javascript 0.5399ms
+2022-11-17 10:03:52.143 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxbuttons.js - - - 304 - application/javascript 25.1949ms
+2022-11-17 10:03:52.143 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxscrollbar.js - - - 304 - application/javascript 0.7884ms
+2022-11-17 10:03:52.148 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxpivot.js - -
+2022-11-17 10:03:52.149 +07:00 [INF] The file /libs/jqwidgets/jqxpivot.js was not modified
+2022-11-17 10:03:52.150 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxpivot.js - - - 304 - application/javascript 1.2630ms
+2022-11-17 10:03:52.151 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxpivotgrid.js - -
+2022-11-17 10:03:52.151 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/scripts/createTiktokWeeklyReportGrid.js - -
+2022-11-17 10:03:52.151 +07:00 [INF] The file /libs/jqwidgets/jqxpivotgrid.js was not modified
+2022-11-17 10:03:52.151 +07:00 [INF] The file /scripts/createTiktokWeeklyReportGrid.js was not modified
+2022-11-17 10:03:52.152 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxpivotgrid.js - - - 304 - application/javascript 0.8134ms
+2022-11-17 10:03:52.152 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/scripts/createTiktokWeeklyReportGrid.js - - - 304 - application/javascript 0.9275ms
+2022-11-17 10:03:52.158 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/backgrounds/bg-transparent.png - -
+2022-11-17 10:03:52.163 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/backgrounds/bg-transparent.png - - - 404 - - 4.9817ms
+2022-11-17 10:03:52.270 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-regular.woff2 - -
+2022-11-17 10:03:52.272 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-regular.woff2 - - - 404 - - 1.3517ms
+2022-11-17 10:03:52.278 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-regular.woff - -
+2022-11-17 10:03:52.279 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-regular.woff - - - 404 - - 1.2788ms
+2022-11-17 10:03:52.846 +07:00 [INF] Authorization failed. These requirements were not met:
+PermissionRequirement: SettingManagement.Emailing
+2022-11-17 10:03:52.858 +07:00 [INF] Authorization failed. These requirements were not met:
+PermissionRequirement: AbpAccount.SettingManagement
+2022-11-17 10:03:52.860 +07:00 [INF] Authorization failed. These requirements were not met:
+PermissionRequirement: AbpIdentity.SettingManagement
+2022-11-17 10:03:52.868 +07:00 [INF] Authorization failed. These requirements were not met:
+PermissionRequirement: LeptonThemeManagement.Settings
+2022-11-17 10:03:52.895 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/manifest.json - -
+2022-11-17 10:03:52.895 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/images/logo/logo-dark.png - -
+2022-11-17 10:03:52.895 +07:00 [INF] The file /images/logo/logo-dark.png was not modified
+2022-11-17 10:03:52.895 +07:00 [INF] The file /manifest.json was not modified
+2022-11-17 10:03:52.896 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/images/logo/logo-dark.png - - - 304 - image/png 1.3518ms
+2022-11-17 10:03:52.896 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/manifest.json - - - 304 - application/json 1.3517ms
+2022-11-17 10:03:53.051 +07:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2022-11-17 10:03:53.203 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/Account/Login - -
+2022-11-17 10:03:53.205 +07:00 [INF] Executing endpoint 'FacebookCommunityAnalytics.Api.Web.Controllers.AccountController.Login (FacebookCommunityAnalytics.Api.Blazor)'
+2022-11-17 10:03:53.222 +07:00 [INF] Route matched with {action = "Login", controller = "Account", area = "", page = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Login(System.String, System.String) on controller FacebookCommunityAnalytics.Api.Web.Controllers.AccountController (FacebookCommunityAnalytics.Api.Blazor).
+2022-11-17 10:03:53.283 +07:00 [INF] Executing ChallengeResult with authentication schemes (["oidc"]).
+2022-11-17 10:03:53.350 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44314/blazor-notification-hub - -
+2022-11-17 10:03:53.351 +07:00 [INF] Executing endpoint '/blazor-notification-hub'
+2022-11-17 10:04:16.685 +07:00 [INF] AuthenticationScheme: oidc was challenged.
+2022-11-17 10:04:16.688 +07:00 [INF] Executed action FacebookCommunityAnalytics.Api.Web.Controllers.AccountController.Login (FacebookCommunityAnalytics.Api.Blazor) in 23464.8315ms
+2022-11-17 10:04:16.688 +07:00 [INF] Executed endpoint 'FacebookCommunityAnalytics.Api.Web.Controllers.AccountController.Login (FacebookCommunityAnalytics.Api.Blazor)'
+2022-11-17 10:04:16.689 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/Account/Login - - - 302 - - 23485.1996ms
+2022-11-17 10:04:19.249 +07:00 [INF] Request starting HTTP/2 POST https://localhost:44314/_blazor/disconnect multipart/form-data;+boundary=----WebKitFormBoundary34bejvWiaOXkcLaY 359
+2022-11-17 10:04:19.250 +07:00 [INF] Executing endpoint 'Blazor disconnect'
+2022-11-17 10:04:19.261 +07:00 [INF] Executed endpoint '/_blazor'
+2022-11-17 10:04:19.262 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44314/_blazor?id=lM8ZxpxTLyD0PItti5zogg - - - 101 - - 27351.9565ms
+2022-11-17 10:04:33.228 +07:00 [INF] Request starting HTTP/2 POST https://localhost:44314/signin-oidc application/x-www-form-urlencoded 1865
+2022-11-17 10:04:34.324 +07:00 [INF] AuthenticationScheme: Cookies signed in.
+2022-11-17 10:04:34.325 +07:00 [INF] Request finished HTTP/2 POST https://localhost:44314/signin-oidc application/x-www-form-urlencoded 1865 - 302 - - 1096.9721ms
+2022-11-17 10:04:34.330 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/ - -
+2022-11-17 10:04:34.333 +07:00 [INF] Executing endpoint '/_Host'
+2022-11-17 10:04:34.333 +07:00 [INF] Route matched with {page = "/_Host", action = "", controller = "", area = ""}. Executing page /_Host
+2022-11-17 10:04:34.333 +07:00 [INF] Skipping the execution of current filter as its not the most effective filter implementing the policy Microsoft.AspNetCore.Mvc.ViewFeatures.IAntiforgeryPolicy
+2022-11-17 10:04:34.334 +07:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2022-11-17 10:04:34.334 +07:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2022-11-17 10:04:34.349 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/application-configuration?api-version=1.0"
+2022-11-17 10:04:34.349 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/application-configuration?api-version=1.0"
+2022-11-17 10:04:35.505 +07:00 [INF] Received HTTP response headers after 1155.9033ms - 200
+2022-11-17 10:04:35.505 +07:00 [INF] End processing HTTP request after 1156.2722ms - 200
+2022-11-17 10:04:35.560 +07:00 [DBG] Added bundle 'Blazor.LeptonTheme.Global' to the page in 1223,53 ms.
+2022-11-17 10:04:35.678 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44314/blazor-notification-hub - -
+2022-11-17 10:04:35.679 +07:00 [INF] Executing endpoint '/blazor-notification-hub'
+2022-11-17 10:04:35.686 +07:00 [DBG] Added bundle 'Blazor.LeptonTheme.Global' to the page in 0,89 ms.
+2022-11-17 10:04:35.687 +07:00 [INF] Executed page /_Host in 1353.7291ms
+2022-11-17 10:04:35.687 +07:00 [INF] Executed endpoint '/_Host'
+2022-11-17 10:04:35.688 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/ - - - 200 - text/html;+charset=utf-8 1358.4559ms
+2022-11-17 10:04:35.707 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/bootstrap/css/bootstrap.css?_v=637900888326551939 - -
+2022-11-17 10:04:35.708 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/@fortawesome/fontawesome-free/css/all.css?_v=637900887544370921 - -
+2022-11-17 10:04:35.708 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/@fortawesome/fontawesome-free/css/v4-shims.css?_v=637900887544370921 - -
+2022-11-17 10:04:35.708 +07:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2022-11-17 10:04:35.708 +07:00 [INF] The file /libs/@fortawesome/fontawesome-free/css/all.css was not modified
+2022-11-17 10:04:35.708 +07:00 [INF] The file /libs/@fortawesome/fontawesome-free/css/v4-shims.css was not modified
+2022-11-17 10:04:35.708 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/bootstrap/css/bootstrap.css?_v=637900888326551939 - - - 304 - text/css 1.0801ms
+2022-11-17 10:04:35.709 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/@fortawesome/fontawesome-free/css/all.css?_v=637900887544370921 - - - 304 - text/css 0.7067ms
+2022-11-17 10:04:35.709 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/@fortawesome/fontawesome-free/css/v4-shims.css?_v=637900887544370921 - - - 304 - text/css 0.5141ms
+2022-11-17 10:04:35.719 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise/blazorise.css?_v=637623888540000000 - -
+2022-11-17 10:04:35.720 +07:00 [INF] The file /_content/Blazorise/blazorise.css was not modified
+2022-11-17 10:04:35.721 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise/blazorise.css?_v=637623888540000000 - - - 304 - text/css 1.1132ms
+2022-11-17 10:04:35.724 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.Bootstrap/blazorise.bootstrap.css?_v=637622729820000000 - -
+2022-11-17 10:04:35.724 +07:00 [INF] The file /_content/Blazorise.Bootstrap/blazorise.bootstrap.css was not modified
+2022-11-17 10:04:35.725 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.Bootstrap/blazorise.bootstrap.css?_v=637622729820000000 - - - 304 - text/css 1.1140ms
+2022-11-17 10:04:35.731 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.Snackbar/blazorise.snackbar.css?_v=637581228220000000 - -
+2022-11-17 10:04:35.731 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/flag-icon-css/css/flag-icon.min.css?_v=637900887544879524 - -
+2022-11-17 10:04:35.731 +07:00 [INF] The file /_content/Blazorise.Snackbar/blazorise.snackbar.css was not modified
+2022-11-17 10:04:35.731 +07:00 [INF] The file /libs/flag-icon-css/css/flag-icon.min.css was not modified
+2022-11-17 10:04:35.731 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.Snackbar/blazorise.snackbar.css?_v=637581228220000000 - - - 304 - text/css 0.7155ms
+2022-11-17 10:04:35.731 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/flag-icon-css/css/flag-icon.min.css?_v=637900887544879524 - - - 304 - text/css 0.6537ms
+2022-11-17 10:04:35.732 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/styles/lepton6.css?_v=637576915460000000 - -
+2022-11-17 10:04:35.733 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/styles/lepton6.css was not modified
+2022-11-17 10:04:35.733 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/styles/lepton6.css?_v=637576915460000000 - - - 304 - text/css 0.7995ms
+2022-11-17 10:04:35.740 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/blazor-global-styles.css?_v=637937097354743254 - -
+2022-11-17 10:04:35.741 +07:00 [INF] The file /blazor-global-styles.css was not modified
+2022-11-17 10:04:35.741 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/blazor-global-styles.css?_v=637937097354743254 - - - 304 - text/css 1.1604ms
+2022-11-17 10:04:35.744 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/styles/theme-lepton6.css?_v=638041865759003740 - -
+2022-11-17 10:04:35.745 +07:00 [INF] The file /styles/theme-lepton6.css was not modified
+2022-11-17 10:04:35.745 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/styles/theme-lepton6.css?_v=638041865759003740 - - - 304 - text/css 0.9437ms
+2022-11-17 10:04:35.745 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/FacebookCommunityAnalytics.Api.Blazor.styles.css?_v=637944878423007809 - -
+2022-11-17 10:04:35.746 +07:00 [INF] The file /FacebookCommunityAnalytics.Api.Blazor.styles.css was not modified
+2022-11-17 10:04:35.746 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/FacebookCommunityAnalytics.Api.Blazor.styles.css?_v=637944878423007809 - - - 304 - text/css 0.6199ms
+2022-11-17 10:04:35.750 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/css/default-base.css - -
+2022-11-17 10:04:35.751 +07:00 [INF] The file /_content/Radzen.Blazor/css/default-base.css was not modified
+2022-11-17 10:04:35.751 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/css/default-base.css - - - 304 - text/css 1.0038ms
+2022-11-17 10:04:35.751 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/BlazorDateRangePicker/daterangepicker.min.css - -
+2022-11-17 10:04:35.752 +07:00 [INF] The file /_content/BlazorDateRangePicker/daterangepicker.min.css was not modified
+2022-11-17 10:04:35.752 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/BlazorDateRangePicker/daterangepicker.min.css - - - 304 - text/css 0.4865ms
+2022-11-17 10:04:35.757 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/styles/jqx.base.css - -
+2022-11-17 10:04:35.758 +07:00 [INF] The file /libs/jqwidgets/styles/jqx.base.css was not modified
+2022-11-17 10:04:35.758 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/styles/jqx.base.css - - - 304 - text/css 1.0267ms
+2022-11-17 10:04:35.770 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.RichTextEdit/Blazorise.RichTextEdit.bundle.scp.css - -
+2022-11-17 10:04:35.770 +07:00 [INF] The file /_content/Blazorise.RichTextEdit/Blazorise.RichTextEdit.bundle.scp.css was not modified
+2022-11-17 10:04:35.771 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.RichTextEdit/Blazorise.RichTextEdit.bundle.scp.css - - - 304 - text/css 0.8413ms
+2022-11-17 10:04:35.771 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/BlazorDateRangePicker/clickAndPositionHandler.js - -
+2022-11-17 10:04:35.772 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_framework/blazor.server.js?_v=637856328560000000 - -
+2022-11-17 10:04:35.772 +07:00 [INF] The file /_framework/blazor.server.js was not modified
+2022-11-17 10:04:35.772 +07:00 [INF] The file /_content/BlazorDateRangePicker/clickAndPositionHandler.js was not modified
+2022-11-17 10:04:35.772 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_framework/blazor.server.js?_v=637856328560000000 - - - 304 - application/javascript 0.3755ms
+2022-11-17 10:04:35.772 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/BlazorDateRangePicker/clickAndPositionHandler.js - - - 304 - application/javascript 0.7393ms
+2022-11-17 10:04:35.779 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise/blazorise.js?_v=637622729820000000 - -
+2022-11-17 10:04:35.780 +07:00 [INF] The file /_content/Blazorise/blazorise.js was not modified
+2022-11-17 10:04:35.780 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise/blazorise.js?_v=637622729820000000 - - - 304 - application/javascript 0.9511ms
+2022-11-17 10:04:35.780 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.Bootstrap/blazorise.bootstrap.js?_v=637622729820000000 - -
+2022-11-17 10:04:35.781 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js?_v=637576742780000000 - -
+2022-11-17 10:04:35.781 +07:00 [INF] The file /_content/Blazorise.Bootstrap/blazorise.bootstrap.js was not modified
+2022-11-17 10:04:35.781 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.Bootstrap/blazorise.bootstrap.js?_v=637622729820000000 - - - 304 - application/javascript 0.7957ms
+2022-11-17 10:04:35.781 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js was not modified
+2022-11-17 10:04:35.781 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js?_v=637576742780000000 - - - 304 - application/javascript 0.7905ms
+2022-11-17 10:04:35.813 +07:00 [INF] Request starting HTTP/2 POST https://localhost:44314/_blazor/negotiate?negotiateVersion=1 text/plain;charset=UTF-8 0
+2022-11-17 10:04:35.814 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/scripts/global.js?_v=637576915460000000 - -
+2022-11-17 10:04:35.815 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/scripts/global.js was not modified
+2022-11-17 10:04:35.815 +07:00 [INF] Executing endpoint '/_blazor/negotiate'
+2022-11-17 10:04:35.816 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/scripts/global.js?_v=637576915460000000 - - - 304 - application/javascript 1.2272ms
+2022-11-17 10:04:35.817 +07:00 [INF] Executed endpoint '/_blazor/negotiate'
+2022-11-17 10:04:35.817 +07:00 [INF] Request finished HTTP/2 POST https://localhost:44314/_blazor/negotiate?negotiateVersion=1 text/plain;charset=UTF-8 0 - 200 316 application/json 3.6720ms
+2022-11-17 10:04:35.852 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jquery/jquery.js - -
+2022-11-17 10:04:35.853 +07:00 [INF] The file /libs/jquery/jquery.js was not modified
+2022-11-17 10:04:35.853 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jquery/jquery.js - - - 304 - application/javascript 0.9872ms
+2022-11-17 10:04:35.856 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.Charts/blazorise.charts.js - -
+2022-11-17 10:04:35.857 +07:00 [INF] The file /_content/Blazorise.Charts/blazorise.charts.js was not modified
+2022-11-17 10:04:35.858 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.Charts/blazorise.charts.js - - - 304 - application/javascript 1.6275ms
+2022-11-17 10:04:35.858 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Blazorise.RichTextEdit/blazorise.richtextedit.js - -
+2022-11-17 10:04:35.858 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44314/_blazor?id=cYlQJh1-dVh5M3C234UPlw - -
+2022-11-17 10:04:35.859 +07:00 [INF] The file /_content/Blazorise.RichTextEdit/blazorise.richtextedit.js was not modified
+2022-11-17 10:04:35.859 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Blazorise.RichTextEdit/blazorise.richtextedit.js - - - 304 - application/javascript 0.8218ms
+2022-11-17 10:04:35.860 +07:00 [INF] Executing endpoint '/_blazor'
+2022-11-17 10:04:35.872 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/Radzen.Blazor.js - -
+2022-11-17 10:04:35.873 +07:00 [INF] The file /_content/Radzen.Blazor/Radzen.Blazor.js was not modified
+2022-11-17 10:04:35.873 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/Radzen.Blazor.js - - - 304 - application/javascript 1.5132ms
+2022-11-17 10:04:35.890 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js - -
+2022-11-17 10:04:35.891 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/scripts/global.js - -
+2022-11-17 10:04:35.891 +07:00 [INF] The file /scripts/global.js was not modified
+2022-11-17 10:04:35.892 +07:00 [INF] The file /_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js was not modified
+2022-11-17 10:04:35.892 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/scripts/global.js - - - 304 - application/javascript 1.2202ms
+2022-11-17 10:04:35.892 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js - - - 304 - application/javascript 1.6187ms
+2022-11-17 10:04:35.909 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxcore.js - -
+2022-11-17 10:04:35.909 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxdata.js - -
+2022-11-17 10:04:35.910 +07:00 [INF] The file /libs/jqwidgets/jqxcore.js was not modified
+2022-11-17 10:04:35.910 +07:00 [INF] The file /libs/jqwidgets/jqxdata.js was not modified
+2022-11-17 10:04:35.910 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxcore.js - - - 304 - application/javascript 1.2510ms
+2022-11-17 10:04:35.910 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxdata.js - - - 304 - application/javascript 0.8316ms
+2022-11-17 10:04:35.914 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxbuttons.js - -
+2022-11-17 10:04:35.914 +07:00 [INF] The file /libs/jqwidgets/jqxbuttons.js was not modified
+2022-11-17 10:04:35.915 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxbuttons.js - - - 304 - application/javascript 0.7986ms
+2022-11-17 10:04:35.918 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxscrollbar.js - -
+2022-11-17 10:04:35.918 +07:00 [INF] The file /libs/jqwidgets/jqxscrollbar.js was not modified
+2022-11-17 10:04:35.918 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxscrollbar.js - - - 304 - application/javascript 0.5816ms
+2022-11-17 10:04:35.939 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxmenu.js - -
+2022-11-17 10:04:35.939 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxpivot.js - -
+2022-11-17 10:04:35.940 +07:00 [INF] The file /libs/jqwidgets/jqxpivot.js was not modified
+2022-11-17 10:04:35.940 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxpivotgrid.js - -
+2022-11-17 10:04:35.940 +07:00 [INF] The file /libs/jqwidgets/jqxmenu.js was not modified
+2022-11-17 10:04:35.940 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxpivot.js - - - 304 - application/javascript 0.7157ms
+2022-11-17 10:04:35.940 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxmenu.js - - - 304 - application/javascript 1.0334ms
+2022-11-17 10:04:35.940 +07:00 [INF] The file /libs/jqwidgets/jqxpivotgrid.js was not modified
+2022-11-17 10:04:35.940 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/jqwidgets/jqxpivotgrid.js - - - 304 - application/javascript 0.8097ms
+2022-11-17 10:04:35.951 +07:00 [INF] Authorization was successful.
+2022-11-17 10:04:35.952 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/scripts/createTiktokWeeklyReportGrid.js - -
+2022-11-17 10:04:35.952 +07:00 [INF] The file /scripts/createTiktokWeeklyReportGrid.js was not modified
+2022-11-17 10:04:35.953 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/scripts/createTiktokWeeklyReportGrid.js - - - 304 - application/javascript 1.1340ms
+2022-11-17 10:04:35.955 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/backgrounds/bg-transparent.png - -
+2022-11-17 10:04:35.958 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/backgrounds/bg-transparent.png - - - 404 - - 3.2442ms
+2022-11-17 10:04:35.978 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-regular.woff2 - -
+2022-11-17 10:04:35.981 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-regular.woff2 - - - 404 - - 3.2620ms
+2022-11-17 10:04:36.017 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-regular.woff - -
+2022-11-17 10:04:36.033 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-regular.woff - - - 404 - - 15.8521ms
+2022-11-17 10:04:36.229 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/manifest.json - -
+2022-11-17 10:04:36.230 +07:00 [INF] The file /manifest.json was not modified
+2022-11-17 10:04:36.231 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/manifest.json - - - 304 - application/json 2.2142ms
+2022-11-17 10:04:36.403 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/team-members/teams?api-version=1.0"
+2022-11-17 10:04:36.403 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/team-members/teams?api-version=1.0"
+2022-11-17 10:04:36.427 +07:00 [INF] Authorization was successful.
+2022-11-17 10:04:36.934 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/api/account/profile-picture-file/d34bfd52-0874-d193-65ee-39fc9126832f - -
+2022-11-17 10:04:36.936 +07:00 [INF] Executing endpoint 'Volo.Abp.Account.AccountController.GetProfilePictureFileAsync (Volo.Abp.Account.Pro.Public.HttpApi)'
+2022-11-17 10:04:36.942 +07:00 [INF] Route matched with {area = "account", action = "GetProfilePictureFile", controller = "Account", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetProfilePictureFileAsync(System.Guid) on controller Volo.Abp.Account.AccountController (Volo.Abp.Account.Pro.Public.HttpApi).
+2022-11-17 10:04:37.029 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/account/profile-picture/d34bfd52-0874-d193-65ee-39fc9126832f?api-version=1.0"
+2022-11-17 10:04:37.030 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/account/profile-picture/d34bfd52-0874-d193-65ee-39fc9126832f?api-version=1.0"
+2022-11-17 10:04:37.094 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/images/logo/logo-light.png - -
+2022-11-17 10:04:37.094 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/libs/flag-icon-css/flags/1x1/vn.svg - -
+2022-11-17 10:04:37.095 +07:00 [INF] The file /images/logo/logo-light.png was not modified
+2022-11-17 10:04:37.095 +07:00 [INF] The file /libs/flag-icon-css/flags/1x1/vn.svg was not modified
+2022-11-17 10:04:37.095 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/libs/flag-icon-css/flags/1x1/vn.svg - - - 304 - image/svg+xml 0.5972ms
+2022-11-17 10:04:37.095 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/images/logo/logo-light.png - - - 304 - image/png 0.9452ms
+2022-11-17 10:04:37.198 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-600.woff2 - -
+2022-11-17 10:04:37.201 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-600.woff2 - - - 404 - - 3.2848ms
+2022-11-17 10:04:37.203 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-700.woff2 - -
+2022-11-17 10:04:37.205 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-700.woff2 - - - 404 - - 2.0106ms
+2022-11-17 10:04:37.554 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/statistics/stat?FromDateTime=2022-10-16+17%3A00%3A00Z&ToDateTime=2022-11-17+16%3A59%3A59Z&GroupSourceType=Group&TikTokMcnType=FilterNoSelect&Count=0&api-version=1.0"
+2022-11-17 10:04:37.555 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/statistics/stat?FromDateTime=2022-10-16+17%3A00%3A00Z&ToDateTime=2022-11-17+16%3A59%3A59Z&GroupSourceType=Group&TikTokMcnType=FilterNoSelect&Count=0&api-version=1.0"
+2022-11-17 10:04:37.607 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-regular.woff2 - -
+2022-11-17 10:04:37.609 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-regular.woff2 was not modified
+2022-11-17 10:04:37.609 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-regular.woff2 - - - 304 - font/woff2 1.8288ms
+2022-11-17 10:04:37.616 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-600.woff - -
+2022-11-17 10:04:37.619 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-600.woff - - - 404 - - 2.5041ms
+2022-11-17 10:04:37.626 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-700.woff - -
+2022-11-17 10:04:37.628 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-700.woff - - - 404 - - 1.9457ms
+2022-11-17 10:04:38.093 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-600.woff2 - -
+2022-11-17 10:04:38.093 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-600.woff2 was not modified
+2022-11-17 10:04:38.094 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-600.woff2 - - - 304 - font/woff2 1.0001ms
+2022-11-17 10:04:38.117 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-700.woff2 - -
+2022-11-17 10:04:38.118 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-700.woff2 was not modified
+2022-11-17 10:04:38.118 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-700.woff2 - - - 304 - font/woff2 1.3940ms
+2022-11-17 10:04:39.455 +07:00 [INF] Received HTTP response headers after 3052.19ms - 200
+2022-11-17 10:04:39.455 +07:00 [INF] End processing HTTP request after 3052.5391ms - 200
+2022-11-17 10:04:39.515 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups-extend/get-list?api-version=1.0"
+2022-11-17 10:04:39.515 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups-extend/get-list?api-version=1.0"
+2022-11-17 10:04:43.700 +07:00 [INF] Received HTTP response headers after 4184.9128ms - 200
+2022-11-17 10:04:43.700 +07:00 [INF] End processing HTTP request after 4185.2774ms - 200
+2022-11-17 10:04:43.732 +07:00 [INF] Authorization was successful.
+2022-11-17 10:04:43.805 +07:00 [INF] Authorization was successful.
+2022-11-17 10:04:44.413 +07:00 [INF] Authorization was successful.
+2022-11-17 10:04:44.422 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/posts/app-user-lookup?Filter=&SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.422 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/posts/app-user-lookup?Filter=&SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.466 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups/get-staff-user-lookup?SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.466 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups/get-staff-user-lookup?SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.471 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups/get-staff-user-lookup?SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.472 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups/get-staff-user-lookup?SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.477 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups/get-staff-user-lookup?SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.477 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups/get-staff-user-lookup?SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.502 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups-extend/get-tiktok-channels?IsActive=True&Point=0&GroupSourceType=Tiktok&GroupOwnershipType=GDLInternal&TikTokMcnType=MCNGdl&Sorting=Title&SkipCount=0&MaxResultCount=50&api-version=1.0"
+2022-11-17 10:04:44.502 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups-extend/get-tiktok-channels?IsActive=True&Point=0&GroupSourceType=Tiktok&GroupOwnershipType=GDLInternal&TikTokMcnType=MCNGdl&Sorting=Title&SkipCount=0&MaxResultCount=50&api-version=1.0"
+2022-11-17 10:04:44.531 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups-extend/get-tiktok-channels?IsActive=True&Point=0&GroupSourceType=Tiktok&GroupOwnershipType=GDLExternal&TikTokMcnType=MCNGdl&Sorting=Title&SkipCount=0&MaxResultCount=50&api-version=1.0"
+2022-11-17 10:04:44.531 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups-extend/get-tiktok-channels?IsActive=True&Point=0&GroupSourceType=Tiktok&GroupOwnershipType=GDLExternal&TikTokMcnType=MCNGdl&Sorting=Title&SkipCount=0&MaxResultCount=50&api-version=1.0"
+2022-11-17 10:04:44.553 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups-extend/get-tiktok-channels?IsActive=True&Point=0&GroupSourceType=Tiktok&GroupOwnershipType=YAN&TikTokMcnType=MCNGdl&Sorting=Title&SkipCount=0&MaxResultCount=50&api-version=1.0"
+2022-11-17 10:04:44.553 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups-extend/get-tiktok-channels?IsActive=True&Point=0&GroupSourceType=Tiktok&GroupOwnershipType=YAN&TikTokMcnType=MCNGdl&Sorting=Title&SkipCount=0&MaxResultCount=50&api-version=1.0"
+2022-11-17 10:04:44.708 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups/get-staff-user-lookup?SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:44.709 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups/get-staff-user-lookup?SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:45.062 +07:00 [INF] Received HTTP response headers after 509.4677ms - 200
+2022-11-17 10:04:45.063 +07:00 [INF] End processing HTTP request after 509.7755ms - 200
+2022-11-17 10:04:45.065 +07:00 [INF] Received HTTP response headers after 562.4006ms - 200
+2022-11-17 10:04:45.065 +07:00 [INF] End processing HTTP request after 562.681ms - 200
+2022-11-17 10:04:45.081 +07:00 [INF] Received HTTP response headers after 550.3244ms - 200
+2022-11-17 10:04:45.082 +07:00 [INF] End processing HTTP request after 550.5618ms - 200
+2022-11-17 10:04:45.083 +07:00 [INF] Received HTTP response headers after 661.5041ms - 200
+2022-11-17 10:04:45.084 +07:00 [INF] End processing HTTP request after 661.834ms - 200
+2022-11-17 10:04:45.091 +07:00 [INF] Received HTTP response headers after 613.6453ms - 200
+2022-11-17 10:04:45.092 +07:00 [INF] End processing HTTP request after 614.6233ms - 200
+2022-11-17 10:04:45.092 +07:00 [INF] Received HTTP response headers after 620.2944ms - 200
+2022-11-17 10:04:45.094 +07:00 [INF] End processing HTTP request after 622.2413ms - 200
+2022-11-17 10:04:45.094 +07:00 [INF] Received HTTP response headers after 627.8532ms - 200
+2022-11-17 10:04:45.094 +07:00 [INF] End processing HTTP request after 628.1649ms - 200
+2022-11-17 10:04:45.097 +07:00 [INF] Received HTTP response headers after 388.5873ms - 200
+2022-11-17 10:04:45.097 +07:00 [INF] End processing HTTP request after 388.8551ms - 200
+2022-11-17 10:04:45.407 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/posts-extend/group-lookup?Filter=&SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:45.407 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/posts-extend/group-lookup?Filter=&SkipCount=0&MaxResultCount=1000&api-version=1.0"
+2022-11-17 10:04:45.410 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups-extend/get-mcn-gdl-tiktok?api-version=1.0"
+2022-11-17 10:04:45.411 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups-extend/get-mcn-gdl-tiktok?api-version=1.0"
+2022-11-17 10:04:45.491 +07:00 [INF] Received HTTP response headers after 80.2643ms - 200
+2022-11-17 10:04:45.491 +07:00 [INF] End processing HTTP request after 80.5324ms - 200
+2022-11-17 10:04:45.740 +07:00 [INF] Received HTTP response headers after 333.0927ms - 200
+2022-11-17 10:04:45.741 +07:00 [INF] End processing HTTP request after 334.1301ms - 200
+2022-11-17 10:04:46.172 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44314/blazor-notification-hub - -
+2022-11-17 10:04:46.174 +07:00 [INF] Executing endpoint '/blazor-notification-hub'
+2022-11-17 10:04:46.588 +07:00 [INF] Authorization was successful.
+2022-11-17 10:04:51.111 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/fonts/MaterialIcons-Regular.woff - -
+2022-11-17 10:04:51.111 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-100.woff2 - -
+2022-11-17 10:04:51.113 +07:00 [INF] The file /_content/Radzen.Blazor/fonts/MaterialIcons-Regular.woff was not modified
+2022-11-17 10:04:51.114 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Radzen.Blazor/fonts/MaterialIcons-Regular.woff - - - 304 - application/font-woff 2.6010ms
+2022-11-17 10:04:51.114 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-100.woff2 - - - 404 - - 2.7881ms
+2022-11-17 10:04:51.125 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-100.woff - -
+2022-11-17 10:04:51.128 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/assets/fonts/poppins-v6-latin-100.woff - - - 404 - - 3.4131ms
+2022-11-17 10:04:51.148 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-100.woff2 - -
+2022-11-17 10:04:51.149 +07:00 [INF] The file /_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-100.woff2 was not modified
+2022-11-17 10:04:51.150 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme/assets/fonts/poppins-v6-latin-100.woff2 - - - 304 - font/woff2 1.5874ms
+2022-11-17 10:04:55.022 +07:00 [INF] Received HTTP response headers after 17466.8405ms - 200
+2022-11-17 10:04:55.022 +07:00 [INF] End processing HTTP request after 17467.7816ms - 200
+2022-11-17 10:04:55.096 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/statistics/growth-stats?FromDateTime=2022-10-16+17%3A00%3A00Z&ToDateTime=2022-11-17+16%3A59%3A59Z&GroupSourceType=Group&TikTokMcnType=FilterNoSelect&Count=0&api-version=1.0"
+2022-11-17 10:04:55.096 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/statistics/growth-stats?FromDateTime=2022-10-16+17%3A00%3A00Z&ToDateTime=2022-11-17+16%3A59%3A59Z&GroupSourceType=Group&TikTokMcnType=FilterNoSelect&Count=0&api-version=1.0"
+2022-11-17 10:04:55.465 +07:00 [INF] Received HTTP response headers after 368.9178ms - 200
+2022-11-17 10:04:55.465 +07:00 [INF] End processing HTTP request after 369.2428ms - 200
+2022-11-17 10:04:55.587 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/statistics/tiktok-stats?FromDateTime=2022-10-16+17%3A00%3A00Z&ToDateTime=2022-11-16+17%3A00%3A00Z&GroupSourceType=Tiktok&TikTokMcnType=FilterNoSelect&Count=0&api-version=1.0"
+2022-11-17 10:04:55.587 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/statistics/tiktok-stats?FromDateTime=2022-10-16+17%3A00%3A00Z&ToDateTime=2022-11-16+17%3A00%3A00Z&GroupSourceType=Tiktok&TikTokMcnType=FilterNoSelect&Count=0&api-version=1.0"
+2022-11-17 10:04:55.874 +07:00 [INF] Received HTTP response headers after 287.2023ms - 200
+2022-11-17 10:04:55.874 +07:00 [INF] End processing HTTP request after 287.5383ms - 200
+2022-11-17 10:04:56.053 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/affiliate-stats/aff-daily-summary?FromDateTime=2022-10-16+17%3A00%3A00Z&ToDateTime=2022-11-17+16%3A59%3A59Z&ClientOffsetInMinutes=420&GroupSourceType=Group&TikTokMcnType=FilterNoSelect&Count=0&api-version=1.0"
+2022-11-17 10:04:56.053 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/affiliate-stats/aff-daily-summary?FromDateTime=2022-10-16+17%3A00%3A00Z&ToDateTime=2022-11-17+16%3A59%3A59Z&ClientOffsetInMinutes=420&GroupSourceType=Group&TikTokMcnType=FilterNoSelect&Count=0&api-version=1.0"
+2022-11-17 10:04:56.611 +07:00 [INF] Received HTTP response headers after 558.2235ms - 200
+2022-11-17 10:04:56.611 +07:00 [INF] End processing HTTP request after 558.5607ms - 200
+2022-11-17 10:05:05.672 +07:00 [INF] Received HTTP response headers after 28642.3345ms - 500
+2022-11-17 10:05:05.672 +07:00 [INF] End processing HTTP request after 28642.7364ms - 500
+2022-11-17 10:05:05.845 +07:00 [INF] Executed action Volo.Abp.Account.AccountController.GetProfilePictureFileAsync (Volo.Abp.Account.Pro.Public.HttpApi) in 28903.0928ms
+2022-11-17 10:05:05.847 +07:00 [INF] Executed endpoint 'Volo.Abp.Account.AccountController.GetProfilePictureFileAsync (Volo.Abp.Account.Pro.Public.HttpApi)'
+2022-11-17 10:05:05.853 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+Volo.Abp.Http.Client.AbpRemoteCallException: Có một lỗi nội bộ xảy ra trong quá trình thực hiện yêu cầu của bạn!
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.ThrowExceptionForResponseAsync(HttpResponseMessage response)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.MakeRequestAndGetResultAsync[T](IAbpMethodInvocation invocation)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.GetResultAsync(Task task, Type resultType)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Validation.ValidationInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.Account.AccountController.GetProfilePictureFileAsync(Guid id)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ExceptionContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Volo.Abp.AspNetCore.Serilog.AbpSerilogMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Volo.Abp.AspNetCore.Tracing.AbpCorrelationIdMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-17 10:05:05.934 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44314/api/account/profile-picture-file/d34bfd52-0874-d193-65ee-39fc9126832f - - - 500 - text/plain 29000.5462ms
+2022-11-17 10:05:13.945 +07:00 [INF] Start processing HTTP request PUT "https://localhost:44344/api/app/groups/547a2ae1-a2c6-76bf-6ef8-3a079218b05c?api-version=1.0"
+2022-11-17 10:05:13.945 +07:00 [INF] Sending HTTP request PUT "https://localhost:44344/api/app/groups/547a2ae1-a2c6-76bf-6ef8-3a079218b05c?api-version=1.0"
+2022-11-17 10:05:14.111 +07:00 [INF] Received HTTP response headers after 165.8451ms - 200
+2022-11-17 10:05:14.111 +07:00 [INF] End processing HTTP request after 166.0823ms - 200
+2022-11-17 10:05:14.121 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/app/groups-extend/get-tiktok-channels?IsActive=True&Point=0&GroupSourceType=Tiktok&GroupOwnershipType=YAN&TikTokMcnType=MCNGdl&Sorting=Title&SkipCount=0&MaxResultCount=50&api-version=1.0"
+2022-11-17 10:05:14.121 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/app/groups-extend/get-tiktok-channels?IsActive=True&Point=0&GroupSourceType=Tiktok&GroupOwnershipType=YAN&TikTokMcnType=MCNGdl&Sorting=Title&SkipCount=0&MaxResultCount=50&api-version=1.0"
+2022-11-17 10:05:14.189 +07:00 [INF] Received HTTP response headers after 68.332ms - 200
+2022-11-17 10:05:14.189 +07:00 [INF] End processing HTTP request after 68.6326ms - 200

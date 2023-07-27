@@ -1,0 +1,615 @@
+2022-06-10 10:41:46.866 +07:00 [INF] Starting backgroundjob web host.
+2022-06-10 10:42:13.672 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-06-10 10:42:13.786 +07:00 [INF] Loaded ABP modules:
+2022-06-10 10:42:13.787 +07:00 [INF] - FacebookCommunityAnalytics.Api.WebBackgroundJob.WebBackgroundJobAppModule
+2022-06-10 10:42:13.787 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Auditing.AbpAuditingModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2022-06-10 10:42:13.787 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2022-06-10 10:42:13.787 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.Uow.AbpUnitOfWorkModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Json.AbpJsonModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.Timing.AbpTimingModule
+2022-06-10 10:42:13.787 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationModule
+2022-06-10 10:42:13.787 +07:00 [INF]               - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2022-06-10 10:42:13.787 +07:00 [INF]               - Volo.Abp.Settings.AbpSettingsModule
+2022-06-10 10:42:13.787 +07:00 [INF]                 - Volo.Abp.Security.AbpSecurityModule
+2022-06-10 10:42:13.787 +07:00 [INF]                 - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Threading.AbpThreadingModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Http.AbpHttpModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Http.AbpHttpAbstractionsModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Minify.AbpMinifyModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Authorization.AbpAuthorizationModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Validation.AbpValidationModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Application.AbpDddApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.UI.AbpUiModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.Application.AbpDddApplicationModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Domain.AbpDddDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.EventBus.AbpEventBusModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Guids.AbpGuidsModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Specifications.AbpSpecificationsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Features.AbpFeaturesModule
+2022-06-10 10:42:13.787 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2022-06-10 10:42:13.787 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]             - Volo.Abp.Users.AbpUsersDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Caching.AbpCachingModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.Serialization.AbpSerializationModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.Users.AbpUsersDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]             - Volo.Abp.Users.AbpUsersAbstractionModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Saas.SaasDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Emailing.AbpEmailingModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2022-06-10 10:42:13.787 +07:00 [INF]   - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2022-06-10 10:42:13.787 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiApplicationModule
+2022-06-10 10:42:13.787 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Saas.Host.SaasHostApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]         - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]           - Volo.Abp.Ldap.AbpLdapModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.Account.AbpAccountAdminApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationContractsModule
+2022-06-10 10:42:13.787 +07:00 [INF]       - Volo.CmsKit.CmsKitProApplicationContractsModule
+2022-06-10 10:42:13.788 +07:00 [INF]         - Volo.CmsKit.CmsKitApplicationContractsModule
+2022-06-10 10:42:13.788 +07:00 [INF]           - Volo.CmsKit.Public.CmsKitPublicApplicationContractsModule
+2022-06-10 10:42:13.788 +07:00 [INF]             - Volo.CmsKit.CmsKitCommonApplicationContractsModule
+2022-06-10 10:42:13.788 +07:00 [INF]           - Volo.CmsKit.Admin.CmsKitAdminApplicationContractsModule
+2022-06-10 10:42:13.788 +07:00 [INF]         - Volo.CmsKit.CmsKitProPublicApplicationContractsModule
+2022-06-10 10:42:13.788 +07:00 [INF]         - Volo.CmsKit.CmsKitProAdminApplicationContractsModule
+2022-06-10 10:42:13.788 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationContractsModule
+2022-06-10 10:42:13.788 +07:00 [INF]       - Volo.Abp.FluentValidation.AbpFluentValidationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Saas.Host.SaasHostApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]       - Volo.Abp.Account.AbpAccountSharedApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]       - Volo.Abp.Sms.AbpSmsModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.CmsKit.CmsKitProApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]       - Volo.CmsKit.CmsKitApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.BlobStoring.Azure.AbpBlobStoringAzureModule
+2022-06-10 10:42:13.788 +07:00 [INF]   - Volo.Abp.Swashbuckle.AbpSwashbuckleModule
+2022-06-10 10:42:13.788 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2022-06-10 10:42:13.788 +07:00 [INF]   - Volo.Abp.BackgroundJobs.Hangfire.AbpBackgroundJobsHangfireModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.Hangfire.AbpHangfireModule
+2022-06-10 10:42:13.788 +07:00 [INF]   - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2022-06-10 10:42:13.788 +07:00 [INF]     - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2022-06-10 10:42:14.002 +07:00 [DBG] Started background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2022-06-10 10:42:14.017 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2022-06-10 10:42:14.158 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.158 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.158 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.158 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.158 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.158 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.158 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.158 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.159 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.159 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.159 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.159 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.159 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.160 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.172 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.181 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.187 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.198 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.201 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.213 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.224 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.235 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.245 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.254 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:42:14.286 +07:00 [INF] Start installing Hangfire SQL objects...
+2022-06-10 10:42:14.637 +07:00 [INF] Hangfire SQL objects installed.
+2022-06-10 10:42:14.650 +07:00 [INF] Starting Hangfire Server using job storage: 'SQL Server: localhost@GDL_Hangfire_db'
+2022-06-10 10:42:14.650 +07:00 [INF] Using the following options for SQL Server job storage: Queue poll interval: 00:00:00.
+2022-06-10 10:42:14.651 +07:00 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2022-06-10 10:42:14.677 +07:00 [DBG] Execution loop BackgroundServerProcess:918b56d9 has started in 8.8445 ms
+2022-06-10 10:42:14.881 +07:00 [INF] Server laptop-b2vhear5:28712:92614604 successfully announced in 189.2653 ms
+2022-06-10 10:42:14.887 +07:00 [INF] Server laptop-b2vhear5:28712:92614604 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2022-06-10 10:42:14.888 +07:00 [DBG] Execution loop ServerHeartbeatProcess:bbbf3374 has started in 5.2137 ms
+2022-06-10 10:42:14.892 +07:00 [DBG] Execution loop ServerWatchdog:04aa9591 has started in 5.6293 ms
+2022-06-10 10:42:14.894 +07:00 [DBG] Execution loop ServerJobCancellationWatcher:a777b796 has started in 5.6578 ms
+2022-06-10 10:42:14.899 +07:00 [DBG] Execution loop ExpirationManager:c299f0ce has started in 8.0235 ms
+2022-06-10 10:42:14.901 +07:00 [DBG] Execution loop CountersAggregator:ec183ac9 has started in 6.7349 ms
+2022-06-10 10:42:14.902 +07:00 [DBG] Aggregating records in 'Counter' table...
+2022-06-10 10:42:14.904 +07:00 [DBG] Removing outdated records from the 'AggregatedCounter' table...
+2022-06-10 10:42:14.908 +07:00 [DBG] Execution loop Worker:1cb02591 has started in 12.3784 ms
+2022-06-10 10:42:14.910 +07:00 [DBG] Execution loop Worker:c0a6824e has started in 14.4021 ms
+2022-06-10 10:42:14.913 +07:00 [DBG] Execution loop Worker:9bc6e427 has started in 17.5033 ms
+2022-06-10 10:42:14.917 +07:00 [INF] 1 servers were removed due to timeout
+2022-06-10 10:42:14.917 +07:00 [DBG] Execution loop Worker:d11ef101 has started in 21.0218 ms
+2022-06-10 10:42:14.920 +07:00 [DBG] Execution loop Worker:3bc9cc1d has started in 24.5375 ms
+2022-06-10 10:42:14.924 +07:00 [DBG] Execution loop Worker:d6680a7d has started in 28.7136 ms
+2022-06-10 10:42:14.928 +07:00 [DBG] Execution loop Worker:4051c971 has started in 32.9519 ms
+2022-06-10 10:42:14.933 +07:00 [DBG] Execution loop Worker:fbbef7a1 has started in 37.8182 ms
+2022-06-10 10:42:14.935 +07:00 [DBG] Execution loop Worker:c54621c9 has started in 39.5024 ms
+2022-06-10 10:42:14.940 +07:00 [DBG] Execution loop Worker:3ac2944b has started in 44.8707 ms
+2022-06-10 10:42:14.945 +07:00 [DBG] Execution loop Worker:425d2cf9 has started in 49.6271 ms
+2022-06-10 10:42:14.949 +07:00 [DBG] Execution loop Worker:efe55a1c has started in 54.0363 ms
+2022-06-10 10:42:14.951 +07:00 [DBG] Execution loop Worker:89264626 has started in 55.8329 ms
+2022-06-10 10:42:14.956 +07:00 [DBG] Execution loop Worker:4f056386 has started in 60.189 ms
+2022-06-10 10:42:14.967 +07:00 [DBG] Execution loop Worker:36081344 has started in 70.9067 ms
+2022-06-10 10:42:14.967 +07:00 [DBG] Execution loop Worker:386d7687 has started in 71.8758 ms
+2022-06-10 10:42:14.971 +07:00 [DBG] Execution loop Worker:097bee6c has started in 75.5431 ms
+2022-06-10 10:42:14.975 +07:00 [DBG] Execution loop Worker:5b310741 has started in 78.9435 ms
+2022-06-10 10:42:14.979 +07:00 [DBG] Execution loop Worker:17a7761a has started in 83.5392 ms
+2022-06-10 10:42:14.984 +07:00 [DBG] Execution loop Worker:07f6bcda has started in 88.8945 ms
+2022-06-10 10:42:14.990 +07:00 [INF] Server laptop-b2vhear5:28712:92614604 all the dispatchers started
+2022-06-10 10:42:14.990 +07:00 [DBG] Execution loop DelayedJobScheduler:807f4624 has started in 9.1394 ms
+2022-06-10 10:42:14.991 +07:00 [DBG] Removing outdated records from the 'Job' table...
+2022-06-10 10:42:14.995 +07:00 [DBG] Execution loop RecurringJobScheduler:52da0994 has started in 9.0287 ms
+2022-06-10 10:42:15.011 +07:00 [DBG] Removing outdated records from the 'List' table...
+2022-06-10 10:42:15.014 +07:00 [DBG] Removing outdated records from the 'Set' table...
+2022-06-10 10:42:15.019 +07:00 [DBG] Removing outdated records from the 'Hash' table...
+2022-06-10 10:42:15.670 +07:00 [DBG] 1 recurring job(s) processed by scheduler.
+2022-06-10 10:42:17.599 +07:00 [INF] Initialized all ABP modules.
+2022-06-10 10:42:17.683 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-06-10 10:42:17.683 +07:00 [INF] Hosting environment: Development
+2022-06-10 10:42:17.683 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.WebBackgroundJob
+2022-06-10 10:42:17.755 +07:00 [INF] Request starting HTTP/1.1 DEBUG http://localhost:3301/ - 0
+2022-06-10 10:42:21.305 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: An error occurred while deserializing the Id property of class Volo.Abp.Domain.Entities.Entity`1[[System.Guid, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]: Cannot deserialize a 'Guid' from BsonType 'ObjectId'.
+ ---> System.FormatException: Cannot deserialize a 'Guid' from BsonType 'ObjectId'.
+   at MongoDB.Bson.Serialization.Serializers.GuidSerializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.Serializers.SerializerBase`1.MongoDB.Bson.Serialization.IBsonSerializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize(IBsonSerializer serializer, BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeMemberValue(BsonDeserializationContext context, BsonMemberMap memberMap)
+   --- End of inner exception stack trace ---
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeMemberValue(BsonDeserializationContext context, BsonMemberMap memberMap)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeClass(BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.Serializers.EnumerableSerializerBase`2.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.CursorDeserializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.AggregateResultDeserializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.ProcessResponse(ConnectionId connectionId, CommandMessage responseMessage)
+   at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.ExecuteAsync(IConnection connection, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Servers.Server.ServerChannel.ExecuteProtocolAsync[TResult](IWireProtocol`1 protocol, ICoreSession session, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.ExecuteAsync[TResult](IRetryableReadOperation`1 operation, RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.ExecuteAsync(IReadBinding binding, CancellationToken cancellationToken)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](IReadBinding binding, IReadOperation`1 operation, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.AggregateAsync[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, AggregateOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.UsingImplicitSessionAsync[TResult](Func`2 funcAsync, CancellationToken cancellationToken)
+   at MongoDB.Driver.IAsyncCursorSourceExtensions.ToListAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)
+   at Volo.Abp.LanguageManagement.MongoDB.MongoLanguageRepository.GetListByIsEnabledAsync(Boolean isEnabled, CancellationToken cancellationToken)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Uow.UnitOfWorkInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.LanguageManagement.DatabaseLanguageProvider.d2bvcd7xA()
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.LanguageManagement.DatabaseLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-06-10 10:42:21.455 +07:00 [INF] Request finished HTTP/1.1 DEBUG http://localhost:3301/ - 0 - 500 - text/plain 3700.7634ms
+2022-06-10 10:42:44.928 +07:00 [DBG] Server laptop-b2vhear5:28712:92614604 heartbeat successfully sent
+2022-06-10 10:43:14.949 +07:00 [DBG] Server laptop-b2vhear5:28712:92614604 heartbeat successfully sent
+2022-06-10 10:43:44.966 +07:00 [DBG] Server laptop-b2vhear5:28712:92614604 heartbeat successfully sent
+2022-06-10 10:43:50.134 +07:00 [DBG] Disposed channel pool with no channels in the pool.
+2022-06-10 10:43:50.159 +07:00 [DBG] Hangfire Server is stopping...
+2022-06-10 10:43:50.160 +07:00 [INF] Server laptop-b2vhear5:28712:92614604 caught stopping signal...
+2022-06-10 10:43:50.161 +07:00 [DBG] Execution loop ServerJobCancellationWatcher:a777b796 stopped in 0 ms
+2022-06-10 10:43:50.164 +07:00 [DBG] Execution loop ExpirationManager:c299f0ce stopped in 0 ms
+2022-06-10 10:43:50.167 +07:00 [DBG] Execution loop CountersAggregator:ec183ac9 stopped in 0 ms
+2022-06-10 10:43:50.169 +07:00 [DBG] Execution loop RecurringJobScheduler:52da0994 stopped in 0 ms
+2022-06-10 10:43:50.169 +07:00 [DBG] Execution loop DelayedJobScheduler:807f4624 stopped in 0 ms
+2022-06-10 10:43:50.170 +07:00 [DBG] Execution loop Worker:1cb02591 stopped in 0 ms
+2022-06-10 10:43:50.180 +07:00 [DBG] Execution loop Worker:c0a6824e stopped in 0.8341 ms
+2022-06-10 10:43:50.183 +07:00 [DBG] Execution loop ServerWatchdog:04aa9591 stopped in 4.7385 ms
+2022-06-10 10:43:50.184 +07:00 [DBG] Execution loop Worker:d11ef101 stopped in 5.8122 ms
+2022-06-10 10:43:50.184 +07:00 [DBG] Execution loop Worker:4051c971 stopped in 5.9189 ms
+2022-06-10 10:43:50.188 +07:00 [INF] Server laptop-b2vhear5:28712:92614604 caught stopped signal...
+2022-06-10 10:43:50.191 +07:00 [DBG] Execution loop Worker:3ac2944b stopped in 12.1222 ms
+2022-06-10 10:43:50.191 +07:00 [DBG] Execution loop Worker:d6680a7d stopped in 12.1301 ms
+2022-06-10 10:43:50.196 +07:00 [DBG] Execution loop Worker:89264626 stopped in 17.4182 ms
+2022-06-10 10:43:50.196 +07:00 [DBG] Execution loop Worker:efe55a1c stopped in 17.5128 ms
+2022-06-10 10:43:50.200 +07:00 [DBG] Execution loop Worker:36081344 stopped in 21.941 ms
+2022-06-10 10:43:50.200 +07:00 [DBG] Execution loop Worker:5b310741 stopped in 21.9247 ms
+2022-06-10 10:43:50.204 +07:00 [DBG] Execution loop Worker:07f6bcda stopped in 25.3637 ms
+2022-06-10 10:43:50.764 +07:00 [DBG] Execution loop Worker:097bee6c stopped in 585.8762 ms
+2022-06-10 10:43:51.230 +07:00 [DBG] Execution loop Worker:3bc9cc1d stopped in 1051.6487 ms
+2022-06-10 10:43:51.230 +07:00 [DBG] Execution loop Worker:9bc6e427 stopped in 1051.6441 ms
+2022-06-10 10:43:51.246 +07:00 [DBG] Execution loop Worker:c54621c9 stopped in 1067.3017 ms
+2022-06-10 10:43:51.246 +07:00 [DBG] Execution loop Worker:4f056386 stopped in 1067.3649 ms
+2022-06-10 10:43:51.246 +07:00 [DBG] Execution loop Worker:386d7687 stopped in 1067.3842 ms
+2022-06-10 10:43:51.246 +07:00 [DBG] Execution loop Worker:425d2cf9 stopped in 1067.3887 ms
+2022-06-10 10:43:51.247 +07:00 [DBG] Execution loop Worker:fbbef7a1 stopped in 1067.3976 ms
+2022-06-10 10:43:51.261 +07:00 [DBG] Execution loop Worker:17a7761a stopped in 1082.4788 ms
+2022-06-10 10:43:51.262 +07:00 [INF] Server laptop-b2vhear5:28712:92614604 All dispatchers stopped
+2022-06-10 10:43:51.263 +07:00 [DBG] Execution loop ServerHeartbeatProcess:bbbf3374 stopped in 1084.7039 ms
+2022-06-10 10:43:51.268 +07:00 [INF] Server laptop-b2vhear5:28712:92614604 successfully reported itself as stopped in 2.259 ms
+2022-06-10 10:43:51.268 +07:00 [INF] Server laptop-b2vhear5:28712:92614604 has been stopped in total 1088.7006 ms
+2022-06-10 10:43:51.268 +07:00 [DBG] Execution loop BackgroundServerProcess:918b56d9 stopped in 1108.2657 ms
+2022-06-10 10:43:51.272 +07:00 [DBG] Stopped background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2022-06-10 10:43:51.272 +07:00 [DBG] Stopped background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2022-06-10 10:43:51.272 +07:00 [INF] Application is shutting down...
+2022-06-10 10:44:07.190 +07:00 [INF] Starting backgroundjob web host.
+2022-06-10 10:44:19.321 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-06-10 10:44:19.428 +07:00 [INF] Loaded ABP modules:
+2022-06-10 10:44:19.428 +07:00 [INF] - FacebookCommunityAnalytics.Api.WebBackgroundJob.WebBackgroundJobAppModule
+2022-06-10 10:44:19.428 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2022-06-10 10:44:19.428 +07:00 [INF]     - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.Auditing.AbpAuditingModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2022-06-10 10:44:19.428 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2022-06-10 10:44:19.428 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2022-06-10 10:44:19.428 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2022-06-10 10:44:19.428 +07:00 [INF]           - Volo.Abp.Uow.AbpUnitOfWorkModule
+2022-06-10 10:44:19.428 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Json.AbpJsonModule
+2022-06-10 10:44:19.428 +07:00 [INF]           - Volo.Abp.Timing.AbpTimingModule
+2022-06-10 10:44:19.428 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationModule
+2022-06-10 10:44:19.428 +07:00 [INF]               - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2022-06-10 10:44:19.428 +07:00 [INF]               - Volo.Abp.Settings.AbpSettingsModule
+2022-06-10 10:44:19.428 +07:00 [INF]                 - Volo.Abp.Security.AbpSecurityModule
+2022-06-10 10:44:19.428 +07:00 [INF]                 - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Threading.AbpThreadingModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.Http.AbpHttpModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Http.AbpHttpAbstractionsModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Minify.AbpMinifyModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.Authorization.AbpAuthorizationModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.Validation.AbpValidationModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2022-06-10 10:44:19.428 +07:00 [INF]     - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2022-06-10 10:44:19.428 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.Application.AbpDddApplicationContractsModule
+2022-06-10 10:44:19.428 +07:00 [INF]     - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.UI.AbpUiModule
+2022-06-10 10:44:19.428 +07:00 [INF]     - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2022-06-10 10:44:19.428 +07:00 [INF]     - Volo.Abp.Application.AbpDddApplicationModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.Domain.AbpDddDomainModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.EventBus.AbpEventBusModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Guids.AbpGuidsModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Specifications.AbpSpecificationsModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - Volo.Abp.Features.AbpFeaturesModule
+2022-06-10 10:44:19.428 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2022-06-10 10:44:19.428 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2022-06-10 10:44:19.428 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2022-06-10 10:44:19.428 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainModule
+2022-06-10 10:44:19.428 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2022-06-10 10:44:19.428 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2022-06-10 10:44:19.428 +07:00 [INF]           - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]             - Volo.Abp.Users.AbpUsersDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.Caching.AbpCachingModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.Abp.Serialization.AbpSerializationModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.Abp.Users.AbpUsersDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]             - Volo.Abp.Users.AbpUsersAbstractionModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Saas.SaasDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Emailing.AbpEmailingModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2022-06-10 10:44:19.429 +07:00 [INF]   - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2022-06-10 10:44:19.429 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Saas.Host.SaasHostApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.Abp.Ldap.AbpLdapModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Account.AbpAccountAdminApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.CmsKit.CmsKitProApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.CmsKit.CmsKitApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.CmsKit.Public.CmsKitPublicApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]             - Volo.CmsKit.CmsKitCommonApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.CmsKit.Admin.CmsKitAdminApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.CmsKit.CmsKitProPublicApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.CmsKit.CmsKitProAdminApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationContractsModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.FluentValidation.AbpFluentValidationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Saas.Host.SaasHostApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Account.AbpAccountSharedApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.Abp.Sms.AbpSmsModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.CmsKit.CmsKitProApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.CmsKit.CmsKitApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminApplicationModule
+2022-06-10 10:44:19.429 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationModule
+2022-06-10 10:44:19.430 +07:00 [INF]     - Volo.Abp.BlobStoring.Azure.AbpBlobStoringAzureModule
+2022-06-10 10:44:19.430 +07:00 [INF]   - Volo.Abp.Swashbuckle.AbpSwashbuckleModule
+2022-06-10 10:44:19.430 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2022-06-10 10:44:19.430 +07:00 [INF]   - Volo.Abp.BackgroundJobs.Hangfire.AbpBackgroundJobsHangfireModule
+2022-06-10 10:44:19.430 +07:00 [INF]     - Volo.Abp.Hangfire.AbpHangfireModule
+2022-06-10 10:44:19.430 +07:00 [INF]   - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2022-06-10 10:44:19.430 +07:00 [INF]     - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2022-06-10 10:44:19.587 +07:00 [DBG] Started background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2022-06-10 10:44:19.618 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2022-06-10 10:44:19.624 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.625 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.631 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.637 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.641 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.647 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.655 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.661 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.670 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.677 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.684 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.694 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.704 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.705 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.715 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.722 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.729 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.737 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.740 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.748 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.756 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.762 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.772 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.781 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-06-10 10:44:19.800 +07:00 [INF] Start installing Hangfire SQL objects...
+2022-06-10 10:44:20.004 +07:00 [INF] Hangfire SQL objects installed.
+2022-06-10 10:44:20.018 +07:00 [INF] Starting Hangfire Server using job storage: 'SQL Server: localhost@GDL_Hangfire_db'
+2022-06-10 10:44:20.018 +07:00 [INF] Using the following options for SQL Server job storage: Queue poll interval: 00:00:00.
+2022-06-10 10:44:20.018 +07:00 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2022-06-10 10:44:20.036 +07:00 [DBG] Execution loop BackgroundServerProcess:0612e0e6 has started in 7.2214 ms
+2022-06-10 10:44:20.276 +07:00 [INF] Server laptop-b2vhear5:22884:450944b9 successfully announced in 219.0472 ms
+2022-06-10 10:44:20.281 +07:00 [DBG] Execution loop ServerHeartbeatProcess:4b167f95 has started in 4.1921 ms
+2022-06-10 10:44:20.282 +07:00 [INF] Server laptop-b2vhear5:22884:450944b9 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2022-06-10 10:44:20.285 +07:00 [DBG] Execution loop ServerWatchdog:d0277ae4 has started in 3.6206 ms
+2022-06-10 10:44:20.286 +07:00 [DBG] Execution loop ServerJobCancellationWatcher:6f4cfa33 has started in 3.8848 ms
+2022-06-10 10:44:20.289 +07:00 [DBG] Execution loop ExpirationManager:bc577b2b has started in 4.0026 ms
+2022-06-10 10:44:20.290 +07:00 [DBG] Execution loop CountersAggregator:84e22edf has started in 3.9017 ms
+2022-06-10 10:44:20.291 +07:00 [DBG] Aggregating records in 'Counter' table...
+2022-06-10 10:44:20.295 +07:00 [DBG] Execution loop Worker:21a806bb has started in 7.6858 ms
+2022-06-10 10:44:20.295 +07:00 [DBG] Removing outdated records from the 'AggregatedCounter' table...
+2022-06-10 10:44:20.296 +07:00 [DBG] Execution loop Worker:6c12834b has started in 9.1827 ms
+2022-06-10 10:44:20.298 +07:00 [DBG] Execution loop Worker:906761cf has started in 10.8351 ms
+2022-06-10 10:44:20.300 +07:00 [DBG] Execution loop Worker:d32ee830 has started in 12.6406 ms
+2022-06-10 10:44:20.302 +07:00 [DBG] Execution loop Worker:e611ed3a has started in 14.8724 ms
+2022-06-10 10:44:20.307 +07:00 [DBG] Execution loop Worker:c341f28a has started in 19.7287 ms
+2022-06-10 10:44:20.308 +07:00 [DBG] Execution loop Worker:51ac5fda has started in 20.5948 ms
+2022-06-10 10:44:20.309 +07:00 [DBG] Execution loop Worker:fc3ad073 has started in 22.3993 ms
+2022-06-10 10:44:20.313 +07:00 [DBG] Execution loop Worker:359fb5e7 has started in 25.5334 ms
+2022-06-10 10:44:20.316 +07:00 [DBG] Execution loop Worker:620cecf4 has started in 27.557 ms
+2022-06-10 10:44:20.318 +07:00 [DBG] Execution loop Worker:e68912e4 has started in 30.975 ms
+2022-06-10 10:44:20.319 +07:00 [DBG] Execution loop Worker:6da0463c has started in 32.1315 ms
+2022-06-10 10:44:20.322 +07:00 [DBG] Execution loop Worker:0bff561e has started in 34.6345 ms
+2022-06-10 10:44:20.325 +07:00 [DBG] Execution loop Worker:e00419ec has started in 37.6853 ms
+2022-06-10 10:44:20.329 +07:00 [DBG] Execution loop Worker:4a989764 has started in 41.4054 ms
+2022-06-10 10:44:20.331 +07:00 [DBG] Execution loop Worker:abab341d has started in 43.0966 ms
+2022-06-10 10:44:20.334 +07:00 [DBG] Execution loop Worker:643fc860 has started in 46.0926 ms
+2022-06-10 10:44:20.336 +07:00 [DBG] Execution loop Worker:3a415e58 has started in 49.1089 ms
+2022-06-10 10:44:20.338 +07:00 [DBG] Execution loop Worker:54be62fc has started in 50.8326 ms
+2022-06-10 10:44:20.341 +07:00 [DBG] Execution loop Worker:7f0f0bb5 has started in 53.8748 ms
+2022-06-10 10:44:20.343 +07:00 [INF] Server laptop-b2vhear5:22884:450944b9 all the dispatchers started
+2022-06-10 10:44:20.343 +07:00 [DBG] Execution loop DelayedJobScheduler:766e4806 has started in 5.6816 ms
+2022-06-10 10:44:20.346 +07:00 [DBG] Execution loop RecurringJobScheduler:a34e47ee has started in 5.2664 ms
+2022-06-10 10:44:20.360 +07:00 [DBG] Removing outdated records from the 'Job' table...
+2022-06-10 10:44:20.371 +07:00 [DBG] Removing outdated records from the 'List' table...
+2022-06-10 10:44:20.374 +07:00 [DBG] Removing outdated records from the 'Set' table...
+2022-06-10 10:44:20.375 +07:00 [DBG] Removing outdated records from the 'Hash' table...
+2022-06-10 10:44:21.084 +07:00 [INF] Initialized all ABP modules.
+2022-06-10 10:44:21.105 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-06-10 10:44:21.106 +07:00 [INF] Hosting environment: Development
+2022-06-10 10:44:21.106 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.WebBackgroundJob
+2022-06-10 10:44:21.139 +07:00 [INF] Request starting HTTP/1.1 DEBUG http://localhost:3301/ - 0
+2022-06-10 10:44:23.259 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: An error occurred while deserializing the Id property of class Volo.Abp.Domain.Entities.Entity`1[[System.Guid, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]: Cannot deserialize a 'Guid' from BsonType 'ObjectId'.
+ ---> System.FormatException: Cannot deserialize a 'Guid' from BsonType 'ObjectId'.
+   at MongoDB.Bson.Serialization.Serializers.GuidSerializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.Serializers.SerializerBase`1.MongoDB.Bson.Serialization.IBsonSerializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize(IBsonSerializer serializer, BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeMemberValue(BsonDeserializationContext context, BsonMemberMap memberMap)
+   --- End of inner exception stack trace ---
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeMemberValue(BsonDeserializationContext context, BsonMemberMap memberMap)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeClass(BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.Serializers.EnumerableSerializerBase`2.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.CursorDeserializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.AggregateResultDeserializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.ProcessResponse(ConnectionId connectionId, CommandMessage responseMessage)
+   at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.ExecuteAsync(IConnection connection, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Servers.Server.ServerChannel.ExecuteProtocolAsync[TResult](IWireProtocol`1 protocol, ICoreSession session, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.ExecuteAsync[TResult](IRetryableReadOperation`1 operation, RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.AggregateOperation`1.ExecuteAsync(IReadBinding binding, CancellationToken cancellationToken)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](IReadBinding binding, IReadOperation`1 operation, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.AggregateAsync[TResult](IClientSessionHandle session, PipelineDefinition`2 pipeline, AggregateOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.UsingImplicitSessionAsync[TResult](Func`2 funcAsync, CancellationToken cancellationToken)
+   at MongoDB.Driver.IAsyncCursorSourceExtensions.ToListAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)
+   at Volo.Abp.LanguageManagement.MongoDB.MongoLanguageRepository.GetListByIsEnabledAsync(Boolean isEnabled, CancellationToken cancellationToken)
+   at Castle.DynamicProxy.AsyncInterceptorBase.ProceedAsynchronous[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo)
+   at Volo.Abp.Castle.DynamicProxy.CastleAbpMethodInvocationAdapterWithReturnValue`1.ProceedAsync()
+   at Volo.Abp.Uow.UnitOfWorkInterceptor.InterceptAsync(IAbpMethodInvocation invocation)
+   at Volo.Abp.Castle.DynamicProxy.CastleAsyncAbpInterceptorAdapter`1.InterceptAsync[TResult](IInvocation invocation, IInvocationProceedInfo proceedInfo, Func`3 proceed)
+   at Volo.Abp.LanguageManagement.DatabaseLanguageProvider.d2bvcd7xA()
+   at Volo.Abp.Caching.DistributedCache`2.GetOrAddAsync(TCacheKey key, Func`1 factory, Func`1 optionsFactory, Nullable`1 hideErrors, Boolean considerUow, CancellationToken token)
+   at Volo.Abp.LanguageManagement.DatabaseLanguageProvider.GetLanguagesAsync()
+   at Microsoft.AspNetCore.RequestLocalization.DefaultAbpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-06-10 10:44:23.351 +07:00 [INF] Request finished HTTP/1.1 DEBUG http://localhost:3301/ - 0 - 500 - text/plain 2213.1792ms
+2022-06-10 10:44:50.307 +07:00 [DBG] Server laptop-b2vhear5:22884:450944b9 heartbeat successfully sent
+2022-06-10 10:45:20.331 +07:00 [DBG] Server laptop-b2vhear5:22884:450944b9 heartbeat successfully sent
+2022-06-10 10:45:50.354 +07:00 [DBG] Server laptop-b2vhear5:22884:450944b9 heartbeat successfully sent
+2022-06-10 10:46:20.373 +07:00 [DBG] Server laptop-b2vhear5:22884:450944b9 heartbeat successfully sent
+2022-06-10 10:46:50.398 +07:00 [DBG] Server laptop-b2vhear5:22884:450944b9 heartbeat successfully sent
+2022-06-10 10:47:20.421 +07:00 [DBG] Server laptop-b2vhear5:22884:450944b9 heartbeat successfully sent
+2022-06-10 10:47:50.439 +07:00 [DBG] Server laptop-b2vhear5:22884:450944b9 heartbeat successfully sent
+2022-06-10 10:48:20.459 +07:00 [DBG] Server laptop-b2vhear5:22884:450944b9 heartbeat successfully sent

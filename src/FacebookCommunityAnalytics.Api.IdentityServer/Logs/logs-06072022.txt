@@ -1,0 +1,1042 @@
+2022-07-06 17:52:33.646 +07:00 [INF] Starting FacebookCommunityAnalytics.Api.IdentityServer.
+2022-07-06 17:52:46.452 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-07-06 17:52:46.524 +07:00 [INF] Loaded ABP modules:
+2022-07-06 17:52:46.524 +07:00 [INF] - FacebookCommunityAnalytics.Api.ApiIdentityServerModule
+2022-07-06 17:52:46.524 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2022-07-06 17:52:46.524 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2022-07-06 17:52:46.524 +07:00 [INF]   - Volo.Abp.Caching.StackExchangeRedis.AbpCachingStackExchangeRedisModule
+2022-07-06 17:52:46.524 +07:00 [INF]     - Volo.Abp.Caching.AbpCachingModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.Serialization.AbpSerializationModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.Uow.AbpUnitOfWorkModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2022-07-06 17:52:46.524 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2022-07-06 17:52:46.524 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2022-07-06 17:52:46.524 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2022-07-06 17:52:46.524 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2022-07-06 17:52:46.524 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2022-07-06 17:52:46.524 +07:00 [INF]         - Volo.Abp.Security.AbpSecurityModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2022-07-06 17:52:46.524 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2022-07-06 17:52:46.524 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2022-07-06 17:52:46.524 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2022-07-06 17:52:46.524 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2022-07-06 17:52:46.524 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2022-07-06 17:52:46.524 +07:00 [INF]     - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.Auditing.AbpAuditingModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.Http.AbpHttpModule
+2022-07-06 17:52:46.524 +07:00 [INF]         - Volo.Abp.Http.AbpHttpAbstractionsModule
+2022-07-06 17:52:46.524 +07:00 [INF]         - Volo.Abp.Minify.AbpMinifyModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.Authorization.AbpAuthorizationModule
+2022-07-06 17:52:46.524 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.Validation.AbpValidationModule
+2022-07-06 17:52:46.524 +07:00 [INF]       - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2022-07-06 17:52:46.524 +07:00 [INF]   - Volo.Abp.Account.Web.AbpAccountPublicWebIdentityServerModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.Account.Public.Web.AbpAccountPublicWebModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicHttpApiModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2022-07-06 17:52:46.525 +07:00 [INF]               - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]                 - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]                   - Volo.Abp.Users.AbpUsersDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]                   - Volo.Abp.Features.AbpFeaturesModule
+2022-07-06 17:52:46.525 +07:00 [INF]               - Volo.Abp.Users.AbpUsersAbstractionModule
+2022-07-06 17:52:46.525 +07:00 [INF]                 - Volo.Abp.EventBus.AbpEventBusModule
+2022-07-06 17:52:46.525 +07:00 [INF]               - Volo.Abp.Application.AbpDddApplicationModule
+2022-07-06 17:52:46.525 +07:00 [INF]                 - Volo.Abp.Domain.AbpDddDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]                   - Volo.Abp.Guids.AbpGuidsModule
+2022-07-06 17:52:46.525 +07:00 [INF]                   - Volo.Abp.Specifications.AbpSpecificationsModule
+2022-07-06 17:52:46.525 +07:00 [INF]                 - Volo.Abp.Application.AbpDddApplicationContractsModule
+2022-07-06 17:52:46.525 +07:00 [INF]                 - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2022-07-06 17:52:46.525 +07:00 [INF]               - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2022-07-06 17:52:46.525 +07:00 [INF]                 - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.Ldap.AbpLdapModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.Emailing.AbpEmailingModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2022-07-06 17:52:46.525 +07:00 [INF]               - Volo.Abp.UI.AbpUiModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.Sms.AbpSmsModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Theme.Commercial.AbpAspNetCoreMvcUiThemeCommercialModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2022-07-06 17:52:46.525 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.Users.AbpUsersDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2022-07-06 17:52:46.525 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.AbpAspNetCoreMvcUiLeptonThemeModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]   - Volo.Abp.Account.AbpAccountPublicApplicationModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.Account.AbpAccountSharedApplicationModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityApplicationModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2022-07-06 17:52:46.525 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Saas.SaasDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2022-07-06 17:52:46.525 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2022-07-06 17:52:46.637 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.642 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.652 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.660 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.664 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.816 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2022-07-06 17:52:46.836 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.848 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.857 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.868 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.878 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.889 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.901 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.910 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.915 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.926 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.936 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.946 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.955 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.967 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.987 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 17:52:46.988 +07:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2022-07-06 17:52:48.779 +07:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2022-07-06 17:52:48.779 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2022-07-06 17:52:48.779 +07:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2022-07-06 17:52:48.780 +07:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2022-07-06 17:52:48.780 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2022-07-06 17:52:48.780 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2022-07-06 17:52:50.583 +07:00 [INF] Initialized all ABP modules.
+2022-07-06 17:52:50.610 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-07-06 17:52:50.610 +07:00 [INF] Hosting environment: Development
+2022-07-06 17:52:50.610 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer
+2022-07-06 17:52:50.650 +07:00 [INF] Request starting HTTP/1.1 DEBUG https://localhost:44382/ - 0
+2022-07-06 17:52:52.890 +07:00 [DBG] Login Url: /Account/Login
+2022-07-06 17:52:52.890 +07:00 [DBG] Login Return Url Parameter: ReturnUrl
+2022-07-06 17:52:52.890 +07:00 [DBG] Logout Url: /Account/Logout
+2022-07-06 17:52:52.890 +07:00 [DBG] ConsentUrl Url: /Consent
+2022-07-06 17:52:52.890 +07:00 [DBG] Consent Return Url Parameter: returnUrl
+2022-07-06 17:52:52.890 +07:00 [DBG] Error Url: /Account/Error
+2022-07-06 17:52:52.890 +07:00 [DBG] Error Id Parameter: errorId
+2022-07-06 17:52:52.965 +07:00 [INF] Executing endpoint '/Index'
+2022-07-06 17:52:53.038 +07:00 [INF] Route matched with {page = "/Index", area = "", action = "", controller = ""}. Executing page /Index
+2022-07-06 17:52:53.041 +07:00 [INF] Skipping the execution of current filter as its not the most effective filter implementing the policy Microsoft.AspNetCore.Mvc.ViewFeatures.IAntiforgeryPolicy
+2022-07-06 17:52:53.049 +07:00 [INF] Antiforgery token validation failed. The required antiforgery cookie ".AspNetCore.Antiforgery.0rwtJJK1YB4" is not present.
+Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException: The required antiforgery cookie ".AspNetCore.Antiforgery.0rwtJJK1YB4" is not present.
+   at Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery.ValidateRequestAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.ValidateAntiforgeryTokenAuthorizationFilter.OnAuthorizationAsync(AuthorizationFilterContext context)
+2022-07-06 17:52:53.051 +07:00 [INF] Authorization failed for the request at filter 'Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter'.
+2022-07-06 17:52:53.055 +07:00 [INF] Executing HttpStatusCodeResult, setting HTTP status code 400
+2022-07-06 17:52:53.059 +07:00 [INF] Executed page /Index in 16.9713ms
+2022-07-06 17:52:53.060 +07:00 [INF] Executed endpoint '/Index'
+2022-07-06 17:52:54.157 +07:00 [INF] Request finished HTTP/1.1 DEBUG https://localhost:44382/ - 0 - 400 - - 3507.8131ms
+2022-07-06 17:53:04.125 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration - -
+2022-07-06 17:53:04.257 +07:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2022-07-06 17:53:06.119 +07:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2022-07-06 17:53:06.119 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2022-07-06 17:53:06.121 +07:00 [DBG] Start discovery request
+2022-07-06 17:53:06.723 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration - - - 200 - application/json;+charset=UTF-8 2598.2669ms
+2022-07-06 17:53:06.865 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration/jwks - -
+2022-07-06 17:53:06.975 +07:00 [DBG] Request path /.well-known/openid-configuration/jwks matched to endpoint type Discovery
+2022-07-06 17:53:06.999 +07:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryKeyEndpoint
+2022-07-06 17:53:06.999 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2022-07-06 17:53:07.002 +07:00 [DBG] Start key discovery request
+2022-07-06 17:53:07.273 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration/jwks - - - 200 - application/json;+charset=UTF-8 408.1685ms
+2022-07-06 17:53:07.355 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/connect/authorize?client_id=Api_BlazorServerTiered&redirect_uri=https%3A%2F%2Flocalhost%3A44314%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20role%20email%20phone%20Api&response_mode=form_post&nonce=637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl&state=CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9&x-client-SKU=ID_NETSTANDARD2_0&x-client-ver=6.7.1.0 - -
+2022-07-06 17:53:07.467 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:07.491 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:07.492 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:07.514 +07:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2022-07-06 17:53:07.545 +07:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2022-07-06 17:53:07.546 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2022-07-06 17:53:07.548 +07:00 [DBG] Start authorize request
+2022-07-06 17:53:07.551 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:07.554 +07:00 [DBG] No user present in authorize request
+2022-07-06 17:53:07.556 +07:00 [DBG] Start authorize request protocol validation
+2022-07-06 17:53:07.699 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:07.718 +07:00 [DBG] Checking for PKCE parameters
+2022-07-06 17:53:07.719 +07:00 [DBG] No PKCE used.
+2022-07-06 17:53:08.029 +07:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2022-07-06 17:53:08.049 +07:00 [DBG] ValidatedAuthorizeRequest
+{"ClientId":"Api_BlazorServerTiered","ClientName":"Api_BlazorServerTiered","RedirectUri":"https://localhost:44314/signin-oidc","AllowedRedirectUris":["https://localhost:44314/signin-oidc"],"SubjectId":"anonymous","ResponseType":"code id_token","ResponseMode":"form_post","GrantType":"hybrid","RequestedScopes":"openid profile role email phone Api","State":"CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9","UiLocales":null,"Nonce":"637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":"","Raw":{"client_id":"Api_BlazorServerTiered","redirect_uri":"https://localhost:44314/signin-oidc","response_type":"code id_token","scope":"openid profile role email phone Api","response_mode":"form_post","nonce":"637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl","state":"CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"6.7.1.0"},"$type":"AuthorizeRequestValidationLog"}
+2022-07-06 17:53:08.055 +07:00 [INF] Showing login: User is not authenticated
+2022-07-06 17:53:08.143 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/connect/authorize?client_id=Api_BlazorServerTiered&redirect_uri=https%3A%2F%2Flocalhost%3A44314%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20role%20email%20phone%20Api&response_mode=form_post&nonce=637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl&state=CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9&x-client-SKU=ID_NETSTANDARD2_0&x-client-ver=6.7.1.0 - - - 302 - - 787.7852ms
+2022-07-06 17:53:08.151 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DApi_BlazorServerTiered%26redirect_uri%3Dhttps%253A%252F%252Flocalhost%253A44314%252Fsignin-oidc%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520role%2520email%2520phone%2520Api%26response_mode%3Dform_post%26nonce%3D637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl%26state%3DCfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9%26x-client-SKU%3DID_NETSTANDARD2_0%26x-client-ver%3D6.7.1.0 - -
+2022-07-06 17:53:08.176 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:08.176 +07:00 [DBG] Start authorize request protocol validation
+2022-07-06 17:53:08.208 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:08.209 +07:00 [DBG] Checking for PKCE parameters
+2022-07-06 17:53:08.209 +07:00 [DBG] No PKCE used.
+2022-07-06 17:53:08.248 +07:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2022-07-06 17:53:08.369 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:08.387 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:08.388 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:08.390 +07:00 [INF] Executing endpoint '/Account/Login'
+2022-07-06 17:53:08.429 +07:00 [INF] Route matched with {page = "/Account/Login", area = "", action = "", controller = ""}. Executing page /Account/Login
+2022-07-06 17:53:08.429 +07:00 [INF] Skipping the execution of current filter as its not the most effective filter implementing the policy Microsoft.AspNetCore.Mvc.ViewFeatures.IAntiforgeryPolicy
+2022-07-06 17:53:09.579 +07:00 [INF] Executing handler method Volo.Abp.Account.Public.Web.Pages.Account.LoginModel.OnGetAsync - ModelState is "Valid"
+2022-07-06 17:53:09.585 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:09.585 +07:00 [DBG] Start authorize request protocol validation
+2022-07-06 17:53:09.597 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:09.598 +07:00 [DBG] Checking for PKCE parameters
+2022-07-06 17:53:09.598 +07:00 [DBG] No PKCE used.
+2022-07-06 17:53:09.643 +07:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2022-07-06 17:53:09.704 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:09.720 +07:00 [INF] Executed handler method OnGetAsync, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2022-07-06 17:53:10.600 +07:00 [DBG] Added bundle 'Lepton.Global' to the page in 48,04 ms.
+2022-07-06 17:53:10.709 +07:00 [DBG] Added bundle 'Lepton.Global' to the page in 22,69 ms.
+2022-07-06 17:53:10.742 +07:00 [INF] Executed page /Account/Login in 2312.724ms
+2022-07-06 17:53:10.743 +07:00 [INF] Executed endpoint '/Account/Login'
+2022-07-06 17:53:10.747 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DApi_BlazorServerTiered%26redirect_uri%3Dhttps%253A%252F%252Flocalhost%253A44314%252Fsignin-oidc%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520role%2520email%2520phone%2520Api%26response_mode%3Dform_post%26nonce%3D637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl%26state%3DCfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9%26x-client-SKU%3DID_NETSTANDARD2_0%26x-client-ver%3D6.7.1.0 - - - 200 - text/html;+charset=utf-8 2596.0964ms
+2022-07-06 17:53:10.807 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/core/abp.css?_v=637900887555332704 - -
+2022-07-06 17:53:10.807 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/bootstrap/css/bootstrap.css?_v=637900887555906366 - -
+2022-07-06 17:53:10.808 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/@fortawesome/fontawesome-free/css/all.css?_v=637900887555217734 - -
+2022-07-06 17:53:10.809 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/@fortawesome/fontawesome-free/css/v4-shims.css?_v=637900887555181858 - -
+2022-07-06 17:53:10.810 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/toastr/toastr.min.css?_v=637900887559844492 - -
+2022-07-06 17:53:10.811 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/select2/css/select2.min.css?_v=637900887558988511 - -
+2022-07-06 17:53:10.812 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css?_v=637900887558972360 - -
+2022-07-06 17:53:10.813 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/datatables.net-bs4/css/dataTables.bootstrap4.css?_v=637900887555947865 - -
+2022-07-06 17:53:10.814 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/bootstrap-datepicker/bootstrap-datepicker.min.css?_v=637900887555392685 - -
+2022-07-06 17:53:10.816 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css?_v=637576811880000000 - -
+2022-07-06 17:53:10.819 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/flag-icon-css/css/flag-icon.min.css?_v=637900887555973056 - -
+2022-07-06 17:53:10.843 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/global-styles.css?_v=637900887555079364 - -
+2022-07-06 17:53:10.858 +07:00 [INF] Sending file. Request path: '/libs/bootstrap-datepicker/bootstrap-datepicker.min.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\bootstrap-datepicker\bootstrap-datepicker.min.css'
+2022-07-06 17:53:10.858 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css'. Physical path: 'N/A'
+2022-07-06 17:53:10.858 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/jquery/jquery.js?_v=637900887558972360 - -
+2022-07-06 17:53:10.858 +07:00 [INF] Sending file. Request path: '/libs/select2/css/select2.min.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\select2\css\select2.min.css'
+2022-07-06 17:53:10.858 +07:00 [INF] Sending file. Request path: '/libs/toastr/toastr.min.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\toastr\toastr.min.css'
+2022-07-06 17:53:10.858 +07:00 [INF] Sending file. Request path: '/libs/datatables.net-bs4/css/dataTables.bootstrap4.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\datatables.net-bs4\css\dataTables.bootstrap4.css'
+2022-07-06 17:53:10.864 +07:00 [INF] Sending file. Request path: '/libs/abp/core/abp.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\abp\core\abp.css'
+2022-07-06 17:53:10.865 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/jquery/abp.jquery.js?_v=637900887555357699 - -
+2022-07-06 17:53:10.878 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/lodash/lodash.min.js?_v=637900887558967360 - -
+2022-07-06 17:53:10.878 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js?_v=637900887557921711 - -
+2022-07-06 17:53:10.878 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/datatables.net-bs4/js/dataTables.bootstrap4.js?_v=637900887555958324 - -
+2022-07-06 17:53:10.878 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/core/abp.js?_v=637900887555352705 - -
+2022-07-06 17:53:10.879 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/bootstrap/js/bootstrap.bundle.js?_v=637900887555962025 - -
+2022-07-06 17:53:10.879 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/jquery-validation/jquery.validate.js?_v=637900887557735487 - -
+2022-07-06 17:53:10.880 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/select2/js/select2.min.js?_v=637900887559391081 - -
+2022-07-06 17:53:10.880 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/Styles/lepton6.css?_v=637577141420000000 - -
+2022-07-06 17:53:10.886 +07:00 [INF] Sending file. Request path: '/global-styles.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\global-styles.css'
+2022-07-06 17:53:10.903 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/toastr/toastr.min.js?_v=637900887559849468 - -
+2022-07-06 17:53:10.903 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/sweetalert/sweetalert.min.js?_v=637900887559411658 - -
+2022-07-06 17:53:10.905 +07:00 [INF] Sending file. Request path: '/libs/abp/jquery/abp.jquery.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\abp\jquery\abp.jquery.js'
+2022-07-06 17:53:10.906 +07:00 [INF] Sending file. Request path: '/libs/datatables.net-bs4/js/dataTables.bootstrap4.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\datatables.net-bs4\js\dataTables.bootstrap4.js'
+2022-07-06 17:53:10.907 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/luxon/luxon.min.js?_v=637900887558972360 - -
+2022-07-06 17:53:10.908 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/timeago/jquery.timeago.js?_v=637900887559431655 - -
+2022-07-06 17:53:10.930 +07:00 [INF] Sending file. Request path: '/libs/toastr/toastr.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\toastr\toastr.min.js'
+2022-07-06 17:53:10.931 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js?_v=637900887558967360 - -
+2022-07-06 17:53:10.931 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/datatables.net/js/jquery.dataTables.js?_v=637900887556013051 - -
+2022-07-06 17:53:10.934 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/luxon/abp.luxon.js?_v=637900887555357699 - -
+2022-07-06 17:53:10.941 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/bootstrap-datepicker/bootstrap-datepicker.min.js?_v=637900887555372685 - -
+2022-07-06 17:53:10.945 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.945 +07:00 [INF] Sending file. Request path: '/libs/timeago/jquery.timeago.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\timeago\jquery.timeago.js'
+2022-07-06 17:53:10.946 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.947 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/widget-manager.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.947 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.948 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/ui-extensions.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.948 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.949 +07:00 [INF] Sending file. Request path: '/libs/abp/core/abp.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\abp\core\abp.js'
+2022-07-06 17:53:10.950 +07:00 [INF] Sending file. Request path: '/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js'
+2022-07-06 17:53:10.950 +07:00 [INF] Sending file. Request path: '/libs/abp/luxon/abp.luxon.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\abp\luxon\abp.luxon.js'
+2022-07-06 17:53:10.950 +07:00 [INF] Sending file. Request path: '/libs/@fortawesome/fontawesome-free/css/v4-shims.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\@fortawesome\fontawesome-free\css\v4-shims.css'
+2022-07-06 17:53:10.950 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.950 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.950 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/widget-manager.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.950 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.951 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/datatables.net-bs4/css/dataTables.bootstrap4.css?_v=637900887555947865 - - - 200 6093 text/css 137.3555ms
+2022-07-06 17:53:10.952 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css?_v=637576811880000000 - - - 200 448 text/css 136.0219ms
+2022-07-06 17:53:10.952 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/core/abp.css?_v=637900887555332704 - - - 200 1331 text/css 144.5572ms
+2022-07-06 17:53:10.952 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/utils/abp-utils.umd.min.js?_v=637900887555367683 - -
+2022-07-06 17:53:10.953 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/ui-extensions.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.953 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.953 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.962 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert/abp-sweetalert.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.962 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Pages/Account/LinkUsers/account-link-user-global.js?_v=637577139860000000 - -
+2022-07-06 17:53:10.962 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js?_v=637576811880000000 - -
+2022-07-06 17:53:10.963 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/timeago/locales/jquery.timeago.vi.js?_v=637900887559828473 - -
+2022-07-06 17:53:10.963 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/scripts/app.js?_v=637577141420000000 - -
+2022-07-06 17:53:10.963 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/jquery-validation/localization/messages_vi.js?_v=637900887558790491 - -
+2022-07-06 17:53:10.965 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.966 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert/abp-sweetalert.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.967 +07:00 [INF] Sending file. Request path: '/Pages/Account/LinkUsers/account-link-user-global.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.967 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/bootstrap-datepicker/locales/bootstrap-datepicker.vi.min.js?_v=637900887555697665 - -
+2022-07-06 17:53:10.967 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Pages/Abp/MultiTenancy/tenant-switch.js?_v=637576811920000000 - -
+2022-07-06 17:53:10.968 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Abp/ApplicationConfigurationScript - -
+2022-07-06 17:53:10.968 +07:00 [INF] Sending file. Request path: '/libs/flag-icon-css/css/flag-icon.min.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\flag-icon-css\css\flag-icon.min.css'
+2022-07-06 17:53:10.969 +07:00 [INF] Sending file. Request path: '/Themes/Lepton/Global/scripts/app.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.974 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Abp/ServiceProxyScript - -
+2022-07-06 17:53:10.974 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/jquery-form/jquery.form.min.js?_v=637900887557666398 - -
+2022-07-06 17:53:10.975 +07:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.975 +07:00 [INF] Sending file. Request path: '/Pages/Abp/MultiTenancy/tenant-switch.js'. Physical path: 'N/A'
+2022-07-06 17:53:10.976 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/select2/js/select2-bootstrap-modal-patch.js?_v=637900887559371011 - -
+2022-07-06 17:53:10.977 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/global-styles.css?_v=637900887555079364 - - - 200 29 text/css 134.6627ms
+2022-07-06 17:53:10.977 +07:00 [INF] Sending file. Request path: '/libs/timeago/locales/jquery.timeago.vi.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\timeago\locales\jquery.timeago.vi.js'
+2022-07-06 17:53:10.980 +07:00 [INF] Sending file. Request path: '/libs/bootstrap-datepicker/locales/bootstrap-datepicker.vi.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\bootstrap-datepicker\locales\bootstrap-datepicker.vi.min.js'
+2022-07-06 17:53:10.980 +07:00 [INF] Sending file. Request path: '/libs/abp/utils/abp-utils.umd.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\abp\utils\abp-utils.umd.min.js'
+2022-07-06 17:53:10.985 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js?_v=637576811880000000 - - - 200 3512 application/javascript 39.7553ms
+2022-07-06 17:53:10.985 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/luxon/abp.luxon.js?_v=637900887555357699 - - - 200 1361 application/javascript 51.3054ms
+2022-07-06 17:53:10.986 +07:00 [INF] Sending file. Request path: '/libs/select2/js/select2-bootstrap-modal-patch.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\select2\js\select2-bootstrap-modal-patch.js'
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js?_v=637576811880000000 - - - 200 6611 application/javascript 37.3923ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js?_v=637576811880000000 - - - 200 5451 application/javascript 41.2870ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/bootstrap-datepicker/bootstrap-datepicker.min.css?_v=637900887555392685 - - - 200 15737 text/css 172.6716ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/select2/css/select2.min.css?_v=637900887558988511 - - - 200 14967 text/css 175.9327ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/widget-manager.js?_v=637576811880000000 - - - 200 4646 application/javascript 40.5626ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js?_v=637576811880000000 - - - 200 921 application/javascript 24.7532ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/flag-icon-css/css/flag-icon.min.css?_v=637900887555973056 - - - 200 33962 text/css 169.0792ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Pages/Account/LinkUsers/account-link-user-global.js?_v=637577139860000000 - - - 200 3756 application/javascript 25.0646ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/@fortawesome/fontawesome-free/css/v4-shims.css?_v=637900887555181858 - - - 200 43484 text/css 178.7107ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert/abp-sweetalert.js?_v=637576811880000000 - - - 200 2893 application/javascript 25.5115ms
+2022-07-06 17:53:10.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/toastr/toastr.min.css?_v=637900887559844492 - - - 200 6454 text/css 177.8693ms
+2022-07-06 17:53:10.988 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Pages/Abp/MultiTenancy/tenant-switch.js?_v=637576811920000000 - - - 200 402 application/javascript 20.3800ms
+2022-07-06 17:53:10.988 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/scripts/app.js?_v=637577141420000000 - - - 200 5390 application/javascript 24.9552ms
+2022-07-06 17:53:10.988 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/timeago/locales/jquery.timeago.vi.js?_v=637900887559828473 - - - 200 871 application/javascript 25.3358ms
+2022-07-06 17:53:10.988 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/bootstrap-datepicker/locales/bootstrap-datepicker.vi.min.js?_v=637900887555697665 - - - 200 551 application/javascript 20.9543ms
+2022-07-06 17:53:10.988 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/datatables.net-bs4/js/dataTables.bootstrap4.js?_v=637900887555958324 - - - 200 4890 application/javascript 110.7741ms
+2022-07-06 17:53:10.988 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/jquery/abp.jquery.js?_v=637900887555357699 - - - 200 13191 application/javascript 123.6083ms
+2022-07-06 17:53:10.989 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/toastr/toastr.min.js?_v=637900887559849468 - - - 200 5253 application/javascript 85.3467ms
+2022-07-06 17:53:10.989 +07:00 [INF] Sending file. Request path: '/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.css'
+2022-07-06 17:53:10.989 +07:00 [INF] Sending file. Request path: '/libs/jquery-validation/jquery.validate.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\jquery-validation\jquery.validate.js'
+2022-07-06 17:53:10.989 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js?_v=637900887557921711 - - - 200 19798 application/javascript 111.7947ms
+2022-07-06 17:53:10.989 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/timeago/jquery.timeago.js?_v=637900887559431655 - - - 200 7636 application/javascript 80.7836ms
+2022-07-06 17:53:10.989 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/select2/js/select2-bootstrap-modal-patch.js?_v=637900887559371011 - - - 200 130 application/javascript 13.2156ms
+2022-07-06 17:53:10.989 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/core/abp.js?_v=637900887555352705 - - - 200 23271 application/javascript 110.7032ms
+2022-07-06 17:53:10.989 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js?_v=637576811880000000 - - - 200 8180 application/javascript 40.8406ms
+2022-07-06 17:53:10.990 +07:00 [INF] Sending file. Request path: '/libs/@fortawesome/fontawesome-free/css/all.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\@fortawesome\fontawesome-free\css\all.css'
+2022-07-06 17:53:10.993 +07:00 [INF] Sending file. Request path: '/libs/select2/js/select2.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\select2\js\select2.min.js'
+2022-07-06 17:53:10.993 +07:00 [INF] Sending file. Request path: '/libs/sweetalert/sweetalert.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\sweetalert\sweetalert.min.js'
+2022-07-06 17:53:10.993 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/ui-extensions.js?_v=637576811880000000 - - - 200 10291 application/javascript 45.4200ms
+2022-07-06 17:53:10.993 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js?_v=637576811880000000 - - - 200 19701 application/javascript 43.7245ms
+2022-07-06 17:53:10.996 +07:00 [INF] Sending file. Request path: '/libs/jquery-validation/localization/messages_vi.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\jquery-validation\localization\messages_vi.js'
+2022-07-06 17:53:10.997 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css?_v=637900887558972360 - - - 200 54850 text/css 185.1644ms
+2022-07-06 17:53:10.997 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/jquery-validation/localization/messages_vi.js?_v=637900887558790491 - - - 200 1331 application/javascript 34.0842ms
+2022-07-06 17:53:10.997 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/sweetalert/sweetalert.min.js?_v=637900887559411658 - - - 200 40808 application/javascript 93.7957ms
+2022-07-06 17:53:10.997 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/jquery-validation/jquery.validate.js?_v=637900887557735487 - - - 200 52610 application/javascript 117.5544ms
+2022-07-06 17:53:11.003 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/@fortawesome/fontawesome-free/css/all.css?_v=637900887555217734 - - - 200 77703 text/css 194.2623ms
+2022-07-06 17:53:11.003 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/select2/js/select2.min.js?_v=637900887559391081 - - - 200 70852 application/javascript 123.9823ms
+2022-07-06 17:53:11.004 +07:00 [INF] Sending file. Request path: '/libs/luxon/luxon.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\luxon\luxon.min.js'
+2022-07-06 17:53:11.008 +07:00 [INF] Sending file. Request path: '/libs/jquery-form/jquery.form.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\jquery-form\jquery.form.min.js'
+2022-07-06 17:53:11.008 +07:00 [INF] Sending file. Request path: '/libs/lodash/lodash.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\lodash\lodash.min.js'
+2022-07-06 17:53:11.008 +07:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\bootstrap\css\bootstrap.css'
+2022-07-06 17:53:11.009 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/jquery-form/jquery.form.min.js?_v=637900887557666398 - - - 200 17117 application/javascript 35.1399ms
+2022-07-06 17:53:11.011 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/luxon/luxon.min.js?_v=637900887558972360 - - - 200 70519 application/javascript 103.6484ms
+2022-07-06 17:53:11.021 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/abp/utils/abp-utils.umd.min.js?_v=637900887555367683 - - - 200 8257 application/javascript 69.0934ms
+2022-07-06 17:53:11.022 +07:00 [INF] Sending file. Request path: '/libs/bootstrap/js/bootstrap.bundle.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\bootstrap\js\bootstrap.bundle.js'
+2022-07-06 17:53:11.033 +07:00 [INF] Sending file. Request path: '/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.concat.min.js'
+2022-07-06 17:53:11.034 +07:00 [INF] Sending file. Request path: '/libs/jquery/jquery.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\jquery\jquery.js'
+2022-07-06 17:53:11.038 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/bootstrap/css/bootstrap.css?_v=637900887555906366 - - - 200 209709 text/css 230.8281ms
+2022-07-06 17:53:11.040 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/lodash/lodash.min.js?_v=637900887558967360 - - - 200 72943 application/javascript 162.2218ms
+2022-07-06 17:53:11.040 +07:00 [INF] Sending file. Request path: '/Themes/Lepton/Global/Styles/lepton6.css'. Physical path: 'N/A'
+2022-07-06 17:53:11.041 +07:00 [INF] Sending file. Request path: '/libs/datatables.net/js/jquery.dataTables.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\datatables.net\js\jquery.dataTables.js'
+2022-07-06 17:53:11.049 +07:00 [INF] Sending file. Request path: '/libs/bootstrap-datepicker/bootstrap-datepicker.min.js'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\bootstrap-datepicker\bootstrap-datepicker.min.js'
+2022-07-06 17:53:11.050 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js?_v=637900887558967360 - - - 200 45483 application/javascript 117.4318ms
+2022-07-06 17:53:11.053 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/bootstrap-datepicker/bootstrap-datepicker.min.js?_v=637900887555372685 - - - 200 33700 application/javascript 112.0093ms
+2022-07-06 17:53:11.054 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/Styles/lepton6.css?_v=637577141420000000 - - - 200 136033 text/css 173.6232ms
+2022-07-06 17:53:11.059 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/bootstrap/js/bootstrap.bundle.js?_v=637900887555962025 - - - 200 243909 application/javascript 179.9943ms
+2022-07-06 17:53:11.068 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/jquery/jquery.js?_v=637900887558972360 - - - 200 298502 application/javascript 209.9716ms
+2022-07-06 17:53:11.087 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/datatables.net/js/jquery.dataTables.js?_v=637900887556013051 - - - 200 465786 application/javascript 155.2809ms
+2022-07-06 17:53:11.095 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/assets/backgrounds/bg-transparent.png - -
+2022-07-06 17:53:11.095 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/images/logo/logo-dark.png - -
+2022-07-06 17:53:11.095 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/libs/flag-icon-css/flags/1x1/vn.svg - -
+2022-07-06 17:53:11.098 +07:00 [INF] Sending file. Request path: '/Themes/Lepton/Global/assets/backgrounds/bg-transparent.png'. Physical path: 'N/A'
+2022-07-06 17:53:11.100 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/assets/backgrounds/bg-transparent.png - - - 200 49688 image/png 5.0410ms
+2022-07-06 17:53:11.111 +07:00 [INF] Sending file. Request path: '/libs/flag-icon-css/flags/1x1/vn.svg'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\libs\flag-icon-css\flags\1x1\vn.svg'
+2022-07-06 17:53:11.112 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/libs/flag-icon-css/flags/1x1/vn.svg - - - 200 509 image/svg+xml 16.7489ms
+2022-07-06 17:53:11.113 +07:00 [INF] Sending file. Request path: '/images/logo/logo-dark.png'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\images\logo\logo-dark.png'
+2022-07-06 17:53:11.116 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/images/logo/logo-dark.png - - - 200 16184 image/png 21.2211ms
+2022-07-06 17:53:11.117 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/assets/fonts/poppins-v6-latin-600.woff2 - -
+2022-07-06 17:53:11.118 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/assets/fonts/poppins-v6-latin-regular.woff2 - -
+2022-07-06 17:53:11.138 +07:00 [INF] CORS policy execution failed.
+2022-07-06 17:53:11.138 +07:00 [INF] CORS policy execution failed.
+2022-07-06 17:53:11.138 +07:00 [INF] Request origin https://localhost:44382 does not have permission to access the resource.
+2022-07-06 17:53:11.138 +07:00 [INF] Request origin https://localhost:44382 does not have permission to access the resource.
+2022-07-06 17:53:11.141 +07:00 [INF] Sending file. Request path: '/Themes/Lepton/Global/assets/fonts/poppins-v6-latin-600.woff2'. Physical path: 'N/A'
+2022-07-06 17:53:11.141 +07:00 [INF] Sending file. Request path: '/Themes/Lepton/Global/assets/fonts/poppins-v6-latin-regular.woff2'. Physical path: 'N/A'
+2022-07-06 17:53:11.142 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/assets/fonts/poppins-v6-latin-600.woff2 - - - 200 7836 font/woff2 25.1552ms
+2022-07-06 17:53:11.143 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Themes/Lepton/Global/assets/fonts/poppins-v6-latin-regular.woff2 - - - 200 7968 font/woff2 24.1684ms
+2022-07-06 17:53:11.148 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:11.149 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:11.176 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:11.176 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:11.177 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:11.178 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:11.179 +07:00 [INF] Executing endpoint 'Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)'
+2022-07-06 17:53:11.180 +07:00 [INF] Executing endpoint 'Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)'
+2022-07-06 17:53:11.192 +07:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] Get() on controller Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController (Volo.Abp.AspNetCore.Mvc).
+2022-07-06 17:53:11.192 +07:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult GetAll(Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel) on controller Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController (Volo.Abp.AspNetCore.Mvc).
+2022-07-06 17:53:11.264 +07:00 [DBG] Executing AbpApplicationConfigurationAppService.GetAsync()...
+2022-07-06 17:53:11.443 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.LoginByLogin
+2022-07-06 17:53:11.475 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.LinkLoginByLogin
+2022-07-06 17:53:11.476 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.Logout
+2022-07-06 17:53:11.476 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.CheckPasswordByLogin
+2022-07-06 17:53:11.480 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.RegisterAsyncByInput
+2022-07-06 17:53:11.480 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.SendPasswordResetCodeAsyncByInput
+2022-07-06 17:53:11.480 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.ResetPasswordAsyncByInput
+2022-07-06 17:53:11.481 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.GetConfirmationStateAsyncById
+2022-07-06 17:53:11.481 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.SendPhoneNumberConfirmationTokenAsyncByInput
+2022-07-06 17:53:11.481 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.SendEmailConfirmationTokenAsyncByInput
+2022-07-06 17:53:11.481 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.ConfirmPhoneNumberAsyncByInput
+2022-07-06 17:53:11.481 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.ConfirmEmailAsyncByInput
+2022-07-06 17:53:11.481 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.SetProfilePictureAsyncByInput
+2022-07-06 17:53:11.481 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.GetProfilePictureAsyncById
+2022-07-06 17:53:11.483 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.SendEmailSecurityCodeAsyncByInput
+2022-07-06 17:53:11.483 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.SendPhoneSecurityCodeAsyncByInput
+2022-07-06 17:53:11.486 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.UploadProfilePictureFileAsyncByImage
+2022-07-06 17:53:11.486 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.GetProfilePictureFileAsyncById
+2022-07-06 17:53:11.486 +07:00 [DBG] ActionApiDescriptionModel.Create: Account.RecaptchaByCaptchaResponse
+2022-07-06 17:53:11.487 +07:00 [DBG] ActionApiDescriptionModel.Create: AccountExternalProvider.GetAllAsync
+2022-07-06 17:53:11.487 +07:00 [DBG] ActionApiDescriptionModel.Create: AccountExternalProvider.GetByNameAsyncByInput
+2022-07-06 17:53:11.487 +07:00 [DBG] ActionApiDescriptionModel.Create: AbpTenant.FindTenantByNameAsyncByName
+2022-07-06 17:53:11.487 +07:00 [DBG] ActionApiDescriptionModel.Create: AbpTenant.FindTenantByIdAsyncById
+2022-07-06 17:53:11.487 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityClaimType.GetListAsyncByInput
+2022-07-06 17:53:11.488 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityClaimType.GetAsyncById
+2022-07-06 17:53:11.488 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityClaimType.CreateAsyncByInput
+2022-07-06 17:53:11.489 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityClaimType.UpdateAsyncByIdAndInput
+2022-07-06 17:53:11.489 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityClaimType.DeleteAsyncById
+2022-07-06 17:53:11.489 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityLinkUser.LinkAsyncByInput
+2022-07-06 17:53:11.491 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityLinkUser.UnlinkAsyncByInput
+2022-07-06 17:53:11.491 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityLinkUser.IsLinkedAsyncByInput
+2022-07-06 17:53:11.491 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityLinkUser.GenerateLinkTokenAsync
+2022-07-06 17:53:11.491 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityLinkUser.VerifyLinkTokenAsyncByToken
+2022-07-06 17:53:11.494 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityLinkUser.GetAllListAsync
+2022-07-06 17:53:11.494 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetAsyncById
+2022-07-06 17:53:11.494 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.CreateAsyncByInput
+2022-07-06 17:53:11.495 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.UpdateAsyncByIdAndInput
+2022-07-06 17:53:11.495 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.DeleteAsyncById
+2022-07-06 17:53:11.495 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetAllListAsync
+2022-07-06 17:53:11.495 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetListAsyncByInput
+2022-07-06 17:53:11.495 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.UpdateClaimsAsyncByIdAndInput
+2022-07-06 17:53:11.496 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetClaimsAsyncById
+2022-07-06 17:53:11.496 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetAllClaimTypesAsync
+2022-07-06 17:53:11.496 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentitySecurityLog.GetListAsyncByInput
+2022-07-06 17:53:11.497 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentitySecurityLog.GetAsyncById
+2022-07-06 17:53:11.499 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentitySecurityLog.GetMyListAsyncByInput
+2022-07-06 17:53:11.499 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentitySecurityLog.GetMyAsyncById
+2022-07-06 17:53:11.502 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentitySettings.GetAsync
+2022-07-06 17:53:11.502 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentitySettings.UpdateAsyncByInput
+2022-07-06 17:53:11.502 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetAsyncById
+2022-07-06 17:53:11.502 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetListAsyncByInput
+2022-07-06 17:53:11.502 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.CreateAsyncByInput
+2022-07-06 17:53:11.502 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UpdateAsyncByIdAndInput
+2022-07-06 17:53:11.503 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.DeleteAsyncById
+2022-07-06 17:53:11.503 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetRolesAsyncById
+2022-07-06 17:53:11.503 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetAssignableRolesAsync
+2022-07-06 17:53:11.503 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetAvailableOrganizationUnitsAsync
+2022-07-06 17:53:11.503 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetAllClaimTypesAsync
+2022-07-06 17:53:11.503 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetClaimsAsyncById
+2022-07-06 17:53:11.505 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetOrganizationUnitsAsyncById
+2022-07-06 17:53:11.505 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UpdateRolesAsyncByIdAndInput
+2022-07-06 17:53:11.509 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UpdateClaimsAsyncByIdAndInput
+2022-07-06 17:53:11.509 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.LockAsyncByIdAndLockoutDuration
+2022-07-06 17:53:11.510 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UnlockAsyncById
+2022-07-06 17:53:11.510 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.FindByUsernameAsyncByUsername
+2022-07-06 17:53:11.510 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.FindByEmailAsyncByEmail
+2022-07-06 17:53:11.510 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetTwoFactorEnabledAsyncById
+2022-07-06 17:53:11.510 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.SetTwoFactorEnabledAsyncByIdAndEnabled
+2022-07-06 17:53:11.511 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UpdatePasswordAsyncByIdAndInput
+2022-07-06 17:53:11.511 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUserLookup.FindByIdAsyncById
+2022-07-06 17:53:11.511 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUserLookup.FindByUserNameAsyncByUserName
+2022-07-06 17:53:11.511 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUserLookup.SearchAsyncByInput
+2022-07-06 17:53:11.511 +07:00 [DBG] ActionApiDescriptionModel.Create: IdentityUserLookup.GetCountAsyncByInput
+2022-07-06 17:53:11.514 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.AddRolesAsyncByIdAndInput
+2022-07-06 17:53:11.514 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.AddMembersAsyncByIdAndInput
+2022-07-06 17:53:11.517 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.CreateAsyncByInput
+2022-07-06 17:53:11.518 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.DeleteAsyncById
+2022-07-06 17:53:11.518 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.GetAsyncById
+2022-07-06 17:53:11.518 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.GetListAsyncByInput
+2022-07-06 17:53:11.519 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.GetListAllAsync
+2022-07-06 17:53:11.519 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.GetRolesAsyncByIdAndInput
+2022-07-06 17:53:11.519 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.GetMembersAsyncByIdAndInput
+2022-07-06 17:53:11.519 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.MoveAsyncByIdAndInput
+2022-07-06 17:53:11.520 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.GetAvailableUsersAsyncByInput
+2022-07-06 17:53:11.520 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.GetAvailableRolesAsyncByInput
+2022-07-06 17:53:11.520 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.UpdateAsyncByIdAndInput
+2022-07-06 17:53:11.521 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.RemoveMemberAsyncByIdAndMemberId
+2022-07-06 17:53:11.522 +07:00 [DBG] ActionApiDescriptionModel.Create: OrganizationUnit.RemoveRoleAsyncByIdAndRoleId
+2022-07-06 17:53:11.522 +07:00 [DBG] ActionApiDescriptionModel.Create: Profile.GetAsync
+2022-07-06 17:53:11.522 +07:00 [DBG] ActionApiDescriptionModel.Create: Profile.UpdateAsyncByInput
+2022-07-06 17:53:11.525 +07:00 [DBG] ActionApiDescriptionModel.Create: Profile.ChangePasswordAsyncByInput
+2022-07-06 17:53:11.526 +07:00 [DBG] ActionApiDescriptionModel.Create: Profile.GetTwoFactorEnabledAsync
+2022-07-06 17:53:11.526 +07:00 [DBG] ActionApiDescriptionModel.Create: Profile.SetTwoFactorEnabledAsyncByEnabled
+2022-07-06 17:53:11.526 +07:00 [DBG] ActionApiDescriptionModel.Create: AbpApplicationConfiguration.GetAsync
+2022-07-06 17:53:11.526 +07:00 [DBG] ActionApiDescriptionModel.Create: AbpApiDefinition.GetByModel
+2022-07-06 17:53:11.614 +07:00 [INF] Executing ContentResult with HTTP Response ContentType of application/javascript
+2022-07-06 17:53:11.620 +07:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 427.3783ms
+2022-07-06 17:53:11.620 +07:00 [INF] Executed endpoint 'Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)'
+2022-07-06 17:53:11.626 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Abp/ServiceProxyScript - - - 200 32026 application/javascript 652.8535ms
+2022-07-06 17:53:12.931 +07:00 [DBG] Executed AbpApplicationConfigurationAppService.GetAsync().
+2022-07-06 17:53:12.994 +07:00 [INF] Executing ContentResult with HTTP Response ContentType of application/javascript
+2022-07-06 17:53:13.003 +07:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 1810.1688ms
+2022-07-06 17:53:13.003 +07:00 [INF] Executed endpoint 'Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)'
+2022-07-06 17:53:13.015 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/Abp/ApplicationConfigurationScript - - - 200 278789 application/javascript 2046.4220ms
+2022-07-06 17:53:13.556 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/images/favicon/site.webmanifest - -
+2022-07-06 17:53:13.566 +07:00 [INF] Sending file. Request path: '/images/favicon/site.webmanifest'. Physical path: 'D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer\wwwroot\images\favicon\site.webmanifest'
+2022-07-06 17:53:13.567 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/images/favicon/site.webmanifest - - - 200 445 application/manifest+json 11.0952ms
+2022-07-06 17:53:16.874 +07:00 [INF] Request starting HTTP/2 POST https://localhost:44382/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DApi_BlazorServerTiered%26redirect_uri%3Dhttps%253A%252F%252Flocalhost%253A44314%252Fsignin-oidc%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520role%2520email%2520phone%2520Api%26response_mode%3Dform_post%26nonce%3D637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl%26state%3DCfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9%26x-client-SKU%3DID_NETSTANDARD2_0%26x-client-ver%3D6.7.1.0 application/x-www-form-urlencoded 291
+2022-07-06 17:53:16.886 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:16.886 +07:00 [DBG] Start authorize request protocol validation
+2022-07-06 17:53:16.900 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:16.901 +07:00 [DBG] Checking for PKCE parameters
+2022-07-06 17:53:16.901 +07:00 [DBG] No PKCE used.
+2022-07-06 17:53:16.953 +07:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2022-07-06 17:53:16.954 +07:00 [INF] CORS policy execution failed.
+2022-07-06 17:53:16.954 +07:00 [INF] Request origin https://localhost:44382 does not have permission to access the resource.
+2022-07-06 17:53:17.051 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:17.054 +07:00 [INF] No CORS policy found for the specified request.
+2022-07-06 17:53:17.081 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:17.081 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:17.083 +07:00 [INF] Executing endpoint '/Account/Login'
+2022-07-06 17:53:17.083 +07:00 [INF] Route matched with {page = "/Account/Login", area = "", action = "", controller = ""}. Executing page /Account/Login
+2022-07-06 17:53:17.083 +07:00 [INF] Skipping the execution of current filter as its not the most effective filter implementing the policy Microsoft.AspNetCore.Mvc.ViewFeatures.IAntiforgeryPolicy
+2022-07-06 17:53:17.170 +07:00 [INF] Executing handler method Volo.Abp.Account.Public.Web.Pages.Account.LoginModel.OnPostAsync - ModelState is "Valid"
+2022-07-06 17:53:17.220 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:17.220 +07:00 [DBG] Start authorize request protocol validation
+2022-07-06 17:53:17.228 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:17.228 +07:00 [DBG] Checking for PKCE parameters
+2022-07-06 17:53:17.228 +07:00 [DBG] No PKCE used.
+2022-07-06 17:53:17.264 +07:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2022-07-06 17:53:17.380 +07:00 [WRN] Ldap login feature is not enabled!
+2022-07-06 17:53:17.927 +07:00 [DBG] Augmenting SignInContext
+2022-07-06 17:53:17.928 +07:00 [DBG] Adding idp claim with value: local
+2022-07-06 17:53:17.928 +07:00 [DBG] Adding auth_time claim with value: 1657104797
+2022-07-06 17:53:17.929 +07:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2022-07-06 17:53:17.944 +07:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2022-07-06 17:53:18.099 +07:00 [INF] {"Username":"admin","Provider":null,"ProviderUserId":null,"SubjectId":"d34bfd52-0874-d193-65ee-39fc9126832f","DisplayName":"admin","Endpoint":"UI","ClientId":null,"Category":"Authentication","Name":"User Login Success","EventType":"Success","Id":1000,"Message":null,"ActivityId":"80000629-000a-fd00-b63f-84710c7967bb","TimeStamp":"2022-07-06T10:53:18.0000000Z","ProcessId":16304,"LocalIpAddress":"::1:44382","RemoteIpAddress":"::1","$type":"UserLoginSuccessEvent"}
+2022-07-06 17:53:18.104 +07:00 [INF] Executed handler method OnPostAsync, returned result Microsoft.AspNetCore.Mvc.RedirectResult.
+2022-07-06 17:53:18.105 +07:00 [INF] Executing RedirectResult, redirecting to /connect/authorize/callback?client_id=Api_BlazorServerTiered&redirect_uri=https%3A%2F%2Flocalhost%3A44314%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20role%20email%20phone%20Api&response_mode=form_post&nonce=637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl&state=CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9&x-client-SKU=ID_NETSTANDARD2_0&x-client-ver=6.7.1.0.
+2022-07-06 17:53:18.106 +07:00 [INF] Executed page /Account/Login in 1022.3466ms
+2022-07-06 17:53:18.106 +07:00 [INF] Executed endpoint '/Account/Login'
+2022-07-06 17:53:18.134 +07:00 [INF] Request finished HTTP/2 POST https://localhost:44382/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DApi_BlazorServerTiered%26redirect_uri%3Dhttps%253A%252F%252Flocalhost%253A44314%252Fsignin-oidc%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520role%2520email%2520phone%2520Api%26response_mode%3Dform_post%26nonce%3D637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl%26state%3DCfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9%26x-client-SKU%3DID_NETSTANDARD2_0%26x-client-ver%3D6.7.1.0 application/x-www-form-urlencoded 291 - 302 - - 1260.4452ms
+2022-07-06 17:53:18.143 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44382/connect/authorize/callback?client_id=Api_BlazorServerTiered&redirect_uri=https%3A%2F%2Flocalhost%3A44314%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20role%20email%20phone%20Api&response_mode=form_post&nonce=637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl&state=CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9&x-client-SKU=ID_NETSTANDARD2_0&x-client-ver=6.7.1.0 - -
+2022-07-06 17:53:18.322 +07:00 [DBG] Request path /connect/authorize/callback matched to endpoint type Authorize
+2022-07-06 17:53:18.331 +07:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeCallbackEndpoint
+2022-07-06 17:53:18.331 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeCallbackEndpoint for /connect/authorize/callback
+2022-07-06 17:53:18.334 +07:00 [DBG] Start authorize callback request
+2022-07-06 17:53:18.340 +07:00 [DBG] User in authorize request: d34bfd52-0874-d193-65ee-39fc9126832f
+2022-07-06 17:53:18.341 +07:00 [DBG] Start authorize request protocol validation
+2022-07-06 17:53:18.354 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:18.354 +07:00 [DBG] Checking for PKCE parameters
+2022-07-06 17:53:18.354 +07:00 [DBG] No PKCE used.
+2022-07-06 17:53:18.394 +07:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2022-07-06 17:53:18.395 +07:00 [DBG] ValidatedAuthorizeRequest
+{"ClientId":"Api_BlazorServerTiered","ClientName":"Api_BlazorServerTiered","RedirectUri":"https://localhost:44314/signin-oidc","AllowedRedirectUris":["https://localhost:44314/signin-oidc"],"SubjectId":"d34bfd52-0874-d193-65ee-39fc9126832f","ResponseType":"code id_token","ResponseMode":"form_post","GrantType":"hybrid","RequestedScopes":"openid profile role email phone Api","State":"CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9","UiLocales":null,"Nonce":"637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"","MaxAge":null,"LoginHint":null,"SessionId":"7EE4AA72629B6D9D6A5825CF50167587","Raw":{"client_id":"Api_BlazorServerTiered","redirect_uri":"https://localhost:44314/signin-oidc","response_type":"code id_token","scope":"openid profile role email phone Api","response_mode":"form_post","nonce":"637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl","state":"CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9","x-client-SKU":"ID_NETSTANDARD2_0","x-client-ver":"6.7.1.0"},"$type":"AuthorizeRequestValidationLog"}
+2022-07-06 17:53:18.419 +07:00 [DBG] Client is configured to not require consent, no consent is required
+2022-07-06 17:53:18.424 +07:00 [DBG] Creating Hybrid Flow response.
+2022-07-06 17:53:18.545 +07:00 [DBG] Creating Implicit Flow response.
+2022-07-06 17:53:18.553 +07:00 [DBG] Getting claims for identity token for subject: d34bfd52-0874-d193-65ee-39fc9126832f and client: Api_BlazorServerTiered
+2022-07-06 17:53:18.733 +07:00 [INF] {"ClientId":"Api_BlazorServerTiered","ClientName":"Api_BlazorServerTiered","RedirectUri":"https://localhost:44314/signin-oidc","Endpoint":"Authorize","SubjectId":"d34bfd52-0874-d193-65ee-39fc9126832f","Scopes":"openid profile role email phone Api","GrantType":"hybrid","Tokens":[{"TokenType":"id_token","TokenValue":"****p7Nw","$type":"Token"},{"TokenType":"code","TokenValue":"****6547","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"800002d4-0000-f400-b63f-84710c7967bb","TimeStamp":"2022-07-06T10:53:18.0000000Z","ProcessId":16304,"LocalIpAddress":"::1:44382","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2022-07-06 17:53:18.735 +07:00 [DBG] Authorize endpoint response
+{"SubjectId":"d34bfd52-0874-d193-65ee-39fc9126832f","ClientId":"Api_BlazorServerTiered","RedirectUri":"https://localhost:44314/signin-oidc","State":"CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9","Scope":"openid profile role email phone Api","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2022-07-06 17:53:18.744 +07:00 [DBG] Augmenting SignInContext
+2022-07-06 17:53:18.745 +07:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2022-07-06 17:53:18.752 +07:00 [INF] Request finished HTTP/2 GET https://localhost:44382/connect/authorize/callback?client_id=Api_BlazorServerTiered&redirect_uri=https%3A%2F%2Flocalhost%3A44314%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20role%20email%20phone%20Api&response_mode=form_post&nonce=637927015873016677.ZGQ2OTQxMjMtM2RhMy00OWEzLTgwODQtNzI4ODk5NzNjM2VkYzk3MGU3ODctZDA3ZS00MjU3LThhOTktMGI3MjU4YjYzZDZl&state=CfDJ8F1tBeVXmsBHmJmfbU1eL8ZKiiLfyG2Tew_n5oBtQem6UUnJv8J7Qm9mrlpxY8hOkO5ePGqptVR6jgMid04cd91kU4LRSRI2cw6zuN0DcXlwqpCuSsiYOI-EMCaY7QmSuFE_ftc7QBs_t5x4_mMvp0KSPH7Y8qkK8ZLBItZ-285eaST0tg1Lmy2ocYh408wHWnZThnxZ-lh-yDc1Uy1xPq9qkudB6SlbB8FsKb-lKbjfRNoXqBGoga3K0yhNLxxc47BhSnsU1eAcYSQ-TBbciEg9PUWzg0CFn3greejeSio9&x-client-SKU=ID_NETSTANDARD2_0&x-client-ver=6.7.1.0 - - - 200 - text/html;+charset=UTF-8 609.1645ms
+2022-07-06 17:53:19.207 +07:00 [INF] Request starting HTTP/1.1 POST https://localhost:44382/connect/token application/x-www-form-urlencoded 215
+2022-07-06 17:53:19.329 +07:00 [DBG] Request path /connect/token matched to endpoint type Token
+2022-07-06 17:53:19.793 +07:00 [DBG] Endpoint enabled: Token, successfully created handler: IdentityServer4.Endpoints.TokenEndpoint
+2022-07-06 17:53:19.793 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.TokenEndpoint for /connect/token
+2022-07-06 17:53:19.798 +07:00 [DBG] Start token request.
+2022-07-06 17:53:19.803 +07:00 [DBG] Start client validation
+2022-07-06 17:53:19.807 +07:00 [DBG] Start parsing Basic Authentication secret
+2022-07-06 17:53:19.809 +07:00 [DBG] Start parsing for secret in post body
+2022-07-06 17:53:19.810 +07:00 [DBG] Parser found secret: PostBodySecretParser
+2022-07-06 17:53:19.810 +07:00 [DBG] Secret id found: Api_BlazorServerTiered
+2022-07-06 17:53:19.822 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:19.834 +07:00 [DBG] Secret validator success: HashedSharedSecretValidator
+2022-07-06 17:53:19.834 +07:00 [DBG] Client validation success
+2022-07-06 17:53:19.836 +07:00 [INF] {"ClientId":"Api_BlazorServerTiered","AuthenticationMethod":"SharedSecret","Category":"Authentication","Name":"Client Authentication Success","EventType":"Success","Id":1010,"Message":null,"ActivityId":"8000007a-000b-f600-b63f-84710c7967bb","TimeStamp":"2022-07-06T10:53:19.0000000Z","ProcessId":16304,"LocalIpAddress":"::1:44382","RemoteIpAddress":"::1","$type":"ClientAuthenticationSuccessEvent"}
+2022-07-06 17:53:19.841 +07:00 [DBG] Start token request validation
+2022-07-06 17:53:19.847 +07:00 [DBG] Start validation of authorization code token request
+2022-07-06 17:53:19.995 +07:00 [DBG] Validation of authorization code token request success
+2022-07-06 17:53:20.003 +07:00 [INF] Token request validation success, {"ClientId":"Api_BlazorServerTiered","ClientName":"Api_BlazorServerTiered","GrantType":"authorization_code","Scopes":null,"AuthorizationCode":"****6547","RefreshToken":"********","UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"client_id":"Api_BlazorServerTiered","client_secret":"***REDACTED***","code":"81FACED856E0844FB793997C812F96DAAB52368D51C714CF49EFE7B674116547","grant_type":"authorization_code","redirect_uri":"https://localhost:44314/signin-oidc"},"$type":"TokenRequestValidationLog"}
+2022-07-06 17:53:20.024 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:20.083 +07:00 [DBG] Getting claims for access token for client: Api_BlazorServerTiered
+2022-07-06 17:53:20.084 +07:00 [DBG] Getting claims for access token for subject: d34bfd52-0874-d193-65ee-39fc9126832f
+2022-07-06 17:53:20.164 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:20.210 +07:00 [DBG] Getting claims for identity token for subject: d34bfd52-0874-d193-65ee-39fc9126832f and client: Api_BlazorServerTiered
+2022-07-06 17:53:20.266 +07:00 [INF] {"ClientId":"Api_BlazorServerTiered","ClientName":"Api_BlazorServerTiered","RedirectUri":null,"Endpoint":"Token","SubjectId":"d34bfd52-0874-d193-65ee-39fc9126832f","Scopes":"openid profile role email phone Api","GrantType":"authorization_code","Tokens":[{"TokenType":"id_token","TokenValue":"****hsfg","$type":"Token"},{"TokenType":"access_token","TokenValue":"****4yog","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"8000007a-000b-f600-b63f-84710c7967bb","TimeStamp":"2022-07-06T10:53:20.0000000Z","ProcessId":16304,"LocalIpAddress":"::1:44382","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2022-07-06 17:53:20.267 +07:00 [DBG] Token request success.
+2022-07-06 17:53:20.276 +07:00 [INF] Request finished HTTP/1.1 POST https://localhost:44382/connect/token application/x-www-form-urlencoded 215 - 200 - application/json;+charset=UTF-8 1068.7309ms
+2022-07-06 17:53:20.297 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/connect/userinfo - -
+2022-07-06 17:53:20.410 +07:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2022-07-06 17:53:20.428 +07:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2022-07-06 17:53:20.428 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2022-07-06 17:53:20.432 +07:00 [DBG] Start userinfo request
+2022-07-06 17:53:20.436 +07:00 [DBG] Bearer token found in header
+2022-07-06 17:53:20.513 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:20.534 +07:00 [DBG] client configuration validation for client Api_BlazorServerTiered succeeded.
+2022-07-06 17:53:20.544 +07:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2022-07-06 17:53:20.546 +07:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1657104800,"exp":1688640800,"iss":"https://localhost:44382","aud":"Api","client_id":"Api_BlazorServerTiered","sub":"d34bfd52-0874-d193-65ee-39fc9126832f","auth_time":1657104797,"idp":"local","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname":"admin","preferred_username":"admin","given_name":"admin","role":"admin","phone_number_verified":"False","email":"admin@abp.io","email_verified":"False","name":"admin","sid":"7EE4AA72629B6D9D6A5825CF50167587","iat":1657104800,"scope":["openid","profile","role","email","phone","Api"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2022-07-06 17:53:20.566 +07:00 [DBG] Creating userinfo response
+2022-07-06 17:53:20.569 +07:00 [DBG] Scopes in access token: openid profile role email phone Api
+2022-07-06 17:53:20.596 +07:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at role email email_verified phone_number phone_number_verified
+2022-07-06 17:53:20.650 +07:00 [INF] Profile service returned the following claim types: sub role phone_number_verified email email_verified preferred_username name given_name
+2022-07-06 17:53:20.651 +07:00 [DBG] End userinfo request
+2022-07-06 17:53:20.655 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/connect/userinfo - - - 200 - application/json;+charset=UTF-8 358.6254ms
+2022-07-06 17:53:20.753 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration - -
+2022-07-06 17:53:20.872 +07:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2022-07-06 17:53:20.894 +07:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2022-07-06 17:53:20.894 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2022-07-06 17:53:20.894 +07:00 [DBG] Start discovery request
+2022-07-06 17:53:20.906 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration - - - 200 - application/json;+charset=UTF-8 153.0868ms
+2022-07-06 17:53:20.951 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration/jwks - -
+2022-07-06 17:53:21.059 +07:00 [DBG] Request path /.well-known/openid-configuration/jwks matched to endpoint type Discovery
+2022-07-06 17:53:21.084 +07:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryKeyEndpoint
+2022-07-06 17:53:21.084 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2022-07-06 17:53:21.084 +07:00 [DBG] Start key discovery request
+2022-07-06 17:53:21.086 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration/jwks - - - 200 - application/json;+charset=UTF-8 134.4411ms
+2022-07-06 18:07:20.172 +07:00 [INF] Starting FacebookCommunityAnalytics.Api.IdentityServer.
+2022-07-06 18:07:26.601 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-07-06 18:07:26.657 +07:00 [INF] Loaded ABP modules:
+2022-07-06 18:07:26.657 +07:00 [INF] - FacebookCommunityAnalytics.Api.ApiIdentityServerModule
+2022-07-06 18:07:26.657 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2022-07-06 18:07:26.657 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2022-07-06 18:07:26.657 +07:00 [INF]   - Volo.Abp.Caching.StackExchangeRedis.AbpCachingStackExchangeRedisModule
+2022-07-06 18:07:26.657 +07:00 [INF]     - Volo.Abp.Caching.AbpCachingModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Serialization.AbpSerializationModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Uow.AbpUnitOfWorkModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Security.AbpSecurityModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2022-07-06 18:07:26.657 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2022-07-06 18:07:26.657 +07:00 [INF]     - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Auditing.AbpAuditingModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Http.AbpHttpModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Http.AbpHttpAbstractionsModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Minify.AbpMinifyModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Authorization.AbpAuthorizationModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Validation.AbpValidationModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2022-07-06 18:07:26.657 +07:00 [INF]   - Volo.Abp.Account.Web.AbpAccountPublicWebIdentityServerModule
+2022-07-06 18:07:26.657 +07:00 [INF]     - Volo.Abp.Account.Public.Web.AbpAccountPublicWebModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicHttpApiModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2022-07-06 18:07:26.657 +07:00 [INF]               - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2022-07-06 18:07:26.657 +07:00 [INF]                 - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2022-07-06 18:07:26.657 +07:00 [INF]                   - Volo.Abp.Users.AbpUsersDomainSharedModule
+2022-07-06 18:07:26.657 +07:00 [INF]                   - Volo.Abp.Features.AbpFeaturesModule
+2022-07-06 18:07:26.657 +07:00 [INF]               - Volo.Abp.Users.AbpUsersAbstractionModule
+2022-07-06 18:07:26.657 +07:00 [INF]                 - Volo.Abp.EventBus.AbpEventBusModule
+2022-07-06 18:07:26.657 +07:00 [INF]               - Volo.Abp.Application.AbpDddApplicationModule
+2022-07-06 18:07:26.657 +07:00 [INF]                 - Volo.Abp.Domain.AbpDddDomainModule
+2022-07-06 18:07:26.657 +07:00 [INF]                   - Volo.Abp.Guids.AbpGuidsModule
+2022-07-06 18:07:26.657 +07:00 [INF]                   - Volo.Abp.Specifications.AbpSpecificationsModule
+2022-07-06 18:07:26.657 +07:00 [INF]                 - Volo.Abp.Application.AbpDddApplicationContractsModule
+2022-07-06 18:07:26.657 +07:00 [INF]                 - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2022-07-06 18:07:26.657 +07:00 [INF]               - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2022-07-06 18:07:26.657 +07:00 [INF]                 - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.Ldap.AbpLdapModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.Emailing.AbpEmailingModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2022-07-06 18:07:26.657 +07:00 [INF]               - Volo.Abp.UI.AbpUiModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Sms.AbpSmsModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Theme.Commercial.AbpAspNetCoreMvcUiThemeCommercialModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2022-07-06 18:07:26.657 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2022-07-06 18:07:26.657 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityDomainModule
+2022-07-06 18:07:26.657 +07:00 [INF]           - Volo.Abp.Users.AbpUsersDomainModule
+2022-07-06 18:07:26.657 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainModule
+2022-07-06 18:07:26.657 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2022-07-06 18:07:26.658 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.AbpAspNetCoreMvcUiLeptonThemeModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]   - Volo.Abp.Account.AbpAccountPublicApplicationModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.Account.AbpAccountSharedApplicationModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityApplicationModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2022-07-06 18:07:26.658 +07:00 [INF]           - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]           - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2022-07-06 18:07:26.658 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Saas.SaasDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2022-07-06 18:07:26.658 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2022-07-06 18:07:26.742 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.743 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.751 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.759 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.761 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.804 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2022-07-06 18:07:26.817 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.824 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.830 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.836 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.843 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.850 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.856 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.862 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.864 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.871 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.877 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.884 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.890 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.896 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.910 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:07:26.911 +07:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2022-07-06 18:07:28.297 +07:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2022-07-06 18:07:28.297 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2022-07-06 18:07:28.297 +07:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2022-07-06 18:07:28.297 +07:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2022-07-06 18:07:28.297 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2022-07-06 18:07:28.297 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2022-07-06 18:07:29.092 +07:00 [INF] Initialized all ABP modules.
+2022-07-06 18:07:29.117 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-07-06 18:07:29.117 +07:00 [INF] Hosting environment: Development
+2022-07-06 18:07:29.117 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer
+2022-07-06 18:07:29.153 +07:00 [INF] Request starting HTTP/1.1 DEBUG https://localhost:44382/ - 0
+2022-07-06 18:07:30.923 +07:00 [DBG] Login Url: /Account/Login
+2022-07-06 18:07:30.923 +07:00 [DBG] Login Return Url Parameter: ReturnUrl
+2022-07-06 18:07:30.923 +07:00 [DBG] Logout Url: /Account/Logout
+2022-07-06 18:07:30.923 +07:00 [DBG] ConsentUrl Url: /Consent
+2022-07-06 18:07:30.923 +07:00 [DBG] Consent Return Url Parameter: returnUrl
+2022-07-06 18:07:30.923 +07:00 [DBG] Error Url: /Account/Error
+2022-07-06 18:07:30.923 +07:00 [DBG] Error Id Parameter: errorId
+2022-07-06 18:07:30.979 +07:00 [INF] Executing endpoint '/Index'
+2022-07-06 18:07:31.069 +07:00 [INF] Route matched with {page = "/Index", area = "", action = "", controller = ""}. Executing page /Index
+2022-07-06 18:07:31.072 +07:00 [INF] Skipping the execution of current filter as its not the most effective filter implementing the policy Microsoft.AspNetCore.Mvc.ViewFeatures.IAntiforgeryPolicy
+2022-07-06 18:07:31.079 +07:00 [INF] Antiforgery token validation failed. The required antiforgery cookie ".AspNetCore.Antiforgery.0rwtJJK1YB4" is not present.
+Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException: The required antiforgery cookie ".AspNetCore.Antiforgery.0rwtJJK1YB4" is not present.
+   at Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery.ValidateRequestAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.ValidateAntiforgeryTokenAuthorizationFilter.OnAuthorizationAsync(AuthorizationFilterContext context)
+2022-07-06 18:07:31.082 +07:00 [INF] Authorization failed for the request at filter 'Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter'.
+2022-07-06 18:07:31.090 +07:00 [INF] Executing HttpStatusCodeResult, setting HTTP status code 400
+2022-07-06 18:07:31.094 +07:00 [INF] Executed page /Index in 20.7159ms
+2022-07-06 18:07:31.095 +07:00 [INF] Executed endpoint '/Index'
+2022-07-06 18:07:32.058 +07:00 [INF] Request finished HTTP/1.1 DEBUG https://localhost:44382/ - 0 - 400 - - 2904.5114ms
+2022-07-06 18:07:54.145 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration - -
+2022-07-06 18:07:54.202 +07:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2022-07-06 18:07:55.079 +07:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2022-07-06 18:07:55.079 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2022-07-06 18:07:55.081 +07:00 [DBG] Start discovery request
+2022-07-06 18:07:55.131 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration - - - 200 - application/json;+charset=UTF-8 985.6010ms
+2022-07-06 18:07:55.153 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration/jwks - -
+2022-07-06 18:07:55.210 +07:00 [DBG] Request path /.well-known/openid-configuration/jwks matched to endpoint type Discovery
+2022-07-06 18:07:55.222 +07:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryKeyEndpoint
+2022-07-06 18:07:55.222 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2022-07-06 18:07:55.223 +07:00 [DBG] Start key discovery request
+2022-07-06 18:07:55.242 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration/jwks - - - 200 - application/json;+charset=UTF-8 88.8111ms
+2022-07-06 18:12:54.377 +07:00 [INF] Starting FacebookCommunityAnalytics.Api.IdentityServer.
+2022-07-06 18:13:01.152 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-07-06 18:13:01.221 +07:00 [INF] Loaded ABP modules:
+2022-07-06 18:13:01.221 +07:00 [INF] - FacebookCommunityAnalytics.Api.ApiIdentityServerModule
+2022-07-06 18:13:01.221 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2022-07-06 18:13:01.221 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2022-07-06 18:13:01.221 +07:00 [INF]   - Volo.Abp.Caching.StackExchangeRedis.AbpCachingStackExchangeRedisModule
+2022-07-06 18:13:01.221 +07:00 [INF]     - Volo.Abp.Caching.AbpCachingModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Serialization.AbpSerializationModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Uow.AbpUnitOfWorkModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Security.AbpSecurityModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2022-07-06 18:13:01.221 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2022-07-06 18:13:01.221 +07:00 [INF]     - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Auditing.AbpAuditingModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Http.AbpHttpModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Http.AbpHttpAbstractionsModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Minify.AbpMinifyModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Authorization.AbpAuthorizationModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Validation.AbpValidationModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2022-07-06 18:13:01.221 +07:00 [INF]   - Volo.Abp.Account.Web.AbpAccountPublicWebIdentityServerModule
+2022-07-06 18:13:01.221 +07:00 [INF]     - Volo.Abp.Account.Public.Web.AbpAccountPublicWebModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicHttpApiModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2022-07-06 18:13:01.221 +07:00 [INF]               - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2022-07-06 18:13:01.221 +07:00 [INF]                 - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2022-07-06 18:13:01.221 +07:00 [INF]                   - Volo.Abp.Users.AbpUsersDomainSharedModule
+2022-07-06 18:13:01.221 +07:00 [INF]                   - Volo.Abp.Features.AbpFeaturesModule
+2022-07-06 18:13:01.221 +07:00 [INF]               - Volo.Abp.Users.AbpUsersAbstractionModule
+2022-07-06 18:13:01.221 +07:00 [INF]                 - Volo.Abp.EventBus.AbpEventBusModule
+2022-07-06 18:13:01.221 +07:00 [INF]               - Volo.Abp.Application.AbpDddApplicationModule
+2022-07-06 18:13:01.221 +07:00 [INF]                 - Volo.Abp.Domain.AbpDddDomainModule
+2022-07-06 18:13:01.221 +07:00 [INF]                   - Volo.Abp.Guids.AbpGuidsModule
+2022-07-06 18:13:01.221 +07:00 [INF]                   - Volo.Abp.Specifications.AbpSpecificationsModule
+2022-07-06 18:13:01.221 +07:00 [INF]                 - Volo.Abp.Application.AbpDddApplicationContractsModule
+2022-07-06 18:13:01.221 +07:00 [INF]                 - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2022-07-06 18:13:01.221 +07:00 [INF]               - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2022-07-06 18:13:01.221 +07:00 [INF]                 - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.Ldap.AbpLdapModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.Emailing.AbpEmailingModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2022-07-06 18:13:01.221 +07:00 [INF]               - Volo.Abp.UI.AbpUiModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Sms.AbpSmsModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Theme.Commercial.AbpAspNetCoreMvcUiThemeCommercialModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2022-07-06 18:13:01.221 +07:00 [INF]             - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2022-07-06 18:13:01.221 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityDomainModule
+2022-07-06 18:13:01.221 +07:00 [INF]           - Volo.Abp.Users.AbpUsersDomainModule
+2022-07-06 18:13:01.221 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2022-07-06 18:13:01.222 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.AbpAspNetCoreMvcUiLeptonThemeModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]   - Volo.Abp.Account.AbpAccountPublicApplicationModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.Account.AbpAccountSharedApplicationModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityApplicationModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2022-07-06 18:13:01.222 +07:00 [INF]           - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]           - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2022-07-06 18:13:01.222 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Saas.SaasDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2022-07-06 18:13:01.222 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2022-07-06 18:13:01.322 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.323 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.331 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.343 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.344 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.403 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2022-07-06 18:13:01.425 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.439 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.450 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.463 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.477 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.491 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.502 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.515 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.520 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.538 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.553 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.564 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.578 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.591 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.626 +07:00 [ERR] ABP-LIC-0021 - Data at the root level is invalid. Line 1, position 1.
+2022-07-06 18:13:01.629 +07:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2022-07-06 18:13:03.708 +07:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2022-07-06 18:13:03.708 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2022-07-06 18:13:03.708 +07:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2022-07-06 18:13:03.709 +07:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2022-07-06 18:13:03.709 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2022-07-06 18:13:03.709 +07:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2022-07-06 18:13:04.511 +07:00 [INF] Initialized all ABP modules.
+2022-07-06 18:13:04.541 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-07-06 18:13:04.541 +07:00 [INF] Hosting environment: Development
+2022-07-06 18:13:04.541 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.IdentityServer
+2022-07-06 18:13:04.577 +07:00 [INF] Request starting HTTP/1.1 DEBUG https://localhost:44382/ - 0
+2022-07-06 18:13:06.397 +07:00 [DBG] Login Url: /Account/Login
+2022-07-06 18:13:06.397 +07:00 [DBG] Login Return Url Parameter: ReturnUrl
+2022-07-06 18:13:06.397 +07:00 [DBG] Logout Url: /Account/Logout
+2022-07-06 18:13:06.397 +07:00 [DBG] ConsentUrl Url: /Consent
+2022-07-06 18:13:06.397 +07:00 [DBG] Consent Return Url Parameter: returnUrl
+2022-07-06 18:13:06.397 +07:00 [DBG] Error Url: /Account/Error
+2022-07-06 18:13:06.397 +07:00 [DBG] Error Id Parameter: errorId
+2022-07-06 18:13:06.459 +07:00 [INF] Executing endpoint '/Index'
+2022-07-06 18:13:06.535 +07:00 [INF] Route matched with {page = "/Index", area = "", action = "", controller = ""}. Executing page /Index
+2022-07-06 18:13:06.537 +07:00 [INF] Skipping the execution of current filter as its not the most effective filter implementing the policy Microsoft.AspNetCore.Mvc.ViewFeatures.IAntiforgeryPolicy
+2022-07-06 18:13:06.544 +07:00 [INF] Antiforgery token validation failed. The required antiforgery cookie ".AspNetCore.Antiforgery.0rwtJJK1YB4" is not present.
+Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException: The required antiforgery cookie ".AspNetCore.Antiforgery.0rwtJJK1YB4" is not present.
+   at Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery.ValidateRequestAsync(HttpContext httpContext)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.ValidateAntiforgeryTokenAuthorizationFilter.OnAuthorizationAsync(AuthorizationFilterContext context)
+2022-07-06 18:13:06.546 +07:00 [INF] Authorization failed for the request at filter 'Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter'.
+2022-07-06 18:13:06.550 +07:00 [INF] Executing HttpStatusCodeResult, setting HTTP status code 400
+2022-07-06 18:13:06.554 +07:00 [INF] Executed page /Index in 14.6539ms
+2022-07-06 18:13:06.555 +07:00 [INF] Executed endpoint '/Index'
+2022-07-06 18:13:07.401 +07:00 [INF] Request finished HTTP/1.1 DEBUG https://localhost:44382/ - 0 - 400 - - 2823.9157ms
+2022-07-06 18:13:18.114 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration - -
+2022-07-06 18:13:18.213 +07:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2022-07-06 18:13:19.384 +07:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2022-07-06 18:13:19.384 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2022-07-06 18:13:19.387 +07:00 [DBG] Start discovery request
+2022-07-06 18:13:19.681 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration - - - 200 - application/json;+charset=UTF-8 1567.6598ms
+2022-07-06 18:13:19.712 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration/jwks - -
+2022-07-06 18:13:19.791 +07:00 [DBG] Request path /.well-known/openid-configuration/jwks matched to endpoint type Discovery
+2022-07-06 18:13:19.847 +07:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryKeyEndpoint
+2022-07-06 18:13:19.848 +07:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2022-07-06 18:13:19.900 +07:00 [DBG] Start key discovery request
+2022-07-06 18:13:19.919 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:44382/.well-known/openid-configuration/jwks - - - 200 - application/json;+charset=UTF-8 206.9155ms

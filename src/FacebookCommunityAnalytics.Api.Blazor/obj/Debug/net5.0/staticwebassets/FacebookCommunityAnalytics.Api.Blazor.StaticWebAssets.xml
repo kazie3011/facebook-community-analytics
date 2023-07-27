@@ -1,0 +1,16 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/BlazorDateRangePicker" Path="C:\Users\ASUS\.nuget\packages\blazordaterangepicker\3.6.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazored.Localisation" Path="C:\Users\ASUS\.nuget\packages\blazored.localisation\2.0.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise" Path="C:\Users\ASUS\.nuget\packages\blazorise\0.9.4.1\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise.Bootstrap" Path="C:\Users\ASUS\.nuget\packages\blazorise.bootstrap\0.9.4.1\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise.Charts" Path="C:\Users\ASUS\.nuget\packages\blazorise.charts\0.9.4.1\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise.DataGrid" Path="C:\Users\ASUS\.nuget\packages\blazorise.datagrid\0.9.4.1\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise.RichTextEdit" Path="C:\Users\ASUS\.nuget\packages\blazorise.richtextedit\0.9.4.1\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise.Snackbar" Path="C:\Users\ASUS\.nuget\packages\blazorise.snackbar\0.9.4.1\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/ChartJs.Blazor.Fork" Path="C:\Users\ASUS\.nuget\packages\chartjs.blazor.fork\2.0.2\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Radzen.Blazor" Path="C:\Users\ASUS\.nuget\packages\radzen.blazor\3.16.3\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Volo.Abp.AspNetCore.Components.Web" Path="C:\Users\ASUS\.nuget\packages\volo.abp.aspnetcore.components.web\4.3.2\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Volo.Abp.AspNetCore.Components.Web.LeptonTheme" Path="C:\Users\ASUS\.nuget\packages\volo.abp.aspnetcore.components.web.leptontheme\4.3.2\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton" Path="C:\Users\ASUS\.nuget\packages\volo.abp.aspnetcore.mvc.ui.theme.lepton\4.3.2\build\..\staticwebassets\" />
+  <ContentRoot BasePath="/" Path="D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Blazor\obj\Debug\net5.0\scopedcss\bundle\" />
+</StaticWebAssets>

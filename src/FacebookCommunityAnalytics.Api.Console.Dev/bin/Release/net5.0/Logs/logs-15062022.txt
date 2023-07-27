@@ -1,0 +1,5 @@
+2022-06-15 14:08:52.632 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-06-15 14:08:57.797 +07:00 [INF] Application is shutting down...
+2022-06-15 14:08:57.797 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-06-15 14:08:57.797 +07:00 [INF] Hosting environment: Production
+2022-06-15 14:08:57.797 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Console.Dev\bin\Release\net5.0

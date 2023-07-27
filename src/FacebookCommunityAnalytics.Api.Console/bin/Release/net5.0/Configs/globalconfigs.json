@@ -1,0 +1,198 @@
+{
+  "GlobalConfiguration": {
+    "PartnerConfiguration": {
+      "IsPartnerTool": false
+    },
+    "Environment": "dev",
+    "CrawlConfiguration": {
+      "IntervalHours": 12,
+      "IntervalCampaigns": 2,
+      "BatchSize": 100,
+      "AccountPerProxy": 15,
+      "HashTags": [
+        "gdlfamily",
+        "theanh28",
+        "amm",
+        "gcentertainment",
+        "onesvn",
+        "bndanceteam",
+        "vtcmedia",
+        "imentertainment",
+        "Bnetwork",
+        "vulaci",
+        "novagr",
+        "dcgr",
+        "acventertainment",
+        "vzone",
+        "vtmgr",
+        "vibula",
+        "anycreatorvietnam",
+        "dqn",
+        "boxstudio",
+        "admicro",
+        "viettelmedia",
+        "ureka",
+        "yeah1",
+        "vtvcab",
+        "gdlfamily",
+        "celebnetwork",
+        "fantasticentertaiment",
+        "eyeplusmedia",
+        "goldennetwork",
+        "mcv",
+        "metubnetwork",
+        "groupcast",
+        "khoiviet",
+        "cooken",
+        "ellastudy",
+        "lecirque",
+        "srvg",
+        "namviet",
+        "dalali",
+        "vienetwork",
+        "vgaming",
+        "phoenixds",
+        "jetstudio",
+        "vietfilm",
+        "bhmedia"
+      ]
+    },
+    "GlobalPayrollConfiguration": {
+      "PayrollTimeZone": -7,
+      "PayrollStartDay": 26,
+      "PayrollEndDay": 25
+    },
+    "KPIConfig": {
+      "CurrentRate": 1
+    },
+    "AffiliateConfiguration": {
+      "InitDayCount": 7
+    },
+    "ChartConfig": {
+      "TikTokChartHashTag": "gdlfamily"
+    },
+    "CompensationConfiguration": {
+      "KPI_Aff_MinConversionCount_Staff": 6500,
+      "KPI_Aff_MinConversionCount_GroupLeader": 10000,
+      "KPI_Aff_MinPostCount_Staff": 150,
+      "KPI_Aff_MinPostCount_GroupLeader": 150,
+      "KPI_Seeding_MinPostCount_Staff": 224,
+      "KPI_Seeding_MinPostCount_GroupLeader": 140,
+      "KPI_Seeding_MinPostCount_Leader": 112,
+      "KPI_Seeding_MinReactionCount_Staff": 120000,
+      "KPI_Seeding_MinReactionCount_GroupLeader": 135000,
+      "KPI_Seeding_MinReactionCount_Leader": 200000
+    },
+    "EmailConfiguration": {
+      "ApiKey": "apikey",
+      "ApiValue": "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",
+      "AdminEmail": "gdl.noreply@gdl.vn",
+      "Recipients": [
+        "dev@veek.vn"
+      ],
+      "Recipients_Test": [
+        "dev@veek.vn"
+      ],
+      "Recipients_PayrollEmail": [
+        "dev@veek.vn"
+      ],
+      "Recipients_AccountantEmail": [
+        "dev@veek.vn"
+      ],
+      "Recipients_Sale": [
+        "dev@veek.vn"
+      ],
+      "Recipients_CampaignEmail_Primary": [
+        "dev@veek.vn"
+      ],
+      "Recipients_CampaignEmail_Secondary": [
+        "dev@veek.vn"
+      ],
+      "Recipients_TiktokEmail": [
+        "dev@veek.vn"
+      ]
+    },
+    "Services": {
+      "IdentityUrl": "https://localhost:44382",
+      "ApiUrl": "https://localhost:44344/",
+      "BackofficeUrl": "https://localhost:44314"
+    },
+    "LazadaConfiguration": {
+      "BaseLink": "https://c.lazada.vn/t/c.ZCvlgR",
+      "BaseProductLink": "https://www.lazada.vn/products/"
+    },
+    "TikiConfiguration": {
+      "ShortkeyLength": 7,
+      "BaseProductLink": "https://www.lazada.vn/products/"
+    },
+    "BitlyConfiguration": {
+      "RootApiUrl": "https://api-ssl.bitly.com/v4",
+      "AccessToken": "2dd6cd371781b98f0cb21319fdfc89348c92d7e9"
+    },
+    "MediaBaseUrl": "https://gdlblobstorage.blob.core.windows.net/contract-media-dev/host/",
+    "EvaluationTeams": [
+      "GDL - Dalat",
+      "GDL - DaNang",
+      "GDL - Sale",
+      "GDL - Content",
+      "GDL - TikTok",
+      "GDL - AT1",
+      "GDL - AT2",
+      "GDL - ST1",
+      "GDL - ST2",
+      "GDL - ST3",
+      "GDL - ST4",
+      "GDL - ST5",
+      "GDL - ST6",
+      "GDL - Seeding Content",
+      "GDL - Community Specialist",
+      "GDL - Community Supervisor",
+      "GDL - Community Leader",
+      "GDL - Operations",
+      "GDL - Account Dalat",
+      "YAN - Social"
+    ],
+    "TeamTypeMapping": {
+      "Sale": [
+        "GDL - Sale",
+        "GDL - Account Dalat"
+      ],
+      "Content": [
+        "GDL - Content",
+        "GDL - Dalat",
+        "GDL - DaNang",
+        "GDL - Seeding Content"
+      ],
+      "Affiliate": [
+        "GDL - AT1",
+        "GDL - AT2"
+      ],
+      "Seeding": [
+        "GDL - ST1",
+        "GDL - ST2",
+        "GDL - ST3",
+        "GDL - ST4",
+        "GDL - ST5",
+        "GDL - ST6",
+        "YAN - Social"
+      ],
+      "Tiktok": [
+        "GDL - TikTok"
+      ]
+    },
+    "SlackConfiguration":{
+      "WebhookUrl":"https://hooks.slack.com/services/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"
+    },
+    "MediaConfiguration":{
+      "TiktokRootPathChannel" : "C:\\GDLMedia\\tiktok\\channels\\",
+      "TiktokRootPathVideo" : "C:\\GDLMedia\\tiktok\\videos\\"
+    },
+    "MediaPath": {
+      "FilePath": "C:\\GDLMedia\\media-library\\files\\",
+      "FileContractPath": "C:\\GDLMedia\\media-library\\contract-files\\",
+      "ContentPath": "C:\\GDLMedia\\media-library\\contents\\",
+      "AvatarPath": "C:\\GDLMedia\\media-library\\avatars\\",
+      "ThumpPath": "C:\\GDLMedia\\media-library\\thumbs\\"
+    }
+  }
+}

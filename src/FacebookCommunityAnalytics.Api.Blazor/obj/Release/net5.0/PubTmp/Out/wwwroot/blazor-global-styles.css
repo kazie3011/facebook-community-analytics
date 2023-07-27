@@ -1,0 +1,327 @@
+﻿
+.rank-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.rank-tooltip .text-tooltip {
+    font-size: 14px;
+    visibility: hidden; 
+    width: 250%;
+    background-color: white;
+    color: black;
+    text-align: justify;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 148%;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.rank-tooltip .text-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.rank-tooltip:hover .text-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.inline-block {
+    display: inline-block !important;
+}
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+.blazored-toast-container {
+    z-index: 10000 !important;
+}
+
+.form-control{
+    height:auto !important;
+}
+
+.dead-link {
+    color: red;
+    text-decoration: line-through;
+}
+
+.dropdown-menu {
+    position: relative !important;
+}
+
+.table-fixed {
+    table-layout: fixed;
+}
+
+.td-table-word-wrap {
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal !important;
+    text-align: left;
+}
+
+.td-table-word-wrap {
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal !important;
+    text-align: left;
+}
+
+.content-item-content .btn-sm {
+    padding: 2px 5px !important;
+    font-size: 10px !important;
+    float: right;
+    margin-left: 5px;
+}
+
+.content-item-date{
+    float: left;
+    font-size: small;
+    font-style: italic;
+}
+.content-item-tags{
+    height:25px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.content-item-img{
+    min-width: 200px;
+    height: 250px;
+}
+
+.content-card-body{
+    position: absolute;
+    bottom: 0;
+    background: yellow;
+    width: 100%;
+    opacity: 0;
+    transition: 0.3s;
+    cursor: context-menu;
+}
+.content-card-body:hover{
+    display: block;
+    opacity: 1;
+    cursor: pointer;
+}
+.content-card-body.badge{
+    cursor: pointer;
+}
+
+.badge{
+    margin-right: 5px;
+}
+
+.jqx-fill-state-normal,.jqx-fill-state-hover,.jqx-fill-state-pressed {
+    background: #026403 !important;
+    color: #fff;
+}
+
+.jqx-pivotgrid {
+    background-color: #026403 !important;
+}
+
+#jqxGrid #divContent div div:last-child .jqx-widget-header .jqx-pivotgrid-item{
+    text-align: center !important;
+}
+
+
+/***** RichEditText Custom*****/
+.ql-editor {
+    min-height: 200px;
+}
+
+.card-aff-report{
+    min-height: 120px;
+}
+.sk-chase-dot::before{
+    color: #037404;
+}
+
+/* RadzenUpload button */
+.rz-fileupload-buttonbar{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    background-color: transparent !important; 
+}
+
+.rz-gdl-custom{
+    /*width: calc(100% - 108px);*/
+    flex: 1 1 auto;
+    width: 1%;
+    border-radius: 0 4px 4px 0 !important;
+}
+.bg-primary {
+    color: #fff !important;
+    background-color: #037404 !important;
+}
+.profile-img {
+    text-align: right;
+}
+.profile-content {
+    text-align: left;
+}
+/* On screens that are 1680 or less, set the background color to blue */
+@media screen and (max-width: 1680px) {
+    .card-aff-report{
+        min-height: 200px;
+    }
+    .profile-img {
+        text-align: right;
+    }
+    .profile-content {
+        text-align: left;
+    }
+}
+
+.modal-body span.text-center{
+    display: block;
+}
+.rz-column-title{
+    font-weight: bold !important;
+}
+
+
+.custom-addon-200{
+    width: 200px !important;
+}
+.custom-select-200{
+    width: 200px !important;
+}
+.heigh-auto{
+    height: auto !important;
+}
+.chart-js-custom{
+    min-height: 500px;
+}
+.chart-js-custom canvas{
+    width: 75%;
+    margin: 0 auto !important;
+}
+.card-none-box{
+    box-shadow: none !important;
+}
+.absolute-inline-left{
+    position: absolute;
+    left:0;
+    top: 0;
+}
+.lp-sidebar-wrapper::-webkit-scrollbar-thumb {
+    background-color: #b2c0cf !important;
+}
+.lp-sidebar-wrapper::-webkit-scrollbar {
+    background-color: #026403 !important;
+}
+
+.lp-opened-sidebar .lp-sidebar, .lp-closed .lp-sidebar
+{
+    width: 285px !important
+}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+    .absolute-inline-left{
+        position: relative;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .custom-select-200{
+        width: 100% !important;
+    }
+
+    .custom-addon-200{
+        width: 100% !important;
+        margin-bottom: 10px;
+    }
+    .chart-js-custom{
+        min-height: 500px;
+        margin-bottom: 20px;
+    }
+    .chart-js-custom canvas{
+        width: 100% !important;
+        /*height: 100% !important;*/
+        margin: 0 auto !important;
+    }
+}
+/* Small devices (portrait tablets and large phones, 768px and up) */
+@media only screen and (max-width: 768px) {
+    .profile-img{
+        text-align: center;
+    }
+    .profile-content{
+        text-align: center;
+    }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+    .chart-js-custom{
+        min-height: 500px;
+        margin-bottom: 20px;
+    }
+    .chart-js-custom canvas{
+        width: 100% !important;
+        /*height: 100% !important;*/
+        margin: 0 auto !important;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+    .chart-js-custom{
+        min-height: 500px;
+        margin-bottom: 20px;
+    }
+    .chart-js-custom canvas{
+        width: 100% !important;
+        /*height: 100% !important;*/
+        margin: 0 auto !important;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    
+}
+
+/*.components-reconnect-show, .components-reconnect-failed, .components-reconnect-rejected {*/
+/*    display: none; !important;*/
+/*}*/
+
+/*#components-reconnect-modal {*/
+/*    display: none !important;*/
+/*}*/

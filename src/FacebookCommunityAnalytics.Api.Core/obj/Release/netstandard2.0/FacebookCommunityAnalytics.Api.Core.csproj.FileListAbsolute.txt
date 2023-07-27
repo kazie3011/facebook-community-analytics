@@ -1,0 +1,10 @@
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.deps.json
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.dll
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\bin\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.pdb
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.csproj.AssemblyReference.cache
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.AssemblyInfoInputs.cache
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.AssemblyInfo.cs
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.csproj.CoreCompileInputs.cache
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.dll
+D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Core\obj\Release\netstandard2.0\FacebookCommunityAnalytics.Api.Core.pdb

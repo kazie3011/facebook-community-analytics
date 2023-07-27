@@ -1,0 +1,213 @@
+2023-06-21 16:07:18.287 +07:00 [INF] Starting web host.
+2023-06-21 16:07:29.476 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-06-21 16:07:29.525 +07:00 [INF] Loaded ABP modules:
+2023-06-21 16:07:29.525 +07:00 [INF] - FacebookCommunityAnalytics.Api.Blazor.ApiBlazorModule
+2023-06-21 16:07:29.525 +07:00 [INF]   - Volo.Abp.Caching.StackExchangeRedis.AbpCachingStackExchangeRedisModule
+2023-06-21 16:07:29.525 +07:00 [INF]     - Volo.Abp.Caching.AbpCachingModule
+2023-06-21 16:07:29.525 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2023-06-21 16:07:29.525 +07:00 [INF]       - Volo.Abp.Serialization.AbpSerializationModule
+2023-06-21 16:07:29.525 +07:00 [INF]       - Volo.Abp.Uow.AbpUnitOfWorkModule
+2023-06-21 16:07:29.525 +07:00 [INF]       - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2023-06-21 16:07:29.525 +07:00 [INF]         - Volo.Abp.Data.AbpDataModule
+2023-06-21 16:07:29.525 +07:00 [INF]           - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2023-06-21 16:07:29.525 +07:00 [INF]             - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2023-06-21 16:07:29.525 +07:00 [INF]             - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2023-06-21 16:07:29.525 +07:00 [INF]           - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2023-06-21 16:07:29.525 +07:00 [INF]         - Volo.Abp.Security.AbpSecurityModule
+2023-06-21 16:07:29.525 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2023-06-21 16:07:29.525 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2023-06-21 16:07:29.525 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2023-06-21 16:07:29.525 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2023-06-21 16:07:29.525 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2023-06-21 16:07:29.525 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2023-06-21 16:07:29.525 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2023-06-21 16:07:29.525 +07:00 [INF]   - Volo.Abp.Swashbuckle.AbpSwashbuckleModule
+2023-06-21 16:07:29.525 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2023-06-21 16:07:29.525 +07:00 [INF]       - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2023-06-21 16:07:29.525 +07:00 [INF]         - Volo.Abp.Auditing.AbpAuditingModule
+2023-06-21 16:07:29.525 +07:00 [INF]         - Volo.Abp.Http.AbpHttpModule
+2023-06-21 16:07:29.525 +07:00 [INF]           - Volo.Abp.Http.AbpHttpAbstractionsModule
+2023-06-21 16:07:29.525 +07:00 [INF]           - Volo.Abp.Minify.AbpMinifyModule
+2023-06-21 16:07:29.525 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationModule
+2023-06-21 16:07:29.525 +07:00 [INF]           - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2023-06-21 16:07:29.525 +07:00 [INF]         - Volo.Abp.Validation.AbpValidationModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.Application.AbpDddApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.UI.AbpUiModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.Application.AbpDddApplicationModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.Domain.AbpDddDomainModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.EventBus.AbpEventBusModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.Guids.AbpGuidsModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.Specifications.AbpSpecificationsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.Features.AbpFeaturesModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.Client.AbpAspNetCoreMvcClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.Client.AbpAspNetCoreMvcClientCommonModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.Http.Client.AbpHttpClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.AspNetCore.Authentication.OpenIdConnect.AbpAspNetCoreAuthenticationOpenIdConnectModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AspNetCore.Authentication.OAuth.AbpAspNetCoreAuthenticationOAuthModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.Http.Client.IdentityModel.Web.AbpHttpClientIdentityModelWebModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Http.Client.IdentityModel.AbpHttpClientIdentityModelModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.IdentityModel.AbpIdentityModelModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.AbpAspNetCoreMvcUiLeptonThemeModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.Theme.Commercial.AbpAspNetCoreMvcUiThemeCommercialModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.AspNetCore.Components.Server.LeptonTheme.AbpAspNetCoreComponentsServerLeptonThemeModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AspNetCore.Components.Web.LeptonTheme.AbpAspNetCoreComponentsWebLeptonThemeModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.AspNetCore.Components.Web.Theming.AbpAspNetCoreComponentsWebThemingModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.BlazoriseUI.AbpBlazoriseUIModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.AspNetCore.Components.Web.AbpAspNetCoreComponentsWebModule
+2023-06-21 16:07:29.526 +07:00 [INF]             - Volo.Abp.AspNetCore.Components.AbpAspNetCoreComponentsModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AspNetCore.Components.Server.Theming.AbpAspNetCoreComponentsServerThemingModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.AspNetCore.Components.Server.AbpAspNetCoreComponentsServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.AspNetCore.SignalR.AbpAspNetCoreSignalRModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.Account.Pro.Admin.Blazor.Server.AbpAccountAdminBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Account.Pro.Admin.Blazor.AbpAccountAdminBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.Account.AbpAccountAdminApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.Account.AbpAccountSharedApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]             - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]               - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]                 - Volo.Abp.Users.AbpUsersDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]             - Volo.Abp.Users.AbpUsersAbstractionModule
+2023-06-21 16:07:29.526 +07:00 [INF]             - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]               - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.Ldap.AbpLdapModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.SettingManagement.Blazor.AbpSettingManagementBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.SettingManagement.Blazor.Server.AbpSettingManagementBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.AuditLogging.Blazor.Server.AbpAuditLoggingBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AuditLogging.Blazor.AbpAuditLoggingBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.Identity.Pro.Blazor.Server.AbpIdentityProBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Identity.Pro.Blazor.AbpIdentityProBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.PermissionManagement.Blazor.AbpPermissionManagementBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.PermissionManagement.Blazor.Server.AbpPermissionManagementBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.LeptonTheme.Management.Blazor.Server.LeptonThemeManagementBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.Blazor.LeptonThemeManagementBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.IdentityServer.Blazor.Server.AbpIdentityServerBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.IdentityServer.Blazor.AbpIdentityServerBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.LanguageManagement.Blazor.Server.LanguageManagementBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.LanguageManagement.Blazor.LanguageManagementBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Saas.Host.Blazor.Server.SaasHostBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Saas.Host.Blazor.SaasHostBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Saas.Host.SaasHostApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Saas.SaasDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.FeatureManagement.AbpFeatureManagementApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.FeatureManagement.Blazor.AbpFeatureManagementBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.FeatureManagement.Blazor.Server.AbpFeatureManagementBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.TextTemplateManagement.Blazor.Server.TextTemplateManagementBlazorServerModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.Blazor.TextTemplateManagementBlazorModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.CmsKit.CmsKitProDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.CmsKit.CmsKitDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.Account.AbpAccountPublicApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.Abp.Emailing.AbpEmailingModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.CmsKit.CmsKitProApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.CmsKit.CmsKitApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.CmsKit.Public.CmsKitPublicApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]             - Volo.CmsKit.CmsKitCommonApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.CmsKit.Admin.CmsKitAdminApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.CmsKit.CmsKitProPublicApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.CmsKit.CmsKitProAdminApplicationContractsModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.Abp.FluentValidation.AbpFluentValidationModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.PermissionManagement.HttpApi.AbpPermissionManagementHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.LeptonTheme.LeptonThemeManagementHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.PermissionManagement.AbpPermissionManagementHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Saas.Host.SaasHostHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Account.AbpAccountAdminHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.Account.AbpAccountPublicHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.CmsKit.CmsKitProHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.CmsKit.CmsKitHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.CmsKit.Admin.CmsKitAdminHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]           - Volo.CmsKit.CmsKitCommonHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]         - Volo.CmsKit.Public.CmsKitPublicHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.CmsKit.CmsKitProAdminHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]       - Volo.CmsKit.CmsKitProPublicHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementHttpApiClientModule
+2023-06-21 16:07:29.526 +07:00 [INF]   - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2023-06-21 16:07:29.526 +07:00 [INF]     - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.703 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.704 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.704 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.704 +07:00 [ERR] ABP-LIC-0008 - License check failed for 'Volo.Abp.Account.Pro.Public.HttpApi-v4.3.2.0'.
+
+For more information, contact to license@abp.io.
+2023-06-21 16:07:29.728 +07:00 [DBG] Disposed channel pool with no channels in the pool.
+2023-06-21 16:07:29.730 +07:00 [INF] Application is shutting down...
+2023-06-21 16:07:29.730 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.735 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:29.742 +07:00 [ERR] ABP-LIC-0017 - License code is not valid: AbpLicenseCode
+2023-06-21 16:07:31.487 +07:00 [INF] Initialized all ABP modules.
+2023-06-21 16:07:31.503 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-06-21 16:07:31.503 +07:00 [INF] Hosting environment: Development
+2023-06-21 16:07:31.503 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Blazor
+2023-06-21 16:07:31.531 +07:00 [INF] Request starting HTTP/2 GET https://localhost:44314/ - -
+2023-06-21 16:07:31.773 +07:00 [INF] Start processing HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2023-06-21 16:07:31.775 +07:00 [INF] Sending HTTP request GET "https://localhost:44344/api/abp/api-definition"
+2023-06-21 16:07:34.733 +07:00 [INF] Waiting for the host to be disposed. Ensure all 'IHost' instances are wrapped in 'using' blocks.

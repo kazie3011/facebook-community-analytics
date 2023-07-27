@@ -1,0 +1,318 @@
+2023-01-09 11:44:21.492 +07:00 [INF] Starting console host.
+2023-01-09 11:44:27.045 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-01-09 11:44:50.409 +07:00 [INF] Starting console host.
+2023-01-09 11:44:52.521 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-01-09 11:44:56.391 +07:00 [INF] Loaded ABP modules:
+2023-01-09 11:44:56.391 +07:00 [INF] - FacebookCommunityAnalytics.Api.Console.Dev.ConsoleModule
+2023-01-09 11:44:56.391 +07:00 [INF]   - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.Auditing.AbpAuditingModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Data.AbpDataModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Uow.AbpUnitOfWorkModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2023-01-09 11:44:56.391 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2023-01-09 11:44:56.391 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2023-01-09 11:44:56.391 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2023-01-09 11:44:56.391 +07:00 [INF]               - Volo.Abp.Security.AbpSecurityModule
+2023-01-09 11:44:56.391 +07:00 [INF]               - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2023-01-09 11:44:56.391 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2023-01-09 11:44:56.391 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Validation.AbpValidationModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]           - Volo.Abp.Users.AbpUsersDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]           - Volo.Abp.Features.AbpFeaturesModule
+2023-01-09 11:44:56.391 +07:00 [INF]             - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Saas.SaasDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]           - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Domain.AbpDddDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.EventBus.AbpEventBusModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Guids.AbpGuidsModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Specifications.AbpSpecificationsModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Caching.AbpCachingModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Serialization.AbpSerializationModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityProDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Users.AbpUsersDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]           - Volo.Abp.Users.AbpUsersAbstractionModule
+2023-01-09 11:44:56.391 +07:00 [INF]     - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2023-01-09 11:44:56.391 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2023-01-09 11:44:56.391 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Saas.SaasDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]       - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.Emailing.AbpEmailingModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.CmsKit.CmsKitProDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]       - Volo.CmsKit.CmsKitDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]         - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2023-01-09 11:44:56.392 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2023-01-09 11:44:56.392 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2023-01-09 11:44:56.449 +07:00 [DBG] Started background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2023-01-09 11:44:56.466 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2023-01-09 11:44:56.557 +07:00 [INF] Initialized all ABP modules.
+2023-01-09 11:47:49.156 +07:00 [INF] Starting console host.
+2023-01-09 11:47:51.189 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-01-09 11:47:55.095 +07:00 [INF] Loaded ABP modules:
+2023-01-09 11:47:55.095 +07:00 [INF] - FacebookCommunityAnalytics.Api.Console.Dev.ConsoleModule
+2023-01-09 11:47:55.095 +07:00 [INF]   - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.Auditing.AbpAuditingModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Data.AbpDataModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Uow.AbpUnitOfWorkModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2023-01-09 11:47:55.095 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2023-01-09 11:47:55.095 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2023-01-09 11:47:55.095 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2023-01-09 11:47:55.095 +07:00 [INF]               - Volo.Abp.Security.AbpSecurityModule
+2023-01-09 11:47:55.095 +07:00 [INF]               - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2023-01-09 11:47:55.095 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2023-01-09 11:47:55.095 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Validation.AbpValidationModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]           - Volo.Abp.Users.AbpUsersDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]           - Volo.Abp.Features.AbpFeaturesModule
+2023-01-09 11:47:55.095 +07:00 [INF]             - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Saas.SaasDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]           - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Domain.AbpDddDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.EventBus.AbpEventBusModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Guids.AbpGuidsModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Specifications.AbpSpecificationsModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Caching.AbpCachingModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Serialization.AbpSerializationModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityProDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Users.AbpUsersDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]           - Volo.Abp.Users.AbpUsersAbstractionModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Saas.SaasDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2023-01-09 11:47:55.095 +07:00 [INF]       - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.Emailing.AbpEmailingModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.CmsKit.CmsKitProDomainModule
+2023-01-09 11:47:55.096 +07:00 [INF]       - Volo.CmsKit.CmsKitDomainModule
+2023-01-09 11:47:55.096 +07:00 [INF]         - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2023-01-09 11:47:55.096 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2023-01-09 11:47:55.096 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2023-01-09 11:47:55.130 +07:00 [DBG] Started background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2023-01-09 11:47:55.147 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2023-01-09 11:47:55.284 +07:00 [INF] Initialized all ABP modules.
+2023-01-09 11:48:46.193 +07:00 [DBG] Stopped background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2023-01-09 11:48:46.193 +07:00 [DBG] Stopped background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2023-01-09 11:48:46.193 +07:00 [INF] Application is shutting down...
+2023-01-09 11:48:46.194 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-01-09 11:48:46.194 +07:00 [INF] Hosting environment: Production
+2023-01-09 11:48:46.194 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Console.Dev\bin\Debug\net5.0
+2023-01-09 11:48:46.195 +07:00 [DBG] Stopped background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2023-01-09 11:48:46.195 +07:00 [DBG] Stopped background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2023-01-09 11:50:24.626 +07:00 [INF] Starting console host.
+2023-01-09 11:50:26.753 +07:00 [INF] User profile is available. Using 'C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-01-09 11:50:31.217 +07:00 [INF] Loaded ABP modules:
+2023-01-09 11:50:31.217 +07:00 [INF] - FacebookCommunityAnalytics.Api.Console.Dev.ConsoleModule
+2023-01-09 11:50:31.217 +07:00 [INF]   - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.Auditing.AbpAuditingModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Data.AbpDataModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Uow.AbpUnitOfWorkModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Json.AbpJsonModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Timing.AbpTimingModule
+2023-01-09 11:50:31.217 +07:00 [INF]           - Volo.Abp.Localization.AbpLocalizationModule
+2023-01-09 11:50:31.217 +07:00 [INF]             - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2023-01-09 11:50:31.217 +07:00 [INF]             - Volo.Abp.Settings.AbpSettingsModule
+2023-01-09 11:50:31.217 +07:00 [INF]               - Volo.Abp.Security.AbpSecurityModule
+2023-01-09 11:50:31.217 +07:00 [INF]               - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Threading.AbpThreadingModule
+2023-01-09 11:50:31.217 +07:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2023-01-09 11:50:31.217 +07:00 [INF]   - FacebookCommunityAnalytics.Api.ApiDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - FacebookCommunityAnalytics.Api.ApiDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Validation.AbpValidationModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityProDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]           - Volo.Abp.Users.AbpUsersDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]           - Volo.Abp.Features.AbpFeaturesModule
+2023-01-09 11:50:31.217 +07:00 [INF]             - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.LanguageManagement.LanguageManagementDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Saas.SaasDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.CmsKit.CmsKitProDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.CmsKit.CmsKitDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]           - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainSharedModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - FacebookCommunityAnalytics.Api.GlobalConfigurationModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Domain.AbpDddDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.EventBus.AbpEventBusModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Guids.AbpGuidsModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Specifications.AbpSpecificationsModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.BackgroundJobs.AbpBackgroundJobsDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Caching.AbpCachingModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Serialization.AbpSerializationModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.Identity.AbpIdentityProDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Identity.AbpIdentityDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Users.AbpUsersDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]           - Volo.Abp.Users.AbpUsersAbstractionModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Authorization.AbpAuthorizationModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.PermissionManagement.IdentityServer.AbpPermissionManagementDomainIdentityServerModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Saas.SaasDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.TextTemplateManagementDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.LeptonTheme.Management.LeptonThemeManagementDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.LanguageManagement.LanguageManagementDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.Commercial.SuiteTemplates.VoloAbpCommercialSuiteTemplatesModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.Emailing.AbpEmailingModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.CmsKit.CmsKitProDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.CmsKit.CmsKitDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.BlobStoring.AbpBlobStoringModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.BlobStoringDatabaseDomainModule
+2023-01-09 11:50:31.217 +07:00 [INF]   - FacebookCommunityAnalytics.Api.MongoDB.ApiMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.PermissionManagement.MongoDB.AbpPermissionManagementMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.MongoDB.AbpMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.SettingManagement.MongoDB.AbpSettingManagementMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.Identity.MongoDB.AbpIdentityProMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.Abp.Identity.MongoDB.AbpIdentityMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]         - Volo.Abp.Users.MongoDB.AbpUsersMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.IdentityServer.MongoDB.AbpIdentityServerMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.BackgroundJobs.MongoDB.AbpBackgroundJobsMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.AuditLogging.MongoDB.AbpAuditLoggingMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.FeatureManagement.MongoDB.AbpFeatureManagementMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.LanguageManagement.MongoDB.LanguageManagementMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Saas.MongoDB.SaasMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.TextTemplateManagement.MongoDB.TextTemplateManagementMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.CmsKit.MongoDB.CmsKitProMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]       - Volo.CmsKit.MongoDB.CmsKitMongoDbModule
+2023-01-09 11:50:31.217 +07:00 [INF]     - Volo.Abp.BlobStoring.Database.MongoDB.BlobStoringDatabaseMongoDbModule
+2023-01-09 11:50:31.250 +07:00 [DBG] Started background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2023-01-09 11:50:31.266 +07:00 [DBG] Started background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2023-01-09 11:50:31.355 +07:00 [INF] Initialized all ABP modules.
+2023-01-09 11:50:48.791 +07:00 [DBG] Stopped background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2023-01-09 11:50:48.791 +07:00 [DBG] Stopped background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
+2023-01-09 11:50:48.791 +07:00 [INF] Application is shutting down...
+2023-01-09 11:50:48.791 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-01-09 11:50:48.792 +07:00 [INF] Hosting environment: Production
+2023-01-09 11:50:48.792 +07:00 [INF] Content root path: D:\Workspace\facebook-community-analytics\FacebookCommunityAnalytics.Api\src\FacebookCommunityAnalytics.Api.Console.Dev\bin\Debug\net5.0
+2023-01-09 11:50:48.793 +07:00 [DBG] Stopped background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2023-01-09 11:50:48.793 +07:00 [DBG] Stopped background worker: Volo.Abp.IdentityServer.Tokens.TokenCleanupBackgroundWorker
